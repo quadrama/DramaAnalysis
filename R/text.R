@@ -20,3 +20,19 @@ get_corpus <- function(...) {
   }
   VCorpus(VectorSource(text_by_figure))
 }
+
+get_tokenized_corpus <- function(...) {
+  args <- list(...)
+  r <- data.frame(drama=c(), fid=c(), tokens=c())
+  for (a in args) {
+    t <- load_text(a, tokens = TRUE)
+    figures <- sort(unique(t$Speaker.figure_id))
+    figure_texts <- c()
+    for (figure_id in figures) {
+      figure_texts <- c(figure_texts, list(t[t$Speaker.figure_id == figure_id,]$Token.lemma))
+    }
+    r <- merge(r, data.frame(drama=args, fid=figures, tokens=figure_texts))
+
+  }
+  r
+}
