@@ -15,7 +15,7 @@ load_figures <- function(...) {
   r
 }
 
-load_text <- function(tokens=FALSE, ...) {
+load_text <- function(..., tokens=FALSE) {
   args <- list(...)
   r <- data.frame(c())
   s <- ""
@@ -24,6 +24,7 @@ load_text <- function(tokens=FALSE, ...) {
   }
   for (a in args) {
     myurl <- paste(id2url(a), "/de.unistuttgart.ims.drama.api.Utterance", s, sep="")
+    print(myurl)
     data <- load_from_url(myurl)
     r <- rbind(r,data)
   }
