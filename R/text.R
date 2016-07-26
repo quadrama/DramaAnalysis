@@ -1,53 +1,34 @@
-get_frequency_table <- function(drama_id, figure_id) {
-  t <- load_text(drama_id, tokens=TRUE)
-  table(t[t$Speaker.figure_id == figure_id,]$Token.lemma)
-}
-
-get_speeches <- function(drama_id, figure_id) {
-  t <- load_text(drama_id, tokens=FALSE)
-  t[t$Speaker.figure_id == figure_id,]
-}
-
-get_corpus <- function(...) {
-  args <- list(...)
-  text_by_figure <- c()
-  for (a in args) {
-    t <- load_text(a, tokens = TRUE)
-    figures <- sort(unique(t$Speaker.figure_id))
-    for (figure_id in figures) {
-      text_by_figure <- c(text_by_figure, paste(t[t$Speaker.figure_id == figure_id,]$Token.surface, sep=" ", collapse=" "))
-    }
+get_frequency_table <- function(t, RELATIVE=TRUE) {
+  if (relative==TRUE) {
+    count_per_figure(t, fnt=function(x) {prop.table(table(x))})
+  } else {
+    count_per_figure(t, fnt=table)
   }
-  VCorpus(VectorSource(text_by_figure))
 }
 
-get_tokenized_corpus <- function(...) {
-  args <- list(...)
-  r <- data.frame(drama=c(), fid=c(), tokens=c())
-  for (a in args) {
-    t <- load_text(a, tokens = TRUE)
-    figures <- sort(unique(t$Speaker.figure_id))
-    figure_texts <- c()
-    for (figure_id in figures) {
-      figure_texts <- c(figure_texts, list(t[t$Speaker.figure_id == figure_id,]$Token.lemma))
-    }
-    r <- merge(r, data.frame(drama=args, fid=figures, tokens=figure_texts))
-
-  }
-  r
+count_tokens_per_drama <- function(t) {
+  tapply(t$Token.surface, t$drama, length)
 }
 
 count_tokens_per_figure <- function(t, names=FALSE) {
-  count_per_figure(t, names, length)
+  count_per_figure(t, names)
 }
 
 count_types_per_figure <- function(t, names=FALSE) {
   count_per_figure(t, names, function(x) {length(levels(factor(x)))})
 }
 
-count_per_figure <- function(t, names=FALSE, fnt) {
+count_per_figure <- function(t, names=FALSE, fnt=length, column="Token.lemma") {
   if (names == TRUE)
-    tapply(t$Token.surface, paste(t$drama,t$Speaker.figure_surface, sep="-"), fnt)
+    tapply(t[[column]], list(t$drama, t$Speaker.figure_surface), fnt)
   else
-    tapply(t$Token.surface, paste(t$drama,t$Speaker.figure_id, sep="-"), fnt)
+    tapply(t[[column]], list(t$drama, t$Speaker.figure_id), fnt)
+}
+
+filter_counts_for_drama <- function(counts, drama_id) {
+  counts[drama_id,][!is.na(counts[drama_id,])]
+}
+
+generate_word_cloud <- function(freq_table, min.freq=10) {
+  wordcloud(as.list(dimnames(l)),as.vector(l), min.freq=min.freq)
 }
