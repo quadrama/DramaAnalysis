@@ -36,3 +36,18 @@ get_tokenized_corpus <- function(...) {
   }
   r
 }
+
+count_tokens_per_figure <- function(t, names=FALSE) {
+  count_per_figure(t, names, length)
+}
+
+count_types_per_figure <- function(t, names=FALSE) {
+  count_per_figure(t, names, function(x) {length(levels(factor(x)))})
+}
+
+count_per_figure <- function(t, names=FALSE, fnt) {
+  if (names == TRUE)
+    tapply(t$Token.surface, paste(t$drama,t$Speaker.figure_surface, sep="-"), fnt)
+  else
+    tapply(t$Token.surface, paste(t$drama,t$Speaker.figure_id, sep="-"), fnt)
+}
