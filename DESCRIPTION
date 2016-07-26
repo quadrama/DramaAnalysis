@@ -1,11 +1,13 @@
 Package: DramaAnalysis
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Scripts to support analysis of dramatic texts
 Version: 0.1
 Date: 2016-07-25
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
+Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
+Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
 LazyData: TRUE
-Depends: tm (>= 0.6-2)
+Depends:
+    wordcloud (>= 2.5)
+RoxygenNote: 5.0.1

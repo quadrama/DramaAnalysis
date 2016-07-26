@@ -1,7 +1,5 @@
-url <- "http://localhost:8080/drama.web/"
-
 id2url <- function(id) {
-  paste(url, "drama/", id, sep="")
+  paste(environment$url, "drama/", id, sep="")
 }
 
 load_figures <- function(...) {
@@ -15,6 +13,10 @@ load_figures <- function(...) {
   r
 }
 
+#' Loads a CSV-formatted text from the server,
+#' assuming the main server url has been set correctly.
+#'
+#' @export
 load_text <- function(..., tokens=FALSE) {
   args <- list(...)
   r <- data.frame(c())
