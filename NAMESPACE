@@ -3,3 +3,4 @@
 export(generate_word_cloud)
 export(get_frequency_table)
 export(load_text)
+export(postags)
