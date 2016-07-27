@@ -5,8 +5,9 @@ Version: 0.1
 Date: 2016-07-25
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Description: This package can be used to import and analyse pre-processed dramatic texts.
+  The texts are expected to be in csv format.
+License: Apache License
 LazyData: TRUE
 Depends:
     wordcloud (>= 2.5)
