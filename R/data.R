@@ -1,5 +1,5 @@
 id2url <- function(id) {
-  paste(environment$url, "drama/", id, sep="")
+  paste(environment$url, "annotations/", id, sep="")
 }
 
 load_figures <- function(...) {
