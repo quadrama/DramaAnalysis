@@ -17,14 +17,13 @@ load_figures <- function(...) {
 #' assuming the main server url has been set correctly.
 #'
 #' @export
-load_text <- function(..., tokens=FALSE) {
-  args <- list(...)
+load_text <- function(ids, tokens=FALSE) {
   r <- data.frame(c())
   s <- ""
   if (tokens == TRUE) {
     s <- "/de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token"
   }
-  for (a in args) {
+  for (a in ids) {
     myurl <- paste(id2url(a), "/de.unistuttgart.ims.drama.api.Utterance", s, sep="")
     print(myurl)
     data <- load_from_url(myurl)
