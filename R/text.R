@@ -71,18 +71,24 @@ generate_word_cloud <- function(freq_table, min.freq=10) {
 #' t <- load_text("rksp.0", tokens=TRUE)
 #' st <- make_style_table(t)
 #' stylo(gui=FALSE, st)
-make_stylo_table <- function(t, accepted.pos=c(), names=FALSE) {
+#' @examples
+#' t <- load_text(read.csv("http://localhost:8080/drama.web/dramas", header=FALSE)[,], tokens=T)
+#' tl <- limit_figures(t, minTokens=1000)
+#' stylo_table <- make_stylo_table(tl, names=TRUE)
+#' stylo(gui=F, frequencies = stylo_table, network=T, write.png.file=T, analysis.type="BCT")
+make_stylo_table <- function(t, accepted.pos=postags$de$words, names=FALSE, column="Token.surface") {
   ft <- t
   if (length(accepted.pos) > 0)
-    ft <- t[t$Token.pos %in% accepted.pos]
+    ft <- t[t$Token.pos %in% accepted.pos,]
   if (names == TRUE)
-    do.call(rbind, tapply(ft$Token.lemma, paste(ft$drama, ft$Speaker.figure_surface), function(x){prop.table(table(x))}))
+    do.call(rbind, tapply(ft[[column]], paste(ft$drama, ft$Speaker.figure_surface), function(x){prop.table(table(x))}))
   else
-      do.call(rbind, tapply(ft$Token.lemma, paste(ft$drama, ft$Speaker.figure_id), function(x){prop.table(table(x))}))
+    do.call(rbind, tapply(ft[[column]], paste(ft$drama, ft$Speaker.figure_id), function(x){prop.table(table(x))}))
 }
 
 #' @export
 limit_figures <- function(t, minTokens=100) {
-  counts <- as.data.frame(tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length))
-  subset(t, counts[paste(t$drama, t$Speaker.figure_id),] > 1000 )
+  counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
+  write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
+  subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
 }
