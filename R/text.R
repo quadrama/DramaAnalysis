@@ -81,9 +81,10 @@ make_stylo_table <- function(t, accepted.pos=postags$de$words, names=FALSE, colu
   if (length(accepted.pos) > 0)
     ft <- t[t$Token.pos %in% accepted.pos,]
   if (names == TRUE)
-    do.call(rbind, tapply(ft[[column]], paste(ft$drama, ft$Speaker.figure_surface), function(x){prop.table(table(x))}))
+    r <- do.call(rbind, tapply(ft[[column]], paste(ft$drama, ft$Speaker.figure_surface), function(x){prop.table(table(x))}))
   else
-    do.call(rbind, tapply(ft[[column]], paste(ft$drama, ft$Speaker.figure_id), function(x){prop.table(table(x))}))
+    r <- do.call(rbind, tapply(ft[[column]], paste(ft$drama, ft$Speaker.figure_id), function(x){prop.table(table(x))}))
+  r[,order(colSums(r),decreasing=TRUE)]
 }
 
 #' @export
