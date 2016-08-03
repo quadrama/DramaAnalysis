@@ -33,7 +33,7 @@ get_frequency_table <- function(t, relative=FALSE, names=FALSE, accepted.pos=c()
 #' stat <- make_figure_statistics(t, names = FALSE)
 #'
 #' @export
-make_figure_statistics <- function(t, names = FALSE, normalized = FALSE) {
+make_figure_statistics <- function(t, names = FALSE, normalize = FALSE) {
   dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
     dup <- duplicated(x)
     diffs <- dup[-1L] != dup[-length(dup)]
@@ -55,14 +55,7 @@ make_figure_statistics <- function(t, names = FALSE, normalized = FALSE) {
     tapply(t$begin, indexes, max)
   ))
   colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd", "first_begin", "last_end")
-  if (normalized == TRUE) {
-    normalise <- function(x) {
-      x$tokens <- as.numeric(x$tokens) / sum(t[t$drama == x$drama,]$tokens)
-      #x$utterances <- x$utterances / sum(t1[t1$drama == x$drama,]$utterances)
-      #x$last_end <- x$last_end / max(t1[t1$drama == x$drama,]$last_end)
-      #x$first_begin <- x$first_begin / max(t1[t1$drama == x$drama,]$first_begin)
-      print(x)
-    }
+  if (normalize == TRUE) {
     n <- r
     for (i in 1:nrow(r)) {
       n[i,]$tokens <- r[i,]$tokens / sum(r[r$drama == r[i,1],]$tokens)
@@ -152,4 +145,28 @@ limit_figures <- function(t, minTokens=100) {
   counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
   write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
   subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
+}
+
+#' @export
+count_word_fields <- function(t, fieldnames=c(), normalize = FALSE) {
+  baseurl <- "https://raw.githubusercontent.com/quadrama/metadata/master/fields/"
+  r <- aggregate(t, by=list(t$drama, t$Speaker.figure_surface), length)[,1:2]
+  for (field in fieldnames) {
+    url <- paste(baseurl, field, ".txt", sep="")
+    list <- read.csv(url, header=F, fileEncoding = "UTF-8")
+    r <- cbind(r,  count_word_field(t, tolower(list$V1), normalize = normalize)[,3])
+  }
+  colnames(r) <- c("drama", "figure", fieldnames)
+  r
+}
+
+count_word_field <- function(t, wordfield=c(), normalize = FALSE) {
+  r <- aggregate(t$Token.lemma, by=list(t$drama, t$Speaker.figure_id), function(x) { length(x[x %in% wordfield]) })
+  colnames(r) <- c("drama", "figure", "x")
+  if (normalize == TRUE) {
+    for (i in 1:nrow(r)) {
+      r[i,]$x <- r[i,]$x / length(t[t$drama == r[i,1] & t$Speaker.figure_id == r[i,2],]$Token.lemma)
+    }
+  }
+  r
 }

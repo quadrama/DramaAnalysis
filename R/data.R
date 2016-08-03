@@ -22,5 +22,5 @@ load_text <- function(ids, tokens=FALSE) {
 }
 
 load_from_url <- function(url) {
-  read.csv(url, sep="\t", header=TRUE, fileEncoding="UTF-8")
+  read.csv(url, header=TRUE, fileEncoding="UTF-8")
 }
