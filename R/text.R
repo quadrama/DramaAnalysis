@@ -33,7 +33,7 @@ get_frequency_table <- function(t, relative=FALSE, names=FALSE, accepted.pos=c()
 #' stat <- make_figure_statistics(t, names = FALSE)
 #'
 #' @export
-make_figure_statistics <- function(t, names = FALSE) {
+make_figure_statistics <- function(t, names = FALSE, normalized = FALSE) {
   dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
     dup <- duplicated(x)
     diffs <- dup[-1L] != dup[-length(dup)]
@@ -44,16 +44,39 @@ make_figure_statistics <- function(t, names = FALSE) {
   if (names == TRUE)
     indexes <- paste(t$drama, t$Speaker.figure_surface)
 
+
   r <- as.data.frame(cbind(
-    tapply(t$Token.surface, indexes, length),
-    tapply(t$Token.surface, indexes, function(x) { length(unique(x))}),
+    aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface), function(x) { length(x) }),
+    aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface), function(x) { length(unique(x)) })[,3],
     tapply(t$begin, indexes, function(x) { length(unique(x)) }),
     tapply(t$begin, indexes, function(x) { mean(rle(x)$lengths) }),
-    tapply(t$begin, indexes, function(x) { sd(rle(x)$lengths) })
+    tapply(t$begin, indexes, function(x) { sd(rle(x)$lengths) }),
+    tapply(t$begin, indexes, min),
+    tapply(t$begin, indexes, max)
   ))
-  colnames(r) <- c("tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd")
+  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd", "first_begin", "last_end")
+  if (normalized == TRUE) {
+    normalise <- function(x) {
+      x$tokens <- as.numeric(x$tokens) / sum(t[t$drama == x$drama,]$tokens)
+      #x$utterances <- x$utterances / sum(t1[t1$drama == x$drama,]$utterances)
+      #x$last_end <- x$last_end / max(t1[t1$drama == x$drama,]$last_end)
+      #x$first_begin <- x$first_begin / max(t1[t1$drama == x$drama,]$first_begin)
+      print(x)
+    }
+    n <- r
+    for (i in 1:nrow(r)) {
+      n[i,]$tokens <- r[i,]$tokens / sum(r[r$drama == r[i,1],]$tokens)
+      n[i,]$utterances <- r[i,]$utterances / sum(r[r$drama == r[i,1],]$utterances)
+      n[i,]$last_end <- r[i,]$last_end / max(r[r$drama == r[i,1],]$last_end)
+      n[i,]$first_begin <- r[i,]$first_begin / max(r[r$drama == r[i,1],]$last_end)
+
+    }
+    r <- n
+  }
   r
 }
+
+
 
 count_tokens_per_drama <- function(t) {
   tapply(t$Token.surface, t$drama, length)
