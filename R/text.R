@@ -18,6 +18,43 @@ get_frequency_table <- function(t, relative=FALSE, names=FALSE, accepted.pos=c()
   }
 }
 
+#' This function extracts figure statistics from a drama text table.
+#' @return A data frame with the following columns and one row for each figure:
+#' tokens: The number of tokens spoken by that figure
+#' types : The number of different tokens (= types) spoken by each figure
+#' utterances: The number of utterances
+#' utterance_length_mean: The mean length of utterances
+#' utterance_length_sd: The standard deviation in utterance length
+#' @param t The drama text
+#' @param names If set to true, the table will contains figure names instead of ids
+#'
+#' @examples
+#' t <- load_text("rksp.0", tokens = TRUE)
+#' stat <- make_figure_statistics(t, names = FALSE)
+#'
+#' @export
+make_figure_statistics <- function(t, names = FALSE) {
+  dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
+    dup <- duplicated(x)
+    diffs <- dup[-1L] != dup[-length(dup)]
+    idx <- c(which(diffs), length(dup))
+    diff(c(0, idx))
+  })
+  indexes <- paste(t$drama, t$Speaker.figure_id)
+  if (names == TRUE)
+    indexes <- paste(t$drama, t$Speaker.figure_surface)
+
+  r <- as.data.frame(cbind(
+    tapply(t$Token.surface, indexes, length),
+    tapply(t$Token.surface, indexes, function(x) { length(unique(x))}),
+    tapply(t$begin, indexes, function(x) { length(unique(x)) }),
+    tapply(t$begin, indexes, function(x) { mean(rle(x)$lengths) }),
+    tapply(t$begin, indexes, function(x) { sd(rle(x)$lengths) })
+  ))
+  colnames(r) <- c("tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd")
+  r
+}
+
 count_tokens_per_drama <- function(t) {
   tapply(t$Token.surface, t$drama, length)
 }
