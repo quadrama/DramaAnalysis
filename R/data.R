@@ -33,5 +33,5 @@ load_text <- function(ids, tokens=FALSE) {
 }
 
 load_from_url <- function(url) {
-  read.csv(url, sep="\t", header=TRUE)
+  read.csv(url, sep="\t", header=TRUE, fileEncoding="UTF-8")
 }
