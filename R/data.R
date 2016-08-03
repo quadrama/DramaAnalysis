@@ -2,17 +2,6 @@ id2url <- function(id) {
   paste(environment$url, "annotations/", id, sep="")
 }
 
-load_figures <- function(...) {
-  args <- list(...)
-  r <- data.frame(c())
-  for (a in args) {
-    myurl <- paste(id2url(a), "/de.unistuttgart.ims.drama.api.Figure", sep="")
-    data <- load_from_url(myurl)
-    r <- rbind(r,data)
-  }
-  r
-}
-
 #' Loads a CSV-formatted text from the server,
 #' assuming the main server url has been set correctly.
 #'
