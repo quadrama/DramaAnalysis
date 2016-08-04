@@ -145,20 +145,38 @@ limit_figures <- function(t, minTokens=100) {
 }
 
 #' @export
-count_word_fields <- function(t, fieldnames=c(), normalize = FALSE) {
+count_word_fields <- function(t, fieldnames=c(), normalize = FALSE, names=FALSE) {
   baseurl <- "https://raw.githubusercontent.com/quadrama/metadata/master/fields/"
-  r <- aggregate(t, by=list(t$drama, t$Speaker.figure_surface), length)[,1:2]
+  bylist <- list(t$drama, t$Speaker.figure_id)
+  if (names == TRUE)
+    bylist <- list(t$drama, t$Speaker.figure_surface)
+  r <- aggregate(t, by=bylist, length)[,1:2]
   for (field in fieldnames) {
     url <- paste(baseurl, field, ".txt", sep="")
     list <- read.csv(url, header=F, fileEncoding = "UTF-8")
-    r <- cbind(r,  count_word_field(t, tolower(list$V1), normalize = normalize)[,3])
+    r <- cbind(r,  count_word_field(t, tolower(list$V1), normalize = FALSE, names=names)[,3])
   }
   colnames(r) <- c("drama", "figure", fieldnames)
+  if (normalize == TRUE) {
+    tokens <- aggregate(t$Token.surface, by=bylist, function(x) { length(x) })
+    r[,-(1:2)] <- r[,-(1:2)] / ave(tokens[[3]], tokens[1:2], FUN=function(x) {x})
+  }
+  if (names == TRUE)
+    #r$figure <- fnames
   r
 }
 
-count_word_field <- function(t, wordfield=c(), normalize = FALSE) {
-  r <- aggregate(t$Token.lemma, by=list(t$drama, t$Speaker.figure_id), function(x) { length(x[x %in% wordfield]) })
+count_word_field <- function(t, wordfield=c(), names = FALSE, normalize = FALSE) {
+  bylist <- list(t$drama, t$Speaker.figure_id)
+  if (names == TRUE)
+    bylist <- list(t$drama, t$Speaker.figure_surface)
+
+  r <- aggregate(t$Token.surface, by=bylist, function(x) {
+    #print(x[tolower(x) %in% wordfield])
+    length(x[tolower(x) %in% wordfield])
+  })
+
+
   colnames(r) <- c("drama", "figure", "x")
   if (normalize == TRUE) {
     for (i in 1:nrow(r)) {
