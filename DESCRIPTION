@@ -10,5 +10,5 @@ Description: This package can be used to import and analyse pre-processed dramat
 License: Apache License
 LazyData: TRUE
 Depends:
-    wordcloud (>= 2.5), stylo (>= 0.6.3)
+    stylo (>= 0.6.3)
 RoxygenNote: 5.0.1
