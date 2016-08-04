@@ -41,30 +41,27 @@ make_figure_statistics <- function(t, names = FALSE, normalize = FALSE) {
     diff(c(0, idx))
   })
   indexes <- paste(t$drama, t$Speaker.figure_id)
-  if (names == TRUE)
+  bylist <- list(t$drama, t$Speaker.figure_id)
+  if (names == TRUE) {
     indexes <- paste(t$drama, t$Speaker.figure_surface)
-
+    bylist <- list(t$drama, t$Speaker.figure_surface)
+  }
 
   r <- as.data.frame(cbind(
-    aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface), function(x) { length(x) }),
-    aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface), function(x) { length(unique(x)) })[,3],
-    tapply(t$begin, indexes, function(x) { length(unique(x)) }),
-    tapply(t$begin, indexes, function(x) { mean(rle(x)$lengths) }),
-    tapply(t$begin, indexes, function(x) { sd(rle(x)$lengths) }),
-    tapply(t$begin, indexes, min),
-    tapply(t$begin, indexes, max)
+    aggregate(t$Token.surface, by=bylist, function(x) { length(x) }),
+    aggregate(t$Token.surface, by=bylist, function(x) { length(unique(x)) })[,3],
+    aggregate(t$begin, by=bylist, function(x) { length(unique(x)) })[,3],
+    aggregate(t$begin, by=bylist, function(x) { mean(rle(x)$lengths) })[,3],
+    aggregate(t$begin, by=bylist, function(x) { sd(rle(x)$lengths) })[,3],
+    aggregate(t$begin, by=bylist, min)[,3],
+    aggregate(t$end, by=bylist, max)[,3]
   ))
   colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd", "first_begin", "last_end")
   if (normalize == TRUE) {
-    n <- r
-    for (i in 1:nrow(r)) {
-      n[i,]$tokens <- r[i,]$tokens / sum(r[r$drama == r[i,1],]$tokens)
-      n[i,]$utterances <- r[i,]$utterances / sum(r[r$drama == r[i,1],]$utterances)
-      n[i,]$last_end <- r[i,]$last_end / max(r[r$drama == r[i,1],]$last_end)
-      n[i,]$first_begin <- r[i,]$first_begin / max(r[r$drama == r[i,1],]$last_end)
-
-    }
-    r <- n
+    r$tokens <- ave(r$tokens, stat$drama, FUN=function(x) {x/sum(x)})
+    r$utterances <- ave(r$utterances, stat$drama, FUN=function(x) {x/sum(x)})
+    r$first_begin <- r$first_begin / ave(r$last_end, stat$drama, FUN=max)
+    r$last_end <- ave(r$last_end, stat$drama, FUN=function(x) {x/max(x)})
   }
   r
 }
