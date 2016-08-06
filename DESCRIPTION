@@ -13,3 +13,4 @@ Depends:
     stylo (>= 0.6.3)
 RoxygenNote: 5.0.1
 Suggests: testthat
+Encoding: UTF-8
