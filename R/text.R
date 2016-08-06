@@ -54,14 +54,15 @@ make_figure_statistics <- function(t, names = FALSE, normalize = FALSE) {
     aggregate(t$begin, by=bylist, function(x) { mean(rle(x)$lengths) })[,3],
     aggregate(t$begin, by=bylist, function(x) { sd(rle(x)$lengths) })[,3],
     aggregate(t$begin, by=bylist, min)[,3],
-    aggregate(t$end, by=bylist, max)[,3]
+    aggregate(t$end, by=bylist, max)[,3],
+    aggregate(t$length, by=bylist, function(x) { unique(x) })[,3]
   ))
-  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd", "first_begin", "last_end")
+  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd", "first_begin", "last_end", "length")
   if (normalize == TRUE) {
-    r$tokens <- ave(r$tokens, stat$drama, FUN=function(x) {x/sum(x)})
-    r$utterances <- ave(r$utterances, stat$drama, FUN=function(x) {x/sum(x)})
-    r$first_begin <- r$first_begin / ave(r$last_end, stat$drama, FUN=max)
-    r$last_end <- ave(r$last_end, stat$drama, FUN=function(x) {x/max(x)})
+    r$tokens <- r$tokens / r$length
+    r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
+    r$first_begin <- r$first_begin / ave(r$last_end, r$drama, FUN=max)
+    r$last_end <- ave(r$last_end, r$drama, FUN=function(x) {x/max(x)})
   }
   r
 }
