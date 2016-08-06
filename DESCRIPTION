@@ -12,3 +12,4 @@ LazyData: TRUE
 Depends:
     stylo (>= 0.6.3)
 RoxygenNote: 5.0.1
+Encoding: UTF-8
