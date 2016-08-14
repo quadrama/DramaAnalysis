@@ -1,26 +1,15 @@
-id2url <- function(id) {
-  paste(environment$url, "annotations/", id, sep="")
-}
+#' The data set exported from Emilia Galotti
+#' @format A data frame with 25365 rows and 9 columns:
+#' \describe{
+#'  \item{drama}{The drama id}
+#'  \item{length}{The length of the drama (in tokens)}
+#'  \item{begin}{The beginning of an utterance (character position)}
+#'  \item{end}{The end of an utterance (character position)}
+#'  \item{Speaker.figure_surface}{The surface description of a figure}
+#'  \item{Speaker.figure_id}{}
+#'  \item{Token.surface}{}
+#'  \item{Token.pos}{}
+#'  \item{Token.lemma}{}
+#' }
 
-#' Loads a CSV-formatted text from the server,
-#' assuming the main server url has been set correctly.
-#'
-#' @export
-load_text <- function(ids, tokens=FALSE) {
-  r <- data.frame(c())
-  s <- ""
-  if (tokens == TRUE) {
-    s <- "/de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token"
-  }
-  for (a in ids) {
-    myurl <- paste(id2url(a), "/de.unistuttgart.ims.drama.api.Utterance", s, sep="")
-    print(myurl)
-    data <- load_from_url(myurl)
-    r <- rbind(r,data)
-  }
-  r
-}
-
-load_from_url <- function(url) {
-  read.csv(url, header=TRUE, fileEncoding="UTF-8")
-}
+"rksp.0"

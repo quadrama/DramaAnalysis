@@ -5,10 +5,11 @@
 #' @param relative Whether to calculate relative frequencies
 #' @param accepted.pos A vector containing pos tags that should be included.
 #'    If the vector is empty, includes everything.
+#' @param If set to true, the resulting table will include figure names instead of figure ids
 #'
 #' @examples
-#' t <- load_text("rksp.0", tokens=TRUE)
-#' freq_table <- get_frequency_table(t)
+#' data(rksp.0)
+#' freq_table <- get_frequency_table(rksp.0)
 #' @export
 get_frequency_table <- function(t, relative=FALSE, names=FALSE, accepted.pos=c()) {
   if (relative == TRUE) {
@@ -27,10 +28,11 @@ get_frequency_table <- function(t, relative=FALSE, names=FALSE, accepted.pos=c()
 #' utterance_length_sd: The standard deviation in utterance length
 #' @param t The drama text
 #' @param names If set to true, the table will contains figure names instead of ids
+#' @param normalize Normalising the individual columns
 #'
 #' @examples
-#' t <- load_text("rksp.0", tokens = TRUE)
-#' stat <- make_figure_statistics(t, names = FALSE)
+#' data(rksp.0)
+#' stat <- make_figure_statistics(rksp.0, names = FALSE)
 #'
 #' @export
 make_figure_statistics <- function(t, names = FALSE, normalize = FALSE) {
@@ -100,14 +102,9 @@ filter_counts_for_drama <- function(counts, drama_id) {
 
 #'
 #' Generates a word cloud based on a frequency table
-#' @export
 #' @param freq_table A single frequency table
 #' @param min.freq The minimal frequency a token should have to be in the word cloud
 #'
-#' @examples
-#' t <- load_text("rksp.0", tokens=TRUE)
-#' freq_table <- get_frequency_table(t)
-#' generate_word_cloud(freq_table[1,1][[1]])
 #'
 generate_word_cloud <- function(freq_table, min.freq=10) {
   wordcloud(dimnames(freq_table)[[1]],as.vector(freq_table), min.freq=min.freq, scale=c(5,0.2),random.order = FALSE)
@@ -117,10 +114,11 @@ generate_word_cloud <- function(freq_table, min.freq=10) {
 #' @param t The text table, potentially covering multiple texts
 #' @param accepted.pos A list of accepted pos tags
 #' @param names Whether to use figure names or ids
+#' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @export
 #' @examples
-#' t <- load_text("rksp.0", tokens=TRUE)
-#' st <- make_style_table(t)
+#' data(rksp.0)
+#' st <- make_style_table(rksp.0)
 #' stylo(gui=FALSE, st)
 #' @examples
 #' t <- load_text(read.csv("http://localhost:8080/drama.web/dramas", header=FALSE)[,], tokens=T)
