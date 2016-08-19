@@ -10,13 +10,34 @@ id2url <- function(id) {
 #' @param tokens If set to true, the table also contains each token in an utterance
 #' @export
 load_text <- function(ids, tokens=FALSE) {
+  load_internal(ids, tokens=tokens)
+}
+
+#' @export
+load_covered <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
+  r <- data.frame(c())
+  s <- ""
+  if (! is.null(coveredType)) {
+    s <- paste("/", coveredType, sep="")
+  }
+  for (a in ids) {
+    myurl <- paste(id2url(a), "/", type, s, sep="")
+    print(myurl)
+    data <- load_from_url(myurl)
+    r <- rbind(r,data)
+  }
+  r
+}
+
+#' @export
+load_internal <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", tokens=FALSE) {
   r <- data.frame(c())
   s <- ""
   if (tokens == TRUE) {
     s <- "/de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token"
   }
   for (a in ids) {
-    myurl <- paste(id2url(a), "/de.unistuttgart.ims.drama.api.Utterance", s, sep="")
+    myurl <- paste(id2url(a), "/", type, s, sep="")
     print(myurl)
     data <- load_from_url(myurl)
     r <- rbind(r,data)
