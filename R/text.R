@@ -134,13 +134,23 @@ make_stylo_table <- function(t, accepted.pos=postags$de$words, names=FALSE, colu
   else
     r <- do.call(rbind, tapply(ft[[column]], paste(ft$drama, ft$Speaker.figure_id), function(x){prop.table(table(x))}))
   r[,order(colSums(r),decreasing=TRUE)]
+
+
+  }
+
+#' @export
+limit.figures.by.rank <- function(t, maxRank=10) {
+  counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
+  counts <- counts[order(counts$x, decreasing = TRUE),]
+  rcounts <- Reduce(rbind, by(counts, counts["Group.1"], head, n=maxRank))
+  t[paste(t$drama, t$Speaker.figure_id) %in% paste(rcounts$Group.1, rcounts$Group.2),]
 }
 
 #' @export
 limit_figures <- function(t, minTokens=100) {
-  counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
-  write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
-  subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
+    counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
+    write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
+    subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
 }
 
 #' @export
