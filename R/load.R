@@ -1,3 +1,8 @@
+#' @export
+qd.url <- function() {
+  environment$url
+}
+
 id2url <- function(id) {
   paste(environment$url, "annotations/", id, sep="")
 }
