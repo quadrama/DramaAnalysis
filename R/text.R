@@ -1,3 +1,18 @@
+#' color scheme to be used for QuaDramA plots
+#' Taken from http://google.github.io/palette.js/, tol-rainbow, 10 colors
+#' @export
+qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
+               rgb(67, 50, 141, maxColorValue = 255),
+               rgb(65, 111, 184, maxColorValue = 255),
+               rgb(81, 156, 184, maxColorValue = 255),
+               rgb(112, 180, 132, maxColorValue = 255),
+               rgb(153, 189, 92, maxColorValue = 255),
+               rgb(195, 186, 69, maxColorValue = 255),
+               rgb(224, 162, 57, maxColorValue = 255),
+               rgb(230, 107, 45, maxColorValue = 255),
+               rgb(217, 33, 32, maxColorValue = 255)
+              );
+
 #'
 #' Returns frequency tables for each figure in all dramas in t
 #'
@@ -104,10 +119,11 @@ filter_counts_for_drama <- function(counts, drama_id) {
 #' Generates a word cloud based on a frequency table
 #' @param freq_table A single frequency table
 #' @param min.freq The minimal frequency a token should have to be in the word cloud
+#' @export
 #'
-#'
-generate_word_cloud <- function(freq_table, min.freq=10) {
-  wordcloud(dimnames(freq_table)[[1]],as.vector(freq_table), min.freq=min.freq, scale=c(5,0.2),random.order = FALSE)
+generate_word_cloud <- function(freq_table, min.freq=10,column=1, colors="black", max.words=100) {
+  wordcloud(words=rownames(freq_table), freq=freq_table[[column]], min.freq=min.freq,scale=c(5,0.3),random.order = FALSE, colors=colors, max.words  = max.words)
+  #wordcloud(dimnames(freq_table)[[1]],as.vector(freq_table), min.freq=min.freq, scale=c(5,0.2),random.order = FALSE)
 }
 
 #' This function generates a table to be used by stylo
