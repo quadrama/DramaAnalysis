@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: This method calculates the length of each utterance,...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for utterance.statistics"><tr><td>utterance.statistics</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>This method calculates the length of each utterance, organised by figure and drama.</h2>
+
+<h3>Description</h3>
+
+<p>This method calculates the length of each utterance, organised by figure and drama.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+utterance.statistics(t, num.figures = 10)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>t</code></td>
+<td>
+<p>The dramatic text(s)</p>
+</td></tr>
+<tr valign="top"><td><code>num.figures</code></td>
+<td>
+<p>The maximal number of figures per drama to include. Default: 10</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(rksp.0)
+num_figures &lt;- 5
+ustat &lt;- utterance.statistics(rksp.0, num.figures = num_figures)
+boxplot(ustat$utterance_length ~ ustat$figure,col=qd.colors[1:num_figures], las=2,frame=F)
+</pre>
+
+
+</body></html>
