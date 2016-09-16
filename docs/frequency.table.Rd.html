@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for make_stylo_table"><tr><td>make_stylo_table</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for frequency.table"><tr><td>frequency.table</td><td style="text-align: right;">R Documentation</td></tr></table>
 
 <h2>This function generates a table to be used by stylo</h2>
 
@@ -16,8 +16,7 @@
 <h3>Usage</h3>
 
 <pre>
-make_stylo_table(t, accepted.pos = postags$de$words, names = FALSE,
-  column = "Token.surface")
+frequency.table(t)
 </pre>
 
 
@@ -40,6 +39,10 @@ make_stylo_table(t, accepted.pos = postags$de$words, names = FALSE,
 <td>
 <p>The column name we should use (should be either Token.surface or Token.lemma)</p>
 </td></tr>
+<tr valign="top"><td><code>by.figure</code></td>
+<td>
+<p>Wether the count is by figure or by text</p>
+</td></tr>
 </table>
 
 
@@ -47,7 +50,7 @@ make_stylo_table(t, accepted.pos = postags$de$words, names = FALSE,
 
 <pre>
 data(rksp.0)
-st &lt;- make_style_table(rksp.0)
+st &lt;- frequency.table(rksp.0)
 stylo(gui=FALSE, st)
 </pre>
 

@@ -1,0 +1,49 @@
+#' This function extracts figure statistics from a drama text table.
+#' @return A data frame with the following columns and one row for each figure:
+#' tokens: The number of tokens spoken by that figure
+#' types : The number of different tokens (= types) spoken by each figure
+#' utterances: The number of utterances
+#' utterance_length_mean: The mean length of utterances
+#' utterance_length_sd: The standard deviation in utterance length
+#' @param t The drama text
+#' @param names If set to true, the table will contains figure names instead of ids
+#' @param normalize Normalising the individual columns
+#'
+#' @examples
+#' data(rksp.0)
+#' stat <- figure.statistics(rksp.0, names = FALSE)
+#'
+#' @export
+figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
+  dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
+    dup <- duplicated(x)
+    diffs <- dup[-1L] != dup[-length(dup)]
+    idx <- c(which(diffs), length(dup))
+    diff(c(0, idx))
+  })
+  indexes <- paste(t$drama, t$Speaker.figure_id)
+  bylist <- list(t$drama, t$Speaker.figure_id)
+  if (names == TRUE) {
+    indexes <- paste(t$drama, t$Speaker.figure_surface)
+    bylist <- list(t$drama, t$Speaker.figure_surface)
+  }
+
+  r <- as.data.frame(cbind(
+    aggregate(t$Token.surface, by=bylist, function(x) { length(x) }),
+    aggregate(t$Token.surface, by=bylist, function(x) { length(unique(x)) })[,3],
+    aggregate(t$begin, by=bylist, function(x) { length(unique(x)) })[,3],
+    aggregate(t$begin, by=bylist, function(x) { mean(rle(x)$lengths) })[,3],
+    aggregate(t$begin, by=bylist, function(x) { sd(rle(x)$lengths) })[,3],
+    aggregate(t$begin, by=bylist, min)[,3],
+    aggregate(t$end, by=bylist, max)[,3],
+    aggregate(t$length, by=bylist, function(x) { unique(x) })[,3]
+  ))
+  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd", "first_begin", "last_end", "length")
+  if (normalize == TRUE) {
+    r$tokens <- r$tokens / r$length
+    r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
+    r$first_begin <- r$first_begin / ave(r$last_end, r$drama, FUN=max)
+    r$last_end <- ave(r$last_end, r$drama, FUN=function(x) {x/max(x)})
+  }
+  r
+}

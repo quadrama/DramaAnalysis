@@ -14,34 +14,24 @@ id2url <- function(id) {
 #' @param ids A vector containing drama ids to be downloaded
 #' @param tokens If set to true, the table also contains each token in an utterance
 #' @export
-load_text <- function(ids, tokens=FALSE) {
-  load_internal(ids, tokens=tokens)
-}
+load.text <- function(ids, tokens=FALSE) {
+  if (tokens == TRUE) {
+    load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
+  } else
+    load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
+#' Helper method to load covered annotations.
+#' @param ids A vector or list of drama ids
+#' @param type The annotation type to load
+#' @param coveredType The annotation type of covered annotations we want to load
 #' @export
-load_covered <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
+#' @examples
+#' load.annotations(c("rksp.0"))
+load.annotations <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
   r <- data.frame(c())
   s <- ""
   if (! is.null(coveredType)) {
     s <- paste("/", coveredType, sep="")
-  }
-  for (a in ids) {
-    myurl <- paste(id2url(a), "/", type, s, sep="")
-    print(myurl)
-    tryCatch({
-      data <- load_from_url(myurl)
-      r <- rbind(r,data)
-    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
-  }
-  r
-}
-
-#' @export
-load_internal <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", tokens=FALSE) {
-  r <- data.frame(c())
-  s <- ""
-  if (tokens == TRUE) {
-    s <- "/de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token"
   }
   for (a in ids) {
     myurl <- paste(id2url(a), "/", type, s, sep="")
