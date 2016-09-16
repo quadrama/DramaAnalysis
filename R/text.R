@@ -248,3 +248,32 @@ utterance.statistics <- function(t, num.figures=10) {
 
   ulength
 }
+
+#' Classification using k nearest neighbor
+#' Evaluation is done using cross validation.
+#' @param ft A frequency table. Words/lemmas in columns, texts/figures in rows
+#' @param gold A list of gold labels in the same order as in the frequency table
+#' @param k The number of neighbors for kNN
+#' @param num.folds The number of folds for CV
+#' @export
+#' @examples
+#' baseurl <- "http://zwergdrossel.ims.uni-stuttgart.de:8080/"
+#' url.tragedies <- paste(baseurl, "drama.web/set/trag%C3%B6die", sep="")
+#' url.comedies <- paste(baseurl, "drama.web/set/kom%C3%B6die", sep="")
+#' meta.comedies <- read.csv(url.comedies)
+#' meta.tragedies <- read.csv(url.tragedies)
+#' text.all.comedies <- load_text(meta.comedies$id, tokens=TRUE)
+#' text.all.tragedies <- load_text(meta.tragedies$id, tokens=TRUE)
+cv.knn <- function(ft, labels, k=5, num.folds=10) {
+
+  folds <- createFolds(as.vector(labels), k = num.folds)
+
+  accuracy <- data.frame(row.names=c("Accuracy","Kappa","AccuracyLower","AccuracyUpper","AccuracyNull","AccuracyPValue","McnemarPValue"))
+  for (fold in folds) {
+    pred <- knn(ft[-unlist(fold),], ft[unlist(fold),], unlist(labels[-unlist(fold)]), k=k)
+    res <- confusionMatrix(pred, unlist(labels[unlist(fold)]))
+    accuracy <- rbind(accuracy, as.list(res$overall))
+  }
+  print(mean(accuracy$Accuracy))
+  accuracy
+}
