@@ -31,7 +31,7 @@ load_covered <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", co
     tryCatch({
       data <- load_from_url(myurl)
       r <- rbind(r,data)
-    }, finally={}, error={})
+    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
   }
   r
 }
