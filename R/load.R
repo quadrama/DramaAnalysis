@@ -28,8 +28,10 @@ load_covered <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", co
   for (a in ids) {
     myurl <- paste(id2url(a), "/", type, s, sep="")
     print(myurl)
-    data <- load_from_url(myurl)
-    r <- rbind(r,data)
+    tryCatch({
+      data <- load_from_url(myurl)
+      r <- rbind(r,data)
+    }, finally={}, error={})
   }
   r
 }
