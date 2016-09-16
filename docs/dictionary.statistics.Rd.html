@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: This method retrieves word lists from the given URL (e.g.,...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dictionary.statistics"><tr><td>dictionary.statistics</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>This method retrieves word lists from the given URL (e.g., github) and
+counts the number of occurrences of the words in the dictionaries</h2>
+
+<h3>Description</h3>
+
+<p>This method retrieves word lists from the given URL (e.g., github) and
+counts the number of occurrences of the words in the dictionaries
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+dictionary.statistics(t, fieldnames = c(), normalize = FALSE,
+  names = FALSE, boost = 100,
+  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>t</code></td>
+<td>
+<p>A text</p>
+</td></tr>
+<tr valign="top"><td><code>fieldnames</code></td>
+<td>
+<p>A list of names for the dictionaries. It is expected that files with that name can be found below the URL.</p>
+</td></tr>
+<tr valign="top"><td><code>normalize</code></td>
+<td>
+<p>Whether to normalize by figure speech length</p>
+</td></tr>
+<tr valign="top"><td><code>names</code></td>
+<td>
+<p>Whether the resulting table contains figure ids or names</p>
+</td></tr>
+<tr valign="top"><td><code>boost</code></td>
+<td>
+<p>A scaling factor to generate nicer values</p>
+</td></tr>
+<tr valign="top"><td><code>baseurl</code></td>
+<td>
+<p>The url delivering the dictionairies</p>
+</td></tr>
+</table>
+
+
+</body></html>
