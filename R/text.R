@@ -13,39 +13,6 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
                rgb(217, 33, 32, maxColorValue = 255)
               );
 
-
-
-
-
-count_tokens_per_drama <- function(t) {
-  tapply(t$Token.surface, t$drama, length)
-}
-
-#' @export
-count_tokens_per_figure <- function(t, names=FALSE) {
-  count_per_figure(t, names)
-}
-
-count_types_per_figure <- function(t, names=FALSE) {
-  count_per_figure(t, names, function(x) {length(levels(factor(x)))})
-}
-
-count_per_figure <- function(t, names=FALSE, fnt=length, column="Token.lemma", accepted.pos=c()) {
-  tf <- t
-  if (length(accepted.pos) > 0) {
-    tf <- t[t$Token.pos %in% accepted.pos,]
-  };
-  if (names == TRUE) {
-    tapply(tf[[column]], paste(tf$drama, tf$Speaker.figure_surface,sep=";"), fnt)
-  } else {
-    tapply(tf[[column]], paste(tf$drama, tf$Speaker.figure_id,sep=";"), fnt)
-  }
-}
-
-filter_counts_for_drama <- function(counts, drama_id) {
-  counts[drama_id,][!is.na(counts[drama_id,])]
-}
-
 #'
 #' Generates a word cloud based on a frequency table
 #' @param freq_table A single frequency table
@@ -85,9 +52,18 @@ limit.figures.by.tokens <- function(t, minTokens=100) {
     subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
 }
 
+#' This method retrieves word lists from the given URL (e.g., github) and
+#' counts the number of occurrences of the words in the dictionaries
+#' @param t A text
+#' @param fieldnames A list of names for the dictionaries. It is expected that files with that name can be found below the URL.
+#' @param normalize Whether to normalize by figure speech length
+#' @param names Whether the resulting table contains figure ids or names
+#' @param boost A scaling factor to generate nicer values
+#' @param baseurl The url delivering the dictionairies
 #' @export
-count_word_fields <- function(t, fieldnames=c(), normalize = FALSE, names=FALSE, boost = 100) {
-  baseurl <- "https://raw.githubusercontent.com/quadrama/metadata/master/fields/"
+dictionary.statistics <- function(t, fieldnames=c(),
+                                  normalize = FALSE, names=FALSE, boost = 100,
+                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/") {
   bylist <- list(t$drama, t$Speaker.figure_id)
   if (names == TRUE)
     bylist <- list(t$drama, t$Speaker.figure_surface)
