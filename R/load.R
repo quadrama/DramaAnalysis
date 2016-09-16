@@ -46,8 +46,10 @@ load_internal <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", t
   for (a in ids) {
     myurl <- paste(id2url(a), "/", type, s, sep="")
     print(myurl)
-    data <- load_from_url(myurl)
-    r <- rbind(r,data)
+    tryCatch({
+      data <- load_from_url(myurl)
+      r <- rbind(r,data)
+    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
   }
   r
 }
