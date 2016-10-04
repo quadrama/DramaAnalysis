@@ -29,8 +29,7 @@ dictionary.statistics <- function(t, fieldnames=c(),
 }
 
 #' @export
-dictionary.statistics.single <- function(t, wordfield=c(), names = FALSE, normalize.by.figure = FALSE, normalize.by.field = FALSE) {
-  bylist <- list(t$drama, t$Speaker.figure_id)
+dictionary.statistics.single <- function(t, wordfield=c(), names = FALSE, normalize.by.figure = FALSE, normalize.by.field = FALSE, bylist = list(t$drama, t$Speaker.figure_id)) {
   if (names == TRUE)
     bylist <- list(t$drama, t$Speaker.figure_surface)
 
@@ -42,7 +41,7 @@ dictionary.statistics.single <- function(t, wordfield=c(), names = FALSE, normal
   })
 
 
-  colnames(r) <- c("drama", "figure", "x")
+  colnames(r) <- ifelse(length(bylist)==3, c("drama", "figure", "x"), c("drama", "x"))
   if (normalize.by.figure == TRUE) {
     for (i in 1:nrow(r)) {
       r[i,]$x <- r[i,]$x / length(t[t$drama == r[i,1] & t$Speaker.figure_id == r[i,2],]$Token.lemma)
