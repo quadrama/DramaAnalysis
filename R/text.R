@@ -27,7 +27,7 @@ generate_word_cloud <- function(freq_table, min.freq=10,column=1, colors="black"
 
 #' This method removes the spoken tokens of all but the most frequent n figures
 #' @param t The text, a data frame listing each token for each figure
-#' @param maxTokens Up to maxTokens figures remain in the data set
+#' @param maxRank Up to maxRank figures remain in the data set
 #' @export
 #' @importFrom utils head
 #' @examples
