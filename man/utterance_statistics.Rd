@@ -10,6 +10,8 @@ utterance_statistics(t, num.figures = 10, normalize.by.drama.length = TRUE)
 \item{t}{The dramatic text(s)}
 
 \item{num.figures}{The maximal number of figures per drama to include. Default: 10. Set to FALSE to include all figures.}
+
+\item{normalize.by.drama.length}{Logical value. If true, the resulting values will be normalized by the length of the drama.}
 }
 \description{
 This method calculates the length of each utterance, organised by figure and drama.

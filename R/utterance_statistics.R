@@ -1,6 +1,7 @@
 #' This method calculates the length of each utterance, organised by figure and drama.
 #' @param t The dramatic text(s)
 #' @param num.figures The maximal number of figures per drama to include. Default: 10. Set to FALSE to include all figures.
+#' @param normalize.by.drama.length Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
 #' @examples
 #' data(rksp.0)
