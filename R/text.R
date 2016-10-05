@@ -36,7 +36,7 @@ limit.figures.by.rank <- function(t, maxRank=10) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' limit.figures.by.tokens(rksp.0)
+#' t <- limit.figures.by.tokens(rksp.0)
 limit.figures.by.tokens <- function(t, minTokens=100) {
     counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
     write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
