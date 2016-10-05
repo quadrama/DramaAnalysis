@@ -5,9 +5,10 @@
 #' @examples
 #' data(rksp.0)
 #' num_figures <- 5
-#' ustat <- utterance.statistics(rksp.0, num.figures = num_figures)
+#' ustat <- utterance_statistics(rksp.0, num.figures = num_figures)
 #' boxplot(ustat$utterance_length ~ ustat$figure,col=qd.colors[1:num_figures], las=2,frame=F)
-utterance.statistics <- function(t, num.figures=10) {
+#' @importFrom stats aggregate
+utterance_statistics <- function(t, num.figures=10) {
 
   if (typeof(num.figures) == "double") {
     t <- limit.figures.by.rank(t, maxRank = num.figures)
