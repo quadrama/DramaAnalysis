@@ -10,7 +10,7 @@ Description: This package can be used to import and analyse pre-processed dramat
 License: Apache License
 LazyData: TRUE
 Imports:
-    stylo (>= 0.6.3), class (>= 7.3-14), caret (>= 6.0-71), stats (>= 3.3.1)
+    stylo (>= 0.6.3), class (>= 7.3-14), caret (>= 6.0-71), stats (>= 3.3.1), utils (>= 3.3.1)
 Depends:
 RoxygenNote: 5.0.1
 Suggests: testthat
