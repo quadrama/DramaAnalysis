@@ -13,7 +13,6 @@
 #' @examples
 #' data(rksp.0)
 #' stat <- figure.statistics(rksp.0, names = FALSE)
-#'
 #' @export
 figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
   dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
