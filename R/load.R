@@ -1,3 +1,4 @@
+#' The base url to retrieve data files from
 #' @export
 qd.url <- function() {
   environment$url
@@ -26,7 +27,9 @@ load.text <- function(ids, tokens=FALSE) {
 #' @param coveredType The annotation type of covered annotations we want to load
 #' @export
 #' @examples
+#' \dontrun{
 #' load.annotations(c("rksp.0"))
+#' }
 load.annotations <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
   r <- data.frame(c())
   s <- ""

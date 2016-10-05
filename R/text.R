@@ -65,6 +65,7 @@ limit.figures.by.tokens <- function(t, minTokens=100) {
 #' @param num.folds The number of folds for CV
 #' @export
 #' @examples
+#' \dontrun{
 #' baseurl <- "http://zwergdrossel.ims.uni-stuttgart.de:8080/"
 #' url.tragedies <- paste(baseurl, "drama.web/set/trag%C3%B6die", sep="")
 #' url.comedies <- paste(baseurl, "drama.web/set/kom%C3%B6die", sep="")
@@ -72,6 +73,7 @@ limit.figures.by.tokens <- function(t, minTokens=100) {
 #' meta.tragedies <- read.csv(url.tragedies)
 #' text.all.comedies <- load.text(meta.comedies$id, tokens=TRUE)
 #' text.all.tragedies <- load.text(meta.tragedies$id, tokens=TRUE)
+#' }
 cv.knn <- function(ft, labels, k=5, num.folds=10) {
 
   folds <- createFolds(as.vector(labels), k = num.folds)
