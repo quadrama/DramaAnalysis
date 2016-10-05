@@ -46,6 +46,6 @@ load.annotations <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance"
 
 #' @importFrom utils read.csv
 load_from_url <- function(url) {
-  read.csv(url, header=TRUE, fileEncoding="UTF-8")
+  read.csv(url, header=TRUE, fileEncoding="UTF-8", encoding="UTF-8")
 }
 
