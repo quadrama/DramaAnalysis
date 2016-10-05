@@ -29,9 +29,10 @@ generate_word_cloud <- function(freq_table, min.freq=10,column=1, colors="black"
 #' @param t The text, a data frame listing each token for each figure
 #' @param maxTokens Up to maxTokens figures remain in the data set
 #' @export
+#' @importFrom utils head
 #' @examples
-#' t <- load.text(c("rksp.0"), tokens=TRUE)
-#' t <- limit.figures.by.rank(t)
+#' data(rksp.0)
+#' t <- limit.figures.by.rank(rksp.0)
 limit.figures.by.rank <- function(t, maxRank=10) {
   counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
   counts <- counts[order(counts$x, decreasing = TRUE),]
