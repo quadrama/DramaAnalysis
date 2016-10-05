@@ -8,7 +8,8 @@
 #' @param t The drama text
 #' @param names If set to true, the table will contains figure names instead of ids
 #' @param normalize Normalising the individual columns
-#'
+#' @importFrom stats sd
+#' @importFrom stats aggregate
 #' @examples
 #' data(rksp.0)
 #' stat <- figure.statistics(rksp.0, names = FALSE)
