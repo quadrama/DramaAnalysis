@@ -6,6 +6,9 @@
 #' @param names Whether the resulting table contains figure ids or names
 #' @param boost A scaling factor to generate nicer values
 #' @param baseurl The url delivering the dictionairies
+#' @importFrom stats aggregate
+#' @importFrom stats ave
+#' @importFrom utils read.csv
 #' @export
 dictionary.statistics <- function(t, fieldnames=c(),
                                   normalize = FALSE, names=FALSE, boost = 100,
@@ -28,6 +31,17 @@ dictionary.statistics <- function(t, fieldnames=c(),
   r
 }
 
+#' Calculates dictionary statistics for a single word field that is given as a character vector
+#' @param t A single or multiple text(s)
+#' @param wordfield A character vector containing the words or lemmas to be counted
+#' @param names A logical values. Whether to use figure names or ids
+#' @param normalize.by.figure A logical value. Whether to normalize by the amount of tokens a figure speaks
+#' @param normalize.by.field A logical value. Whether to normalize by the size of the word field
+#' @param bylist A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas
+#' @examples
+#' data(rksp.0)
+#' fstat <- dictionary.statistics.single(rksp.0, wordfield=c("der"), names=TRUE)
+#' @importFrom stats aggregate
 #' @export
 dictionary.statistics.single <- function(t, wordfield=c(), names = FALSE, normalize.by.figure = FALSE, normalize.by.field = FALSE, bylist = list(t$drama, t$Speaker.figure_id)) {
   if (names == TRUE)

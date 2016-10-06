@@ -1,13 +1,19 @@
 #' This method calculates the length of each utterance, organised by figure and drama.
 #' @param t The dramatic text(s)
 #' @param num.figures The maximal number of figures per drama to include. Default: 10. Set to FALSE to include all figures.
+#' @param normalize.by.drama.length Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
 #' @examples
 #' data(rksp.0)
 #' num_figures <- 5
-#' ustat <- utterance.statistics(rksp.0, num.figures = num_figures)
-#' boxplot(ustat$utterance_length ~ ustat$figure,col=qd.colors[1:num_figures], las=2,frame=F)
-utterance.statistics <- function(t, num.figures=10) {
+#' ustat <- utterance_statistics(rksp.0, num.figures = num_figures)
+#' \dontrun{
+#' boxplot(ustat$utterance_length ~ ustat$figure,
+#'    col=qd.colors[1:num_figures],
+#'    las=2, frame=FALSE)
+#' }
+#' @importFrom stats aggregate
+utterance_statistics <- function(t, num.figures=10, normalize.by.drama.length = TRUE) {
 
   if (typeof(num.figures) == "double") {
     t <- limit.figures.by.rank(t, maxRank = num.figures)
@@ -18,8 +24,9 @@ utterance.statistics <- function(t, num.figures=10) {
   colnames(ulength) <- c("drama", "figure", "begin", "drama_length","utterance_length")
 
   # normalize by drama length
-  ulength$utterance_length <- ulength$utterance_length / ulength$drama_length
-
+  if (normalize.by.drama.length == TRUE) {
+    ulength$utterance_length <- ulength$utterance_length / ulength$drama_length
+  }
   # skip empty factor levels
   ulength <- droplevels(ulength)
 
