@@ -1,7 +1,7 @@
 
 
-id2url <- function(id, url = qd.baseurl) {
-  paste(environment$url, "annotations", id, sep="/")
+id2url <- function(id, url = "http://localhost:8080/drama.web") {
+  paste(url, "annotations", id, sep="/")
 }
 
 #' Loads a CSV-formatted text from the server,
@@ -12,7 +12,7 @@ id2url <- function(id, url = qd.baseurl) {
 #' @param tokens If set to true, the table also contains each token in an utterance
 #' @param url The url we load the text from
 #' @export
-load.text <- function(ids, tokens=FALSE, url=qd.baseurl) {
+load.text <- function(ids, tokens=FALSE, url="http://localhost:8080/drama.web") {
   if (tokens == TRUE) {
     load.annotations(ids, 
                      type="de.unistuttgart.ims.drama.api.Utterance", 
@@ -35,7 +35,7 @@ load.text <- function(ids, tokens=FALSE, url=qd.baseurl) {
 load.annotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance", 
                              coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
-                             url=qd.baseurl) {
+                             url="http://localhost:8080/drama.web") {
   r <- data.frame(c())
   s <- ""
   if (! is.null(coveredType)) {
