@@ -1,11 +1,7 @@
-#' The base url to retrieve data files from
-#' @export
-qd.url <- function() {
-  environment$url
-}
 
-id2url <- function(id) {
-  paste(environment$url, "annotations/", id, sep="")
+
+id2url <- function(id, url = "http://localhost:8080/drama.web") {
+  paste(url, "annotations", id, sep="/")
 }
 
 #' Loads a CSV-formatted text from the server,
@@ -14,30 +10,39 @@ id2url <- function(id) {
 #'
 #' @param ids A vector containing drama ids to be downloaded
 #' @param tokens If set to true, the table also contains each token in an utterance
+#' @param url The url we load the text from
 #' @export
-load.text <- function(ids, tokens=FALSE) {
+load.text <- function(ids, tokens=FALSE, url="http://localhost:8080/drama.web") {
   if (tokens == TRUE) {
-    load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
+    load.annotations(ids, 
+                     type="de.unistuttgart.ims.drama.api.Utterance", 
+                     coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+                     url=url)
   } else
-    load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
+    load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL,
+                     url=url)}
 
 #' Helper method to load covered annotations.
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load
+#' @param url The base url the web service can be reached with
 #' @export
 #' @examples
 #' \dontrun{
 #' load.annotations(c("rksp.0"))
 #' }
-load.annotations <- function(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
+load.annotations <- function(ids, 
+                             type="de.unistuttgart.ims.drama.api.Utterance", 
+                             coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+                             url="http://localhost:8080/drama.web") {
   r <- data.frame(c())
   s <- ""
   if (! is.null(coveredType)) {
     s <- paste("/", coveredType, sep="")
   }
   for (a in ids) {
-    myurl <- paste(id2url(a), "/", type, s, sep="")
+    myurl <- paste(id2url(a, url=url), "/", type, s, sep="")
     print(myurl)
     tryCatch({
       data <- load_from_url(myurl)

@@ -5,7 +5,8 @@
 \title{Helper method to load covered annotations.}
 \usage{
 load.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
-  coveredType = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
+  coveredType = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
+  url = qd.baseurl)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
@@ -13,6 +14,8 @@ load.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
 \item{type}{The annotation type to load}
 
 \item{coveredType}{The annotation type of covered annotations we want to load}
+
+\item{url}{The base url the web service can be reached with}
 }
 \description{
 Helper method to load covered annotations.
