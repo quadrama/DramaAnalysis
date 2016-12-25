@@ -5,7 +5,7 @@
 \title{Loads a CSV-formatted text from the server,
 assuming the main server url has been set correctly.}
 \usage{
-load.text(ids, tokens = FALSE, url = qd.baseurl)
+load.text(ids, tokens = FALSE, url = "http://localhost:8080/drama.web")
 }
 \arguments{
 \item{ids}{A vector containing drama ids to be downloaded}

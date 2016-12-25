@@ -6,7 +6,7 @@
 \usage{
 load.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
   coveredType = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
-  url = qd.baseurl)
+  url = "http://localhost:8080/drama.web")
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
