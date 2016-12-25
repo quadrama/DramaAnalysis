@@ -46,7 +46,41 @@ load.annotations <- function(ids,
     print(myurl)
     tryCatch({
       data <- load_from_url(myurl)
+      data$drama <- a
+      data$length <- nrow(data)
       r <- rbind(r,data)
+    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
+  }
+  r
+}
+
+#' Function to count the annotations of a certain type in selected texts.
+#' @param ids A vector or list of drama ids
+#' @param type A string, the fully qualified type name we want to count
+#' @param url The base url the web service can be reached with
+#' @param debug Logical value, whether to print debug information
+#' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
+#' @export
+count.annotations <- function(ids, 
+                             type="de.unistuttgart.ims.drama.api.Utterance",
+                             url="http://localhost:8080/drama.web",
+                             debug=FALSE,
+                             shortname=TRUE) {
+  r <- data.frame(c())
+  s <- ""
+  if (shortname == TRUE) {
+    lname <- utils::tail(unlist(strsplit(type, split=".",fixed=TRUE)),n=1)
+  } else {
+    lname <- type
+  }
+  for (a in ids) {
+    myurl <- paste(id2url(a, url=url), "/", type, s, sep="")
+    if (debug == TRUE) {
+      print(myurl)
+    }
+    tryCatch({
+      data2 <- load_from_url(myurl)
+      r[a,lname] = nrow(data2)
     }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
   }
   r
