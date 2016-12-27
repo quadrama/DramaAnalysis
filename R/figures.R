@@ -47,3 +47,40 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
   }
   r
 }
+
+#' @export
+rank.figures.by.dp <- function(figures) {
+  figures$"Rank (dramatis personae)" <- ave(seq(1:nrow(figures)),figures$drama, FUN=rank)
+  figures
+}
+
+#' Given a dramatic text and a table of figures, ranks the figures by 
+#' their first appearance. The lower the rank number, the earlier the figure appears.
+#' "appears": speaks for the first time.
+#' @export
+#' @examples 
+#' data(rksp.0)
+#' \dontrun{rank.figures.by.appearance(figures, rksp.0)}
+rank.figures.by.appearance <- function(figures, text) {
+  minimal.utterance.begin <- aggregate(text$begin, by=list(text$drama,
+                                                           text$Speaker.figure_surface),
+                                       min)
+  colnames(minimal.utterance.begin) <- c("drama", "figure", "begin")
+  minimal.utterance.begin$"Rank (1st appearance)" <- ave(minimal.utterance.begin$begin, 
+                                                         minimal.utterance.begin$drama, FUN=rank)
+  minimal.utterance.begin <- subset(minimal.utterance.begin, select=c("figure","Rank (1st appearance)"))
+  merge(figures, minimal.utterance.begin, by.x="Figure.surface", by.y="figure")
+}
+
+#' @export
+figures.first.appearances <- function(texts, acts) {
+  acts$Number <- ave(acts$begin, acts$drama, FUN=rank)
+  minimal.utterance.begin <- aggregate(texts$begin, by=list(texts$drama, 
+                                                            texts$Speaker.figure_surface), 
+                                       min)
+  mub.at <- merge(minimal.utterance.begin, acts, by.x="Group.1", by.y="drama")
+  mub.at <- mub.at[mub.at$x>=mub.at$begin& mub.at$x<=mub.at$end,]
+  mub.at <- merge(mub.at, genres, by.x="Group.1", by.y=0)
+  table(mub.at$Number, mub.at$Genre)
+}
+
