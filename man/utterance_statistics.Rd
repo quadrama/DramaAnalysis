@@ -19,7 +19,7 @@ This method calculates the length of each utterance, organised by figure and dra
 \examples{
 data(rksp.0)
 num_figures <- 5
-ustat <- utterance_statistics(rksp.0, num.figures = num_figures)
+ustat <- utterance_statistics(rksp.0.text, num.figures = num_figures)
 \dontrun{
 boxplot(ustat$utterance_length ~ ustat$figure,
    col=qd.colors[1:num_figures],

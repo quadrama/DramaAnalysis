@@ -6,7 +6,7 @@
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @examples
 #' data(rksp.0)
-#' st <- frequencytable(rksp.0)
+#' st <- frequencytable(rksp.0.text)
 #' @examples
 #' \dontrun{
 #' t <- load.text(read.csv("http://localhost:8080/drama.web/dramas", header=FALSE)[,], tokens=T)

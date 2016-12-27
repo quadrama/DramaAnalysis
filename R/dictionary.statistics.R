@@ -40,7 +40,7 @@ dictionary.statistics <- function(t, fieldnames=c(),
 #' @param bylist A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas
 #' @examples
 #' data(rksp.0)
-#' fstat <- dictionary.statistics.single(rksp.0, wordfield=c("der"), names=TRUE)
+#' fstat <- dictionary.statistics.single(rksp.0.text, wordfield=c("der"), names=TRUE)
 #' @importFrom stats aggregate
 #' @export
 dictionary.statistics.single <- function(t, wordfield=c(), names = FALSE, normalize.by.figure = FALSE, normalize.by.field = FALSE, bylist = list(t$drama, t$Speaker.figure_id)) {

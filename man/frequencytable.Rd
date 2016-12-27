@@ -23,6 +23,6 @@ This function generates a table to be used by stylo
 }
 \examples{
 data(rksp.0)
-st <- frequencytable(rksp.0)
+st <- frequencytable(rksp.0.text)
 }
 
