@@ -86,6 +86,19 @@ count.annotations <- function(ids,
   r
 }
 
+#' @export
+load.numbers <- function(ids=c(),
+                         annotations=c(), 
+                         url="http://localhost:8080/drama.web3", debug=FALSE) {
+  df <- data.frame(ids)
+  rownames(df) <- df$ids
+  for (a in annotations) {
+    annos <- count.annotations(ids, type=a, url=url, debug=debug)
+    df <- cbind(df, annos)
+  }
+  subset(df,select=c(-1))
+}
+
 #' @importFrom utils read.csv
 load_from_url <- function(url) {
   read.csv(url, header=TRUE, fileEncoding="UTF-8", encoding="UTF-8")
