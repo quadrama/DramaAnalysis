@@ -5,3 +5,5 @@ addons:
   apt:
     packages:
       ed
+notifications:
+  slack: quadrama:0jGO6p0xkb5l0vSK00tQSJMr

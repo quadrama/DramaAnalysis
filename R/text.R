@@ -22,7 +22,7 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @importFrom utils head
 #' @examples
 #' data(rksp.0)
-#' t <- limit.figures.by.rank(rksp.0)
+#' t <- limit.figures.by.rank(rksp.0.text)
 limit.figures.by.rank <- function(t, maxRank=10) {
   counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
   counts <- counts[order(counts$x, decreasing = TRUE),]
@@ -36,7 +36,7 @@ limit.figures.by.rank <- function(t, maxRank=10) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' t <- limit.figures.by.tokens(rksp.0)
+#' t <- limit.figures.by.tokens(rksp.0.text)
 limit.figures.by.tokens <- function(t, minTokens=100) {
     counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
     write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
@@ -44,7 +44,43 @@ limit.figures.by.tokens <- function(t, minTokens=100) {
 }
 
 
+tfidf1 <- function(word) {
+  docfreq <- sum(word>0)
+  word/docfreq
+}
 
+#' @export
+tfidf <- function(ftable) {
+  data.frame(apply(ftable, 2, tfidf1))
+}
 
+#' @export
+configuration <- function(mtext, by="Act") {
+  if (by=="Scene") {
+    configuration.scene(mtext)
+  } else {
+    configuration.act(mtext)
+  }
+}
 
+configuration.act <- function(mtext) {
+  t <- mtext
+  words.per.segment <- aggregate(Token.surface ~ drama + Speaker.figure_surface + Number.Act, 
+                                 data=t, length)
+  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("drama","Speaker.figure_surface"), timevar = "Number.Act")
+  cfg[is.na(cfg)] <- 0
+  colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
+  cfg
+}
 
+configuration.scene <- function(text) {
+  t <- text
+  bylist = list(t$drama, t$Speaker.figure_surface, paste0(t$Number.Act,"-", formatC(t$Number.Scene, width=2)))
+  words.per.segment <- aggregate(t$Token.surface, 
+                                 by=bylist, 
+                                 length)
+  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("Group.1","Group.2"), timevar = "Group.3")
+  cfg[is.na(cfg)] <- 0
+  colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
+  cfg
+}

@@ -16,6 +16,6 @@ This method removes the spoken tokens by all figures that speak infrequently.
 }
 \examples{
 data(rksp.0)
-t <- limit.figures.by.tokens(rksp.0)
+t <- limit.figures.by.tokens(rksp.0.text)
 }
 

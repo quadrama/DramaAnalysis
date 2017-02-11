@@ -4,9 +4,10 @@
 #' @param names Whether to use figure names or ids
 #' @param by.figure Wether the count is by figure or by text
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
+#' @param sep The separation character that goes between drama name and figure (if applicable)
 #' @examples
 #' data(rksp.0)
-#' st <- frequencytable(rksp.0)
+#' st <- frequencytable(rksp.0.text)
 #' @examples
 #' \dontrun{
 #' t <- load.text(read.csv("http://localhost:8080/drama.web/dramas", header=FALSE)[,], tokens=T)
@@ -15,7 +16,23 @@
 #' stylo(gui=F, frequencies = stylo_table, network=T, write.png.file=T, analysis.type="BCT")
 #' }
 #' @export
-frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, column="Token.surface", by.figure=FALSE) {
+frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, column="Token.surface", by.figure=FALSE, sep=" ") {
+  ft <- t
+  if (length(accepted.pos) > 0)
+    ft <- t[t$Token.pos %in% accepted.pos,]
+  if (by.figure == FALSE)
+    index <- paste(ft$drama)
+  else if (names == TRUE)
+    index <- paste(ft$drama, ft$Speaker.figure_surface, sep=sep)
+  else
+    index <- paste(ft$drama, ft$Speaker.figure_id, sep=sep)
+  r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
+  r[,order(colSums(r),decreasing=TRUE)]
+}
+
+#' Extract bigrams instead of words (currently not taking utterance boundaries into account)
+#' @export
+frequencytable2 <- function(t, accepted.pos = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), by.figure=FALSE) {
   ft <- t
   if (length(accepted.pos) > 0)
     ft <- t[t$Token.pos %in% accepted.pos,]
@@ -25,6 +42,6 @@ frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, colu
     index <- paste(ft$drama, ft$Speaker.figure_surface)
   else
     index <- paste(ft$drama, ft$Speaker.figure_id)
-  r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
+  r <- do.call(rbind, tapply(paste(ft[[cols[1]]], ft[[cols[2]]][-1]), index, function(x){prop.table(table(x))}))
   r[,order(colSums(r),decreasing=TRUE)]
 }

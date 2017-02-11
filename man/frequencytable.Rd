@@ -5,7 +5,7 @@
 \title{This function generates a table to be used by stylo}
 \usage{
 frequencytable(t, accepted.pos = postags$de$words, names = FALSE,
-  column = "Token.surface", by.figure = FALSE)
+  column = "Token.surface", by.figure = FALSE, sep = " ")
 }
 \arguments{
 \item{t}{The text table, potentially covering multiple texts}
@@ -17,12 +17,14 @@ frequencytable(t, accepted.pos = postags$de$words, names = FALSE,
 \item{column}{The column name we should use (should be either Token.surface or Token.lemma)}
 
 \item{by.figure}{Wether the count is by figure or by text}
+
+\item{sep}{The separation character that goes between drama name and figure (if applicable)}
 }
 \description{
 This function generates a table to be used by stylo
 }
 \examples{
 data(rksp.0)
-st <- frequencytable(rksp.0)
+st <- frequencytable(rksp.0.text)
 }
 

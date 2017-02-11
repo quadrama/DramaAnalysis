@@ -12,7 +12,10 @@
 #'  \item{Token.lemma}{}
 #' }
 
-"rksp.0"
+"rksp.0.text"
+
+#' Figures declared in the dramatis personae from Emilia Galotti.
+"rksp.0.figures"
 
 #' The data set exported from Romeo und Julia, German translation
 #' @format A data frame with 28542 rows and 9 columns:

@@ -12,7 +12,7 @@
 #' @importFrom stats aggregate
 #' @examples
 #' data(rksp.0)
-#' stat <- figure.statistics(rksp.0, names = FALSE)
+#' stat <- figure.statistics(rksp.0.text, names = FALSE)
 #' @export
 figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
   dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
@@ -47,3 +47,46 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
   }
   r
 }
+
+#' Adds a column to the figures data frame, containing the rank in the dramatis personae.
+#' @param figures The figures to rank
+#' @export
+#' @examples 
+#' data(rksp.0)
+#' rank.figures.by.dp(rksp.0.figures)
+rank.figures.by.dp <- function(figures, columnTitle="Rank (dramatis personae)") {
+  figures[[columnTitle]] <- ave(seq(1:nrow(figures)),figures$drama, FUN=rank)
+  figures
+}
+
+#' Given a dramatic text and a table of figures, ranks the figures by 
+#' their first appearance. The lower the rank number, the earlier the figure appears.
+#' "appears": speaks for the first time.
+#' @param figures A data frame containing the figures
+#' @param text A text data frame
+#' @export
+#' @examples 
+#' data(rksp.0)
+#' rank.figures.by.appearance(rksp.0.figures, rksp.0.text)
+rank.figures.by.appearance <- function(figures, text, columnTitle="Rank (1st appearance)") {
+  minimal.utterance.begin <- aggregate(text$begin, by=list(text$drama,
+                                                           text$Speaker.figure_surface),
+                                       min)
+  colnames(minimal.utterance.begin) <- c("drama", "figure", "begin")
+  minimal.utterance.begin[[columnTitle]] <- ave(minimal.utterance.begin$begin, 
+                                                         minimal.utterance.begin$drama, FUN=rank)
+  minimal.utterance.begin <- subset(minimal.utterance.begin, select=c("figure","drama",columnTitle))
+  merge(figures, minimal.utterance.begin, by.x=c("drama","Figure.surface"), by.y=c("drama","figure"))
+}
+
+#' @export
+figures.first.appearances <- function(texts, acts) {
+  acts$Number <- ave(acts$begin, acts$drama, FUN=rank)
+  minimal.utterance.begin <- aggregate(texts$begin, by=list(texts$drama, 
+                                                            texts$Speaker.figure_surface), 
+                                       min)
+  mub.at <- merge(minimal.utterance.begin, acts, by.x="Group.1", by.y="drama")
+  mub.at <- mub.at[mub.at$x>=mub.at$begin& mub.at$x<=mub.at$end,]
+  mub.at
+}
+
