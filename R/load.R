@@ -15,7 +15,11 @@ scene.act.table <- function(ids, url) {
   merged
 }
 
+#' Loads a CSV-formatted text from the given server url.
+#' @param ids A list or vector of ids
+#' @param url the URL to reach the server.
 #' @export
+#' 
 load.text2 <- function(ids, url="http://localhost:8080/drama.web") {
   text <- load.text(ids, tokens=TRUE, url=url)
   satable <- scene.act.table(ids=ids, url=url)
