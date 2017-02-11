@@ -75,8 +75,8 @@ rank.figures.by.appearance <- function(figures, text, columnTitle="Rank (1st app
   colnames(minimal.utterance.begin) <- c("drama", "figure", "begin")
   minimal.utterance.begin[[columnTitle]] <- ave(minimal.utterance.begin$begin, 
                                                          minimal.utterance.begin$drama, FUN=rank)
-  minimal.utterance.begin <- subset(minimal.utterance.begin, select=c("figure",columnTitle))
-  merge(figures, minimal.utterance.begin, by.x="Figure.surface", by.y="figure")
+  minimal.utterance.begin <- subset(minimal.utterance.begin, select=c("figure","drama",columnTitle))
+  merge(figures, minimal.utterance.begin, by.x=c("drama","Figure.surface"), by.y=c("drama","figure"))
 }
 
 #' @export
