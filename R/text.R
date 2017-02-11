@@ -54,4 +54,33 @@ tfidf <- function(ftable) {
   data.frame(apply(ftable, 2, tfidf1))
 }
 
+#' @export
+configuration <- function(mtext, by="Act") {
+  if (by=="Scene") {
+    configuration.scene(mtext)
+  } else {
+    configuration.act(mtext)
+  }
+}
 
+configuration.act <- function(mtext) {
+  t <- mtext
+  words.per.segment <- aggregate(Token.surface ~ drama + Speaker.figure_surface + Number.Act, 
+                                 data=t, length)
+  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("drama","Speaker.figure_surface"), timevar = "Number.Act")
+  cfg[is.na(cfg)] <- 0
+  colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
+  cfg
+}
+
+configuration.scene <- function(text) {
+  t <- text
+  bylist = list(t$drama, t$Speaker.figure_surface, paste0(t$Number.Act,"-", formatC(t$Number.Scene, width=2)))
+  words.per.segment <- aggregate(t$Token.surface, 
+                                 by=bylist, 
+                                 length)
+  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("Group.1","Group.2"), timevar = "Group.3")
+  cfg[is.na(cfg)] <- 0
+  colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
+  cfg
+}
