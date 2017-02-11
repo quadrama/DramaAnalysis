@@ -4,6 +4,27 @@ id2url <- function(id, url = "http://localhost:8080/drama.web") {
   paste(url, "annotations", id, sep="/")
 }
 
+scene.act.table <- function(ids, url) {
+  acts <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL,url=url)
+  acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
+  scenes <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL,url=url)
+  merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"))
+  merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
+  merged <- subset(merged, select=c(-5,-9))
+  merged$Number.Scene <- ave(merged$begin.Scene, merged$drama, merged$Number.Act, FUN=function(x) {as.numeric(as.factor(x))})
+  merged
+}
+
+#' @export
+load.text2 <- function(ids, url="http://localhost:8080/drama.web") {
+  text <- load.text(ids, tokens=TRUE, url=url)
+  satable <- scene.act.table(ids=ids, url=url)
+  mtext <- merge(text, satable, by="drama")
+  mtext <- mtext[mtext$begin >= mtext$begin.Scene & mtext$end <= mtext$end.Scene,]
+  mtext
+}
+
+
 #' Loads a CSV-formatted text from the server,
 #' assuming the main server url has been set correctly.
 #'
@@ -49,7 +70,7 @@ load.annotations <- function(ids,
       data$drama <- a
       data$length <- nrow(data)
       r <- rbind(r,data)
-    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
+    }, finally=function(w) {print()}, error=function(w){print(w)}, warning=function(w){print(w)})
   }
   r
 }
