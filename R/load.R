@@ -71,8 +71,8 @@ load.annotations <- function(ids,
     print(myurl)
     tryCatch({
       data <- load_from_url(myurl)
-      data$drama <- a
-      data$length <- nrow(data)
+      #data$drama <- a
+      #data$length <- nrow(data)
       r <- rbind(r,data)
     }, finally=function(w) {print()}, error=function(w){print(w)}, warning=function(w){print(w)})
   }
