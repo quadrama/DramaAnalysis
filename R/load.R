@@ -10,7 +10,7 @@ scene.act.table <- function(ids, url) {
   scenes <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL,url=url)
   merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"))
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
-  merged <- subset(merged, select=c(-5,-9))
+  #merged <- subset(merged, select=c(-5,-9))
   merged$Number.Scene <- ave(merged$begin.Scene, merged$drama, merged$Number.Act, FUN=function(x) {as.numeric(as.factor(x))})
   merged
 }
