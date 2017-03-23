@@ -18,4 +18,3 @@ load.text(ids, tokens = FALSE, url = "http://localhost:8080/drama.web")
 Loads a CSV-formatted text from the server,
 assuming the main server url has been set correctly.
 }
-

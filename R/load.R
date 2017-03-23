@@ -4,6 +4,20 @@ id2url <- function(id, url = "http://localhost:8080/drama.web") {
   paste(url, "annotations", id, sep="/")
 }
 
+#' Function to load a set from QuaDramA web service.
+#' Can optionally set the set name as a genre in the returned table
+#' @param setName The name of the set to retrieve
+#' @param url The base url of the web service
+#' @param setGenre Whether to set the Genre-column in the returned table to the set name
+#' @export
+load.set <- function(setName, url = "http://localhost:8080/drama.web3",setGenre=FALSE) {
+  ds <- load_from_url(paste(url,"set",setName,sep="/"))
+  if (setGenre == TRUE) {
+    ds$Genre <- setName
+  }
+  ds
+}
+
 scene.act.table <- function(ids, url) {
   acts <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL,url=url)
   acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})

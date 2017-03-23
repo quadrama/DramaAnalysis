@@ -25,4 +25,3 @@ Helper method to load covered annotations.
 load.annotations(c("rksp.0"))
 }
 }
-
