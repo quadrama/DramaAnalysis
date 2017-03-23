@@ -26,5 +26,10 @@ This function generates a table to be used by stylo
 \examples{
 data(rksp.0)
 st <- frequencytable(rksp.0.text)
+\dontrun{
+t <- load.text(read.csv("http://localhost:8080/drama.web/dramas", header=FALSE)[,], tokens=T)
+tl <- limit.figures.by.tokens(t, minTokens=1000)
+stylo_table <- frequencytable(tl, names=TRUE, by.figure=TRUE)
+stylo(gui=F, frequencies = stylo_table, network=T, write.png.file=T, analysis.type="BCT")
 }
-
+}
