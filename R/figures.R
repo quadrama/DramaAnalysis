@@ -54,6 +54,9 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
 #' @param fstat The figure statistics table, i.e., the output of figure.statistics()
 #' @param column A column name found in the statistics table. This count is used 
 #' as a basis for the plot.
+#' @param order If set to -1 (default), figures are ranked descending 
+#' (i.e., figure with most spoken words first). If set to 1, 
+#' figures are ranked ascending.
 #' @importFrom reshape2 dcast
 #' @examples
 #' data(rksp.0,vndf.0)
@@ -65,9 +68,9 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
 #' # Add figure names (if needed/wanted)
 #' text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
 #' @export
-figurematrix <- function(fstat,column="tokens") {
+figurematrix <- function(fstat,column="tokens",order=-1) {
   fs <- fstat
-  fs$rank <- ave(fs$tokens, fs$drama, FUN=function(x) {rank(-x, ties.method = "first")})
+  fs$rank <- ave(fs[[column]], fs$drama, FUN=function(x) {rank(order*x, ties.method = "first")})
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
   mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="figure")[,-1])
   mat_cs <- apply(mat_values, 2,cumsum)
