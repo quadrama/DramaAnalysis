@@ -5,8 +5,8 @@
 \title{This method retrieves word lists from the given URL (e.g., github) and
 counts the number of occurrences of the words in the dictionaries}
 \usage{
-dictionary.statistics(t, fieldnames = c(), normalize = FALSE,
-  names = FALSE, boost = 100,
+dictionary.statistics(t, fieldnames = c(), normalize.by.figure = FALSE,
+  normalize.by.field = FALSE, names = FALSE, boost = 1,
   baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/")
 }
 \arguments{
@@ -14,7 +14,9 @@ dictionary.statistics(t, fieldnames = c(), normalize = FALSE,
 
 \item{fieldnames}{A list of names for the dictionaries. It is expected that files with that name can be found below the URL.}
 
-\item{normalize}{Whether to normalize by figure speech length}
+\item{normalize.by.figure}{Whether to normalize by figure speech length}
+
+\item{normalize.by.field}{Whether to normalize by dictionary size. You usually want this.}
 
 \item{names}{Whether the resulting table contains figure ids or names}
 
@@ -26,4 +28,3 @@ dictionary.statistics(t, fieldnames = c(), normalize = FALSE,
 This method retrieves word lists from the given URL (e.g., github) and
 counts the number of occurrences of the words in the dictionaries
 }
-
