@@ -23,4 +23,3 @@ rksp.0.text
 The data set exported from Emilia Galotti
 }
 \keyword{datasets}
-

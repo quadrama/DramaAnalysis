@@ -22,4 +22,3 @@ count.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
 \description{
 Function to count the annotations of a certain type in selected texts.
 }
-

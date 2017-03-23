@@ -26,4 +26,3 @@ boxplot(ustat$utterance_length ~ ustat$figure,
    las=2, frame=FALSE)
 }
 }
-

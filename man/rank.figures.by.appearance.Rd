@@ -23,4 +23,3 @@ their first appearance. The lower the rank number, the earlier the figure appear
 data(rksp.0)
 rank.figures.by.appearance(rksp.0.figures, rksp.0.text)
 }
-

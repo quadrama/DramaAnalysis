@@ -16,4 +16,3 @@ Adds a column to the figures data frame, containing the rank in the dramatis per
 data(rksp.0)
 rank.figures.by.dp(rksp.0.figures)
 }
-

@@ -12,4 +12,3 @@ rksp.0.figures
 Figures declared in the dramatis personae from Emilia Galotti.
 }
 \keyword{datasets}
-

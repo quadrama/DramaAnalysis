@@ -23,4 +23,3 @@ vndf.0
 The data set exported from Romeo und Julia, German translation
 }
 \keyword{datasets}
-
