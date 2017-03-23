@@ -28,4 +28,3 @@ This function extracts figure statistics from a drama text table.
 data(rksp.0)
 stat <- figure.statistics(rksp.0.text, names = FALSE)
 }
-

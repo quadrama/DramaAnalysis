@@ -18,4 +18,3 @@ This method removes the spoken tokens of all but the most frequent n figures
 data(rksp.0)
 t <- limit.figures.by.rank(rksp.0.text)
 }
-
