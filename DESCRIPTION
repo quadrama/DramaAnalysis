@@ -12,6 +12,8 @@ LazyData: TRUE
 Imports:
    class (>= 7.3-14), caret (>= 6.0-71), stats (>= 3.3.1), utils (>= 3.3.1), reshape2 (>= 1.4.2)
 Depends:
+  rJava (>= 0.9-8)
 RoxygenNote: 6.0.1
 Suggests: testthat
 Encoding: UTF-8
+SystemRequirements: Java
