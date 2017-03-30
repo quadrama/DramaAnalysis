@@ -1,16 +1,164 @@
 package de.unistuttgart.ims.drama.R;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.logging.Logger;
 
-public class DataLoader {
-	File xmiDirectory;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.uima.UIMAException;
+import org.apache.uima.cas.impl.XmiCasDeserializer;
+import org.apache.uima.fit.factory.JCasFactory;
+import org.apache.uima.jcas.JCas;
+import org.xml.sax.SAXException;
+
+public class DataLoader implements IRepository {
+	File rootDirectory;
+	String defaultNamespace = "tg";
+	String idSeparator = ":";
+
+	static Logger logger = Logger.getLogger(DataLoader.class.getPackage().getName());
 
 	public DataLoader(String xmiDirectoryName) {
-		xmiDirectory = new File(xmiDirectoryName);
+		rootDirectory = new File(xmiDirectoryName);
 	}
 
 	@Override
 	public String toString() {
-		return xmiDirectory.getAbsolutePath();
+		return rootDirectory.getAbsolutePath();
+	}
+
+	public JCas getJCas(String id) throws UIMAException, SAXException, IOException {
+		JCas jcas = JCasFactory.createJCas();
+		try {
+			XmiCasDeserializer.deserialize(getXmiStream(id), jcas.getCas(), true);
+		} catch (SAXException e) {
+			logger.severe("XMI Parsing Error for id " + id);
+			throw e;
+		}
+		return jcas;
+	}
+
+	public Iterator<String> getIds() {
+		final Iterator<File> fIter = FileUtils.iterateFiles(getXmiDirectory(), new String[] { "xmi" }, true);
+		return new Iterator<String>() {
+
+			public boolean hasNext() {
+				return fIter.hasNext();
+			}
+
+			public String next() {
+				File f = fIter.next();
+
+				return f.getParentFile().getName() + idSeparator + f.getName().substring(0, f.getName().length() - 4);
+			}
+		};
+
+	}
+
+	public String[] getCollections() {
+		return getCollectionsDirectory().list(new FilenameFilter() {
+
+			public boolean accept(File dir, String name) {
+				return !name.startsWith(".");
+			}
+		});
+	}
+
+	public InputStream getCollection(String collection) throws FileNotFoundException {
+		return new FileInputStream(getCollectionFile(collection));
+	}
+
+	public boolean existsId(String id) {
+		return getFile(id).exists();
+	}
+
+	private File getFile(String id) {
+		String[] idp = id.split(idSeparator, 2);
+		if (idp.length == 1) {
+			idp = (String[]) ArrayUtils.addAll(new String[] { "tg" }, idp);
+		}
+
+		String path = StringUtils.join(idp, File.separatorChar);
+		if (!path.endsWith(".xmi"))
+			path = path + ".xmi";
+		return new File(getXmiDirectory(), path);
+	}
+
+	private File getXmiDirectory() {
+		return new File(rootDirectory, getXmiDirectoryName());
+	}
+
+	private String getXmiDirectoryName() {
+		return "xmi";
+	}
+
+	private String getCollectionsDirectoryName() {
+		return "collections";
+	}
+
+	private InputStream getXmiStream(String id) throws FileNotFoundException {
+		return new FileInputStream(getFile(id));
+	}
+
+	private File getCollectionsDirectory() {
+		return new File(rootDirectory, getCollectionsDirectoryName());
+	}
+
+	private File getCollectionFile(String collectionName) {
+		return new File(getCollectionsDirectory(), collectionName);
+	}
+
+	public Object[][] getListOfSets() {
+
+		String[] coll = getCollections();
+		Object[][] r = new Object[2][];
+		r[0] = coll;
+		r[1] = new Object[coll.length];
+		// r.add(new Object[] { "id", "length" });
+		for (int i = 0; i < coll.length; i++) {
+			String file = coll[i];
+			try {
+				r[1][i] = new Integer(Util.countLines(getCollection(file)));
+			} catch (IOException e) {
+				r[1][i] = new Integer(0);
+				e.printStackTrace();
+			}
+		}
+
+		return r;
+	}
+
+	public String[] getCollectionEntries(String tagsList) {
+
+		Set<String> ret = new HashSet<String>();
+
+		String[] tags = tagsList.split(",");
+		Set<String> selectedIds = new HashSet<String>();
+		for (String t : tags) {
+			try {
+				selectedIds.addAll(IOUtils.readLines(getCollection(t)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		for (String id : selectedIds) {
+			if (existsId(id)) {
+				ret.add(id);
+
+			}
+		}
+		return ret.toArray(new String[ret.size()]);
+
 	}
 }
