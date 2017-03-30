@@ -1,4 +1,4 @@
-package de.unistuttgart.ims.drama.R;
+package de.unistuttgart.ims.drama.data;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

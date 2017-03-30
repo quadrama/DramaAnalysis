@@ -1,4 +1,4 @@
-package de.unistuttgart.ims.drama.R;
+package de.unistuttgart.ims.drama.data;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,11 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.apache.commons.configuration2.CombinedConfiguration;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.tree.OverrideCombiner;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -19,17 +23,58 @@ import org.apache.uima.UIMAException;
 import org.apache.uima.cas.impl.XmiCasDeserializer;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.tcas.Annotation;
 import org.xml.sax.SAXException;
+
+import de.unistuttgart.ims.uimautil.CoNLLExport;
 
 public class DataLoader implements IRepository {
 	File rootDirectory;
 	String defaultNamespace = "tg";
 	String idSeparator = ":";
+	CombinedConfiguration config;
 
 	static Logger logger = Logger.getLogger(DataLoader.class.getPackage().getName());
 
 	public DataLoader(String xmiDirectoryName) {
 		rootDirectory = new File(xmiDirectoryName);
+		loadConfig();
+	}
+
+	private void loadConfig() {
+		INIConfiguration defaultConfig = new INIConfiguration();
+		INIConfiguration serverConfig = new INIConfiguration();
+
+		InputStream is = null;
+		try {
+			// reading of default properties from inside the war
+			is = getClass().getResourceAsStream("/project.properties");
+			if (is != null) {
+				defaultConfig.read(new InputStreamReader(is, "UTF-8"));
+				// defaults.load();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(is);
+		}
+
+		try {
+			// reading additional properties in seperate file, as specified
+			// in the context
+			is = new FileInputStream(new File(rootDirectory, "settings.properties"));
+			serverConfig.read(new InputStreamReader(is, "UTF-8"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(is);
+		}
+
+		config = new CombinedConfiguration(new OverrideCombiner());
+		config.addConfiguration(serverConfig);
+		config.addConfiguration(defaultConfig);
+
 	}
 
 	@Override
@@ -118,6 +163,36 @@ public class DataLoader implements IRepository {
 		return new File(getCollectionsDirectory(), collectionName);
 	}
 
+	public Object[][] getAnnotations(String dramaId, String annotationClassName, String coveredAnnotationClassName)
+			throws ClassNotFoundException, UIMAException, SAXException, IOException {
+
+		Class<? extends Annotation> annotationClass;
+		annotationClass = (Class<? extends Annotation>) Class.forName(annotationClassName);
+
+		Class<? extends Annotation> coveredAnnotationClass = null;
+		if (coveredAnnotationClassName != null)
+			coveredAnnotationClass = (Class<? extends Annotation>) Class.forName(coveredAnnotationClassName);
+
+		logger.info("getAnnotations(" + dramaId + "," + annotationClassName + "," + coveredAnnotationClassName + ")");
+		CoNLLExport exporter = new CoNLLExport();
+		exporter.init(config, null, annotationClass, coveredAnnotationClass);
+
+		String[] dramaIds;
+		if (dramaId.contains(",")) {
+			dramaIds = dramaId.split(",");
+		} else {
+			dramaIds = new String[] { dramaId };
+		}
+		for (String s : dramaIds) {
+			JCas jcas;
+			jcas = getJCas(s);
+
+			exporter.convert(jcas);
+
+		}
+		return Util.toArray(exporter.getResult());
+	}
+
 	public Object[][] getListOfSets() {
 
 		String[] coll = getCollections();
@@ -146,7 +221,7 @@ public class DataLoader implements IRepository {
 		Set<String> selectedIds = new HashSet<String>();
 		for (String t : tags) {
 			try {
-				selectedIds.addAll(IOUtils.readLines(getCollection(t)));
+				selectedIds.addAll(IOUtils.readLines(getCollection(t), "UTF-8"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

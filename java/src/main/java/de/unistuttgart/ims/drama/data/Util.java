@@ -1,7 +1,8 @@
-package de.unistuttgart.ims.drama.R;
+package de.unistuttgart.ims.drama.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class Util {
 	public static int countLines(InputStream is) throws IOException {
@@ -22,5 +23,17 @@ public class Util {
 		} finally {
 			is.close();
 		}
+	}
+
+	public static <T> T[][] toArray(List<List<T>> list) {
+		System.err.println("converting array ... ");
+		T[][] r = (T[][]) new Object[list.get(0).size()][list.size()];
+
+		for (int i = 0; i < list.size(); i++) {
+			for (int j = 0; j < list.get(i).size(); j++) {
+				r[j][i] = list.get(i).get(j);
+			}
+		}
+		return r;
 	}
 }
