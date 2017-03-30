@@ -2,3 +2,6 @@
 .Rhistory
 .RData
 *.Rproj
+.project
+java/.settings
+java/target
