@@ -10,12 +10,20 @@ id2url <- function(id, url = "http://localhost:8080/drama.web") {
 #' @param url The base url of the web service
 #' @param setGenre Whether to set the Genre-column in the returned table to the set name
 #' @export
-load.set <- function(setName, url = "http://localhost:8080/drama.web3",setGenre=FALSE) {
-  ds <- load_from_url(paste(url,"set",setName,sep="/"))
-  if (setGenre == TRUE) {
+load.set <- function(setName, add.genre.column=FALSE) {
+  dl <- .jnew("de/unistuttgart/ims/drama/data/DataLoader","/Users/reiterns/Documents/QuaDramA/Data")
+  ds <- data.frame(id=dl$getCollectionEntries(setName))
+  if (add.genre.column == TRUE) {
     ds$Genre <- setName
   }
   ds
+}
+
+load.sets <- function(setName, setGenre=FALSE) {
+  dl <- .jnew("de/unistuttgart/ims/drama/data/DataLoader","/Users/reiterns/Documents/QuaDramA/Data")
+  s <- dl$getListOfSets()
+  l <- unlist(lapply(.jevalArray(s[[2]]),FUN=function(x) {.jsimplify(x)}))
+  data.frame(id=.jevalArray(s[[1]]),size=l)
 }
 
 scene.act.table <- function(ids, url) {
@@ -30,9 +38,9 @@ scene.act.table <- function(ids, url) {
 }
 
 #' Loads a CSV-formatted text from the given server url.
+#' This function is an incredible bad idea.
 #' @param ids A list or vector of ids
 #' @param url the URL to reach the server.
-#' @export
 #' 
 load.text2 <- function(ids, url="http://localhost:8080/drama.web") {
   text <- load.text(ids, tokens=TRUE, url=url)
@@ -65,32 +73,24 @@ load.text <- function(ids, tokens=FALSE, url="http://localhost:8080/drama.web") 
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load
-#' @param url The base url the web service can be reached with
 #' @export
+#' @importFrom utils read.csv
+#' @importFrom rJava .jnew .jarray .jnull
 #' @examples
 #' \dontrun{
 #' load.annotations(c("rksp.0"))
 #' }
 load.annotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance", 
-                             coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
-                             url="http://localhost:8080/drama.web") {
-  r <- data.frame(c())
-  s <- ""
-  if (! is.null(coveredType)) {
-    s <- paste("/", coveredType, sep="")
+                             coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
+  dl <- .jnew("de/unistuttgart/ims/drama/data/DataLoader","/Users/reiterns/Documents/QuaDramA/Data")
+  if (is.null(coveredType)) {
+    s <- dl$getAnnotations(.jarray(ids),type,.jnull())
+  } else {
+    s <- dl$getAnnotations(.jarray(ids),type,coveredType)
   }
-  for (a in ids) {
-    myurl <- paste(id2url(a, url=url), "/", type, s, sep="")
-    print(myurl)
-    tryCatch({
-      data <- load_from_url(myurl)
-      #data$drama <- a
-      #data$length <- nrow(data)
-      r <- rbind(r,data)
-    }, finally=function(w) {print()}, error=function(w){print(w)}, warning=function(w){print(w)})
-  }
-  r
+  df <- read.csv(text=s)
+  df
 }
 
 #' Function to count the annotations of a certain type in selected texts.
