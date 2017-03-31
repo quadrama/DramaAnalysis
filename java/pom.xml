@@ -4,14 +4,9 @@
 	<groupId>de.unistuttgart.ims</groupId>
 	<artifactId>drama.RInterface</artifactId>
 	<properties>
-	  <dramanlp.version>0.4.5-SNAPSHOT</dramanlp.version>
+	  <dramanlp.version>0.4.4</dramanlp.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.uima</groupId>
-			<artifactId>uimaj-core</artifactId>
-			<version>2.9.0</version>
-		</dependency>
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
 			<artifactId>de.unistuttgart.ims.drama.api</artifactId>
@@ -23,26 +18,10 @@
 			<version>0.6.5</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-		</dependency>
-		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>
-  			de.tudarmstadt.ukp.dkpro.core.io.xmi-asl
-  		</artifactId>
-			<version>1.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.5</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<version>0.3.1</version>
