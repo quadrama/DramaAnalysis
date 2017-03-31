@@ -2,7 +2,13 @@ package de.unistuttgart.ims.drama.data;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 public class Util {
 	public static int countLines(InputStream is) throws IOException {
@@ -26,14 +32,33 @@ public class Util {
 	}
 
 	public static <T> T[][] toArray(List<List<T>> list) {
+		final int rowN = list.size();
+		final int colN = list.get(0).size();
 		System.err.println("converting array ... ");
-		T[][] r = (T[][]) new Object[list.get(0).size()][list.size()];
+		final T[][] r = (T[][]) new Object[colN][rowN];
 
-		for (int i = 0; i < list.size(); i++) {
-			for (int j = 0; j < list.get(i).size(); j++) {
-				r[j][i] = list.get(i).get(j);
+		Iterator<List<T>> iterator = list.iterator();
+		for (int i = 0; i < rowN; i++) {
+			List<T> l = iterator.next();
+			for (int j = 0; j < colN; j++) {
+				r[j][i] = l.get(j);
 			}
 		}
 		return r;
+	}
+
+	public static <T> void writeCSV(List<List<T>> table, OutputStream os) throws IOException {
+		CSVPrinter p = new CSVPrinter(new OutputStreamWriter(os), CSVFormat.DEFAULT);
+		for (Object s : table) {
+			if (s instanceof String) {
+				p.printRecord(((String) s).trim());
+			} else if (s instanceof Iterable) {
+				p.printRecord((Iterable<Object>) s);
+			} else {
+				p.printRecord(s);
+			}
+		}
+		p.flush();
+		p.close();
 	}
 }

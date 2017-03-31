@@ -1,5 +1,6 @@
 package de.unistuttgart.ims.drama.data;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -62,9 +63,11 @@ public class DataLoader implements IRepository {
 		try {
 			// reading additional properties in seperate file, as specified
 			// in the context
-			is = new FileInputStream(new File(rootDirectory, "settings.properties"));
+			is = new FileInputStream(new File(System.getProperty("user.dir"), "settings.properties"));
 			serverConfig.read(new InputStreamReader(is, "UTF-8"));
-
+		} catch (FileNotFoundException e) {
+			logger.info("No config file found, using default values. "
+					+ new File(System.getProperty("user.dir"), "settings.properties").getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -163,7 +166,7 @@ public class DataLoader implements IRepository {
 		return new File(getCollectionsDirectory(), collectionName);
 	}
 
-	public Object[][] getAnnotations(String dramaId, String annotationClassName, String coveredAnnotationClassName)
+	public String getAnnotations(String[] dramaIds, String annotationClassName, String coveredAnnotationClassName)
 			throws ClassNotFoundException, UIMAException, SAXException, IOException {
 
 		Class<? extends Annotation> annotationClass;
@@ -173,16 +176,11 @@ public class DataLoader implements IRepository {
 		if (coveredAnnotationClassName != null)
 			coveredAnnotationClass = (Class<? extends Annotation>) Class.forName(coveredAnnotationClassName);
 
-		logger.info("getAnnotations(" + dramaId + "," + annotationClassName + "," + coveredAnnotationClassName + ")");
+		logger.fine("getAnnotations(" + ArrayUtils.toString(dramaIds) + "," + annotationClassName + ","
+				+ coveredAnnotationClassName + ")");
 		CoNLLExport exporter = new CoNLLExport();
 		exporter.init(config, null, annotationClass, coveredAnnotationClass);
 
-		String[] dramaIds;
-		if (dramaId.contains(",")) {
-			dramaIds = dramaId.split(",");
-		} else {
-			dramaIds = new String[] { dramaId };
-		}
 		for (String s : dramaIds) {
 			JCas jcas;
 			jcas = getJCas(s);
@@ -190,7 +188,9 @@ public class DataLoader implements IRepository {
 			exporter.convert(jcas);
 
 		}
-		return Util.toArray(exporter.getResult());
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+		Util.writeCSV(exporter.getResult(), boas);
+		return new String(boas.toByteArray());
 	}
 
 	public Object[][] getListOfSets() {
@@ -236,4 +236,5 @@ public class DataLoader implements IRepository {
 		return ret.toArray(new String[ret.size()]);
 
 	}
+
 }
