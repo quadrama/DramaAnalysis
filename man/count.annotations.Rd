@@ -13,8 +13,6 @@ count.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
 
 \item{type}{A string, the fully qualified type name we want to count}
 
-\item{url}{The base url the web service can be reached with}
-
 \item{debug}{Logical value, whether to print debug information}
 
 \item{shortname}{Logical value, whether to only use the local name of type in the returned data frame.}
