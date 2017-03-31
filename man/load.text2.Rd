@@ -2,7 +2,8 @@
 % Please edit documentation in R/load.R
 \name{load.text2}
 \alias{load.text2}
-\title{Loads a CSV-formatted text from the given server url.}
+\title{Loads a CSV-formatted text from the given server url.
+This function is an incredible bad idea.}
 \usage{
 load.text2(ids, url = "http://localhost:8080/drama.web")
 }
@@ -13,4 +14,5 @@ load.text2(ids, url = "http://localhost:8080/drama.web")
 }
 \description{
 Loads a CSV-formatted text from the given server url.
+This function is an incredible bad idea.
 }
