@@ -10,7 +10,7 @@ load.set(setName, add.genre.column = FALSE)
 \arguments{
 \item{setName}{The name of the set to retrieve}
 
-\item{setGenre}{Whether to set the Genre-column in the returned table to the set name}
+\item{add.genre.column}{Whether to set the Genre-column in the returned table to the set name}
 }
 \description{
 Function to load a set from QuaDramA web service.

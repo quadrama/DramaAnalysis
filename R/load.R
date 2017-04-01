@@ -17,7 +17,7 @@ dlobject <- function() {
 #' Function to load a set from QuaDramA web service.
 #' Can optionally set the set name as a genre in the returned table
 #' @param setName The name of the set to retrieve
-#' @param setGenre Whether to set the Genre-column in the returned table to the set name
+#' @param add.genre.column Whether to set the Genre-column in the returned table to the set name
 #' @export
 load.set <- function(setName, add.genre.column=FALSE) {
   dl <- dlobject()
@@ -38,10 +38,10 @@ load.sets <- function() {
   data.frame(id=.jevalArray(s[[1]]),size=l)
 }
 
-scene.act.table <- function(ids, url) {
-  acts <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL,url=url)
+scene.act.table <- function(ids) {
+  acts <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL)
   acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL,url=url)
+  scenes <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL)
   merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"))
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
@@ -51,12 +51,9 @@ scene.act.table <- function(ids, url) {
 
 #' Loads a CSV-formatted text from the given server url.
 #' This function is an incredible bad idea.
-#' @param ids A list or vector of ids
-#' @param url the URL to reach the server.
-#' 
-load.text2 <- function(ids, url="http://localhost:8080/drama.web") {
-  text <- load.text(ids, tokens=TRUE, url=url)
-  satable <- scene.act.table(ids=ids, url=url)
+load.text2 <- function(ids) {
+  text <- load.text(ids, tokens=TRUE)
+  satable <- scene.act.table(ids=ids)
   mtext <- merge(text, satable, by="drama")
   mtext <- mtext[mtext$begin >= mtext$begin.Scene & mtext$end <= mtext$end.Scene,]
   mtext
@@ -110,7 +107,6 @@ load.annotations <- function(ids,
 #' @export
 count.annotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance",
-                             url="http://localhost:8080/drama.web",
                              debug=FALSE,
                              shortname=TRUE) {
   r <- data.frame(c())
@@ -150,14 +146,10 @@ load.numbers <- function(ids=c(),
   df <- data.frame(ids)
   rownames(df) <- df$ids
   for (a in annotations) {
-    annos <- count.annotations(ids, type=a, url=url, debug=debug)
+    annos <- count.annotations(ids, type=a, debug=debug)
     df <- cbind(df, annos)
   }
   subset(df,select=c(-1))
 }
 
-#' @importFrom utils read.csv
-load_from_url <- function(url) {
-  read.csv(url, header=TRUE, fileEncoding="UTF-8", encoding="UTF-8")
-}
 
