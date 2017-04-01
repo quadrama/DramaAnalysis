@@ -4,7 +4,7 @@
 	<groupId>de.unistuttgart.ims</groupId>
 	<artifactId>drama.RInterface</artifactId>
 	<properties>
-	  <dramanlp.version>0.4.4</dramanlp.version>
+	  <dramanlp.version>0.5.0</dramanlp.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
 			<artifactId>uimautil</artifactId>
-			<version>0.6.5</version>
+			<version>0.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
