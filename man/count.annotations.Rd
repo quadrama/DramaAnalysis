@@ -5,15 +5,12 @@
 \title{Function to count the annotations of a certain type in selected texts.}
 \usage{
 count.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
-  url = "http://localhost:8080/drama.web", debug = FALSE,
-  shortname = TRUE)
+  debug = FALSE, shortname = TRUE)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
 
 \item{type}{A string, the fully qualified type name we want to count}
-
-\item{url}{The base url the web service can be reached with}
 
 \item{debug}{Logical value, whether to print debug information}
 

@@ -62,7 +62,7 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
 #' data(rksp.0,vndf.0)
 #' text <- rbind(rksp.0.text,vndf.0)
 #' stat <- figure.statistics(text, names = TRUE)
-#' fmatrix <- figurematrix(stat)
+#' mat <- figurematrix(stat)
 #' # Plot a stacked bar plot
 #' b <- barplot(mat$values,col=qd.colors)
 #' # Add figure names (if needed/wanted)

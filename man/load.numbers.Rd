@@ -10,15 +10,12 @@ load.numbers(ids = c(), annotations = c("de.unistuttgart.ims.drama.api.Act",
   "de.unistuttgart.ims.drama.api.Utterance",
   "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
   "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
-  "de.unistuttgart.ims.drama.api.DramatisPersonae"),
-  url = "http://localhost:8080/drama.web3", debug = FALSE)
+  "de.unistuttgart.ims.drama.api.DramatisPersonae"), debug = FALSE)
 }
 \arguments{
 \item{ids}{A vector containing drama ids}
 
 \item{annotations}{A character vector containing the annotation types we want to count}
-
-\item{url}{The url to the server}
 
 \item{debug}{Logical value, whether to print out debug info}
 }
