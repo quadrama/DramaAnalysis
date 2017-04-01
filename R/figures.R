@@ -48,6 +48,37 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
   r
 }
 
+
+#' This function takes a data frame describing various metrics of figures in dramas 
+#' and creates a matrix that can be used to create a stacked bar plot.
+#' @param fstat The figure statistics table, i.e., the output of figure.statistics()
+#' @param column A column name found in the statistics table. This count is used 
+#' as a basis for the plot.
+#' @param order If set to -1 (default), figures are ranked descending 
+#' (i.e., figure with most spoken words first). If set to 1, 
+#' figures are ranked ascending.
+#' @importFrom reshape2 dcast
+#' @examples
+#' data(rksp.0,vndf.0)
+#' text <- rbind(rksp.0.text,vndf.0)
+#' stat <- figure.statistics(text, names = TRUE)
+#' mat <- figurematrix(stat)
+#' # Plot a stacked bar plot
+#' b <- barplot(mat$values,col=qd.colors)
+#' # Add figure names (if needed/wanted)
+#' text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
+#' @export
+figurematrix <- function(fstat,column="tokens",order=-1) {
+  fs <- fstat
+  fs$rank <- ave(fs[[column]], fs$drama, FUN=function(x) {rank(order*x, ties.method = "first")})
+  mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
+  mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="figure")[,-1])
+  mat_cs <- apply(mat_values, 2,cumsum)
+  mat_cs <- rbind(matrix(0,ncol=ncol(mat_cs)),mat_cs)
+  mat_values <- rbind(mat_values,matrix(NA,ncol=ncol(mat_values)))
+  list(values=mat_values,labels=mat_labels,cs=mat_cs)
+}
+
 #' Adds a column to the figures data frame, containing the rank in the dramatis personae.
 #' @param figures The figures to rank
 #' @export

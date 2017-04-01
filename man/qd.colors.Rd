@@ -14,4 +14,3 @@ color scheme to be used for QuaDramA plots
 Taken from http://google.github.io/palette.js/, tol-rainbow, 10 colors
 }
 \keyword{datasets}
-

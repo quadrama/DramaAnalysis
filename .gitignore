@@ -2,3 +2,9 @@
 .Rhistory
 .RData
 *.Rproj
+.project
+java/.settings
+java/target
+src/java/.settings
+src/java/target
+drama.R.jar

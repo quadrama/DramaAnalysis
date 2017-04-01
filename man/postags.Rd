@@ -12,4 +12,3 @@ postags
 Provides lists of groups of pos tags for various word classes.
 }
 \keyword{datasets}
-

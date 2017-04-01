@@ -5,17 +5,14 @@
 \title{Loads a CSV-formatted text from the server,
 assuming the main server url has been set correctly.}
 \usage{
-load.text(ids, tokens = FALSE, url = "http://localhost:8080/drama.web")
+load.text(ids, tokens = FALSE)
 }
 \arguments{
 \item{ids}{A vector containing drama ids to be downloaded}
 
 \item{tokens}{If set to true, the table also contains each token in an utterance}
-
-\item{url}{The url we load the text from}
 }
 \description{
 Loads a CSV-formatted text from the server,
 assuming the main server url has been set correctly.
 }
-

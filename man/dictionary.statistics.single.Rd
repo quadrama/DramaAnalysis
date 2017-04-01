@@ -28,4 +28,3 @@ Calculates dictionary statistics for a single word field that is given as a char
 data(rksp.0)
 fstat <- dictionary.statistics.single(rksp.0.text, wordfield=c("der"), names=TRUE)
 }
-
