@@ -2,6 +2,11 @@
 
 This package contains a number of functions that work with the QuaDramA web service.
 
+## Download and Installation
+Please check [this page](https://github.com/quadrama/DramaAnalysis/releases).
+
+## Usage and Howto
+Please see the [wiki](quadrama/DramaAnalysis/wiki)
 
 ## Release workflow
 - Make a new branch for the release (e.g. `release/1.0.0`)
