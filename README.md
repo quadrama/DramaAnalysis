@@ -6,7 +6,7 @@ This package contains a number of functions that work with the QuaDramA web serv
 Please check [this page](https://github.com/quadrama/DramaAnalysis/releases).
 
 ## Usage and Howto
-Please see the [wiki](quadrama/DramaAnalysis/wiki)
+Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
 
 ## Release workflow
 - Make a new branch for the release (e.g. `release/1.0.0`)
