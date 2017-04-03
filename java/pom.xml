@@ -39,7 +39,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<outputFile>../../inst/java/drama.R.jar</outputFile>
+							<outputFile>../inst/java/drama.R.jar</outputFile>
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
