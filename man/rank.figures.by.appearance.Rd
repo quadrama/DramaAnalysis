@@ -13,6 +13,8 @@ rank.figures.by.appearance(figures, text,
 \item{figures}{A data frame containing the figures}
 
 \item{text}{A text data frame}
+
+\item{columnTitle}{The title for the rank column}
 }
 \description{
 Given a dramatic text and a table of figures, ranks the figures by 

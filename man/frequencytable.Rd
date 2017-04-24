@@ -2,10 +2,10 @@
 % Please edit documentation in R/frequencytable.R
 \name{frequencytable}
 \alias{frequencytable}
-\title{This function generates a table to be used by stylo}
+\title{This function generates a matrix of word frequencies by figure or drama.}
 \usage{
 frequencytable(t, accepted.pos = postags$de$words, names = FALSE,
-  column = "Token.surface", by.figure = FALSE, sep = " ")
+  column = "Token.surface", by.figure = FALSE, sep = "|")
 }
 \arguments{
 \item{t}{The text table, potentially covering multiple texts}

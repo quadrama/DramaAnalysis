@@ -1,4 +1,4 @@
-#' This function generates a table to be used by stylo
+#' This function generates a matrix of word frequencies by figure or drama.
 #' @param t The text table, potentially covering multiple texts
 #' @param accepted.pos A list of accepted pos tags
 #' @param names Whether to use figure names or ids
