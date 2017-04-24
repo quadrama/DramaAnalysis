@@ -6,7 +6,7 @@
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @param sep The separation character that goes between drama name and figure (if applicable)
 #' @examples
-#' data(rksp.0)
+#' data(rksp.0.text)
 #' st <- frequencytable(rksp.0.text)
 #' @examples
 #' \dontrun{

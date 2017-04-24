@@ -21,10 +21,10 @@ frequencytable(t, accepted.pos = postags$de$words, names = FALSE,
 \item{sep}{The separation character that goes between drama name and figure (if applicable)}
 }
 \description{
-This function generates a table to be used by stylo
+This function generates a matrix of word frequencies by figure or drama.
 }
 \examples{
-data(rksp.0)
+data(rksp.0.text)
 st <- frequencytable(rksp.0.text)
 \dontrun{
 t <- load.text(read.csv("http://localhost:8080/drama.web/dramas", header=FALSE)[,], tokens=T)

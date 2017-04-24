@@ -8,11 +8,13 @@ rank.figures.by.dp(figures, columnTitle = "Rank (dramatis personae)")
 }
 \arguments{
 \item{figures}{The figures to rank}
+
+\item{columnTitle}{The title for the rank column}
 }
 \description{
 Adds a column to the figures data frame, containing the rank in the dramatis personae.
 }
 \examples{
-data(rksp.0)
+data(rksp.0.figures)
 rank.figures.by.dp(rksp.0.figures)
 }
