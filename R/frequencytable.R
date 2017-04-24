@@ -16,19 +16,20 @@
 #' stylo(gui=F, frequencies = stylo_table, network=T, write.png.file=T, analysis.type="BCT")
 #' }
 #' @export
-frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, column="Token.surface", by.figure=FALSE, sep=" ") {
+frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, column="Token.surface", by.figure=FALSE, sep="|") {
   ft <- t
   if (length(accepted.pos) > 0)
     ft <- t[t$Token.pos %in% accepted.pos,]
-  if (by.figure == FALSE)
-    index <- paste(ft$drama)
-  else if (names == TRUE)
-    index <- paste(ft$drama, ft$Speaker.figure_surface, sep=sep)
-  else
-    index <- paste(ft$drama, ft$Speaker.figure_id, sep=sep)
+  if (by.figure == FALSE) {
+    index <- list(ft$drama)
+  } else if (names == TRUE) {
+    index <- paste(ft$drama, ft$Speaker.figure_surface,sep=sep)
+  } else
+    index <- list(ft$drama, ft$Speaker.figure_id)
   r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
   r[,order(colSums(r),decreasing=TRUE)]
 }
+
 
 #' Extract bigrams instead of words (currently not taking utterance boundaries into account)
 #' @export
