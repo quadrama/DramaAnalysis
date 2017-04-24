@@ -11,7 +11,7 @@
 #' @importFrom stats sd
 #' @importFrom stats aggregate
 #' @examples
-#' data(rksp.0)
+#' data(rksp.0.text)
 #' stat <- figure.statistics(rksp.0.text, names = FALSE)
 #' @export
 figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
@@ -59,8 +59,8 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
 #' figures are ranked ascending.
 #' @importFrom reshape2 dcast
 #' @examples
-#' data(rksp.0,vndf.0)
-#' text <- rbind(rksp.0.text,vndf.0)
+#' data(rksp.0.text,vndf.0.text)
+#' text <- rbind(rksp.0.text,vndf.0.text)
 #' stat <- figure.statistics(text, names = TRUE)
 #' mat <- figurematrix(stat)
 #' # Plot a stacked bar plot
@@ -81,9 +81,10 @@ figurematrix <- function(fstat,column="tokens",order=-1) {
 
 #' Adds a column to the figures data frame, containing the rank in the dramatis personae.
 #' @param figures The figures to rank
+#' @param columnTitle The title for the rank column
 #' @export
 #' @examples 
-#' data(rksp.0)
+#' data(rksp.0.figures)
 #' rank.figures.by.dp(rksp.0.figures)
 rank.figures.by.dp <- function(figures, columnTitle="Rank (dramatis personae)") {
   figures[[columnTitle]] <- ave(seq(1:nrow(figures)),figures$drama, FUN=rank)
@@ -95,9 +96,10 @@ rank.figures.by.dp <- function(figures, columnTitle="Rank (dramatis personae)") 
 #' "appears": speaks for the first time.
 #' @param figures A data frame containing the figures
 #' @param text A text data frame
+#' @param columnTitle The title for the rank column
 #' @export
 #' @examples 
-#' data(rksp.0)
+#' data(rksp.0.text, rksp.0.figures)
 #' rank.figures.by.appearance(rksp.0.figures, rksp.0.text)
 rank.figures.by.appearance <- function(figures, text, columnTitle="Rank (1st appearance)") {
   minimal.utterance.begin <- aggregate(text$begin, by=list(text$drama,

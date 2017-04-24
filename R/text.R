@@ -21,7 +21,7 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @export
 #' @importFrom utils head
 #' @examples
-#' data(rksp.0)
+#' data(rksp.0.text)
 #' t <- limit.figures.by.rank(rksp.0.text)
 limit.figures.by.rank <- function(t, maxRank=10) {
   counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
@@ -35,7 +35,7 @@ limit.figures.by.rank <- function(t, maxRank=10) {
 #' @param minTokens The minimal amount of tokens a figure has to speak
 #' @export
 #' @examples
-#' data(rksp.0)
+#' data(rksp.0.text)
 #' t <- limit.figures.by.tokens(rksp.0.text)
 limit.figures.by.tokens <- function(t, minTokens=100) {
     counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)

@@ -20,6 +20,6 @@ their first appearance. The lower the rank number, the earlier the figure appear
 "appears": speaks for the first time.
 }
 \examples{
-data(rksp.0)
+data(rksp.0.text, rksp.0.figures)
 rank.figures.by.appearance(rksp.0.figures, rksp.0.text)
 }

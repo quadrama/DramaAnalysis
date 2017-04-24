@@ -11,7 +11,6 @@
 #'  \item{Token.pos}{}
 #'  \item{Token.lemma}{}
 #' }
-
 "rksp.0.text"
 
 #' Figures declared in the dramatis personae from Emilia Galotti.
@@ -31,4 +30,4 @@
 #'  \item{Token.lemma}{}
 #' }
 
-"vndf.0"
+"vndf.0.text"

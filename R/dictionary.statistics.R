@@ -42,7 +42,7 @@ dictionary.statistics <- function(t, fieldnames=c(),
 #' @param normalize.by.field A logical value. Whether to normalize by the size of the word field
 #' @param bylist A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas
 #' @examples
-#' data(rksp.0)
+#' data(rksp.0.text)
 #' fstat <- dictionary.statistics.single(rksp.0.text, wordfield=c("der"), names=TRUE)
 #' @importFrom stats aggregate
 #' @export

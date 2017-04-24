@@ -4,7 +4,7 @@
 \name{rksp.0.figures}
 \alias{rksp.0.figures}
 \title{Figures declared in the dramatis personae from Emilia Galotti.}
-\format{An object of class \code{data.frame} with 10 rows and 6 columns.}
+\format{An object of class \code{data.frame} with 10 rows and 5 columns.}
 \usage{
 rksp.0.figures
 }

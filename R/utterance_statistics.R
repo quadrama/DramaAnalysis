@@ -4,7 +4,7 @@
 #' @param normalize.by.drama.length Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
 #' @examples
-#' data(rksp.0)
+#' data(rksp.0.text)
 #' num_figures <- 5
 #' ustat <- utterance_statistics(rksp.0.text, num.figures = num_figures)
 #' \dontrun{

@@ -25,6 +25,6 @@ utterance_length_sd: The standard deviation in utterance length
 This function extracts figure statistics from a drama text table.
 }
 \examples{
-data(rksp.0)
+data(rksp.0.text)
 stat <- figure.statistics(rksp.0.text, names = FALSE)
 }
