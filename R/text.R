@@ -59,6 +59,10 @@ tfidf <- function(ftable) {
 #' @param by A string, either "Act" or "Scene"
 #' @seealso DramaAnalysis::load.text2()
 #' @export
+#' @examples
+#' data(rksp.0.mtext)
+#' cfg <- configuration(rksp.0.mtext)
+#' 
 configuration <- function(mtext, by="Act") {
   if (by=="Scene") {
     configuration.scene(mtext)
