@@ -13,6 +13,8 @@ rank.figures.by.appearance(figures, text,
 \item{figures}{A data frame containing the figures}
 
 \item{text}{A text data frame}
+
+\item{columnTitle}{The title for the rank column}
 }
 \description{
 Given a dramatic text and a table of figures, ranks the figures by 
@@ -20,6 +22,6 @@ their first appearance. The lower the rank number, the earlier the figure appear
 "appears": speaks for the first time.
 }
 \examples{
-data(rksp.0)
+data(rksp.0.text, rksp.0.figures)
 rank.figures.by.appearance(rksp.0.figures, rksp.0.text)
 }

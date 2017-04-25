@@ -2,12 +2,18 @@
 % Please edit documentation in R/load.R
 \name{load.text2}
 \alias{load.text2}
-\title{Loads a CSV-formatted text from the given server url.
-This function is an incredible bad idea.}
+\title{Similar to load.text(), but the table also includes scene and act markings.}
 \usage{
 load.text2(ids)
 }
+\arguments{
+\item{ids}{The ids for which we want to get the text}
+}
 \description{
-Loads a CSV-formatted text from the given server url.
-This function is an incredible bad idea.
+Similar to load.text(), but the table also includes scene and act markings.
+}
+\examples{
+\dontrun{
+mtext <- load.text2(c("tg:rksp.0"))
+}
 }

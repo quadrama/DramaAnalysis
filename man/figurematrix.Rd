@@ -22,8 +22,8 @@ This function takes a data frame describing various metrics of figures in dramas
 and creates a matrix that can be used to create a stacked bar plot.
 }
 \examples{
-data(rksp.0,vndf.0)
-text <- rbind(rksp.0.text,vndf.0)
+data(rksp.0.text,vndf.0.text)
+text <- rbind(rksp.0.text,vndf.0.text)
 stat <- figure.statistics(text, names = TRUE)
 mat <- figurematrix(stat)
 # Plot a stacked bar plot

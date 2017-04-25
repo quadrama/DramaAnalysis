@@ -17,7 +17,7 @@ utterance_statistics(t, num.figures = 10, normalize.by.drama.length = TRUE)
 This method calculates the length of each utterance, organised by figure and drama.
 }
 \examples{
-data(rksp.0)
+data(rksp.0.text)
 num_figures <- 5
 ustat <- utterance_statistics(rksp.0.text, num.figures = num_figures)
 \dontrun{

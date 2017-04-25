@@ -49,13 +49,19 @@ scene.act.table <- function(ids) {
   merged
 }
 
-#' Loads a CSV-formatted text from the given server url.
-#' This function is an incredible bad idea.
+#' Similar to load.text(), but the table also includes scene and act markings.
+#' @param ids The ids for which we want to get the text
+#' @importFrom data.table setkey foverlaps
+#' @export
+#' @examples 
+#' \dontrun{
+#' mtext <- load.text2(c("tg:rksp.0"))
+#' }
 load.text2 <- function(ids) {
-  text <- load.text(ids, tokens=TRUE)
-  satable <- scene.act.table(ids=ids)
-  mtext <- merge(text, satable, by="drama")
-  mtext <- mtext[mtext$begin >= mtext$begin.Scene & mtext$end <= mtext$end.Scene,]
+  t <- data.table(load.text(ids, tokens=TRUE))
+  sat <- data.table(scene.act.table(ids=ids))
+  setkey(sat,drama,begin.Scene, end.Scene)
+  mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
   mtext
 }
 
@@ -75,6 +81,7 @@ load.text <- function(ids, tokens=FALSE) {
   } else
     load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
+#' @title Load annotations
 #' Helper method to load covered annotations.
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load
