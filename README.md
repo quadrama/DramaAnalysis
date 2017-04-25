@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
+
 # DramaAnalysis with R
 
 This package contains a number of functions that work with the QuaDramA web service.
