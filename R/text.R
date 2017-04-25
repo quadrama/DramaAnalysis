@@ -54,6 +54,10 @@ tfidf <- function(ftable) {
   data.frame(apply(ftable, 2, tfidf1))
 }
 
+#' Creates classic drama configuration matrix
+#' @param mtext The text including Act and Scene markings
+#' @param by A string, either "Act" or "Scene"
+#' @seealso DramaAnalysis::load.text2()
 #' @export
 configuration <- function(mtext, by="Act") {
   if (by=="Scene") {
