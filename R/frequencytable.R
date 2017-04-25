@@ -33,6 +33,11 @@ frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, colu
 
 #' Extract bigrams instead of words (currently not taking utterance boundaries into account)
 #' @export
+#' @param t The text
+#' @param accepted.pos A list of accepted pos tags
+#' @param names Whether to use figure names or ids
+#' @param by.figure Wether the count is by figure or by text
+#' @param cols The column names we should use (should be either Token.surface or Token.lemma)
 frequencytable2 <- function(t, accepted.pos = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), by.figure=FALSE) {
   ft <- t
   if (length(accepted.pos) > 0)
