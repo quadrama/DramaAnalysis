@@ -112,7 +112,6 @@ rank.figures.by.appearance <- function(figures, text, columnTitle="Rank (1st app
   merge(figures, minimal.utterance.begin, by.x=c("drama","Figure.surface"), by.y=c("drama","figure"))
 }
 
-#' @export
 figures.first.appearances <- function(texts, acts) {
   acts$Number <- ave(acts$begin, acts$drama, FUN=rank)
   minimal.utterance.begin <- aggregate(texts$begin, by=list(texts$drama, 
