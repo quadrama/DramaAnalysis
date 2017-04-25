@@ -27,3 +27,4 @@ Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
    install.packages("https://github.com/quadrama/DramaAnalysis/releases/download/v1.0.0/DramaAnalysis_1.0.0.tar.gz",
    repos=NULL, type="source")
    ```
+- Add the PDF documentation for the R package to the release page
