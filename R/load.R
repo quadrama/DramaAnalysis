@@ -52,6 +52,7 @@ scene.act.table <- function(ids) {
 #' Similar to load.text(), but the table also includes scene and act markings.
 #' @param ids The ids for which we want to get the text
 #' @importFrom data.table setkey foverlaps
+#' @export
 #' @examples 
 #' \dontrun{
 #' mtext <- load.text2(c("tg:rksp.0"))
