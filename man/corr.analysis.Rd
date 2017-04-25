@@ -12,6 +12,8 @@ corr.analysis(text.ft, outcomes, method = "spearman",
 
 \item{outcomes}{A list of outcomes, will be cast as numeric}
 
+\item{method}{The correlation method, passed on to cor()}
+
 \item{minimal.frequency}{An integer. Words that appear less than x times can be filtered in advance}
 }
 \description{

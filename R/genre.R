@@ -3,6 +3,7 @@
 #' @param text.ft A matrix, containing words in columns and figures (or plays) in rows
 #' @param outcomes A list of outcomes, will be cast as numeric
 #' @param minimal.frequency An integer. Words that appear less than x times can be filtered in advance
+#' @param method The correlation method, passed on to cor()
 #' @export
 #' @importFrom stats cor
 #' @examples
