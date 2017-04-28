@@ -6,7 +6,7 @@
 #' @param normalize.by.field Whether to normalize by dictionary size. You usually want this.
 #' @param names Whether the resulting table contains figure ids or names
 #' @param boost A scaling factor to generate nicer values
-#' @param baseurl The url delivering the dictionairies
+#' @param baseurl The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().
 #' @importFrom stats aggregate
 #' @importFrom stats ave
 #' @importFrom utils read.csv
