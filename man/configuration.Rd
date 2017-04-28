@@ -4,7 +4,7 @@
 \alias{configuration}
 \title{Creates classic drama configuration matrix}
 \usage{
-configuration(mtext, by = "Act")
+configuration(mtext, by = "Act", only.presence = FALSE)
 }
 \arguments{
 \item{mtext}{The text including Act and Scene markings}
@@ -13,6 +13,11 @@ configuration(mtext, by = "Act")
 }
 \description{
 Creates classic drama configuration matrix
+}
+\examples{
+data(rksp.0.mtext)
+cfg <- configuration(rksp.0.mtext)
+
 }
 \seealso{
 DramaAnalysis::load.text2()

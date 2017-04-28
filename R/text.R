@@ -63,14 +63,19 @@ tfidf <- function(ftable) {
 #' data(rksp.0.mtext)
 #' cfg <- configuration(rksp.0.mtext)
 #' 
-configuration <- function(mtext, by="Act") {
+configuration <- function(mtext, by="Act", only.presence=FALSE) {
+  
   if (by=="Scene") {
-    configuration.scene(mtext)
+    c <- configuration.scene(mtext)
   } else {
-    configuration.act(mtext)
+    c <- configuration.act(mtext)
   }
+  if (only.presence)
+    c$matrix <- c$matrix>0
+  c
 }
 
+#' @importFrom stats reshape
 configuration.act <- function(mtext) {
   t <- mtext
   words.per.segment <- aggregate(Token.surface ~ drama + Speaker.figure_surface + Number.Act, 
@@ -78,9 +83,10 @@ configuration.act <- function(mtext) {
   cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("drama","Speaker.figure_surface"), timevar = "Number.Act")
   cfg[is.na(cfg)] <- 0
   colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
-  cfg
+  list(matrix=as.matrix(cfg[,3:ncol(cfg)]),drama=cfg[,1],figure=cfg[,2])
 }
 
+#' @importFrom stats reshape
 configuration.scene <- function(text) {
   t <- text
   bylist = list(t$drama, t$Speaker.figure_surface, paste0(t$Number.Act,"-", formatC(t$Number.Scene, width=2)))
@@ -90,5 +96,6 @@ configuration.scene <- function(text) {
   cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("Group.1","Group.2"), timevar = "Group.3")
   cfg[is.na(cfg)] <- 0
   colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
-  cfg
+  list(matrix=as.matrix(cfg[,3:ncol(cfg)]),drama=cfg[,1],figure=cfg[,2])
+  
 }
