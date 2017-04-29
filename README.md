@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
 [![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
+[![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
 
 # DramaAnalysis with R
 
