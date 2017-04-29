@@ -1,3 +1,4 @@
+[![release](https://img.shields.io/badge/release-0.4.1-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v0.4.1)
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
 [![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
 [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
