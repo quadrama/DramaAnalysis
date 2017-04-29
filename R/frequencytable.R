@@ -27,7 +27,7 @@ frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, colu
   } else
     index <- list(ft$drama, ft$Speaker.figure_id)
   r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
-  r[,order(colSums(r),decreasing=TRUE)]
+  as.matrix(r[,order(colSums(r),decreasing=TRUE)])
 }
 
 
