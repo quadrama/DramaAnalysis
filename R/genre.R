@@ -14,7 +14,9 @@
 corr.analysis <- function(text.ft, outcomes,  method="spearman",minimal.frequency=10) {
   text.ft.filtered <- data.frame(text.ft[,colSums(text.ft!=0) > minimal.frequency])
   outcomes <- as.numeric(outcomes)
-  text.cor <- cor( text.ft.filtered, y=outcomes, method=method)
+  text.cor <- data.frame(cor( text.ft.filtered, y=outcomes, method=method))
   colnames(text.cor) <- c("cor")
+  text.cor$word <- rownames(text.cor)
+  text.cor <- text.cor[order(text.cor$cor),]
   text.cor
 } 
