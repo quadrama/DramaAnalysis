@@ -39,9 +39,9 @@ load.sets <- function() {
 }
 
 scene.act.table <- function(ids) {
-  acts <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL)
+  acts <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL)
   acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL)
+  scenes <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL)
   merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"))
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
@@ -55,12 +55,12 @@ scene.act.table <- function(ids) {
 #' @export
 #' @examples 
 #' \dontrun{
-#' mtext <- load.text2(c("tg:rksp.0"))
+#' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
-load.text2 <- function(ids) {
-  t <- data.table(load.text(ids, tokens=TRUE))
+loadSegmentedText <- function(ids) {
+  t <- data.table(loadText(ids, includeTokens=TRUE))
   sat <- data.table(scene.act.table(ids=ids))
-  setkey(sat,drama,begin.Scene, end.Scene)
+  setkey(sat, drama, begin.Scene, end.Scene)
   mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
   mtext
 }
@@ -71,15 +71,15 @@ load.text2 <- function(ids) {
 #'
 #'
 #' @param ids A vector containing drama ids to be downloaded
-#' @param tokens If set to true, the table also contains each token in an utterance
+#' @param includeTokens If set to true, the table also contains each token in an utterance
 #' @export
-load.text <- function(ids, tokens=FALSE) {
-  if (tokens == TRUE) {
-    load.annotations(ids, 
+loadText <- function(ids, includeTokens=FALSE) {
+  if (includeTokens == TRUE) {
+    loadAnnotations(ids, 
                      type="de.unistuttgart.ims.drama.api.Utterance", 
                      coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
   } else
-    load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
+    loadAnnotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
 #' @title Load annotations
 #' Helper method to load covered annotations.
@@ -91,9 +91,9 @@ load.text <- function(ids, tokens=FALSE) {
 #' @importFrom rJava .jnew .jarray .jnull
 #' @examples
 #' \dontrun{
-#' load.annotations(c("rksp.0"))
+#' loadAnnotations(c("rksp.0"))
 #' }
-load.annotations <- function(ids, 
+loadAnnotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance", 
                              coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
   dl <- dlobject()
@@ -125,7 +125,7 @@ count.annotations <- function(ids,
   }
   for (a in ids) {
     tryCatch({
-      data2 <- load.annotations(ids,type,NULL)
+      data2 <- loadAnnotations(ids,type,NULL)
       r[a,lname] = nrow(data2)
     }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
   }
