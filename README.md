@@ -32,3 +32,4 @@ Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
    ```
 - Add the PDF documentation for the R package to the release page
 - Update zenodo-DOI in README.md on master branch
+- Check/Update guides in Wiki
