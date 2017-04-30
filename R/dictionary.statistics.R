@@ -13,7 +13,8 @@
 #' @export
 dictionary.statistics <- function(t, fieldnames=c(),
                                   normalize.by.figure = FALSE, normalize.by.field = FALSE, names=FALSE, boost = 1,
-                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/") {
+                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
+                                  column="Token.surface") {
   bylist <- list(t$drama, t$Speaker.figure_id)
   if (names == TRUE)
     bylist <- list(t$drama, t$Speaker.figure_surface)
@@ -23,7 +24,7 @@ dictionary.statistics <- function(t, fieldnames=c(),
     list <- read.csv(url, header=F, fileEncoding = "UTF-8")
     r <- cbind(r,  dictionary.statistics.single(t, tolower(list$V1), 
                                                 normalize.by.figure = FALSE, 
-                                                normalize.by.field = normalize.by.field, names=names)[,3])
+                                                normalize.by.field = normalize.by.field, names=names, column=column)[,3])
   }
   colnames(r) <- c("drama", "figure", fieldnames)
   if (normalize.by.figure == TRUE) {
