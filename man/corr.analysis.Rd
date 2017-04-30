@@ -22,6 +22,6 @@ Calculates correlation of a frequency table with an outcome list according to gi
 \examples{
 data(rksp.0.text)
 rksp.0.ft <- frequencytable(rksp.0.text, by.figure=TRUE, names=TRUE)
-g <- factor(c("m","m","m","m","f","f","m","m","m","f","m","m","m","f","m"))
+g <- factor(c("m","m","m","m","f","m","m","m","f","m","m","f","m"))
 rksp.0.cor <- corr.analysis(rksp.0.ft,g)
 }
