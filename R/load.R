@@ -28,7 +28,7 @@ load.set <- function(setName, add.genre.column=FALSE) {
   ds
 }
 
-#' A function to get a list of all collections and the number os plays in that collection
+#' A function to get a list of all collections and the number of plays in that collection
 #' @export
 #' @importFrom rJava .jevalArray .jsimplify
 load.sets <- function() {
