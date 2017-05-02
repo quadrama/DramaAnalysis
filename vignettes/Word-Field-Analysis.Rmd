@@ -1,0 +1,153 @@
+---
+title: "Word Field Analysis"
+author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 5
+  md_document:
+    variant: markdown_github
+    toc: true
+    includes:
+      before_body: version.md
+
+vignette: >
+  %\VignetteIndexEntry{Measuring speech topics using word fields}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r, include=FALSE}
+require(DramaAnalysis)
+v <- packageVersion("DramaAnalysis")
+```
+
+
+
+A word field is basically of a list of words that belong to a common theme / topic / semantic group.
+
+```{r include=FALSE}
+require(DramaAnalysis)
+```
+
+## Word Field Definition
+For **demo purposes** (this is really a toy example), we will define the word field of `Love` as containing the words `Liebe` and `Herz`.
+In R, we can put them in a character vector:
+
+```{r}
+wf_love <- c("liebe", "herz")
+```
+
+We will test this word field on Romeo und Julia, which should be about love. 
+
+```{r}
+data(vndf.0.text)
+```
+
+## Single word field
+The core of the word field analysis collecting statistics about a dictionary. Therefore, we use the function called `dictionary.statistics.single()` (single, because we only want to analyse a single word field):
+
+```{r}
+dstat <- dictionary.statistics.single(
+  vndf.0.text,         # the text we want to process
+  wordfield=wf_love,   # the word field
+  names=TRUE,          # we want figure names instead of ids
+  column="Token.lemma" # we count lemmas instead of surface forms
+)
+
+summary(dstat)
+```
+
+We can visualise these counts in a simple bar chart:
+
+```{r fig.height=3}
+# remove figures not using these words at all
+dstat <- dstat[dstat$x>0,] 
+
+barplot(dstat$x,                   # what to plot
+        names.arg = dstat$figure,  # x axis labels
+        las=3,                     # turn axis labels
+        cex.names=0.6,             # smaller font on x axis
+        col=qd.colors              # colors
+      )
+```
+
+Apparently, Romeo and Juliet are mentioning these words a lot. 
+
+Obviously we would want to **normalize** according to the total number of spoken words by a figure:
+```{r}
+dstat <- dictionary.statistics.single(
+  vndf.0.text,       # the text we want to process
+  wordfield=wf_love, # the word field
+  names=TRUE,        # we want figure names instead of ids
+  normalize.by.figure = TRUE,   # apply normalization
+  column = "Token.lemma"
+)
+
+# remove figures not using these words at all
+dstat <- dstat[dstat$x>0,]
+
+barplot(dstat$x, 
+        names.arg = dstat$figure,  # x axis labels
+        las=3,             # turn axis labels
+        cex.names=0.8,     # smaller font on x axis
+        col=qd.colors
+      )
+```
+
+
+## Multiple Word Fields
+
+The function `dictionary.statistics()` can be used to analyse multiple dictionaries at once. To this end, it is assumed that dictionaries are stored in text files that either are stored locally or reachable via a URL. In any case, the parameter `baseurl` can be used to specify a prefix, to which the field names are appended. By default, the baseurl `https://github.com/quadrama/metadata/tree/master/fields/` is used. Appending the field name "Liebe", for instance, thus results in the URL `https://github.com/quadrama/metadata/tree/master/fields/Liebe`, which is a plain text file.
+
+The following examples use the baseurl `https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/`, i.e., a specific version of the fields we have been using in QuaDramA. 
+
+```{r}
+
+# code is more readable if we define this variable 
+baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/"
+
+
+dstat <- dictionary.statistics(
+  vndf.0.text,  # the text
+  fieldnames=  # fields we want to measure
+    c("Liebe", "Krieg", "Familie", "Ratio", "Religion"),
+  baseurl = baseUrl,            # specify url
+  names = TRUE,                 # use figure names (instead of ids)
+  normalize.by.figure = TRUE,   # normalization by figure
+  normalize.by.field = TRUE,    # normalization by field
+  column = "Token.lemma"        # lemma-based stats
+)
+colnames(dstat)       
+```
+
+The variable `dstat` now contains multiple columns, one for each word field.
+
+### Bar plot by figure
+
+We can now display the distribution of the words of a single figure over these word fields:
+
+```{r}
+barplot(as.matrix(dstat[28,3:7]), # we select Romeo's line
+        main="Romeo's speech",    # plot title
+        col=qd.colors             # more colors
+        )
+```
+
+
+### Bar plot by field
+
+... but we can also analyse who uses  words of a certain field how often
+
+```{r}
+barplot(as.matrix(dstat$Liebe),
+        main="Use of love words", # title for plot
+        beside = TRUE,            # not stacked
+        names.arg = dstat$figure, # x axis labels
+        las=3,                    # rotation for labels
+        col=qd.colors,            # more colors
+        cex.names = 0.7           # font size
+        )
+```

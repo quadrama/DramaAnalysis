@@ -1,7 +1,7 @@
 TDIR=../DramaAnalysis.wiki
 VIG=vignettes
 
-wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md 
+wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md 
 
 ${VIG}/%.md: vignettes/%.Rmd ${VIG}/version.md
 	Rscript -e "library(rmarkdown); render('$<', output_format='md_document', clean=TRUE)"
