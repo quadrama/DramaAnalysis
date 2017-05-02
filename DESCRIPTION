@@ -10,7 +10,7 @@ Description: This package can be used to import and analyse pre-processed dramat
 License: Apache License
 LazyData: TRUE
 Imports:
-   class (>= 7.3-14), caret (>= 6.0-71), stats (>= 3.3.1), utils (>= 3.3.1), reshape2 (>= 1.4.2), data.table (>= 1.10.4)
+   igraph (>= 1.0.1), class (>= 7.3-14), caret (>= 6.0-71), stats (>= 3.3.1), utils (>= 3.3.1), reshape2 (>= 1.4.2), data.table (>= 1.10.4)
 Depends:
   rJava (>= 0.9-8), R (>= 2.10)
 RoxygenNote: 6.0.1
