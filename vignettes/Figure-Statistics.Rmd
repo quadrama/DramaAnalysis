@@ -9,6 +9,9 @@ output:
   md_document:
     variant: markdown_github
     toc: true
+    includes:
+      before_body: version.md
+
 
 vignette: >
   %\VignetteIndexEntry{Who speaks when how much and often?}
