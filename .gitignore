@@ -10,3 +10,4 @@ src/java/target
 drama.R.jar
 ..Rcheck
 inst/doc
+version.md
