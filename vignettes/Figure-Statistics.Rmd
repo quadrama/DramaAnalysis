@@ -25,8 +25,6 @@ require(DramaAnalysis)
 v <- packageVersion("DramaAnalysis")
 ```
 
-![`r v`](https://img.shields.io/badge/v-`r v`-blue.svg)
-
 
 We're assuming here that we have loaded some texts using `load.text()`, and that this text is stored as a data.frame in the variable `text`. For this example, we have loaded Emilia Galotti and Romeo und Julia, both coming from the TextGrid repository. For demo purposes, one can use the data sets included in the package.
 

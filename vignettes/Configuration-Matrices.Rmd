@@ -21,7 +21,6 @@ require(DramaAnalysis)
 v <- packageVersion("DramaAnalysis")
 ```
 
-![`r v`](https://img.shields.io/badge/v-`r v`-blue.svg)
 
 ## Matrices
 
