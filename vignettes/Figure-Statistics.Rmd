@@ -6,17 +6,26 @@ output:
   rmarkdown::html_vignette:
     fig_width: 6
     fig_height: 5
+  md_document:
+    variant: markdown_github
+    toc: true
+
 vignette: >
-  %\VignetteIndexEntry{Figure Statistics}
+  %\VignetteIndexEntry{Who speaks when how much and often?}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 require(DramaAnalysis)
+
+v <- packageVersion("DramaAnalysis")
 ```
 
+![`r v`](https://img.shields.io/badge/v-`r v`-blue.svg)
 
 
 We're assuming here that we have loaded some texts using `load.text()`, and that this text is stored as a data.frame in the variable `text`. For this example, we have loaded Emilia Galotti and Romeo und Julia, both coming from the TextGrid repository. For demo purposes, one can use the data sets included in the package.
@@ -60,9 +69,9 @@ text(x=b,y=t(mat$cs+(mat$values/2)),
      labels=t(substr(mat$labels,0,20)))
 ```
 
-Since many of these labels are barely readable, we can restrict the number of displayed labels to, say, the top 5 figures (i.e., the five figures that speak the most). We do this by selecting only the top 5 rows in the matrices, using the function `head()`. For the sake of brevity, we do not include the plot here.
+Since many of these labels are barely readable, we can restrict the number of displayed labels to, say, the top 5 figures (i.e., the five figures that speak the most). We do this by selecting only the top 5 rows in the matrices, using the function `head()`.
 
-```{r eval=FALSE}
+```{r}
 # Plot a stacked bar plot
 b <- barplot(mat$values,col=qd.colors)
 
