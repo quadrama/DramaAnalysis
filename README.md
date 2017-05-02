@@ -28,3 +28,4 @@ Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
    repos=NULL, type="source")
    ```
 - Add the PDF documentation for the R package to the release page
+- Post the updated vignettes on the wiki
