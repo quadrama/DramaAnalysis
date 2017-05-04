@@ -31,7 +31,7 @@ loadSet <- function(setName, addGenreColumn=FALSE) {
 #' A function to get a list of all collections and the number of plays in that collection
 #' @export
 #' @importFrom rJava .jevalArray .jsimplify
-load.sets <- function() {
+loadSets <- function() {
   dl <- dlobject()
   s <- dl$getListOfSets()
   l <- unlist(lapply(.jevalArray(s[[2]]),FUN=function(x) {.jsimplify(x)}))
@@ -82,7 +82,7 @@ loadText <- function(ids, includeTokens=FALSE) {
     loadAnnotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
 #' @title Load annotations
-#' Helper method to load covered annotations.
+#' @description Helper method to load covered annotations.
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load
