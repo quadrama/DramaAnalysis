@@ -1,0 +1,184 @@
+---
+title: "Configuration Matrices"
+author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6 
+    fig_height: 5
+  md_document: 
+    variant: markdown_github
+    toc: true
+    includes:
+      before_body:
+      - version.md
+      - vig-Configuration-Matrices.md
+vignette: >
+  %\VignetteIndexEntry{Configuration matrices and co-occurrence networks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r, include=FALSE}
+require(DramaAnalysis)
+v <- packageVersion("DramaAnalysis")
+```
+
+
+## Matrices
+
+As configuration matrices [@Pfister:1988aa] are dependent on information about acts and scenes, we need to load the texts in such a way that this information is present. The function `load.text2()` does exactly that.  Alternatively, one can use the dataset `rksp.0.mtext`.
+
+
+```{r setup}
+require(DramaAnalysis)
+data(rksp.0.mtext)
+
+colnames(rksp.0.mtext)
+```
+
+In addition to the regular text and speakers, this table also contains informatio about the scenes and acts in which each token is spoken.
+
+```{r}
+c <- configuration(rksp.0.mtext)
+c$matrix
+c$figure
+```
+
+This creates a basic configuration matrix, but instead of just containing the presence or absence of a figure, it contains the number of spoken tokens for each act for each figure. 
+
+We can use this easily to create a stacked bar chart, showing the distribution visually (you probably need a color palette with more than ten colors ... )
+
+```{r}
+par(mar=c(2,2,2,10))
+barplot(c$matrix, 
+        legend.text = c$figure, # legend text
+        args.legend = list(cex=0.5, # legend font size
+                           x=7.5, # legend x position
+                           y=max(colSums(c$matrix)) # legend y pos
+                        ), 
+        col=qd.colors)
+```
+
+Since each act has a different length, it would be useful to normalize each block, according to the total number of spoken tokens. This way, we can display the relative active presence of each figure in each act. We normalize by dividing by the sum of each column.
+
+```{r}
+c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
+c$matrix
+par(mar=c(2,2,2,10))
+barplot(c$matrix, 
+        legend.text=c$figure, # set legend text
+        args.legend = list(cex=0.5, # legend font size
+                           x=7.5, # legend x position
+                           y=max(colSums(c$matrix)) # legend y pos
+                        ),
+        col=qd.colors)
+```
+
+## Copresence
+
+Configuration matrices are also often used to get an overview of who is copresent on stage. First, we create a configuration matrix that only represents presence or absence of a figure (and we switch to scenes). Obviously, the resulting matrix has many more columns.
+```{r}
+c <- configuration(rksp.0.mtext, only.presence = TRUE, by="Scene")
+
+# to see the matrix (not shown here):
+# c$matrix 
+``` 
+
+Creating a co-occurrence matrix is a simple matter of matrix multiplication:
+```{r}
+rksp.0.co <- c$matrix %*% t(c$matrix)
+rksp.0.co
+
+# add figure names
+rownames(rksp.0.co) <- c$figure
+colnames(rksp.0.co) <- c$figure
+```
+
+### As Heatmap
+
+This can be visualised in a simple heat map:
+```{r}
+# since it's a square matrix, we don't need the bottom right triangle
+# and diagonales.
+rksp.0.co[lower.tri(rksp.0.co,diag=TRUE)] <- NA
+
+par(mar=c(10,10,1,1)) # plot margins
+image(rksp.0.co, 
+      col = rgb(64,111,184, alpha=(seq(0,255)),
+                maxColorValue = 256),
+      xaxt= "n",  # no x axis
+      yaxt= "n",  # no y axis
+      frame=TRUE  # print a frame around the heatmap
+      )
+# add the x axis
+axis(1, at = seq(0,1,length.out = length(c$figure)), labels = c$figure, las=3)
+# add the y axis
+axis(2, at = seq(0,1,length.out = length(c$figure)), labels = c$figure, las=1)
+```
+
+Apparently, Marinelli and Der Prinz have the most shared scenes. Marinelli also shares a scene with most other figures (vertical bar).
+
+### As Network
+
+... or even a co-occurrence network, using the package `igraph`. A nice introduction in igraph can be found in [@Arnold:2015aa], particularly for literary networks.
+
+
+```{r message=FALSE}
+require(igraph)
+```
+
+Technically, the matrix we created before is an [adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix). It is therefore simple to convert it to a graph, and igraph offers the function `graph_from_adjacency_matrix()` for this.
+
+```{r}
+g <- graph_from_adjacency_matrix(rksp.0.co, 
+                                 weighted=TRUE,     # weighted graph
+                                 mode="undirected", # no direction
+                                 diag=FALSE         # no looping edges
+                                )
+
+# Now we plot
+plot.igraph(g, 
+            layout=layout_with_gem,       # how to lay out the graph
+            main="Co-Occurrence Network: Emilia Galotti",  # title
+            vertex.label.cex=0.6,         # label size
+            vertex.label.color="black",   # font color
+            vertex.color=qd.colors[4],    # vertex color
+            vertex.frame.color=NA,        # no vertex border
+            edge.width=E(g)$weight        # scale edges according to their weight
+            )  
+```
+
+### Graph Export
+
+As a final step, one might want to further work on the graph using [Gephi](https://gephi.org), or other tools. In order to do so, one can export the graph into an appropriate file:
+```{r eval=FALSE}
+write_graph(g, 
+            "rksp.0.graphml",
+            format="graphml")
+```
+
+This results in a file called [`rksp.0.graphml`](rksp.0.graphml), that starts similarly as this:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="e_weight" for="edge" attr.name="weight" attr.type="double"/>
+  <graph id="G" edgedefault="undirected">
+    <node id="n0">
+      <data key="v_name">DER KAMMERDIENER</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">DER PRINZ</data>
+    </node>
+    ...
+```
+
+This file can be opened with Gephi.
+
+## References

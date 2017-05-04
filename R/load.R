@@ -28,7 +28,7 @@ load.set <- function(setName, add.genre.column=FALSE) {
   ds
 }
 
-#' A function to get a list of all collections and the number os plays in that collection
+#' A function to get a list of all collections and the number of plays in that collection
 #' @export
 #' @importFrom rJava .jevalArray .jsimplify
 load.sets <- function() {
@@ -51,7 +51,7 @@ scene.act.table <- function(ids) {
 
 #' Similar to load.text(), but the table also includes scene and act markings.
 #' @param ids The ids for which we want to get the text
-#' @importFrom data.table setkey foverlaps
+#' @importFrom data.table setkey foverlaps data.table
 #' @export
 #' @examples 
 #' \dontrun{

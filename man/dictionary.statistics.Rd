@@ -7,7 +7,8 @@ counts the number of occurrences of the words in the dictionaries}
 \usage{
 dictionary.statistics(t, fieldnames = c(), normalize.by.figure = FALSE,
   normalize.by.field = FALSE, names = FALSE, boost = 1,
-  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/")
+  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
+  column = "Token.surface")
 }
 \arguments{
 \item{t}{A text}

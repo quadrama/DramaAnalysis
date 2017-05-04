@@ -2,7 +2,8 @@
 % Please edit documentation in R/text.R
 \name{configuration}
 \alias{configuration}
-\title{Creates classic drama configuration matrix}
+\title{Creates classic drama configuration matrix. Returns a list with 
+the three components matrix, drama, and figure}
 \usage{
 configuration(mtext, by = "Act", only.presence = FALSE)
 }
@@ -10,9 +11,13 @@ configuration(mtext, by = "Act", only.presence = FALSE)
 \item{mtext}{The text including Act and Scene markings}
 
 \item{by}{A string, either "Act" or "Scene"}
+
+\item{only.presence}{If TRUE, the resulting matrix only contains 
+logical values for stage presence}
 }
 \description{
-Creates classic drama configuration matrix
+Creates classic drama configuration matrix. Returns a list with 
+the three components matrix, drama, and figure
 }
 \examples{
 data(rksp.0.mtext)

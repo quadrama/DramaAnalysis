@@ -10,10 +10,11 @@
 #' st <- frequencytable(rksp.0.text)
 #' @examples
 #' \dontrun{
-#' t <- load.text(read.csv("http://localhost:8080/drama.web/dramas", header=FALSE)[,], tokens=T)
-#' tl <- limit.figures.by.tokens(t, minTokens=1000)
+#' require(stylo)
+#' data(vndf.0.text)
+#' tl <- limit.figures.by.tokens(vndf.0.text, minTokens=1000)
 #' stylo_table <- frequencytable(tl, names=TRUE, by.figure=TRUE)
-#' stylo(gui=F, frequencies = stylo_table, network=T, write.png.file=T, analysis.type="BCT")
+#' stylo(gui=F, frequencies = stylo_table)
 #' }
 #' @export
 frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, column="Token.surface", by.figure=FALSE, sep="|") {
@@ -27,7 +28,7 @@ frequencytable <- function(t, accepted.pos = postags$de$words, names=FALSE, colu
   } else
     index <- list(ft$drama, ft$Speaker.figure_id)
   r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
-  r[,order(colSums(r),decreasing=TRUE)]
+  as.matrix(r[,order(colSums(r),decreasing=TRUE)])
 }
 
 

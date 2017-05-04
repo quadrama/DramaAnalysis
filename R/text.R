@@ -54,9 +54,12 @@ tfidf <- function(ftable) {
   data.frame(apply(ftable, 2, tfidf1))
 }
 
-#' Creates classic drama configuration matrix
+#' Creates classic drama configuration matrix. Returns a list with 
+#' the three components matrix, drama, and figure
 #' @param mtext The text including Act and Scene markings
 #' @param by A string, either "Act" or "Scene"
+#' @param only.presence If TRUE, the resulting matrix only contains 
+#' logical values for stage presence
 #' @seealso DramaAnalysis::load.text2()
 #' @export
 #' @examples
