@@ -60,7 +60,7 @@ scene.act.table <- function(ids) {
 loadSegmentedText <- function(ids) {
   t <- data.table(loadText(ids, includeTokens=TRUE))
   sat <- data.table(scene.act.table(ids=ids))
-  setkey(sat, drama, begin.Scene, end.Scene)
+  setkey(sat, "drama", "begin.Scene", "end.Scene")
   mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
   mtext
 }
