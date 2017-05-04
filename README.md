@@ -17,6 +17,7 @@ Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
   - `pom.xml` for the Java code
 - Compile the Java code by running `mvn -f java/pom.xml clean package`
 - Go one directory up `cd ..`
+- Create vignettes by running `devtools::build_vignettes()` in R
 - Check that the R package is well: `R CMD check DramaAnalysis`
 - Make a source package by running `R CMD build DramaAnalysis`
 - If all works well, merge the branch into master, tag it with `v1.0.0`
