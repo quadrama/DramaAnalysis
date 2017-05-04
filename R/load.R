@@ -17,12 +17,12 @@ dlobject <- function() {
 #' Function to load a set from QuaDramA web service.
 #' Can optionally set the set name as a genre in the returned table
 #' @param setName The name of the set to retrieve
-#' @param add.genre.column Whether to set the Genre-column in the returned table to the set name
+#' @param addGenreColumn Whether to set the Genre-column in the returned table to the set name
 #' @export
-load.set <- function(setName, add.genre.column=FALSE) {
+loadSet <- function(setName, addGenreColumn=FALSE) {
   dl <- dlobject()
   ds <- data.frame(id=dl$getCollectionEntries(setName))
-  if (add.genre.column == TRUE) {
+  if (addGenreColumn == TRUE) {
     ds$Genre <- setName
   }
   ds
