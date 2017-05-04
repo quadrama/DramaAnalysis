@@ -4,13 +4,15 @@ author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-    fig_width: 6
+    fig_width: 6 
     fig_height: 5
   md_document: 
     variant: markdown_github
     toc: true
     includes:
-      before_body: version.md
+      before_body:
+      - version.md
+      - vig-Configuration-Matrices.md
 vignette: >
   %\VignetteIndexEntry{Configuration matrices and co-occurrence networks}
   %\VignetteEngine{knitr::rmarkdown}

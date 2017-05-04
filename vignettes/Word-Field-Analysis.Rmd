@@ -10,7 +10,10 @@ output:
     variant: markdown_github
     toc: true
     includes:
-      before_body: version.md
+      before_body:
+      - version.md
+      - vig-Word-Field-Analysis.md
+
 
 vignette: >
   %\VignetteIndexEntry{Measuring speech topics using word fields}
