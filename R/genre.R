@@ -9,12 +9,14 @@
 #' @examples
 #' data(rksp.0.text)
 #' rksp.0.ft <- frequencytable(rksp.0.text, by.figure=TRUE, names=TRUE)
-#' g <- factor(c("m","m","m","m","f","f","m","m","m","f","m","m","m","f","m"))
+#' g <- factor(c("m","m","m","m","f","m","m","m","f","m","m","f","m"))
 #' rksp.0.cor <- corr.analysis(rksp.0.ft,g)
 corr.analysis <- function(text.ft, outcomes,  method="spearman",minimal.frequency=10) {
   text.ft.filtered <- data.frame(text.ft[,colSums(text.ft!=0) > minimal.frequency])
   outcomes <- as.numeric(outcomes)
-  text.cor <- cor( text.ft.filtered, y=outcomes, method=method)
+  text.cor <- data.frame(cor( text.ft.filtered, y=outcomes, method=method))
   colnames(text.cor) <- c("cor")
+  text.cor$word <- rownames(text.cor)
+  text.cor <- text.cor[order(text.cor$cor),]
   text.cor
 } 

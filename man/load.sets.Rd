@@ -2,10 +2,10 @@
 % Please edit documentation in R/load.R
 \name{load.sets}
 \alias{load.sets}
-\title{A function to get a list of all collections and the number os plays in that collection}
+\title{A function to get a list of all collections and the number of plays in that collection}
 \usage{
 load.sets()
 }
 \description{
-A function to get a list of all collections and the number os plays in that collection
+A function to get a list of all collections and the number of plays in that collection
 }

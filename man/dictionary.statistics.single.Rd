@@ -6,7 +6,7 @@
 \usage{
 dictionary.statistics.single(t, wordfield = c(), names = FALSE,
   normalize.by.figure = FALSE, normalize.by.field = FALSE,
-  bylist = list(t$drama, t$Speaker.figure_id))
+  bylist = list(t$drama, t$Speaker.figure_id), column = "Token.surface")
 }
 \arguments{
 \item{t}{A single or multiple text(s)}
@@ -20,6 +20,8 @@ dictionary.statistics.single(t, wordfield = c(), names = FALSE,
 \item{normalize.by.field}{A logical value. Whether to normalize by the size of the word field}
 
 \item{bylist}{A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas}
+
+\item{column}{"Token.surface" or "Token.lemma"}
 }
 \description{
 Calculates dictionary statistics for a single word field that is given as a character vector

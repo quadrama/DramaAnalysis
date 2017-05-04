@@ -7,7 +7,8 @@ counts the number of occurrences of the words in the dictionaries}
 \usage{
 dictionary.statistics(t, fieldnames = c(), normalize.by.figure = FALSE,
   normalize.by.field = FALSE, names = FALSE, boost = 1,
-  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/")
+  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
+  column = "Token.surface")
 }
 \arguments{
 \item{t}{A text}
@@ -22,7 +23,7 @@ dictionary.statistics(t, fieldnames = c(), normalize.by.figure = FALSE,
 
 \item{boost}{A scaling factor to generate nicer values}
 
-\item{baseurl}{The url delivering the dictionairies}
+\item{baseurl}{The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().}
 }
 \description{
 This method retrieves word lists from the given URL (e.g., github) and

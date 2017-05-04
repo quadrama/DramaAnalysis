@@ -24,7 +24,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<version>0.4.1</version>
+	<version>0.4.2</version>
 	<build>
 		<plugins>
 			<plugin>

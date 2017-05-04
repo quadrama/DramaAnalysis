@@ -28,7 +28,7 @@ load.set <- function(setName, add.genre.column=FALSE) {
   ds
 }
 
-#' A function to get a list of all collections and the number os plays in that collection
+#' A function to get a list of all collections and the number of plays in that collection
 #' @export
 #' @importFrom rJava .jevalArray .jsimplify
 load.sets <- function() {
@@ -51,16 +51,16 @@ scene.act.table <- function(ids) {
 
 #' Similar to load.text(), but the table also includes scene and act markings.
 #' @param ids The ids for which we want to get the text
-#' @importFrom data.table setkey foverlaps
+#' @importFrom data.table setkey foverlaps data.table
 #' @export
 #' @examples 
 #' \dontrun{
 #' mtext <- load.text2(c("tg:rksp.0"))
 #' }
 load.text2 <- function(ids) {
-  t <- data.table(load.text(ids, tokens=TRUE))
-  sat <- data.table(scene.act.table(ids=ids))
-  setkey(sat,drama,begin.Scene, end.Scene)
+  t <- data.table::data.table(load.text(ids, tokens=TRUE))
+  sat <- data.table::data.table(scene.act.table(ids=ids))
+  setkey(sat, "drama", "begin.Scene", "end.Scene")
   mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
   mtext
 }

@@ -1,0 +1,147 @@
+---
+title: "Figure Statistics"
+author: "Nils Reiter"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 5
+  md_document:
+    variant: markdown_github
+    toc: true
+    includes:
+      before_body:
+      - version.md
+      - vig-Figure-Statistics.md
+
+
+vignette: >
+  %\VignetteIndexEntry{Who speaks when how much and often?}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(DramaAnalysis)
+
+v <- packageVersion("DramaAnalysis")
+```
+
+
+We're assuming here that we have loaded some texts using `load.text()`, and that this text is stored as a data.frame in the variable `text`. For this example, we have loaded Emilia Galotti and Romeo und Julia, both coming from the TextGrid repository. For demo purposes, one can use the data sets included in the package.
+
+```{r}
+# Load Emilia Galotti
+data(rksp.0.text)
+# Load Romeo und Julia
+data(vndf.0.text)
+
+# make a joint table containing both
+text <- rbind(rksp.0.text, vndf.0.text)
+
+```
+
+## Who's talking how much? (Tokens)
+
+
+First, we calculate figure statistics. 
+```{r}
+fstat <- figure.statistics(text, names=TRUE, normalize=FALSE)
+summary(fstat)
+```
+This figure statistics table already contains all the information we need and can be inspected and analysed directly. The remaining steps are only needed if you want to plot this information as a stacked bar chart.
+
+```{r}
+# Create a matrix
+mat <- figurematrix(fstat)
+summary(mat)
+head(mat$values,5)
+```
+
+`mat` is a list containing three things: `values` is a matrix storing the number of tokens a figure speaks, `labels` contains the names of figures corresponding to the respective cell in `values` and `cs` contains summed token numbers, such that the entries can be stacked.
+
+```{r}
+# Plot a stacked bar plot
+b <- barplot(mat$values,col=qd.colors)
+
+# Add figure names (if needed/wanted)
+text(x=b,y=t(mat$cs+(mat$values/2)),
+     labels=t(substr(mat$labels,0,20)))
+```
+
+Since many of these labels are barely readable, we can restrict the number of displayed labels to, say, the top 5 figures (i.e., the five figures that speak the most). We do this by selecting only the top 5 rows in the matrices, using the function `head()`.
+
+```{r}
+# Plot a stacked bar plot
+b <- barplot(mat$values,col=qd.colors)
+
+top <- 5
+
+# Add figure names (if needed/wanted)
+text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
+     labels=t(substr(head(mat$labels,top),0,20)))
+```
+
+## Who's talking how often? (Utterances)
+
+So far, we have counted words. Now we will turn to utterances, and their properties.
+
+First, we will use the function `utterance_statistics()` to extract numbers about utterances
+```{r}
+ustat <- utterance_statistics(rksp.0.text, 
+                              num.figures = 10, # include 10 figures per drama
+                              normalize.by.drama.length = FALSE # use absolute values
+                            )
+colnames(ustat)
+```
+
+This creates a table with a single row for each utterance. We can now inspect the variance in utterance length
+
+```{r}
+par(mar=c(10,2,2,2))
+boxplot(utterance_length ~ figure, # what do we want to correlate 
+        data=ustat, 
+        las = 3 # rotate axis labels
+      )
+```
+
+## When are figures talking?
+
+While the above displays the *length* of utterances, we can also display the position of utterances, i.e., where in the text are they taking place?
+
+```{r}
+par(mar=c(2,10,2,2))
+stripchart(begin ~ figure, data=ustat, 
+           las=1, # horizontal labels
+           pch=20, # use a small bullet as symbol
+           col=qd.colors # get nice colors
+           )
+```
+
+Each dot in this plot represents one utterance, the x-axis is measured in character positions. This is not really intuitive, but the flow from left to right represents the flow of the text.
+
+Now it would be useful to include information on act/scene boundaries in this plot. This can be done by accessing the segmented text table. The first  commands work just as before, with the exception of being applied to the variable `rksp.0.mtext`.
+
+```{r}
+data(rksp.0.mtext)
+
+ustat <- utterance_statistics(rksp.0.mtext, 
+                              num.figures = 10, # include 10 figures per drama
+                              normalize.by.drama.length = FALSE # use absolute values
+                            )
+par(mar=c(2,10,2,2))
+stripchart(begin ~ figure, data=ustat, 
+           las=1, # horizontal labels
+           pch=20, # use a small bullet as symbol
+           col=qd.colors, # get nice colors
+           xaxt="n" # suppress the x axis
+           )
+
+# add vertical lines for act beginning
+abline(v=unique(rksp.0.mtext$begin.Act)[-1])
+```
+
+Please note that the information contained in this plot is very similar to the information in the [visual and relative configuration matrices](Configuration-Matrices).
