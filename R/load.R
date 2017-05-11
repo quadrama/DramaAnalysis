@@ -112,7 +112,7 @@ loadAnnotations <- function(ids,
 #' @param debug Logical value, whether to print debug information
 #' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
 #' @export
-count.annotations <- function(ids, 
+countAnnotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance",
                              debug=FALSE,
                              shortname=TRUE) {
@@ -153,7 +153,7 @@ load.numbers <- function(ids=c(),
   df <- data.frame(ids)
   rownames(df) <- df$ids
   for (a in annotations) {
-    annos <- count.annotations(ids, type=a, debug=debug)
+    annos <- countAnnotations(ids, type=a, debug=debug)
     df <- cbind(df, annos)
   }
   subset(df,select=c(-1))

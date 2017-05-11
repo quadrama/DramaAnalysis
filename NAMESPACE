@@ -2,7 +2,7 @@
 
 export(configuration)
 export(corr.analysis)
-export(count.annotations)
+export(countAnnotations)
 export(dictionary.statistics)
 export(dictionary.statistics.single)
 export(figure.statistics)
