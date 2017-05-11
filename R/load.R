@@ -135,21 +135,21 @@ countAnnotations <- function(ids,
 #' This function loads the number of annotations of different types for several 
 #' dramas at once.
 #' @param ids A vector containing drama ids
-#' @param annotations A character vector containing the annotation types we want to count
+#' @param types A character vector containing the annotation types we want to count
 #' @param debug Logical value, whether to print out debug info
 #' @export
 #' @examples 
 #' \dontrun{
-#' load.numbers(c("rksp.0", "vndf.0"))
+#' loadNumbers(c("rksp.0", "vndf.0"))
 #' }
-load.numbers <- function(ids=c(),
-                         annotations=c("de.unistuttgart.ims.drama.api.Act",
+loadNumbers <- function(ids=c(),
+                        types=c("de.unistuttgart.ims.drama.api.Act",
                                        "de.unistuttgart.ims.drama.api.Scene", 
                                        "de.unistuttgart.ims.drama.api.Utterance", 
                                        "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
                                        "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
-                                       "de.unistuttgart.ims.drama.api.DramatisPersonae"), 
-                         debug=FALSE) {
+                                       "de.unistuttgart.ims.drama.api.DramatisPersonae"),
+                        debug=FALSE) {
   df <- data.frame(ids)
   rownames(df) <- df$ids
   for (a in annotations) {
