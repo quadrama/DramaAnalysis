@@ -152,7 +152,7 @@ loadNumbers <- function(ids=c(),
                         debug=FALSE) {
   df <- data.frame(ids)
   rownames(df) <- df$ids
-  for (a in annotations) {
+  for (a in types) {
     annos <- countAnnotations(ids, type=a, debug=debug)
     df <- cbind(df, annos)
   }
