@@ -6,7 +6,7 @@ load.meta <- function(ids = c("rksp.0")) {
                               coveredType="de.unistuttgart.ims.drama.api.Figure");
   drama2figures <- data.frame(tapply(figures$Figure.surface, figures$drama, length));
   colnames(drama2figures) <- c("Figures (in Dramatis Personae)");
-  tokens <- loadText(ids, tokens=TRUE);
+  tokens <- loadText(ids, includeTokens=TRUE);
   drama2tokens <- data.frame(tapply(tokens$Token.surface, tokens$drama, FUN=length));
   colnames(drama2tokens) <- c("Tokens (in speech)");
   m <- merge(meta, drama2figures, by=0)[,-1]
