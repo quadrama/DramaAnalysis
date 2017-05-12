@@ -24,7 +24,7 @@ and creates a matrix that can be used to create a stacked bar plot.
 \examples{
 data(rksp.0.text,vndf.0.text)
 text <- rbind(rksp.0.text,vndf.0.text)
-stat <- figure.statistics(text, names = TRUE)
+stat <- figureStatistics(text, names = TRUE)
 mat <- figurematrix(stat)
 # Plot a stacked bar plot
 b <- barplot(mat$values,col=qd.colors)

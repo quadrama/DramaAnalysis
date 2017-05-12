@@ -3,8 +3,8 @@
 #' tokens: The number of tokens spoken by that figure
 #' types : The number of different tokens (= types) spoken by each figure
 #' utterances: The number of utterances
-#' utterance_length_mean: The mean length of utterances
-#' utterance_length_sd: The standard deviation in utterance length
+#' utteranceLengthMean: The mean length of utterances
+#' utteranceLengthSd: The standard deviation in utterance length
 #' @param t The drama text
 #' @param names If set to true, the table will contains figure names instead of ids
 #' @param normalize Normalising the individual columns
@@ -12,9 +12,9 @@
 #' @importFrom stats aggregate
 #' @examples
 #' data(rksp.0.text)
-#' stat <- figure.statistics(rksp.0.text, names = FALSE)
+#' stat <- figureStatistics(rksp.0.text, names = FALSE)
 #' @export
-figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
+figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
   dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
     dup <- duplicated(x)
     diffs <- dup[-1L] != dup[-length(dup)]
@@ -38,12 +38,12 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
     aggregate(t$end, by=bylist, max)[,3],
     aggregate(t$length, by=bylist, function(x) { unique(x) })[,3]
   ))
-  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utterance_length_mean", "utterance_length_sd", "first_begin", "last_end", "length")
+  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utteranceLengthMean", "utteranceLengthSd", "firstBegin", "lastEnd", "length")
   if (normalize == TRUE) {
     r$tokens <- r$tokens / r$length
     r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
-    r$first_begin <- r$first_begin / ave(r$last_end, r$drama, FUN=max)
-    r$last_end <- ave(r$last_end, r$drama, FUN=function(x) {x/max(x)})
+    r$firstBegin <- r$firstBegin / ave(r$lastEnd, r$drama, FUN=max)
+    r$lastEnd <- ave(r$lastEnd, r$drama, FUN=function(x) {x/max(x)})
   }
   r
 }
@@ -61,7 +61,7 @@ figure.statistics <- function(t, names = FALSE, normalize = FALSE) {
 #' @examples
 #' data(rksp.0.text,vndf.0.text)
 #' text <- rbind(rksp.0.text,vndf.0.text)
-#' stat <- figure.statistics(text, names = TRUE)
+#' stat <- figureStatistics(text, names = TRUE)
 #' mat <- figurematrix(stat)
 #' # Plot a stacked bar plot
 #' b <- barplot(mat$values,col=qd.colors)
