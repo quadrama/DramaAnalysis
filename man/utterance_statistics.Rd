@@ -2,7 +2,7 @@
 % Please edit documentation in R/utterance_statistics.R
 \name{utterance_statistics}
 \alias{utterance_statistics}
-\title{This method calculates the length of each utterance, organised by figure and drama.}
+\title{Utterance Statistics}
 \usage{
 utterance_statistics(t, num.figures = 10, normalize.by.drama.length = TRUE)
 }

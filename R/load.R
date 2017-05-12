@@ -82,7 +82,7 @@ load.text <- function(ids, tokens=FALSE) {
     load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
 #' @title Load annotations
-#' Helper method to load covered annotations.
+#' @description Helper method to load covered annotations.
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load

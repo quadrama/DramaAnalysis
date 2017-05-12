@@ -2,8 +2,7 @@
 % Please edit documentation in R/load.R
 \name{load.annotations}
 \alias{load.annotations}
-\title{Load annotations
-Helper method to load covered annotations.}
+\title{Load annotations}
 \usage{
 load.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
   coveredType = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
@@ -14,6 +13,9 @@ load.annotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
 \item{type}{The annotation type to load}
 
 \item{coveredType}{The annotation type of covered annotations we want to load}
+}
+\description{
+Helper method to load covered annotations.
 }
 \examples{
 \dontrun{
