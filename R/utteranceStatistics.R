@@ -5,11 +5,10 @@
 #' @export
 #' @examples
 #' data(rksp.0.text)
-#' num_figures <- 5
-#' ustat <- utteranceStatistics(rksp.0.text, numberOfFigures = num_figures)
+#' ustat <- utteranceStatistics(rksp.0.text, numberOfFigures = 5)
 #' \dontrun{
-#' boxplot(ustat$utterance_length ~ ustat$figure,
-#'    col=qd.colors[1:num_figures],
+#' boxplot(ustat$utteranceLength ~ ustat$figure,
+#'    col=qd.colors[1:5],
 #'    las=2, frame=FALSE)
 #' }
 #' @importFrom stats aggregate
@@ -21,11 +20,11 @@ utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = 
   # utterance statistics
   ulength <- aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface, t$begin, t$length), length)
 
-  colnames(ulength) <- c("drama", "figure", "begin", "drama_length","utterance_length")
+  colnames(ulength) <- c("drama", "figure", "begin", "dramaLength","utteranceLength")
 
   # normalize by drama length
   if (normalizeByDramaLength == TRUE) {
-    ulength$utterance_length <- ulength$utterance_length / ulength$drama_length
+    ulength$utteranceLength <- ulength$utteranceLength / ulength$dramaLength
   }
   # skip empty factor levels
   ulength <- droplevels(ulength)

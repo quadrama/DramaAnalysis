@@ -102,7 +102,7 @@ This creates a table with a single row for each utterance. We can now inspect th
 
 ```{r}
 par(mar=c(10,2,2,2))
-boxplot(utterance_length ~ figure, # what do we want to correlate 
+boxplot(utteranceLength ~ figure, # what do we want to correlate 
         data=ustat, 
         las = 3 # rotate axis labels
       )
