@@ -1,4 +1,4 @@
-load.meta <- function(ids = c("rksp.0")) {
+loadMeta <- function(ids = c("rksp.0")) {
   meta <- read.csv(paste("", "all", sep="/"))
   rownames(meta) <- meta$id;
   figures <- loadAnnotations(ids, 
