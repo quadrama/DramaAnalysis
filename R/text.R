@@ -58,7 +58,7 @@ tfidf <- function(ftable) {
 #' the three components matrix, drama, and figure
 #' @param mtext The text including Act and Scene markings
 #' @param by A string, either "Act" or "Scene"
-#' @param only.presence If TRUE, the resulting matrix only contains 
+#' @param onlyPresence If TRUE, the resulting matrix only contains 
 #' logical values for stage presence
 #' @seealso DramaAnalysis::load.text2()
 #' @export
@@ -66,14 +66,14 @@ tfidf <- function(ftable) {
 #' data(rksp.0.mtext)
 #' cfg <- configuration(rksp.0.mtext)
 #' 
-configuration <- function(mtext, by="Act", only.presence=FALSE) {
+configuration <- function(mtext, by="Act", onlyPresence=FALSE) {
   
   if (by=="Scene") {
     c <- configuration.scene(mtext)
   } else {
     c <- configuration.act(mtext)
   }
-  if (only.presence)
+  if (onlyPresence)
     c$matrix <- c$matrix>0
   c
 }
