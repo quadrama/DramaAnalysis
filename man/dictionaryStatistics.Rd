@@ -24,6 +24,8 @@ dictionaryStatistics(t, fieldnames = c(), normalizeByFigure = FALSE,
 \item{boost}{A scaling factor to generate nicer values}
 
 \item{baseurl}{The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().}
+
+\item{column}{The table column we apply the dictionary on. Should be either "Token.surface" or "Token.lemma".}
 }
 \description{
 This method retrieves word lists from the given URL (e.g., github) and

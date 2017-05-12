@@ -7,6 +7,7 @@
 #' @param names Whether the resulting table contains figure ids or names
 #' @param boost A scaling factor to generate nicer values
 #' @param baseurl The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().
+#' @param column The table column we apply the dictionary on. Should be either "Token.surface" or "Token.lemma".
 #' @importFrom stats aggregate
 #' @importFrom stats ave
 #' @importFrom utils read.csv
