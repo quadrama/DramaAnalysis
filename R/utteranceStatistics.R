@@ -16,6 +16,7 @@
 utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = TRUE) {
 
   if (typeof(numberOfFigures) == "double") {
+    # TODO: limitFigures
     t <- limit.figures.by.rank(t, maxRank = numberOfFigures)
   }
   # utterance statistics

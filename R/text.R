@@ -13,16 +13,32 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
                rgb(217, 33, 32, maxColorValue = 255)
               );
 
-
+#' @title Filtering figures
+#' @description This function can be used to remove speech content of certain figures. 
+#' Currently, it offers two ways of filtering: By rank or by spoken words. Filtering by 
+#' rank is an upper criterion, i.e., up to $threshold$ figures are included. Filtering 
+#' by tokens is a lower limit: Every figure that speaks more than $threshold$ figures is
+#' included.
+#' @param text The dramatic text in table form
+#' @param by A character vector, either "rank" or "tokens"
+#' @param threshold A number specifying the limit
+#' @export
+#' @examples 
+#' data(rksp.0.text)
+#' text.top10 <- limitFigures(rksp.0.text)
+limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10)) {
+  if(is.na(pmatch(by, c("tokens", "rank")))) stop("Invalid filtering criterion")
+  if (by=="tokens") {
+    limit.figures.by.tokens(text, minTokens=threshold)
+  } else {
+    limit.figures.by.rank(text, maxRank = threshold)
+  }
+}
 
 #' This method removes the spoken tokens of all but the most frequent n figures
 #' @param t The text, a data frame listing each token for each figure
 #' @param maxRank Up to maxRank figures remain in the data set
-#' @export
 #' @importFrom utils head
-#' @examples
-#' data(rksp.0.text)
-#' t <- limit.figures.by.rank(rksp.0.text)
 limit.figures.by.rank <- function(t, maxRank=10) {
   counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
   counts <- counts[order(counts$x, decreasing = TRUE),]
@@ -33,10 +49,6 @@ limit.figures.by.rank <- function(t, maxRank=10) {
 #' This method removes the spoken tokens by all figures that speak infrequently.
 #' @param t The text, a data frame listing each token for each figure
 #' @param minTokens The minimal amount of tokens a figure has to speak
-#' @export
-#' @examples
-#' data(rksp.0.text)
-#' t <- limit.figures.by.tokens(rksp.0.text)
 limit.figures.by.tokens <- function(t, minTokens=100) {
     counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
     write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
