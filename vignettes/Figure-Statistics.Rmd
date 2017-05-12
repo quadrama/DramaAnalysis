@@ -49,7 +49,7 @@ text <- rbind(rksp.0.text, vndf.0.text)
 
 First, we calculate figure statistics. 
 ```{r}
-fstat <- figure.statistics(text, names=TRUE, normalize=FALSE)
+fstat <- figureStatistics(text, names=TRUE, normalize=FALSE)
 summary(fstat)
 ```
 This figure statistics table already contains all the information we need and can be inspected and analysed directly. The remaining steps are only needed if you want to plot this information as a stacked bar chart.
