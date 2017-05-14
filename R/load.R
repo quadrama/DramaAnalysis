@@ -75,11 +75,11 @@ load.text2 <- function(ids) {
 #' @export
 load.text <- function(ids, tokens=FALSE) {
   if (tokens == TRUE) {
-    load.annotations(ids, 
+    load.annotations(as.character(ids), 
                      type="de.unistuttgart.ims.drama.api.Utterance", 
                      coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
   } else
-    load.annotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
+    load.annotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
 #' @title Load annotations
 #' @description Helper method to load covered annotations.
