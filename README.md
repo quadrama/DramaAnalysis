@@ -1,4 +1,7 @@
+[![release](https://img.shields.io/badge/release-0.4.2-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v0.4.2)
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
+[![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
+[![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
 
 # DramaAnalysis with R
 
@@ -17,6 +20,7 @@ Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
   - `pom.xml` for the Java code
 - Compile the Java code by running `mvn -f java/pom.xml clean package`
 - Go one directory up `cd ..`
+- Create vignettes by running `devtools::build_vignettes()` in R
 - Check that the R package is well: `R CMD check DramaAnalysis`
 - Make a source package by running `R CMD build DramaAnalysis`
 - If all works well, merge the branch into master, tag it with `v1.0.0`
@@ -28,4 +32,5 @@ Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
    repos=NULL, type="source")
    ```
 - Add the PDF documentation for the R package to the release page
+- Update zenodo-DOI in README.md on master branch
 - Post the updated vignettes on the wiki
