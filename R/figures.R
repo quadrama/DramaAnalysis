@@ -85,12 +85,14 @@ figurematrix <- function(fstat,column="tokens",order=-1) {
 #' @export
 #' @examples 
 #' data(rksp.0.figures)
-#' rank.figures.by.dp(rksp.0.figures)
-rank.figures.by.dp <- function(figures, columnTitle="Rank (dramatis personae)") {
+#' rankFiguresByDramatisPersonae(rksp.0.figures)
+rankFiguresByDramatisPersonae <- function(figures, columnTitle="Rank (dramatis personae)") {
   figures[[columnTitle]] <- ave(seq(1:nrow(figures)),figures$drama, FUN=rank)
   figures
 }
 
+#' @title Rank figures by their 1st appearance
+#' @description
 #' Given a dramatic text and a table of figures, ranks the figures by 
 #' their first appearance. The lower the rank number, the earlier the figure appears.
 #' "appears": speaks for the first time.
@@ -100,8 +102,8 @@ rank.figures.by.dp <- function(figures, columnTitle="Rank (dramatis personae)") 
 #' @export
 #' @examples 
 #' data(rksp.0.text, rksp.0.figures)
-#' rank.figures.by.appearance(rksp.0.figures, rksp.0.text)
-rank.figures.by.appearance <- function(figures, text, columnTitle="Rank (1st appearance)") {
+#' rankFiguresByAppearance(rksp.0.figures, rksp.0.text)
+rankFiguresByAppearance <- function(figures, text, columnTitle="Rank (1st appearance)") {
   minimal.utterance.begin <- aggregate(text$begin, by=list(text$drama,
                                                            text$Speaker.figure_surface),
                                        min)
