@@ -75,11 +75,11 @@ loadSegmentedText <- function(ids) {
 #' @export
 loadText <- function(ids, includeTokens=FALSE) {
   if (includeTokens == TRUE) {
-    loadAnnotations(ids, 
+    loadAnnotations(as.character(ids), 
                      type="de.unistuttgart.ims.drama.api.Utterance", 
                      coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
   } else
-    loadAnnotations(ids, type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
+    loadAnnotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
 #' @title Load annotations
 #' @description Helper method to load covered annotations.
