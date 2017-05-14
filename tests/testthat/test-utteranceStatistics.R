@@ -1,16 +1,16 @@
 data(rksp.0.text)
 data(vndf.0.text)
 
-ustat <- utterance_statistics(rksp.0.text, num.figures = 10, normalize.by.drama.length=FALSE)
+ustat <- utteranceStatistics(rksp.0.text, numberOfFigures = 10, normalizeByDramaLength = FALSE)
 
 expect_that(length(ustat), equals(5))
 expect_that(length(ustat$drama), equals(812))
-expect_that(median(ustat$utterance_length), equals(17.5))
+expect_that(median(ustat$utteranceLength), equals(17.5))
 expect_that(median(ustat[ustat$figure=="ODOARDO GALOTTI",5]), equals(14))
 
-ustat <- utterance_statistics(rksp.0.text, num.figures = 10, normalize.by.drama.length=TRUE)
+ustat <- utteranceStatistics(rksp.0.text, numberOfFigures = 10, normalizeByDramaLength = TRUE)
 
 expect_that(length(ustat), equals(5))
 expect_that(length(ustat$drama), equals(812))
-expect_that(median(ustat$utterance_length), equals(0.0006899271))
+expect_that(median(ustat$utteranceLength), equals(0.0006899271))
 expect_that(median(ustat[ustat$figure=="ODOARDO GALOTTI",5]), equals(0.0005519417))

@@ -4,19 +4,19 @@
 \alias{frequencytable2}
 \title{Extract bigrams instead of words (currently not taking utterance boundaries into account)}
 \usage{
-frequencytable2(t, accepted.pos = postags$de$words, names = FALSE,
-  cols = c("Token.surface", "Token.surface"), by.figure = FALSE)
+frequencytable2(t, acceptedPOS = postags$de$words, names = FALSE,
+  cols = c("Token.surface", "Token.surface"), byFigure = FALSE)
 }
 \arguments{
 \item{t}{The text}
 
-\item{accepted.pos}{A list of accepted pos tags}
+\item{acceptedPOS}{A list of accepted pos tags}
 
 \item{names}{Whether to use figure names or ids}
 
 \item{cols}{The column names we should use (should be either Token.surface or Token.lemma)}
 
-\item{by.figure}{Wether the count is by figure or by text}
+\item{byFigure}{Wether the count is by figure or by text}
 }
 \description{
 Extract bigrams instead of words (currently not taking utterance boundaries into account)

@@ -17,12 +17,12 @@ dlobject <- function() {
 #' Function to load a set from QuaDramA web service.
 #' Can optionally set the set name as a genre in the returned table
 #' @param setName The name of the set to retrieve
-#' @param add.genre.column Whether to set the Genre-column in the returned table to the set name
+#' @param addGenreColumn Whether to set the Genre-column in the returned table to the set name
 #' @export
-load.set <- function(setName, add.genre.column=FALSE) {
+loadSet <- function(setName, addGenreColumn=FALSE) {
   dl <- dlobject()
   ds <- data.frame(id=dl$getCollectionEntries(setName))
-  if (add.genre.column == TRUE) {
+  if (addGenreColumn == TRUE) {
     ds$Genre <- setName
   }
   ds
@@ -31,7 +31,7 @@ load.set <- function(setName, add.genre.column=FALSE) {
 #' A function to get a list of all collections and the number of plays in that collection
 #' @export
 #' @importFrom rJava .jevalArray .jsimplify
-load.sets <- function() {
+loadSets <- function() {
   dl <- dlobject()
   s <- dl$getListOfSets()
   l <- unlist(lapply(.jevalArray(s[[2]]),FUN=function(x) {.jsimplify(x)}))
@@ -39,9 +39,9 @@ load.sets <- function() {
 }
 
 scene.act.table <- function(ids) {
-  acts <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL)
+  acts <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL)
   acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- load.annotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL)
+  scenes <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL)
   merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"))
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
@@ -55,11 +55,11 @@ scene.act.table <- function(ids) {
 #' @export
 #' @examples 
 #' \dontrun{
-#' mtext <- load.text2(c("tg:rksp.0"))
+#' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
-load.text2 <- function(ids) {
-  t <- data.table::data.table(load.text(ids, tokens=TRUE))
-  sat <- data.table::data.table(scene.act.table(ids=ids))
+loadSegmentedText <- function(ids) {
+  t <- data.table(loadText(ids, includeTokens=TRUE))
+  sat <- data.table(scene.act.table(ids=ids))
   setkey(sat, "drama", "begin.Scene", "end.Scene")
   mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
   mtext
@@ -71,15 +71,15 @@ load.text2 <- function(ids) {
 #'
 #'
 #' @param ids A vector containing drama ids to be downloaded
-#' @param tokens If set to true, the table also contains each token in an utterance
+#' @param includeTokens If set to true, the table also contains each token in an utterance
 #' @export
-load.text <- function(ids, tokens=FALSE) {
-  if (tokens == TRUE) {
-    load.annotations(as.character(ids), 
+loadText <- function(ids, includeTokens=FALSE) {
+  if (includeTokens == TRUE) {
+    loadAnnotations(as.character(ids), 
                      type="de.unistuttgart.ims.drama.api.Utterance", 
                      coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
   } else
-    load.annotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
+    loadAnnotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
 #' @title Load annotations
 #' @description Helper method to load covered annotations.
@@ -91,9 +91,9 @@ load.text <- function(ids, tokens=FALSE) {
 #' @importFrom rJava .jnew .jarray .jnull
 #' @examples
 #' \dontrun{
-#' load.annotations(c("rksp.0"))
+#' loadAnnotations(c("rksp.0"))
 #' }
-load.annotations <- function(ids, 
+loadAnnotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance", 
                              coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
   dl <- dlobject()
@@ -112,7 +112,7 @@ load.annotations <- function(ids,
 #' @param debug Logical value, whether to print debug information
 #' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
 #' @export
-count.annotations <- function(ids, 
+countAnnotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance",
                              debug=FALSE,
                              shortname=TRUE) {
@@ -125,7 +125,7 @@ count.annotations <- function(ids,
   }
   for (a in ids) {
     tryCatch({
-      data2 <- load.annotations(ids,type,NULL)
+      data2 <- loadAnnotations(ids,type,NULL)
       r[a,lname] = nrow(data2)
     }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
   }
@@ -135,25 +135,25 @@ count.annotations <- function(ids,
 #' This function loads the number of annotations of different types for several 
 #' dramas at once.
 #' @param ids A vector containing drama ids
-#' @param annotations A character vector containing the annotation types we want to count
+#' @param types A character vector containing the annotation types we want to count
 #' @param debug Logical value, whether to print out debug info
 #' @export
 #' @examples 
 #' \dontrun{
-#' load.numbers(c("rksp.0", "vndf.0"))
+#' loadNumbers(c("rksp.0", "vndf.0"))
 #' }
-load.numbers <- function(ids=c(),
-                         annotations=c("de.unistuttgart.ims.drama.api.Act",
+loadNumbers <- function(ids=c(),
+                        types=c("de.unistuttgart.ims.drama.api.Act",
                                        "de.unistuttgart.ims.drama.api.Scene", 
                                        "de.unistuttgart.ims.drama.api.Utterance", 
                                        "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
                                        "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
-                                       "de.unistuttgart.ims.drama.api.DramatisPersonae"), 
-                         debug=FALSE) {
+                                       "de.unistuttgart.ims.drama.api.DramatisPersonae"),
+                        debug=FALSE) {
   df <- data.frame(ids)
   rownames(df) <- df$ids
-  for (a in annotations) {
-    annos <- count.annotations(ids, type=a, debug=debug)
+  for (a in types) {
+    annos <- countAnnotations(ids, type=a, debug=debug)
     df <- cbind(df, annos)
   }
   subset(df,select=c(-1))

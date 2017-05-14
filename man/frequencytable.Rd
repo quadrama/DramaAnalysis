@@ -4,19 +4,19 @@
 \alias{frequencytable}
 \title{This function generates a matrix of word frequencies by figure or drama.}
 \usage{
-frequencytable(t, accepted.pos = postags$de$words, names = FALSE,
-  column = "Token.surface", by.figure = FALSE, sep = "|")
+frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
+  column = "Token.surface", byFigure = FALSE, sep = "|")
 }
 \arguments{
 \item{t}{The text table, potentially covering multiple texts}
 
-\item{accepted.pos}{A list of accepted pos tags}
+\item{acceptedPOS}{A list of accepted pos tags}
 
 \item{names}{Whether to use figure names or ids}
 
 \item{column}{The column name we should use (should be either Token.surface or Token.lemma)}
 
-\item{by.figure}{Wether the count is by figure or by text}
+\item{byFigure}{Wether the count is by figure or by text}
 
 \item{sep}{The separation character that goes between drama name and figure (if applicable)}
 }
@@ -30,7 +30,7 @@ st <- frequencytable(rksp.0.text)
 require(stylo)
 data(vndf.0.text)
 tl <- limit.figures.by.tokens(vndf.0.text, minTokens=1000)
-stylo_table <- frequencytable(tl, names=TRUE, by.figure=TRUE)
+stylo_table <- frequencytable(tl, names=TRUE, byFigure=TRUE)
 stylo(gui=F, frequencies = stylo_table)
 }
 }
