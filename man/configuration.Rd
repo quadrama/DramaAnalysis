@@ -5,14 +5,14 @@
 \title{Creates classic drama configuration matrix. Returns a list with 
 the three components matrix, drama, and figure}
 \usage{
-configuration(mtext, by = "Act", only.presence = FALSE)
+configuration(mtext, by = "Act", onlyPresence = FALSE)
 }
 \arguments{
 \item{mtext}{The text including Act and Scene markings}
 
 \item{by}{A string, either "Act" or "Scene"}
 
-\item{only.presence}{If TRUE, the resulting matrix only contains 
+\item{onlyPresence}{If TRUE, the resulting matrix only contains 
 logical values for stage presence}
 }
 \description{

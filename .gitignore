@@ -11,3 +11,5 @@ drama.R.jar
 ..Rcheck
 inst/doc
 version.md
+vignettes/*.html
+vignettes/*.R
