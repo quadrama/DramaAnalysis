@@ -5,7 +5,7 @@
 \title{Calculates correlation of a frequency table with an outcome list according to given method}
 \usage{
 correlationAnalysis(text.ft, outcomes, method = "spearman",
-  minimal.frequency = 10)
+  minimalFrequency = 10)
 }
 \arguments{
 \item{text.ft}{A matrix, containing words in columns and figures (or plays) in rows}
@@ -14,7 +14,7 @@ correlationAnalysis(text.ft, outcomes, method = "spearman",
 
 \item{method}{The correlation method, passed on to cor()}
 
-\item{minimal.frequency}{An integer. Words that appear less than x times can be filtered in advance}
+\item{minimalFrequency}{An integer. Words that appear less than x times can be filtered in advance}
 }
 \description{
 Calculates correlation of a frequency table with an outcome list according to given method
