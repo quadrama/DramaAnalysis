@@ -21,6 +21,7 @@ require(fmsb)
 #' @param legend.horizontal Whether to print legend horizontally or vertically
 #' @param ... Miscellaneous arguments to be given for radarchart().
 #' @importFrom fmsb radarchart
+#' @export
 #' @examples 
 #' data(rksp.0.text)
 #' dstat <- dictionaryStatistics(rksp.0.text, normalizeByField=TRUE, names=TRUE,
