@@ -58,12 +58,49 @@ limit.figures.by.tokens <- function(t, minTokens=100) {
 
 tfidf1 <- function(word) {
   docfreq <- sum(word>0)
-  word/docfreq
+  docfreq <- log((length(word)+1) / (sum(word>0)))
+  if (docfreq==0)
+    rep(0,length(word))
+  else
+    word*docfreq
 }
 
+#' @title TF-IDF
+#' @description This function calculates a variant TF-IDF. 
+#' The input is assumed to contain relative frequencies.
+#' IDF is calculated as follows: \eqn{idf_t = \log\frac{N+1}{n_t}}, with \eqn{N} being 
+#' the total number of documents (i.e., rows) and \eqn{n_t} the number of documents
+#' containing term \eqn{t}. We add one to the denominator to prevent terms that appear
+#' in every document to become 0.
+#' 
+#' @param ftable A matrix, containing "document" as rows and "terms" as columns. 
+#' Values are assumed to be normalized by document, i.e., contain relative frequencies.
 #' @export
+#' @examples
+#' data(rksp.0.text)
+#' rksp.0.ftable <- frequencytable(rksp.0.text,byFigure=TRUE)
+#' rksp.0.tfidf <- tfidf(rksp.0.ftable)
+#' @examples
+#' mat <- matrix(c(0.10,0.2, 0,
+#'                 0,   0.2, 0,
+#'                 0.1, 0.2, 0.1,
+#'                 0.8, 0.4, 0.9),
+#'               nrow=3,ncol=4)
+#' mat2 <- tfidf(mat)
+#' print(mat2)
 tfidf <- function(ftable) {
-  data.frame(apply(ftable, 2, tfidf1))
+  if (mean(apply(ftable,1,sum))!=1)
+    stop("Matrix should contain relative frequencies")
+  r <- apply(ftable, 2, tfidf1)
+  rownames(r) <- rownames(ftable)
+  r[is.na(r)] <- 0
+  r
+}
+
+
+extractTopTerms <- function(mat, top=10) {
+  r <- apply(mat, 1, function(x) { list(head(x[order(x, decreasing=TRUE)],n=top)) })
+  lapply(r, unlist)
 }
 
 #' Creates classic drama configuration matrix. Returns a list with 
