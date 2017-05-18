@@ -5,6 +5,7 @@
 #' @param byFigure Wether the count is by figure or by text
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @param sep The separation character that goes between drama name and figure (if applicable)
+#' @param normalize Whether to normalize values or not
 #' @examples
 #' data(rksp.0.text)
 #' st <- frequencytable(rksp.0.text)
@@ -17,7 +18,7 @@
 #' stylo(gui=F, frequencies = stylo_table)
 #' }
 #' @export
-frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|") {
+frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=TRUE) {
   ft <- t
   if (length(acceptedPOS) > 0)
     ft <- t[t$Token.pos %in% acceptedPOS,]
@@ -27,7 +28,11 @@ frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, colum
     index <- paste(ft$drama, ft$Speaker.figure_surface,sep=sep)
   } else
     index <- list(ft$drama, ft$Speaker.figure_id)
-  r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
+  if (normalize==TRUE) {
+    r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
+  } else {
+    r <- do.call(rbind, tapply(ft[[column]], index, function(x){(table(x))}))
+  }
   as.matrix(r[,order(colSums(r),decreasing=TRUE)])
 }
 

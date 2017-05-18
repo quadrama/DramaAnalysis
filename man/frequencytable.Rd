@@ -5,7 +5,8 @@
 \title{This function generates a matrix of word frequencies by figure or drama.}
 \usage{
 frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
-  column = "Token.surface", byFigure = FALSE, sep = "|")
+  column = "Token.surface", byFigure = FALSE, sep = "|",
+  normalize = TRUE)
 }
 \arguments{
 \item{t}{The text table, potentially covering multiple texts}
@@ -19,6 +20,8 @@ frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
 \item{byFigure}{Wether the count is by figure or by text}
 
 \item{sep}{The separation character that goes between drama name and figure (if applicable)}
+
+\item{normalize}{Whether to normalize values or not}
 }
 \description{
 This function generates a matrix of word frequencies by figure or drama.
