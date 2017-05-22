@@ -27,7 +27,7 @@ require(fmsb)
 #' dstat <- dictionaryStatistics(rksp.0.text, normalizeByField=TRUE, names=TRUE,
 #'                               fieldnames=c("Krieg", "Liebe", "Familie", "Ratio","Religion"))
 #' plotWordFields(dstat[,3:7],names=dstat[,2],max=50)
-plotWordFields <- function(dstat, mat=dstat[,-c(1,2)], names=dstat[,2], 
+plotWordFields <- function(dstat=NULL, mat=dstat[,-c(1,2)], names=dstat[,2], 
                            symbols=c(17,16,15,4,8),
                            maxValue=max(mat),minValue=min(mat), cglcol="black", 
                            legend=TRUE,
@@ -37,7 +37,7 @@ plotWordFields <- function(dstat, mat=dstat[,-c(1,2)], names=dstat[,2],
                            legend.horizontal = FALSE,
                            pcol=qd.colors,... ) {
   
-  data <- rbind(rep(maxValue,ncol(mat)),rep(minValue,ncol(mat)),mat)
+  data <- data.frame(rbind(rep(maxValue,ncol(mat)),rep(minValue,ncol(mat)),mat))
   radarchart(data, maxmin=TRUE, 
              plwd=1,pcol=pcol,
              pty=symbols,

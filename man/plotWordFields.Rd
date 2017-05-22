@@ -4,7 +4,7 @@
 \alias{plotWordFields}
 \title{Spider-Webs}
 \usage{
-plotWordFields(dstat, mat = dstat[, -c(1, 2)], names = dstat[, 2],
+plotWordFields(dstat = NULL, mat = dstat[, -c(1, 2)], names = dstat[, 2],
   symbols = c(17, 16, 15, 4, 8), maxValue = max(mat), minValue = min(mat),
   cglcol = "black", legend = TRUE, legend.cex = 0.7,
   legend.pos.x = "bottomright", legend.pos.y = NA,
