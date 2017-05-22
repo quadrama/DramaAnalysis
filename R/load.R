@@ -40,7 +40,10 @@ loadSets <- function() {
 
 scene.act.table <- function(ids) {
   acts <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL)
-  acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
+  
+  acts[, Number := as.integer(as.numeric(as.factor(begin))),drama]
+  
+  #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
   scenes <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL)
   merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"))
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
@@ -59,6 +62,7 @@ scene.act.table <- function(ids) {
 #' }
 loadSegmentedText <- function(ids) {
   t <- data.table(loadText(ids, includeTokens=TRUE))
+  print(t)
   sat <- data.table(scene.act.table(ids=ids))
   setkey(sat, "drama", "begin.Scene", "end.Scene")
   mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
