@@ -82,16 +82,16 @@ loadText <- function(ids, includeTokens=FALSE) {
     loadAnnotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
 
 #' @title Load annotations
-#' @description Helper method to load covered annotations.
+#' @description Helper method to load covered annotations. Returns a data.table.
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load
 #' @export
-#' @importFrom utils read.csv
+#' @importFrom data.table fread
 #' @importFrom rJava .jnew .jarray .jnull
 #' @examples
 #' \dontrun{
-#' loadAnnotations(c("rksp.0"))
+#' loadAnnotations(c("tg:rksp.0"))
 #' }
 loadAnnotations <- function(ids, 
                              type="de.unistuttgart.ims.drama.api.Utterance", 
@@ -102,7 +102,7 @@ loadAnnotations <- function(ids,
   } else {
     s <- dl$getAnnotations(.jarray(ids),type,coveredType)
   }
-  df <- read.csv(text=s)
+  df <- data.table::fread(input=s, check.names = TRUE)
   df
 }
 

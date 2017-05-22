@@ -15,7 +15,7 @@ loadAnnotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
 \item{coveredType}{The annotation type of covered annotations we want to load}
 }
 \description{
-Helper method to load covered annotations.
+Helper method to load covered annotations. Returns a data.table.
 }
 \examples{
 \dontrun{
