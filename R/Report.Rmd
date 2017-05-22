@@ -148,6 +148,22 @@ legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border
 
 ```
 
+## Bar chart (scaled)
+
+```{r, echo=FALSE}
+mat <- t(scale(t(mat),center=FALSE,scale=rowSums(mat)))
+
+par(mar=c(10,2,1,10),xpd=TRUE)
+b <- barplot(t(mat),
+        col=params$col[1:length(fields)],
+        las=3,
+        border=FALSE
+        )
+legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border=FALSE)
+
+```
+
+
 ## Spider Web
 
 ```{r, echo=FALSE}
