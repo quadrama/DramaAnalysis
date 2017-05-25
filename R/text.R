@@ -151,3 +151,12 @@ configuration.scene <- function(text) {
   list(matrix=as.matrix(cfg[,3:ncol(cfg)]),drama=cfg[,1],figure=cfg[,2])
   
 }
+
+#' @export
+report <- function(id="tg:rksp.0", of=paste0("../", id, ".html"), colors=qd.colors) {
+  require(knitr)
+  require(rmarkdown)
+  rmarkdown::render("R/Report.Rmd", params=list(id=id, col=colors), 
+                    output_format = "html_document", 
+                    output_file = of)
+}

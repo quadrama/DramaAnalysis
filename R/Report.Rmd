@@ -1,0 +1,195 @@
+---
+title: "QuaDramA Report"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: 2
+params:
+  id: "tg:rksp.0"
+  col: "grey"
+---
+
+```{r,echo=FALSE}
+pver <- packageVersion("DramaAnalysis")
+```
+
+This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io).
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setup()
+
+text <- loadText(params$id, includeTokens = TRUE)
+mtext <- loadSegmentedText(params$id)
+
+```
+
+# Figure Lists {.tabset}
+
+## Dramatis Personae 
+
+All figurs as listed in the dramatis personae:
+
+```{r, echo=FALSE}
+figuresInDramatisPersonae <- loadAnnotations(params$id, type="de.unistuttgart.ims.drama.api.DramatisPersonae", coveredType = "de.unistuttgart.ims.drama.api.Figure")
+as.character(figuresInDramatisPersonae$Figure.surface)
+```
+
+## By Order of appearance
+
+All figures, in the order they have their first appearance
+
+```{r, echo=FALSE}
+begins <- aggregate(text$begin, by=list(text$Speaker.figure_surface), min)
+as.character(begins[order(begins$x),]$Group.1)
+```
+
+# Overall Speech Distribution
+
+Relative amount of words spoken by each figure. 
+
+```{r, echo=FALSE}
+fstat <- figureStatistics(text, names=TRUE, normalize=FALSE)
+mat <- figurematrix(fstat)
+b <- barplot(mat$values,col=params$col)
+
+top <- 15
+
+text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
+     labels=t(substr(head(mat$labels,top),0,20)),cex=0.5)
+```
+
+# Presence and Utterances
+
+```{r,echo=FALSE}
+ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
+
+```
+
+## All Utterances
+```{r,echo=FALSE}
+par(mar=c(1,9,1,0),xpd=FALSE)
+plotUtterancePositions(ustat,mtext,xlab="")
+```
+
+## Utterance Length Variation
+
+```{r,echo=FALSE}
+par(mar=c(2,9,0,0))
+boxplot(utteranceLength ~ figure, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
+```
+
+# Configuration and Copresence {.tabset}
+
+## By Act 
+```{r, echo=FALSE}
+c <- configuration(mtext)
+c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
+barplot(c$matrix, 
+        legend.text=c$figure, # set legend text
+        args.legend = list(cex=0.5, # legend font size
+                           x=7.5, # legend x position
+                           y=max(colSums(c$matrix)) # legend y pos
+                        ),
+        col=params$col)
+```
+
+## By Scene
+
+```{r, echo=FALSE}
+c <- configuration(mtext, by="Scene")
+c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
+barplot(c$matrix, 
+        legend.text=c$figure, # set legend text
+        args.legend = list(cex=0.5, # legend font size
+                           x=7.5, # legend x position
+                           y=max(colSums(c$matrix)) # legend y pos
+                        ),
+        col=params$col)
+```
+
+
+# Copresence Network
+```{r, echo=FALSE, message=FALSE}
+c <- configuration(mtext, onlyPresence = TRUE, by="Scene")
+co <- c$matrix %*% t(c$matrix)
+
+# add figure names
+rownames(co) <- c$figure
+colnames(co) <- c$figure
+require(igraph)
+
+g <- graph_from_adjacency_matrix(co, 
+                                 weighted=TRUE,     # weighted graph
+                                 mode="undirected", # no direction
+                                 diag=FALSE         # no looping edges
+                                )
+
+# Now we plot
+plot.igraph(g, 
+            layout=layout_with_gem,       # how to lay out the graph
+            vertex.label.cex=0.6,         # label size
+            vertex.label.color="black",   # font color
+            vertex.color=qd.colors[4],    # vertex color
+            vertex.frame.color=NA,        # no vertex border
+            edge.width=E(g)$weight        # scale edges according to their weight
+            )  
+```
+
+
+# Word Fields  {.tabset}
+
+## Bar Chart
+
+```{r, echo=FALSE}
+baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/"
+
+text2 <- limitFigures(text, by="tokens")
+fields <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
+dstat <- dictionaryStatistics(
+  text2,  # the text
+  fieldnames=fields,  # fields we want to measure
+  baseurl = baseUrl,            # specify url
+  names = TRUE,                 # use figure names (instead of ids)
+  normalizeByFigure = TRUE,   # normalization by figure
+  normalizeByField = TRUE,    # normalization by field
+  column = "Token.lemma"        # lemma-based stats
+)
+mat <- as.matrix(dstat[,3:7])
+rownames(mat) <- vapply(strsplit(as.character(dstat$figure), ",", fixed=TRUE), `[`,1, FUN.VALUE=character(1))
+
+par(mar=c(10,2,0,10),xpd=TRUE)
+b <- barplot(t(mat), # we select Romeo's line
+        col=params$col[1:length(fields)],
+        las=3,
+        border=FALSE
+        )
+legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border=FALSE)
+
+```
+
+## Bar chart (scaled)
+
+```{r, echo=FALSE}
+mat <- t(scale(t(mat),center=FALSE,scale=rowSums(mat)))
+
+par(mar=c(10,2,1,10),xpd=TRUE)
+b <- barplot(t(mat),
+        col=params$col[1:length(fields)],
+        las=3,
+        border=FALSE
+        )
+legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border=FALSE)
+
+```
+
+
+## Spider Web
+
+```{r, echo=FALSE}
+plotWordFields(dstat, col=params$col)
+```
