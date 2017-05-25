@@ -1,4 +1,3 @@
-require(fmsb)
 
 
 #' @title Spider-Webs
@@ -36,7 +35,7 @@ plotWordFields <- function(dstat=NULL, mat=dstat[,-c(1,2)], names=dstat[,2],
                            legend.pos.y=NA,
                            legend.horizontal = FALSE,
                            pcol=qd.colors,... ) {
-  
+  require(fmsb)
   data <- data.frame(rbind(rep(maxValue,ncol(mat)),rep(minValue,ncol(mat)),mat))
   radarchart(data, maxmin=TRUE, 
              plwd=1,pcol=pcol,
