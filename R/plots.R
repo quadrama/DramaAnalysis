@@ -1,5 +1,26 @@
-require(fmsb)
-
+#' @title Utterance positions
+#' @description Uses `stripchart` to  plot each utterance at their position,
+#' in a line representing the figure. The dot is marked in the middle of each utterance.
+#' Might look weird if very long utterances are present.
+#' @param utteranceStatistics A table generated from the function
+#' @param segmentedText If supplied, act boundaries will be marked
+#' @param colors The colors to be used
+#' @param plotFrame Whether to draw a frame around the plot
+#' @param ... Parameters passed to stripchart().
+#' @importFrom graphics stripchart abline
+#' @export
+plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors=qd.colors,plotFrame=FALSE,...) {
+  graphics::stripchart(begin+(utteranceLength/2) ~ figure, data=utteranceStatistics, 
+             las=1, # horizontal labels
+             pch=20, # use a small bullet as symbol
+             col=colors, # get nice colors
+             xaxt="n", # suppress the x axis
+             frame=plotFrame,
+             ...)
+  if ( !is.null(segmentedText) ) {
+    graphics::abline(v=unique(segmentedText$begin.Act)[-1])
+  }
+}
 
 #' @title Spider-Webs
 #' @description Generates spider-web like plot
@@ -27,7 +48,7 @@ require(fmsb)
 #' dstat <- dictionaryStatistics(rksp.0.text, normalizeByField=TRUE, names=TRUE,
 #'                               fieldnames=c("Krieg", "Liebe", "Familie", "Ratio","Religion"))
 #' plotWordFields(dstat[,3:7],names=dstat[,2],max=50)
-plotWordFields <- function(dstat, mat=dstat[,-c(1,2)], names=dstat[,2], 
+plotWordFields <- function(dstat=NULL, mat=dstat[,-c(1,2)], names=dstat[,2], 
                            symbols=c(17,16,15,4,8),
                            maxValue=max(mat),minValue=min(mat), cglcol="black", 
                            legend=TRUE,
@@ -36,8 +57,8 @@ plotWordFields <- function(dstat, mat=dstat[,-c(1,2)], names=dstat[,2],
                            legend.pos.y=NA,
                            legend.horizontal = FALSE,
                            pcol=qd.colors,... ) {
-  
-  data <- rbind(rep(maxValue,ncol(mat)),rep(minValue,ncol(mat)),mat)
+  require(fmsb)
+  data <- data.frame(rbind(rep(maxValue,ncol(mat)),rep(minValue,ncol(mat)),mat))
   radarchart(data, maxmin=TRUE, 
              plwd=1,pcol=pcol,
              pty=symbols,
