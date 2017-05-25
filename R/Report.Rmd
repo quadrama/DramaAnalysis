@@ -1,7 +1,5 @@
 ---
 title: "QuaDramA Report"
-author: "Nils Reiter"
-date: "19/05/2017"
 output: 
   html_document:
     toc: true
@@ -14,6 +12,12 @@ params:
   id: "tg:rksp.0"
   col: "grey"
 ---
+
+```{r,echo=FALSE}
+pver <- packageVersion("DramaAnalysis")
+```
+
+This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io).
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -57,6 +61,26 @@ top <- 15
 
 text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
      labels=t(substr(head(mat$labels,top),0,20)),cex=0.5)
+```
+
+# Presence and Utterances
+
+```{r,echo=FALSE}
+ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
+
+```
+
+## All Utterances
+```{r,echo=FALSE}
+par(mar=c(1,9,1,0),xpd=FALSE)
+plotUtterancePositions(ustat,mtext,xlab="")
+```
+
+## Utterance Length Variation
+
+```{r,echo=FALSE}
+par(mar=c(2,9,0,0))
+boxplot(utteranceLength ~ figure, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
 ```
 
 # Configuration and Copresence {.tabset}
