@@ -1,4 +1,26 @@
-
+#' @title Utterance positions
+#' @description Uses `stripchart` to  plot each utterance at their position,
+#' in a line representing the figure. The dot is marked in the middle of each utterance.
+#' Might look weird if very long utterances are present.
+#' @param utteranceStatistics A table generated from the function
+#' @param segmentedText If supplied, act boundaries will be marked
+#' @param colors The colors to be used
+#' @param plotFrame Whether to draw a frame around the plot
+#' @param ... Parameters passed to stripchart().
+#' @importFrom graphics stripchart abline
+#' @export
+plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors=qd.colors,plotFrame=FALSE,...) {
+  graphics::stripchart(begin+(utteranceLength/2) ~ figure, data=utteranceStatistics, 
+             las=1, # horizontal labels
+             pch=20, # use a small bullet as symbol
+             col=colors, # get nice colors
+             xaxt="n", # suppress the x axis
+             frame=plotFrame,
+             ...)
+  if ( !is.null(segmentedText) ) {
+    graphics::abline(v=unique(segmentedText$begin.Act)[-1])
+  }
+}
 
 #' @title Spider-Webs
 #' @description Generates spider-web like plot
