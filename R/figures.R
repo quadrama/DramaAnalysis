@@ -11,6 +11,7 @@
 #' @param normalize Normalising the individual columns
 #' @importFrom stats sd
 #' @importFrom stats aggregate
+#' @importFrom data.table as.data.table
 #' @examples
 #' data(rksp.0.text)
 #' stat <- figureStatistics(rksp.0.text, names = FALSE)
@@ -47,7 +48,7 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 
 #' This function takes a data frame describing various metrics of figures in dramas 
 #' and creates a matrix that can be used to create a stacked bar plot.
-#' @param fstat The figure statistics table, i.e., the output of figure.statistics()
+#' @param fstat The figure statistics table, i.e., the output of figureStatistics(). Coerced to a data.table if needed.
 #' @param column A column name found in the statistics table. This count is used 
 #' as a basis for the plot.
 #' @param order If set to -1 (default), figures are ranked descending 
@@ -65,8 +66,9 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 #' text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
 #' @export
 figurematrix <- function(fstat,column="tokens",order=-1) {
-  fs <- fstat
-  fs$rank <- ave(fs[[column]], fs$drama, FUN=function(x) {rank(order*x, ties.method = "first")})
+  fs <- as.data.table(fstat)
+  fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
+  print(fs)
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
   mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="figure")[,-1])
   mat_cs <- apply(mat_values, 2,cumsum)
