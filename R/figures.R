@@ -5,7 +5,8 @@
 #' utterances: The number of utterances
 #' utteranceLengthMean: The mean length of utterances
 #' utteranceLengthSd: The standard deviation in utterance length
-#' @param t The drama text
+#' @param t A data.table containing the text. Will be coerced into a data.table,
+#' if necessary.
 #' @param names If set to true, the table will contains figure names instead of ids
 #' @param normalize Normalising the individual columns
 #' @importFrom stats sd
@@ -15,30 +16,25 @@
 #' stat <- figureStatistics(rksp.0.text, names = FALSE)
 #' @export
 figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
-  dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
-    dup <- duplicated(x)
-    diffs <- dup[-1L] != dup[-length(dup)]
-    idx <- c(which(diffs), length(dup))
-    diff(c(0, idx))
-  })
-  indexes <- paste(t$drama, t$Speaker.figure_id)
-  bylist <- list(t$drama, t$Speaker.figure_id)
+  t <- as.data.table(t)
+  
+  b <- quote(Speaker.figure_id)
   if (names == TRUE) {
-    indexes <- paste(t$drama, t$Speaker.figure_surface)
-    bylist <- list(t$drama, t$Speaker.figure_surface)
+    b <- quote(Speaker.figure_surface)
   }
 
-  r <- as.data.frame(cbind(
-    aggregate(t$Token.surface, by=bylist, function(x) { length(x) }),
-    aggregate(t$Token.surface, by=bylist, function(x) { length(unique(x)) })[,3],
-    aggregate(t$begin, by=bylist, function(x) { length(unique(x)) })[,3],
-    aggregate(t$begin, by=bylist, function(x) { mean(rle(x)$lengths) })[,3],
-    aggregate(t$begin, by=bylist, function(x) { sd(rle(x)$lengths) })[,3],
-    aggregate(t$begin, by=bylist, min)[,3],
-    aggregate(t$end, by=bylist, max)[,3],
-    aggregate(t$length, by=bylist, function(x) { unique(x) })[,3]
-  ))
-  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utteranceLengthMean", "utteranceLengthSd", "firstBegin", "lastEnd", "length")
+  r <- t[,.(tokens=length(Token.surface),
+       types=length(unique(Token.surface)),
+       utterances=length(unique(begin)),
+       utteranceLengthMean=mean(rle(begin)$lengths),
+       utteranceLengthSd=sd(rle(begin)$lengths),
+       firstBegin=min(begin),
+       lastEnd=max(end),
+       length=unique(length)
+       ),.(drama,eval(b))]
+  
+  
+  colnames(r)[2] <- "figure"
   if (normalize == TRUE) {
     r$tokens <- r$tokens / r$length
     r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
