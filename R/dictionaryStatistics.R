@@ -76,3 +76,26 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(), names = FALSE, normaliz
   }
   r
 }
+
+dictionaryStatisticsSingleL <- function(...) {
+  dstat <- dictionaryStatisticsSingle(...)
+  as.list(dstat)
+}
+
+#' @title Dictionary Statistics as a list
+#' @description This function applies the same logic as \code{\link{dictionaryStatistics}}, but returns the result as a list with multiple components, and the core data as a matrix
+#' @param ... All parameters are passed to \code{\link{dictionaryStatistics}}
+#' @seealso \code{\link{dictionaryStatistics}}
+#' @details The returned list has three named elements:
+#' \describe{
+#' \item{drama}{The drama in which these counts have been counted}
+#' \item{figure}{the figure these values has spoken}
+#' \item{mat}{A matrix containing the actual values}
+#' }
+#' @export
+dictionaryStatisticsL <- function(...) {
+  dstat <- dictionaryStatistics(...)
+  r <- as.list(dstat[,1:2])
+  r$mat <- as.matrix(dstat[,-c(1,2)])
+  r
+}
