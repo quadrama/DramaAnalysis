@@ -62,7 +62,6 @@ scene.act.table <- function(ids) {
 #' }
 loadSegmentedText <- function(ids) {
   t <- data.table(loadText(ids, includeTokens=TRUE))
-  print(t)
   sat <- data.table(scene.act.table(ids=ids))
   setkey(sat, "drama", "begin.Scene", "end.Scene")
   mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
@@ -83,7 +82,8 @@ loadText <- function(ids, includeTokens=FALSE) {
                      type="de.unistuttgart.ims.drama.api.Utterance", 
                      coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
   } else
-    loadAnnotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)}
+    loadAnnotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)
+  }
 
 #' @title Load annotations
 #' @description Helper method to load covered annotations. Returns a data.table.

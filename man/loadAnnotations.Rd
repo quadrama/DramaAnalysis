@@ -19,6 +19,6 @@ Helper method to load covered annotations. Returns a data.table.
 }
 \examples{
 \dontrun{
-loadAnnotations(c("rksp.0"))
+loadAnnotations(c("tg:rksp.0"))
 }
 }
