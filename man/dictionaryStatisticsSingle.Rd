@@ -8,7 +8,8 @@ dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
   normalizeByFigure = FALSE, normalizeByField = FALSE,
   fieldNormalizer = length(wordfield), bylist = ifelse(names == TRUE,
   "drama,Speaker.figure_surface", "drama,Speaker.figure_id"),
-  column = "Token.surface", colnames = c("drama", "figure", "x"))
+  column = "Token.surface", ci = TRUE, colnames = c("drama", "figure",
+  "x"))
 }
 \arguments{
 \item{t}{A single or multiple text(s)}
@@ -26,6 +27,8 @@ dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
 \item{bylist}{A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas}
 
 \item{column}{"Token.surface" or "Token.lemma"}
+
+\item{ci}{Logical. Wether to ignore case. Defaults to TRUE}
 }
 \description{
 Calculates dictionary statistics for a single word field that is given as a character vector

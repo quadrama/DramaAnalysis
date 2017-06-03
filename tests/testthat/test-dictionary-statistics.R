@@ -12,3 +12,6 @@ expect_that(as.numeric(dstat[6,3]), equals(0.0013089005))
 dstat <- dictionaryStatisticsSingle(rksp.0.text, wordfield = c("schön","gut"), names=TRUE, normalizeByFigure = FALSE, normalizeByField = TRUE)
 expect_that(length(dstat), equals(3))
 expect_that(as.numeric(dstat[6,3]), equals(0.5))
+
+dstat <- dictionaryStatistics(rksp.0.text, fields=list(Familie=list("aber")))
+expect_that(as.numeric(dstat[4,3]), equals(29))
