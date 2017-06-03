@@ -42,38 +42,37 @@ dictionaryStatistics <- function(t, fieldnames=c(),
 #' @param names A logical values. Whether to use figure names or ids
 #' @param normalizeByFigure A logical value. Whether to normalize by the amount of tokens a figure speaks
 #' @param normalizeByField A logical value. Whether to normalize by the size of the word field
+#' @param fieldNormalizer defaults to the length of the wordfield
 #' @param bylist A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas
 #' @param column "Token.surface" or "Token.lemma"
 #' @examples
 #' data(rksp.0.text)
 #' fstat <- dictionaryStatisticsSingle(rksp.0.text, wordfield=c("der"), names=TRUE)
 #' @importFrom stats aggregate
+#' @importFrom stats na.omit
 #' @export
-dictionaryStatisticsSingle <- function(t, wordfield=c(), names = FALSE, normalizeByFigure = FALSE, normalizeByField = FALSE, bylist = list(t$drama, t$Speaker.figure_id), column="Token.surface") {
-  if (names == TRUE)
-    bylist <- list(t$drama, t$Speaker.figure_surface)
-
-  r <- aggregate(t[[column]], by=bylist, function(x) {
-    if (normalizeByField == TRUE)
-      length(x[tolower(x) %in% wordfield])/length(wordfield)
-    else
-      length(x[tolower(x) %in% wordfield])
-  })
-
-  if (ncol(r)==3) {
-    colnames(r) <- c("drama", "figure", "x")
-  } else if (ncol(r)==2) {
-    colnames(r) <- c("drama", "x")
-  }
+dictionaryStatisticsSingle <- function(t, wordfield=c(), names = FALSE, normalizeByFigure = FALSE, normalizeByField = FALSE, fieldNormalizer=length(wordfield), bylist = ifelse(names==TRUE,"drama,Speaker.figure_surface","drama,Speaker.figure_id"), column="Token.surface",colnames=c("drama","figure","x")) 
+  {
+  dt <- as.data.table(t)
+  
   if (normalizeByFigure == TRUE) {
-    for (i in 1:nrow(r)) {
-      if (names == TRUE) {
-        r[i,]$x <- r[i,]$x / length(t[t$drama == r[i,1] & t$Speaker.figure_surface == r[i,2],]$Token.lemma)
-      } else {
-        r[i,]$x <- r[i,]$x / length(t[t$drama == r[i,1] & t$Speaker.figure_id == r[i,2],]$Token.lemma)
-      }
-    }
+    r <- dt[,
+            ((length(stats::na.omit(match(get(column), wordfield))) / .N) 
+              / ifelse(normalizeByField,fieldNormalizer,1)),
+           keyby=bylist
+           ]
+  } else {
+    r <- dt[,
+            (length(na.omit(match(get(column), wordfield)))
+              / ifelse(normalizeByField,fieldNormalizer,1)),
+            keyby=bylist
+           ]
   }
+  
+  if (! is.null(colnames)) {
+    colnames(r) <- colnames
+  }
+  
   r
 }
 

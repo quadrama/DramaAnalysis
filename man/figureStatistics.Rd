@@ -7,7 +7,8 @@
 figureStatistics(t, names = FALSE, normalize = FALSE)
 }
 \arguments{
-\item{t}{The drama text}
+\item{t}{A data.table containing the text. Will be coerced into a data.table,
+if necessary.}
 
 \item{names}{If set to true, the table will contains figure names instead of ids}
 

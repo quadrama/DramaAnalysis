@@ -8,7 +8,7 @@ and creates a matrix that can be used to create a stacked bar plot.}
 figurematrix(fstat, column = "tokens", order = -1)
 }
 \arguments{
-\item{fstat}{The figure statistics table, i.e., the output of figure.statistics()}
+\item{fstat}{The figure statistics table, i.e., the output of figureStatistics(). Coerced to a data.table if needed.}
 
 \item{column}{A column name found in the statistics table. This count is used 
 as a basis for the plot.}

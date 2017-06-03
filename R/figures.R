@@ -5,40 +5,37 @@
 #' utterances: The number of utterances
 #' utteranceLengthMean: The mean length of utterances
 #' utteranceLengthSd: The standard deviation in utterance length
-#' @param t The drama text
+#' @param t A data.table containing the text. Will be coerced into a data.table,
+#' if necessary.
 #' @param names If set to true, the table will contains figure names instead of ids
 #' @param normalize Normalising the individual columns
 #' @importFrom stats sd
 #' @importFrom stats aggregate
+#' @importFrom data.table as.data.table
 #' @examples
 #' data(rksp.0.text)
 #' stat <- figureStatistics(rksp.0.text, names = FALSE)
 #' @export
 figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
-  dup <- tapply(t$begin, paste(t$drama, t$Speaker.figure_id), function(x) {
-    dup <- duplicated(x)
-    diffs <- dup[-1L] != dup[-length(dup)]
-    idx <- c(which(diffs), length(dup))
-    diff(c(0, idx))
-  })
-  indexes <- paste(t$drama, t$Speaker.figure_id)
-  bylist <- list(t$drama, t$Speaker.figure_id)
+  t <- as.data.table(t)
+  
+  b <- quote(Speaker.figure_id)
   if (names == TRUE) {
-    indexes <- paste(t$drama, t$Speaker.figure_surface)
-    bylist <- list(t$drama, t$Speaker.figure_surface)
+    b <- quote(Speaker.figure_surface)
   }
 
-  r <- as.data.frame(cbind(
-    aggregate(t$Token.surface, by=bylist, function(x) { length(x) }),
-    aggregate(t$Token.surface, by=bylist, function(x) { length(unique(x)) })[,3],
-    aggregate(t$begin, by=bylist, function(x) { length(unique(x)) })[,3],
-    aggregate(t$begin, by=bylist, function(x) { mean(rle(x)$lengths) })[,3],
-    aggregate(t$begin, by=bylist, function(x) { sd(rle(x)$lengths) })[,3],
-    aggregate(t$begin, by=bylist, min)[,3],
-    aggregate(t$end, by=bylist, max)[,3],
-    aggregate(t$length, by=bylist, function(x) { unique(x) })[,3]
-  ))
-  colnames(r) <- c("drama", "figure","tokens", "types", "utterances", "utteranceLengthMean", "utteranceLengthSd", "firstBegin", "lastEnd", "length")
+  r <- t[,.(tokens=length(Token.surface),
+       types=length(unique(Token.surface)),
+       utterances=length(unique(begin)),
+       utteranceLengthMean=mean(rle(begin)$lengths),
+       utteranceLengthSd=sd(rle(begin)$lengths),
+       firstBegin=min(begin),
+       lastEnd=max(end),
+       length=unique(length)
+       ),.(drama,eval(b))]
+  
+  
+  colnames(r)[2] <- "figure"
   if (normalize == TRUE) {
     r$tokens <- r$tokens / r$length
     r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
@@ -51,7 +48,7 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 
 #' This function takes a data frame describing various metrics of figures in dramas 
 #' and creates a matrix that can be used to create a stacked bar plot.
-#' @param fstat The figure statistics table, i.e., the output of figure.statistics()
+#' @param fstat The figure statistics table, i.e., the output of figureStatistics(). Coerced to a data.table if needed.
 #' @param column A column name found in the statistics table. This count is used 
 #' as a basis for the plot.
 #' @param order If set to -1 (default), figures are ranked descending 
@@ -69,8 +66,9 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 #' text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
 #' @export
 figurematrix <- function(fstat,column="tokens",order=-1) {
-  fs <- fstat
-  fs$rank <- ave(fs[[column]], fs$drama, FUN=function(x) {rank(order*x, ties.method = "first")})
+  fs <- as.data.table(fstat)
+  fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
+  print(fs)
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
   mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="figure")[,-1])
   mat_cs <- apply(mat_values, 2,cumsum)
