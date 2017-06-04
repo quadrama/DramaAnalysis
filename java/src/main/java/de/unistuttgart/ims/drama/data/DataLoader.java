@@ -25,6 +25,7 @@ import org.apache.uima.UIMAException;
 import org.apache.uima.cas.impl.XmiCasDeserializer;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.cas.TOP;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.xml.sax.SAXException;
 
@@ -170,8 +171,8 @@ public class DataLoader implements IRepository {
 	public String getAnnotations(String[] dramaIds, String annotationClassName, String coveredAnnotationClassName)
 			throws ClassNotFoundException, UIMAException, SAXException, IOException {
 
-		Class<? extends Annotation> annotationClass;
-		annotationClass = (Class<? extends Annotation>) Class.forName(annotationClassName);
+		Class<? extends TOP> annotationClass;
+		annotationClass = (Class<? extends TOP>) Class.forName(annotationClassName);
 
 		Class<? extends Annotation> coveredAnnotationClass = null;
 		if (coveredAnnotationClassName != null)

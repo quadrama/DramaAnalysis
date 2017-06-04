@@ -39,12 +39,12 @@ loadSets <- function() {
 }
 
 scene.act.table <- function(ids) {
-  acts <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Act",coveredType=NULL)
+  acts <- loadAnnotations(ids,type=atypes$Act,coveredType=NULL)
   
   acts[, Number := as.integer(as.numeric(as.factor(begin))),drama]
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- loadAnnotations(ids,type="de.unistuttgart.ims.drama.api.Scene",coveredType = NULL)
+  scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
   merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"), allow.cartesian = TRUE)
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
@@ -79,10 +79,10 @@ loadSegmentedText <- function(ids) {
 loadText <- function(ids, includeTokens=FALSE) {
   if (includeTokens == TRUE) {
     loadAnnotations(as.character(ids), 
-                     type="de.unistuttgart.ims.drama.api.Utterance", 
-                     coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
+                     type=atypes$Utterance, 
+                     coveredType=atypes$Token)
   } else
-    loadAnnotations(as.character(ids), type="de.unistuttgart.ims.drama.api.Utterance", coveredType=NULL)
+    loadAnnotations(as.character(ids), type=atypes$Utterance, coveredType=NULL)
   }
 
 #' @title Load annotations
@@ -98,8 +98,8 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' loadAnnotations(c("tg:rksp.0"))
 #' }
 loadAnnotations <- function(ids, 
-                             type="de.unistuttgart.ims.drama.api.Utterance", 
-                             coveredType="de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token") {
+                             type=atypes$Utterance, 
+                             coveredType=atypes$Token) {
   dl <- dlobject()
   if (is.null(coveredType)) {
     s <- dl$getAnnotations(.jarray(ids),type,.jnull())
@@ -110,6 +110,15 @@ loadAnnotations <- function(ids,
   df
 }
 
+#' @title Load meta data
+#' @description helper method to load meta data about dramatic texts (E.g., author, year)
+#' @param ids A vector or list of drama ids
+#' @param type The annotation type to load
+#' @export
+loadMeta <- function(ids,type=atypes$Author) {
+  loadAnnotations(ids,type,coveredType = NULL)
+}
+
 #' Function to count the annotations of a certain type in selected texts.
 #' @param ids A vector or list of drama ids
 #' @param type A string, the fully qualified type name we want to count
@@ -117,7 +126,7 @@ loadAnnotations <- function(ids,
 #' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
 #' @export
 countAnnotations <- function(ids, 
-                             type="de.unistuttgart.ims.drama.api.Utterance",
+                             type=atypes$Utterance,
                              debug=FALSE,
                              shortname=TRUE) {
   r <- data.frame(c())
@@ -147,12 +156,12 @@ countAnnotations <- function(ids,
 #' loadNumbers(c("rksp.0", "vndf.0"))
 #' }
 loadNumbers <- function(ids=c(),
-                        types=c("de.unistuttgart.ims.drama.api.Act",
-                                       "de.unistuttgart.ims.drama.api.Scene", 
-                                       "de.unistuttgart.ims.drama.api.Utterance", 
-                                       "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
-                                       "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
-                                       "de.unistuttgart.ims.drama.api.DramatisPersonae"),
+                        types=c(atypes$Act,
+                                atypes$Scene, 
+                                atypes$Utterance,
+                                atypes$Token,
+                                atypes$Sentence,
+                                atypes$DramatisPersonae),
                         debug=FALSE) {
   df <- data.frame(ids)
   rownames(df) <- df$ids
