@@ -103,7 +103,7 @@ barplot(dstat$x,
 
 ## Multiple Word Fields
 
-The function `dictionary.statistics()` can be used to analyse multiple dictionaries at once. To this end, it is assumed that dictionaries are stored in text files that either are stored locally or reachable via a URL. In any case, the parameter `baseurl` can be used to specify a prefix, to which the field names are appended. By default, the baseurl `https://github.com/quadrama/metadata/tree/master/fields/` is used. Appending the field name "Liebe", for instance, thus results in the URL `https://github.com/quadrama/metadata/tree/master/fields/Liebe`, which is a plain text file.
+The function `dictionaryStatistics()` can be used to analyse multiple dictionaries at once. To this end, it is assumed that dictionaries are stored in text files that either are stored locally or reachable via a URL. In any case, the parameter `baseurl` can be used to specify a prefix, to which the field names are appended. By default, the baseurl `https://github.com/quadrama/metadata/tree/master/fields/` is used. Appending the field name "Liebe", for instance, thus results in the URL `https://github.com/quadrama/metadata/tree/master/fields/Liebe`, which is a plain text file.
 
 The following examples use the baseurl `https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/`, i.e., a specific version of the fields we have been using in QuaDramA. 
 
