@@ -152,10 +152,14 @@ configuration.scene <- function(text) {
   
 }
 
+#' @title Report
+#' @description generates a report for a specific dramatic text
+#' @param id The id of the text
+#' @param of The output file
+#' @param colors A list of colors to be used for plots
+#' @importFrom rmarkdown render
 #' @export
 report <- function(id="tg:rksp.0", of=paste0("../", id, ".html"), colors=qd.colors) {
-  require(knitr)
-  require(rmarkdown)
   rmarkdown::render("R/Report.Rmd", params=list(id=id, col=colors), 
                     output_format = "html_document", 
                     output_file = of)
