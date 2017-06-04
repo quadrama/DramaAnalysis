@@ -68,7 +68,6 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 figurematrix <- function(fstat,column="tokens",order=-1) {
   fs <- as.data.table(fstat)
   fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
-  print(fs)
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
   mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="figure")[,-1])
   mat_cs <- apply(mat_values, 2,cumsum)
