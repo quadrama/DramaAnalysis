@@ -5,13 +5,16 @@
 \title{This method retrieves word lists from the given URL (e.g., github) and
 counts the number of occurrences of the words in the dictionaries}
 \usage{
-dictionaryStatistics(t, fieldnames = c(), normalizeByFigure = FALSE,
-  normalizeByField = FALSE, names = FALSE, boost = 1,
+dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
+  fieldnames = c(), normalizeByFigure = FALSE, normalizeByField = FALSE,
+  names = FALSE, boost = 1,
   baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-  column = "Token.surface")
+  column = "Token.surface", ci = TRUE)
 }
 \arguments{
 \item{t}{A text}
+
+\item{fields}{A list of lists that contains the actual field names. This overrides whatever is given via fieldnames.}
 
 \item{fieldnames}{A list of names for the dictionaries. It is expected that files with that name can be found below the URL.}
 
@@ -26,6 +29,8 @@ dictionaryStatistics(t, fieldnames = c(), normalizeByFigure = FALSE,
 \item{baseurl}{The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().}
 
 \item{column}{The table column we apply the dictionary on. Should be either "Token.surface" or "Token.lemma".}
+
+\item{ci}{Whether to ignore case. Defaults to TRUE, i.e., case is ignored.}
 }
 \description{
 This method retrieves word lists from the given URL (e.g., github) and

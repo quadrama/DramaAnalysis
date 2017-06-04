@@ -4,8 +4,7 @@
 \alias{loadAnnotations}
 \title{Load annotations}
 \usage{
-loadAnnotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
-  coveredType = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
+loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
@@ -15,10 +14,10 @@ loadAnnotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
 \item{coveredType}{The annotation type of covered annotations we want to load}
 }
 \description{
-Helper method to load covered annotations.
+Helper method to load covered annotations. Returns a data.table.
 }
 \examples{
 \dontrun{
-loadAnnotations(c("rksp.0"))
+loadAnnotations(c("tg:rksp.0"))
 }
 }

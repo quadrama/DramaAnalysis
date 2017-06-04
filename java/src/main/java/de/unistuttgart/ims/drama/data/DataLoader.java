@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -24,6 +25,7 @@ import org.apache.uima.UIMAException;
 import org.apache.uima.cas.impl.XmiCasDeserializer;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.cas.TOP;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.xml.sax.SAXException;
 
@@ -169,8 +171,8 @@ public class DataLoader implements IRepository {
 	public String getAnnotations(String[] dramaIds, String annotationClassName, String coveredAnnotationClassName)
 			throws ClassNotFoundException, UIMAException, SAXException, IOException {
 
-		Class<? extends Annotation> annotationClass;
-		annotationClass = (Class<? extends Annotation>) Class.forName(annotationClassName);
+		Class<? extends TOP> annotationClass;
+		annotationClass = (Class<? extends TOP>) Class.forName(annotationClassName);
 
 		Class<? extends Annotation> coveredAnnotationClass = null;
 		if (coveredAnnotationClassName != null)
@@ -181,15 +183,14 @@ public class DataLoader implements IRepository {
 		CoNLLExport exporter = new CoNLLExport();
 		exporter.init(config, null, annotationClass, coveredAnnotationClass);
 
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
 		for (String s : dramaIds) {
 			JCas jcas;
 			jcas = getJCas(s);
 
-			exporter.convert(jcas);
-
+			Util.writeCSV((List<List<Object>>) exporter.convert(jcas), boas);
+			exporter.clearResult();
 		}
-		ByteArrayOutputStream boas = new ByteArrayOutputStream();
-		Util.writeCSV(exporter.getResult(), boas);
 		return new String(boas.toByteArray());
 	}
 
