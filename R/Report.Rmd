@@ -35,7 +35,7 @@ mtext <- loadSegmentedText(params$id)
 All figurs as listed in the dramatis personae:
 
 ```{r, echo=FALSE}
-figuresInDramatisPersonae <- loadAnnotations(params$id, type="de.unistuttgart.ims.drama.api.DramatisPersonae", coveredType = "de.unistuttgart.ims.drama.api.Figure")
+figuresInDramatisPersonae <- loadAnnotations(params$id, type=atypes$DramatisPersonae, coveredType = atypes$Figure)
 as.character(figuresInDramatisPersonae$Figure.surface)
 ```
 
