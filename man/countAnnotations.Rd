@@ -4,8 +4,8 @@
 \alias{countAnnotations}
 \title{Function to count the annotations of a certain type in selected texts.}
 \usage{
-countAnnotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
-  debug = FALSE, shortname = TRUE)
+countAnnotations(ids, type = atypes$Utterance, debug = FALSE,
+  shortname = TRUE)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}

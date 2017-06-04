@@ -4,7 +4,7 @@
 \name{atypes}
 \alias{atypes}
 \title{a list of names of the UIMA annotation types used}
-\format{An object of class \code{list} of length 18.}
+\format{An object of class \code{list} of length 20.}
 \usage{
 atypes
 }

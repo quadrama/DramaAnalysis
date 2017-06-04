@@ -4,8 +4,7 @@
 \alias{loadAnnotations}
 \title{Load annotations}
 \usage{
-loadAnnotations(ids, type = "de.unistuttgart.ims.drama.api.Utterance",
-  coveredType = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token")
+loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}

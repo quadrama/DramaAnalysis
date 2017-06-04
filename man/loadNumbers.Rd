@@ -5,12 +5,8 @@
 \title{This function loads the number of annotations of different types for several 
 dramas at once.}
 \usage{
-loadNumbers(ids = c(), types = c("de.unistuttgart.ims.drama.api.Act",
-  "de.unistuttgart.ims.drama.api.Scene",
-  "de.unistuttgart.ims.drama.api.Utterance",
-  "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token",
-  "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence",
-  "de.unistuttgart.ims.drama.api.DramatisPersonae"), debug = FALSE)
+loadNumbers(ids = c(), types = c(atypes$Act, atypes$Scene, atypes$Utterance,
+  atypes$Token, atypes$Sentence, atypes$DramatisPersonae), debug = FALSE)
 }
 \arguments{
 \item{ids}{A vector containing drama ids}

@@ -29,6 +29,8 @@ dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
 \item{column}{"Token.surface" or "Token.lemma"}
 
 \item{ci}{Logical. Wether to ignore case. Defaults to TRUE}
+
+\item{colnames}{The column names to be used}
 }
 \description{
 Calculates dictionary statistics for a single word field that is given as a character vector

@@ -62,6 +62,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
 #' @param fieldNormalizer defaults to the length of the wordfield
 #' @param bylist A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas
 #' @param column "Token.surface" or "Token.lemma"
+#' @param colnames The column names to be used
 #' @param ci Logical. Wether to ignore case. Defaults to TRUE
 #' @examples
 #' data(rksp.0.text)
