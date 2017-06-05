@@ -29,9 +29,9 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10)) {
   if(is.na(pmatch(by, c("tokens", "rank")))) stop("Invalid filtering criterion")
   if (by=="tokens") {
-    limit.figures.by.tokens(text, minTokens=threshold)
+    limitFiguresByTokens(text, minTokens=threshold)
   } else {
-    limit.figures.by.rank(text, maxRank = threshold)
+    limitFiguresByRank(text, maxRank = threshold)
   }
 }
 
@@ -39,7 +39,7 @@ limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10))
 #' @param t The text, a data frame listing each token for each figure
 #' @param maxRank Up to maxRank figures remain in the data set
 #' @importFrom utils head
-limit.figures.by.rank <- function(t, maxRank=10) {
+limitFiguresByRank <- function(t, maxRank=10) {
   counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
   counts <- counts[order(counts$x, decreasing = TRUE),]
   rcounts <- Reduce(rbind, by(counts, counts["Group.1"], head, n=maxRank))
@@ -49,12 +49,23 @@ limit.figures.by.rank <- function(t, maxRank=10) {
 #' This method removes the spoken tokens by all figures that speak infrequently.
 #' @param t The text, a data frame listing each token for each figure
 #' @param minTokens The minimal amount of tokens a figure has to speak
-limit.figures.by.tokens <- function(t, minTokens=100) {
+limitFiguresByTokens <- function(t, minTokens=100) {
     counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
     write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
     subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
 }
 
+#' @export
+limit.figures.by.rank <- function(...) {
+  .Deprecated("limitFigures(by=\"rank\"")
+  limitFiguresByRank(...)
+}
+
+#' @export
+limit.figures.by.tokens <- function(...) {
+  .Deprecated("limitFigures(by=\"tokens\"")
+  limitFiguresByTokens(...)
+}
 
 tfidf1 <- function(word) {
   docfreq <- sum(word>0)

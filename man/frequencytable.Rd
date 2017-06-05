@@ -32,7 +32,7 @@ st <- frequencytable(rksp.0.text)
 \dontrun{
 require(stylo)
 data(vndf.0.text)
-tl <- limit.figures.by.tokens(vndf.0.text, minTokens=1000)
+tl <- limitFiguress(vndf.0.text, by="tokens", threshold=1000)
 stylo_table <- frequencytable(tl, names=TRUE, byFigure=TRUE)
 stylo(gui=F, frequencies = stylo_table)
 }
