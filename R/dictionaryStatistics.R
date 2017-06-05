@@ -122,3 +122,9 @@ dictionaryStatisticsL <- function(...) {
   r$mat <- as.matrix(dstat[,-c(1,2)])
   r
 }
+
+#' @export
+dictionary.statistics <- function(...) {
+  .Deprecated("dictionaryStatistics")
+  dictionaryStatistics(...)
+}

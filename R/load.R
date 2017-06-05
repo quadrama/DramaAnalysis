@@ -68,6 +68,18 @@ loadSegmentedText <- function(ids) {
   mtext
 }
 
+#' @export
+load.text <- function(...) {
+  .Deprecated("loadText")
+  loadText(...)
+}
+
+#' @export
+load.text2 <- function(...) {
+  .Deprecated("loadSegmentedText")
+  loadSegmentedText(...)
+}
+
 
 #' Loads a CSV-formatted text from the server,
 #' assuming the main server url has been set correctly.

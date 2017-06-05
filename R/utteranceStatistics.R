@@ -39,3 +39,9 @@ utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = 
 
   ulength
 }
+
+#' @export
+utterance_statistics <- function(...) {
+  .Deprecated("utteranceStatistics")
+  utteranceStatistics(...)
+}
