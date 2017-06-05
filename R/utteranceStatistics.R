@@ -17,7 +17,7 @@ utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = 
 
   if (typeof(numberOfFigures) == "double") {
     # TODO: limitFigures
-    t <- limit.figures.by.rank(t, maxRank = numberOfFigures)
+    t <- limitFigures(t, by="rank", threshold = numberOfFigures)
   }
   # utterance statistics
   ulength <- aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface, t$begin, t$length), length)
