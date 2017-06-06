@@ -1,8 +1,8 @@
 
 #' This function initialises the import from XMI files.
-#' @param datadir A path to the directory in which data and metadata are located
+#' @param dataDirectory A path to the directory in which data and metadata are located. "~/QuaDramA/Data" by default
 #' @export
-setup <- function(datadir = "/Users/reiterns/Documents/QuaDramA/Data") {
+setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data")) {
   options(qd.datadir=datadir)
   options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",datadir))
 }
