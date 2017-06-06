@@ -4,7 +4,7 @@
 #' @export
 setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data")) {
   options(qd.datadir=dataDirectory)
-  options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",datadir))
+  options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
 dlobject <- function() {
