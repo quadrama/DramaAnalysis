@@ -5,7 +5,15 @@
 
 # DramaAnalysis with R
 
-This package contains a number of functions that work with the QuaDramA web service.
+This package contains a number of functions to support the analyis of dramatic texts. 
+
+## Features
+- Summary statistics about the number of words and utterances per figure
+- Statistics about word use from a dictionary per figure
+- Support for stylometric analyses by figure or text
+- Generation of a report for a dramatic text
+- Reads in preprocessed texts 
+
 
 ## Download and Installation
 Please check [this page](https://github.com/quadrama/DramaAnalysis/releases).
@@ -13,7 +21,7 @@ Please check [this page](https://github.com/quadrama/DramaAnalysis/releases).
 ## Usage and Howto
 Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
 
-## Release workflow
+# Release workflow
 - Make a new branch for the release (e.g. `release/1.0.0`)
 - Set all version numbers to the correct version
   - `DESCRIPTION` file for the R package
