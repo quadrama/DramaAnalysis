@@ -184,4 +184,34 @@ loadNumbers <- function(ids=c(),
   subset(df,select=c(-1))
 }
 
+#' @title Download preprocessed drama data
+#' @description This function downloads pre-processed dramatic texts via http and stores them locally in your data directory
+#' @param dataSource Currently, only "tg" (textgrid) is supported
+#' @param dataDirectory The directory in which the data is to be stored
+#' @param downloadSource The server from which to download
+#' @export
+installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims") {
+  dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
+  sourceFilename <- switch(dataSource,tg="textgrid-dramas-xmi.zip")
+  if (downloadSource == "ims") {
+    tf <- installDataFromIMS(sourceFilename)
+  } else if (downloadSource == "zenodo") {
+    tf <- installDataFromZenodo(803280,sourceFilename)
+  }
+  unzip(tf,exdir=file.path(dataDirectory,"xmi"))
+  invisible(file.remove(tf))
+}
 
+installDataFromIMS <- function(filename) {
+  tf <- tempfile()
+  sourceUrl <- paste0("https://www2.ims.uni-stuttgart.de/gcl/reiterns/quadrama/res/",filename)
+  download.file(sourceUrl,destfile = tf)
+  tf
+}
+
+installDataFromZenodo <- function (id, filename)  {
+  tf <- tempfile()
+  sourceUrl <- paste0("https://zenodo.org/record/",id,"/files/",filename)
+  download.file(sourceUrl,destfile = tf)
+  tf
+}
