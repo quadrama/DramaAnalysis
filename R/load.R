@@ -3,7 +3,7 @@
 #' @param dataDirectory A path to the directory in which data and metadata are located. "~/QuaDramA/Data" by default
 #' @export
 setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data")) {
-  options(qd.datadir=datadir)
+  options(qd.datadir=dataDirectory)
   options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",datadir))
 }
 
