@@ -105,6 +105,7 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' @export
 #' @importFrom data.table fread
 #' @importFrom rJava .jnew .jarray .jnull
+#' @importFrom readr read_csv
 #' @examples
 #' \dontrun{
 #' loadAnnotations(c("tg:rksp.0"))
@@ -114,9 +115,9 @@ loadAnnotations <- function(ids,
                              coveredType=atypes$Token) {
   dl <- dlobject()
   if (is.null(coveredType)) {
-    s <- dl$getAnnotations(.jarray(ids),type,.jnull())
+    s <- dl$getAnnotations(rJava::.jarray(ids),type,rJava::.jnull())
   } else {
-    s <- dl$getAnnotations(.jarray(ids),type,coveredType)
+    s <- dl$getAnnotations(rJava::.jarray(ids),type,coveredType)
   }
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
   df
