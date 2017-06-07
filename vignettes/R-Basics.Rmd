@@ -1,0 +1,61 @@
+---
+title: "R Extreme Basics"
+author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 5
+  md_document:
+    variant: markdown_github
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{R Extreme Basics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# The R environment
+
+The R environment is our sandbox and playground. Think of the environment as a short-term memory, or a desktop. It contains the stuff we are currently working with,   data and code. In RStudio, the contents of the R environment is distplayed in the `Environment' pane. 
+
+We manipulate what's in the environment via the console (on the `Console' pane). Only by entering commands there can we do something. Between entering, the environment is in a fixed state and nothing happens automatically.
+
+Initially, the environment is empty. We enter stuff into the environment by defining variables (i.e., givin names to things). This is done through the stylized arrow, the assignment operator: `<-`.
+
+```{r}
+i <- 5
+```
+
+This expression, entered in the console, adds a variable with the name `i` to the environment. The content of the variable is the number 5. The left of the assignment is typically called left-hand side (LHS) and the right right-hand side (RHS). The order in which the assignment words is from `right to left`: First, the RHS is evaluated and the result of this evaluation is assigned to the LHS.
+
+```{r}
+j <- i + 5
+```
+
+That means, that the value of `j` is now 10, because we evaluate the expression `i+5` first and then assign the result to the (new) variable `j`. We can verify this by just entering the variable name. If we don't assign it to anything, we get the value printed in the console. This works for all kinds of mathematical expressions:
+
+```{r}
+j
+(10+5)-7^4+6^j*2
+```
+
+## Data types
+
+In addition to natural numbers, we can operate with other types of data: Characters and strings, floating point numbers and data types that group multiple atomic data types.
+
+```{r}
+h <- "hello" # a variable containing a string
+w <- 0.5     # a variable with a floating point number
+```
+
+## Vectors
+
+
+
+
