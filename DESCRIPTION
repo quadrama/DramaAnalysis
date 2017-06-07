@@ -14,10 +14,12 @@ Imports:
    utils (>= 3.3.1), 
    reshape2 (>= 1.4.2), 
    fmsb (>= 0.6.0),
-   rmarkdown (>= 1.5)
+   rmarkdown (>= 1.5),
+   readr (>= 1.1.1),
+   rJava (>= 0.9-8), 
+   data.table (>= 1.10.4)
 Depends:
-  rJava (>= 0.9-8), R (>= 2.10),
-  data.table (>= 1.10.4)
+  R (>= 3.0.0)
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
