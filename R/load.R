@@ -118,7 +118,7 @@ loadAnnotations <- function(ids,
   } else {
     s <- dl$getAnnotations(.jarray(ids),type,coveredType)
   }
-  df <- data.table::fread(input=s, check.names = TRUE)
+  df <- data.table::fread(input=s, check.names = TRUE, encoding="UTF-8")
   df
 }
 
