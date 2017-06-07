@@ -105,7 +105,7 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' @export
 #' @importFrom data.table fread
 #' @importFrom rJava .jnew .jarray .jnull
-#' @importFrom readr read_csv
+#' @importFrom readr read_csv locale
 #' @examples
 #' \dontrun{
 #' loadAnnotations(c("tg:rksp.0"))
