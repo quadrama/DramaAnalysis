@@ -4,12 +4,12 @@
 #' @export
 setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data")) {
   options(qd.datadir=dataDirectory)
-  options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
+  options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
 dlobject <- function() {
   if (is.null(getOption("qd.dl"))) {
-    options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
+    options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
   }
   getOption("qd.dl")
 }
@@ -34,8 +34,8 @@ loadSet <- function(setName, addGenreColumn=FALSE) {
 loadSets <- function() {
   dl <- dlobject()
   s <- dl$getListOfSets()
-  l <- unlist(lapply(.jevalArray(s[[2]]),FUN=function(x) {.jsimplify(x)}))
-  data.frame(id=.jevalArray(s[[1]]),size=l)
+  l <- unlist(lapply(rJava::.jevalArray(s[[2]]),FUN=function(x) {rJava::.jsimplify(x)}))
+  data.frame(id=rJava::.jevalArray(s[[1]]),size=l)
 }
 
 scene.act.table <- function(ids) {
@@ -45,10 +45,10 @@ scene.act.table <- function(ids) {
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
   scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
-  merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"), allow.cartesian = TRUE)
+  merged <- data.table::merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"), allow.cartesian = TRUE)
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
-  merged$Number.Scene <- ave(merged$begin.Scene, merged$drama, merged$Number.Act, FUN=function(x) {as.numeric(as.factor(x))})
+  merged$Number.Scene <- stats::ave(merged$begin.Scene, merged$drama, merged$Number.Act, FUN=function(x) {as.numeric(as.factor(x))})
   merged
 }
 
@@ -61,10 +61,10 @@ scene.act.table <- function(ids) {
 #' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
 loadSegmentedText <- function(ids) {
-  t <- data.table(loadText(ids, includeTokens=TRUE))
-  sat <- data.table(scene.act.table(ids=ids))
-  setkey(sat, "drama", "begin.Scene", "end.Scene")
-  mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
+  t <- data.table::data.table(loadText(ids, includeTokens=TRUE))
+  sat <- data.table::data.table(scene.act.table(ids=ids))
+  data.table::setkey(sat, "drama", "begin.Scene", "end.Scene")
+  mtext <- data.table::foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
   mtext
 }
 
@@ -118,7 +118,7 @@ loadAnnotations <- function(ids,
   } else {
     s <- dl$getAnnotations(.jarray(ids),type,coveredType)
   }
-  df <- data.table::fread(input=s, check.names = TRUE)
+  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
   df
 }
 
