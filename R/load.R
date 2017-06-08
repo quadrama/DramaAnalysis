@@ -45,7 +45,7 @@ scene.act.table <- function(ids) {
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
   scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
-  merged <- data.table::merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"), allow.cartesian = TRUE)
+  merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"), allow.cartesian = TRUE)
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
   merged$Number.Scene <- stats::ave(merged$begin.Scene, merged$drama, merged$Number.Act, FUN=function(x) {as.numeric(as.factor(x))})
@@ -120,6 +120,7 @@ loadAnnotations <- function(ids,
     s <- dl$getAnnotations(rJava::.jarray(ids),type,coveredType)
   }
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
+  colnames(df) <- make.names(colnames(df))
   df
 }
 
