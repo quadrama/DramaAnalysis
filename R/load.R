@@ -195,25 +195,76 @@ loadNumbers <- function(ids=c(),
 installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims") {
   dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
   sourceFilename <- switch(dataSource,tg="textgrid-dramas-xmi.zip")
+
+  
   if (downloadSource == "ims") {
-    tf <- installDataFromIMS(sourceFilename)
+    sourceUrl <- createIMSUrl(sourceFilename)
   } else if (downloadSource == "zenodo") {
-    tf <- installDataFromZenodo(803280,sourceFilename)
+    sourceUrl <- createZenodoUrl(803280, sourceFilename)
   }
-  unzip(tf,exdir=file.path(dataDirectory,"xmi"))
-  invisible(file.remove(tf))
+  lm <- lastModifiedDate(sourceUrl)
+  message("Version on server: ", lm)
+  installedV <- getInstalledDate(dataDirectory,sourceFilename)
+    
+  message("Locally installed version: ", as.character(installedV))
+  
+  
+  if (is.na(installedV) | installedV < lm) {
+    message("Downloading new version.")
+    tf <- tempfile()
+    download.file(sourceUrl,destfile = tf)
+    unzip(tf,exdir=file.path(dataDirectory,"xmi"))
+    invisible(file.remove(tf))
+    saveInstalledDate(dataDirectory, sourceFilename, lm)
+  } else {
+    message("No download necessary.")
+  }
+  
+  
 }
 
-installDataFromIMS <- function(filename) {
-  tf <- tempfile()
-  sourceUrl <- paste0("https://www2.ims.uni-stuttgart.de/gcl/reiterns/quadrama/res/",filename)
-  download.file(sourceUrl,destfile = tf)
-  tf
+getInstalledDate <- function(dataDirectory,filename) {
+  versionsFilename <- file.path(dataDirectory,"versions.csv")
+  if (file.exists(versionsFilename)) {
+    versions <- read.csv(versionsFilename)
+    v <- versions[versions$file == filename,2]
+    if (length(v)>0) {
+      as.Date(v)
+    } else {
+      NA
+    }
+  } else {
+    NA
+  }
 }
 
-installDataFromZenodo <- function (id, filename)  {
-  tf <- tempfile()
-  sourceUrl <- paste0("https://zenodo.org/record/",id,"/files/",filename)
-  download.file(sourceUrl,destfile = tf)
-  tf
+saveInstalledDate <- function(dataDirectory, filename, date) {
+  versionsFilename <- file.path(dataDirectory,"versions.csv")
+  if (file.exists(versionsFilename)) {
+    versions <- read.csv(versionsFilename)
+    if (length(versions[versions$file==filename,"date"])>0) {
+      versions[versions$file==filename,"date"] <- date
+    } else {
+      versions[nrow(versions) + 1,] = c(filename,as.Date(lm))
+    }
+  } else {
+    versions <- data.frame(file=c(filename),date=c(date))
+  }
+  write.csv(versions,file=versionsFilename,row.names=FALSE)
+  
+}
+
+#' @importFrom httr HEAD headers
+lastModifiedDate <- function(url) {
+  h <- httr::HEAD(url)
+  lm <- httr::headers(h)$`last-modified`
+  as.Date(lm, "%a, %d %b %Y %H:%M:%S")
+}
+
+createIMSUrl <- function(filename) {
+  paste0("https://www2.ims.uni-stuttgart.de/gcl/reiterns/quadrama/res/",filename)
+}
+
+createZenodoUrl <- function(id,filename) {
+  paste0("https://zenodo.org/record/",id,"/files/",filename)
 }
