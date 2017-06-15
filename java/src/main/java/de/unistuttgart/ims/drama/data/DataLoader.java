@@ -8,6 +8,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -112,6 +113,16 @@ public class DataLoader implements IRepository {
 				return f.getParentFile().getName() + idSeparator + f.getName().substring(0, f.getName().length() - 4);
 			}
 		};
+
+	}
+
+	public String[] getAllIds() {
+		Iterator<String> i = this.getIds();
+		ArrayList<String> arr = new ArrayList<String>();
+		while (i.hasNext()) {
+			arr.add(i.next());
+		}
+		return arr.toArray(new String[arr.size()]);
 
 	}
 
