@@ -191,9 +191,10 @@ loadNumbers <- function(ids=c(),
 #' @param dataSource Currently, only "tg" (textgrid) is supported
 #' @param dataDirectory The directory in which the data is to be stored
 #' @param downloadSource The server from which to download
+#' @param removeZipFile If true (the default), the downloaded zip file is removed after unpacking
 #' @importFrom utils download.file unzip
 #' @export
-installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims") {
+installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims", removeZipFile = TRUE) {
   dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
   sourceFilename <- switch(dataSource,tg="textgrid-dramas-xmi.zip")
 
@@ -213,9 +214,11 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
   if (is.na(installedV) | installedV < lm) {
     message("Downloading new version.")
     tf <- tempfile()
-    invisible(file.remove(tf))
     utils::download.file(sourceUrl,destfile = tf)
     utils::unzip(tf,exdir=file.path(dataDirectory,"xmi"))
+    if (removeZipFile == TRUE) {
+      file.remove(tf)
+    }
     saveInstalledDate(dataDirectory, sourceFilename, lm)
   } else {
     message("No download necessary.")

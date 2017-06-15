@@ -5,7 +5,7 @@
 \title{Download preprocessed drama data}
 \usage{
 installData(dataSource = "tg", dataDirectory = getOption("qd.datadir"),
-  downloadSource = "ims")
+  downloadSource = "ims", removeZipFile = TRUE)
 }
 \arguments{
 \item{dataSource}{Currently, only "tg" (textgrid) is supported}
@@ -13,6 +13,8 @@ installData(dataSource = "tg", dataDirectory = getOption("qd.datadir"),
 \item{dataDirectory}{The directory in which the data is to be stored}
 
 \item{downloadSource}{The server from which to download}
+
+\item{removeZipFile}{If true (the default), the downloaded zip file is removed after unpacking}
 }
 \description{
 This function downloads pre-processed dramatic texts via http and stores them locally in your data directory
