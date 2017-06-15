@@ -191,6 +191,7 @@ loadNumbers <- function(ids=c(),
 #' @param dataSource Currently, only "tg" (textgrid) is supported
 #' @param dataDirectory The directory in which the data is to be stored
 #' @param downloadSource The server from which to download
+#' @importFrom utils download.file unzip
 #' @export
 installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims") {
   dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
@@ -212,9 +213,9 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
   if (is.na(installedV) | installedV < lm) {
     message("Downloading new version.")
     tf <- tempfile()
-    download.file(sourceUrl,destfile = tf)
-    unzip(tf,exdir=file.path(dataDirectory,"xmi"))
     invisible(file.remove(tf))
+    utils::download.file(sourceUrl,destfile = tf)
+    utils::unzip(tf,exdir=file.path(dataDirectory,"xmi"))
     saveInstalledDate(dataDirectory, sourceFilename, lm)
   } else {
     message("No download necessary.")
@@ -223,10 +224,11 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
   
 }
 
+#' @importFrom utils read.csv
 getInstalledDate <- function(dataDirectory,filename) {
   versionsFilename <- file.path(dataDirectory,"versions.csv")
   if (file.exists(versionsFilename)) {
-    versions <- read.csv(versionsFilename)
+    versions <- utils::read.csv(versionsFilename)
     v <- versions[versions$file == filename,2]
     if (length(v)>0) {
       as.Date(v)
@@ -238,10 +240,11 @@ getInstalledDate <- function(dataDirectory,filename) {
   }
 }
 
+#' @importFrom utils write.csv read.csv
 saveInstalledDate <- function(dataDirectory, filename, date) {
   versionsFilename <- file.path(dataDirectory,"versions.csv")
   if (file.exists(versionsFilename)) {
-    versions <- read.csv(versionsFilename)
+    versions <- utils::read.csv(versionsFilename)
     if (length(versions[versions$file==filename,"date"])>0) {
       versions[versions$file==filename,"date"] <- date
     } else {
@@ -250,7 +253,7 @@ saveInstalledDate <- function(dataDirectory, filename, date) {
   } else {
     versions <- data.frame(file=c(filename),date=c(date))
   }
-  write.csv(versions,file=versionsFilename,row.names=FALSE)
+  utils::write.csv(versions,file=versionsFilename,row.names=FALSE)
   
 }
 
