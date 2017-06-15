@@ -170,7 +170,7 @@ configuration.scene <- function(text) {
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
 #' @export
-report <- function(id="tg:rksp.0", of=paste0("../", id, ".html"), colors=qd.colors) {
+report <- function(id="tg:rksp.0", of=paste0("../", unlist(strsplit(id,":",fixed=TRUE))[2], ".html"), colors=qd.colors) {
   rmarkdown::render("R/Report.Rmd", params=list(id=id, col=colors), 
                     output_format = "html_document", 
                     output_file = of)
