@@ -6,7 +6,7 @@
 \usage{
 frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
   column = "Token.surface", byFigure = FALSE, sep = "|",
-  normalize = TRUE)
+  normalize = TRUE, sortResult = FALSE)
 }
 \arguments{
 \item{t}{The text table, potentially covering multiple texts}
@@ -22,6 +22,8 @@ frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
 \item{sep}{The separation character that goes between drama name and figure (if applicable)}
 
 \item{normalize}{Whether to normalize values or not}
+
+\item{sortResult}{Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)}
 }
 \description{
 This function generates a matrix of word frequencies by figure or drama.
@@ -32,7 +34,7 @@ st <- frequencytable(rksp.0.text)
 \dontrun{
 require(stylo)
 data(vndf.0.text)
-tl <- limitFiguress(vndf.0.text, by="tokens", threshold=1000)
+tl <- limitFigures(vndf.0.text, by="tokens", threshold=1000)
 stylo_table <- frequencytable(tl, names=TRUE, byFigure=TRUE)
 stylo(gui=F, frequencies = stylo_table)
 }
