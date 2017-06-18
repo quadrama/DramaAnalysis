@@ -37,7 +37,7 @@ frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, colum
   
   
   if (normalize==TRUE) {
-    r <- t(apply(r,1,function(x) { x / sum(r)}))
+    r <- t(apply(r,1,function(x) { x / sum(x)}))
   } 
   
   if (sortResult == TRUE) {
