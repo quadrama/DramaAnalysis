@@ -6,6 +6,7 @@
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @param sep The separation character that goes between drama name and figure (if applicable)
 #' @param normalize Whether to normalize values or not
+#' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)
 #' @examples
 #' data(rksp.0.text)
 #' st <- frequencytable(rksp.0.text)
@@ -13,12 +14,12 @@
 #' \dontrun{
 #' require(stylo)
 #' data(vndf.0.text)
-#' tl <- limitFiguress(vndf.0.text, by="tokens", threshold=1000)
+#' tl <- limitFigures(vndf.0.text, by="tokens", threshold=1000)
 #' stylo_table <- frequencytable(tl, names=TRUE, byFigure=TRUE)
 #' stylo(gui=F, frequencies = stylo_table)
 #' }
 #' @export
-frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=TRUE) {
+frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=TRUE, sortResult=FALSE) {
   ft <- t
   if (length(acceptedPOS) > 0)
     ft <- t[t$Token.pos %in% acceptedPOS,]
@@ -36,10 +37,14 @@ frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, colum
   
   
   if (normalize==TRUE) {
-    t(apply(r,1,function(x) { x / sum(r)}))
-  } else {
-    r
+    r <- t(apply(r,1,function(x) { x / sum(r)}))
+  } 
+  
+  if (sortResult == TRUE) {
+    r <- r[,order(colSums(r),decreasing = TRUE)]
   }
+  
+  r
 }
 
 
