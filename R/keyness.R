@@ -8,31 +8,45 @@
 #' @param siglevel Return only the keywords above the significance level. Set to 1 to get all words
 #' @return A list of keywords, sorted by their log-likelihood value, calculated according to http://ucrel.lancs.ac.uk/llwizard.html
 #' @export
-keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05) {
+keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method="loglikelihood",minimalFrequency=10) {
   f1 <- colSums(matrix(ft[row,],nrow=length(row),dimnames=list(NULL,colnames(ft))))
   f2 <- colSums(matrix(ft[-1*row,],nrow=nrow(ft)-length(row),dimnames=list(NULL,colnames(ft))))
 
-  f1[f1==0] <- epsilon
-  f2[f2==0] <- epsilon
-  
-  other1 <- sum(f1) - f1
-  other2 <- sum(f2) - f2
-  
   total1 <- sum(f1)
   total2 <- sum(f2)
   
-  rf <- (f1 + f2) / ( total1 + total2 )
+  if (method=="loglikelihood") {
+    f1[f1==0] <- epsilon
+    f2[f2==0] <- epsilon
+    other1 <- sum(f1) - f1
+    other2 <- sum(f2) - f2
+    #print(paste("total1",total1))
+    #print(paste("total2",total2))
+  
+    rf <- (f1 + f2) / ( total1 + total2 )
     
-  e1 <- total1 * rf
-  e2 <- total2 * rf
+    e1 <- total1 * rf
+    e2 <- total2 * rf
 
-  l <- 2 * ( ( f1 * log(f1/e1)  ) + (f2 * log(f2/e2)  ))
+    l <- 2 * ( ( f1 * log(f1/e1)  ) + (f2 * log(f2/e2)  ))
 
   
-  l <- sort(l,decreasing = TRUE)
-  pvalues <- 1-pchisq(l, df=1)
+    l <- sort(l,decreasing = TRUE)
+    pvalues <- 1-pchisq(l, df=1)
   
-  l[pvalues<siglevel]
+    l[pvalues<siglevel]
+  } else if (method=="logratio") {
+    
+    f1[f1>=minimalFrequency] <- 0
+    f2[f2>=minimalFrequency] <- 0
+    
+    rf1 <- f1 / total1
+    rf2 <- f2 / total2
+    
+    r <- sort(log2(rf1/rf2),decreasing = TRUE)
+    
+    r[is.finite(r)]
+  }
 }
 
 
