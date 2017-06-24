@@ -186,6 +186,13 @@ loadNumbers <- function(ids=c(),
   subset(df,select=c(-1))
 }
 
+#' Returns a list of all ids that are installed
+#' @export
+#' 
+loadAllInstalledIds <- function() {
+  getOption("qd.dl")$getAllIds()
+}
+
 #' @title Download preprocessed drama data
 #' @description This function downloads pre-processed dramatic texts via http and stores them locally in your data directory
 #' @param dataSource Currently, only "tg" (textgrid) is supported
