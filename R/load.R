@@ -257,7 +257,7 @@ saveInstalledDate <- function(dataDirectory, filename, date) {
     if (length(versions[versions$file==filename,"date"])>0) {
       versions[versions$file==filename,"date"] <- date
     } else {
-      versions[nrow(versions) + 1,] = c(filename,as.Date(lm))
+      versions[nrow(versions) + 1,] = c(filename,date)
     }
   } else {
     versions <- data.frame(file=c(filename),date=c(date))
