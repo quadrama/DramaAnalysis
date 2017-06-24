@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
 			<artifactId>uimautil</artifactId>
-			<version>0.7.2-SNAPSHOT</version>
+			<version>0.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
