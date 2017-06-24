@@ -55,13 +55,13 @@ limitFiguresByTokens <- function(t, minTokens=100) {
     subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
 }
 
-#' @export
+
 limit.figures.by.rank <- function(...) {
   .Deprecated("limitFigures(by=\"rank\"")
   limitFiguresByRank(...)
 }
 
-#' @export
+
 limit.figures.by.tokens <- function(...) {
   .Deprecated("limitFigures(by=\"tokens\"")
   limitFiguresByTokens(...)

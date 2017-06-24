@@ -123,7 +123,7 @@ dictionaryStatisticsL <- function(...) {
   r
 }
 
-#' @export
+
 dictionary.statistics <- function(...) {
   .Deprecated("dictionaryStatistics")
   dictionaryStatistics(...)

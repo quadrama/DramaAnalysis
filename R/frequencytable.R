@@ -49,7 +49,6 @@ frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, colum
 
 
 #' Extract bigrams instead of words (currently not taking utterance boundaries into account)
-#' @export
 #' @param t The text
 #' @param acceptedPOS A list of accepted pos tags
 #' @param names Whether to use figure names or ids
