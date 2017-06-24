@@ -253,7 +253,7 @@ getInstalledDate <- function(dataDirectory,filename) {
 saveInstalledDate <- function(dataDirectory, filename, date) {
   versionsFilename <- file.path(dataDirectory,"versions.csv")
   if (file.exists(versionsFilename)) {
-    versions <- utils::read.csv(versionsFilename)
+    versions <- utils::read.csv(versionsFilename,stringsAsFactors = FALSE)
     if (length(versions[versions$file==filename,"date"])>0) {
       versions[versions$file==filename,"date"] <- date
     } else {
