@@ -3,19 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.unistuttgart.ims</groupId>
 	<artifactId>drama.RInterface</artifactId>
-	<properties>
-	  <dramanlp.version>0.5.1</dramanlp.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
 			<artifactId>de.unistuttgart.ims.drama.api</artifactId>
-			<version>${dramanlp.version}</version>
+			<version>0.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
 			<artifactId>uimautil</artifactId>
-			<version>0.7.2</version>
+			<version>0.7.3</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
