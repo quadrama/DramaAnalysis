@@ -4,7 +4,7 @@
 	<groupId>de.unistuttgart.ims</groupId>
 	<artifactId>drama.RInterface</artifactId>
 	<properties>
-	  <dramanlp.version>0.5.0</dramanlp.version>
+	  <dramanlp.version>0.5.1-SNAPSHOT</dramanlp.version>
 	</properties>
 	<dependencies>
 		<dependency>
