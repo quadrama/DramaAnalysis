@@ -14,3 +14,4 @@ limitFiguresByTokens(t, minTokens = 100)
 \description{
 This method removes the spoken tokens by all figures that speak infrequently.
 }
+\keyword{internal}

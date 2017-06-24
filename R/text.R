@@ -38,6 +38,7 @@ limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10))
 #' This method removes the spoken tokens of all but the most frequent n figures
 #' @param t The text, a data frame listing each token for each figure
 #' @param maxRank Up to maxRank figures remain in the data set
+#' @keywords internal
 #' @importFrom utils head
 limitFiguresByRank <- function(t, maxRank=10) {
   counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
@@ -49,9 +50,10 @@ limitFiguresByRank <- function(t, maxRank=10) {
 #' This method removes the spoken tokens by all figures that speak infrequently.
 #' @param t The text, a data frame listing each token for each figure
 #' @param minTokens The minimal amount of tokens a figure has to speak
+#' @keywords internal
 limitFiguresByTokens <- function(t, minTokens=100) {
     counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
-    write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
+    write(paste(length(counts[counts > minTokens]), "figures remaining."),stderr())
     subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
 }
 
