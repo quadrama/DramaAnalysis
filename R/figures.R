@@ -31,16 +31,15 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
   if (names == TRUE) {
     b <- quote(Speaker.figure_surface)
   }
-
-  r <- t[,.(tokens=length(Token.surface),
-       types=length(unique(Token.surface)),
-       utterances=length(unique(begin)),
+  setkey(t, "corpus", "drama")
+  r <- t[,`:=`(tokens=length(Token.surface),
+       types=data.table::uniqueN(Token.surface),
+       utterances=data.table::uniqueN(begin),
        utteranceLengthMean=mean(rle(begin)$lengths),
        utteranceLengthSd=sd(rle(begin)$lengths),
        firstBegin=min(begin),
-       lastEnd=max(end),
-       length=unique(length)
-       ),.(drama,eval(b))]
+       lastEnd=max(end)
+       ),by=.(corpus,drama,length,eval(b))]
   
   
   colnames(r)[2] <- "figure"
