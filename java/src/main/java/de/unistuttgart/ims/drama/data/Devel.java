@@ -13,7 +13,7 @@ public class Devel {
 				de.unistuttgart.ims.drama.api.Author.class.getName(), null));
 		System.out.println(
 				dl.getAnnotations(new String[] { "tc:tc0623" }, de.unistuttgart.ims.drama.api.Utterance.class.getName(),
-						de.unistuttgart.ims.drama.api.Speaker.class.getName()));
+						de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token.class.getName()));
 	}
 
 }
