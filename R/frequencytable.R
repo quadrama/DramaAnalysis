@@ -9,8 +9,8 @@
 #' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)
 #' @importFrom stats xtabs ftable
 #' @examples
-#' data(rksp.0.text)
-#' st <- frequencytable(rksp.0.text)
+#' data(rksp.0)
+#' st <- frequencytable(rksp.0$mtext)
 #' @examples
 #' \dontrun{
 #' require(stylo)

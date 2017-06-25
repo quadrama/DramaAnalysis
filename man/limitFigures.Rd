@@ -21,6 +21,6 @@ by tokens is a lower limit: Every figure that speaks more than $threshold$ figur
 included.
 }
 \examples{
-data(rksp.0.text)
-text.top10 <- limitFigures(rksp.0.text)
+data(rksp.0)
+text.top10 <- limitFigures(rksp.0$mtext)
 }

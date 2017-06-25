@@ -29,8 +29,8 @@ frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
 This function generates a matrix of word frequencies by figure or drama.
 }
 \examples{
-data(rksp.0.text)
-st <- frequencytable(rksp.0.text)
+data(rksp.0)
+st <- frequencytable(rksp.0$mtext)
 \dontrun{
 require(stylo)
 data(vndf.0.text)

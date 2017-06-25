@@ -24,8 +24,8 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @param threshold A number specifying the limit
 #' @export
 #' @examples 
-#' data(rksp.0.text)
-#' text.top10 <- limitFigures(rksp.0.text)
+#' data(rksp.0)
+#' text.top10 <- limitFigures(rksp.0$mtext)
 limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10)) {
   if(is.na(pmatch(by, c("tokens", "rank")))) stop("Invalid filtering criterion")
   if (by=="tokens") {
@@ -90,8 +90,8 @@ tfidf1 <- function(word) {
 #' Values are assumed to be normalized by document, i.e., contain relative frequencies.
 #' @export
 #' @examples
-#' data(rksp.0.text)
-#' rksp.0.ftable <- frequencytable(rksp.0.text,byFigure=TRUE)
+#' data(rksp.0)
+#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE)
 #' rksp.0.tfidf <- tfidf(rksp.0.ftable)
 #' @examples
 #' mat <- matrix(c(0.10,0.2, 0,
@@ -125,8 +125,8 @@ extractTopTerms <- function(mat, top=10) {
 #' @seealso DramaAnalysis::load.text2()
 #' @export
 #' @examples
-#' data(rksp.0.mtext)
-#' cfg <- configuration(rksp.0.mtext)
+#' data(rksp.0)
+#' cfg <- configuration(rksp.0$mtext)
 #' 
 configuration <- function(mtext, by="Act", onlyPresence=FALSE) {
   

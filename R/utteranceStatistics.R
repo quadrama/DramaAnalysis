@@ -5,8 +5,8 @@
 #' @param normalizeByDramaLength Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
 #' @examples
-#' data(rksp.0.text)
-#' ustat <- utteranceStatistics(rksp.0.text, numberOfFigures = 5)
+#' data(rksp.0)
+#' ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 5)
 #' \dontrun{
 #' boxplot(ustat$utteranceLength ~ ustat$figure,
 #'    col=qd.colors[1:5],

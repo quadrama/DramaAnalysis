@@ -48,8 +48,8 @@ they can easily become misleading. They are in this package
 for historic reasons, but should not be used anymore.
 }
 \examples{
-data(rksp.0.text)
-dstat <- dictionaryStatistics(rksp.0.text, normalizeByField=TRUE, names=TRUE,
+data(rksp.0)
+dstat <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
                               fieldnames=c("Krieg", "Liebe", "Familie", "Ratio","Religion"))
 plotSpiderWebs(dstat[,3:7],names=dstat[,2],max=50)
 }
