@@ -39,9 +39,17 @@ loadSets <- function() {
 }
 
 scene.act.table <- function(ids) {
-  acts <- loadAnnotations(ids,type=atypes$Act,coveredType=NULL)
   
-  acts[, Number := as.integer(as.numeric(as.factor(begin))),drama]
+  # prevent notes in R CMD check
+  Number <- NULL
+  begin <- NULL
+  drama <- NULL
+  
+  `:=` <- NULL
+  
+  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL)
+  
+  acts[, Number := as.integer(as.numeric(as.factor(begin))), drama]
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
   scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)

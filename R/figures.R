@@ -17,6 +17,14 @@
 #' stat <- figureStatistics(rksp.0.text, names = FALSE)
 #' @export
 figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
+  
+  # prevent notes in R CMD check
+  . <- NULL
+  Token.surface <- NULL
+  begin <- NULL
+  end <- NULL
+  drama <- NULL
+  
   t <- as.data.table(t)
   
   b <- quote(Speaker.figure_id)
@@ -66,6 +74,11 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 #' text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
 #' @export
 figurematrix <- function(fstat,column="tokens",order=-1) {
+  
+  # prevent note in R CMD check
+  drama <- NULL
+  `:=` <- NULL
+
   fs <- as.data.table(fstat)
   fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])

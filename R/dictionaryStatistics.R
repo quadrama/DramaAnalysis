@@ -81,6 +81,8 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
                                        column="Token.surface", ci=TRUE,
                                        colnames=c("drama","figure","x")) 
   {
+  # we need this to prevent notes in R CMD check
+  .N <- NULL
   dt <- as.data.table(t)
   if (ci) {
     wordfield <- tolower(wordfield)
