@@ -21,3 +21,4 @@ frequencytable2(t, acceptedPOS = postags$de$words, names = FALSE,
 \description{
 Extract bigrams instead of words (currently not taking utterance boundaries into account)
 }
+\keyword{internal}
