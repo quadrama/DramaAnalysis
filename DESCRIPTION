@@ -7,7 +7,7 @@ Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Description: This package can be used to import and analyse pre-processed dramatic texts.
   The texts are expected to be in csv format. There is not much to do without preprocessed texts.
-License: Apache License
+License: file LICENSE
 LazyData: TRUE
 Imports:
    stats (>= 3.3.1), 
@@ -24,7 +24,6 @@ Depends:
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
-    rmarkdown,
     igraph
 Encoding: UTF-8
 SystemRequirements: Java
