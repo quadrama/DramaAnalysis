@@ -45,10 +45,14 @@ scene.act.table <- function(ids) {
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
   scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
-  merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"), allow.cartesian = TRUE)
+  merged <- merge(acts, scenes, by="drama", 
+                  suffixes=c(".Act", ".Scene"), 
+                  allow.cartesian = TRUE)
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
-  merged$Number.Scene <- stats::ave(merged$begin.Scene, merged$drama, merged$Number.Act, FUN=function(x) {as.numeric(as.factor(x))})
+  merged$Number.Scene <- stats::ave(merged$begin.Scene, 
+                                    merged$drama, merged$Number.Act, 
+                                    FUN=function(x) {as.numeric(as.factor(x))})
   merged
 }
 
