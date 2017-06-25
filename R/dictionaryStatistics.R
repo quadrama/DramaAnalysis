@@ -66,8 +66,8 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
 #' @param colnames The column names to be used
 #' @param ci Logical. Wether to ignore case. Defaults to TRUE
 #' @examples
-#' data(rksp.0.text)
-#' fstat <- dictionaryStatisticsSingle(rksp.0.text, wordfield=c("der"), names=TRUE)
+#' data(rksp.0)
+#' fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
 #' @importFrom stats aggregate
 #' @importFrom stats na.omit
 #' @export

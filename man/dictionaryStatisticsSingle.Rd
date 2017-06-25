@@ -36,6 +36,6 @@ dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
 Calculates dictionary statistics for a single word field that is given as a character vector
 }
 \examples{
-data(rksp.0.text)
-fstat <- dictionaryStatisticsSingle(rksp.0.text, wordfield=c("der"), names=TRUE)
+data(rksp.0)
+fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
 }
