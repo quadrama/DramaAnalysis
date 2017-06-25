@@ -42,6 +42,7 @@ scene.act.table <- function(ids) {
   
   # prevent notes in R CMD check
   Number <- NULL
+  Number.Act <- NULL
   begin <- NULL
   drama <- NULL
   
@@ -104,6 +105,9 @@ load.text2 <- function(...) {
 #' @export
 loadText <- function(ids, includeTokens=FALSE) {
   `:=` <- NULL
+  .N <- NULL
+  corpus <- NULL
+  drama <- NULL
   if (includeTokens == TRUE) {
     r <- loadAnnotations(as.character(ids), 
                      type=atypes$Utterance, 

@@ -24,6 +24,8 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
   begin <- NULL
   end <- NULL
   drama <- NULL
+  `:=` <- NULL
+  corpus <- NULL
   
   t <- as.data.table(t)
   
