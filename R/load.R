@@ -103,6 +103,7 @@ load.text2 <- function(...) {
 #' @param includeTokens If set to true, the table also contains each token in an utterance
 #' @export
 loadText <- function(ids, includeTokens=FALSE) {
+  `:=` <- NULL
   if (includeTokens == TRUE) {
     r <- loadAnnotations(as.character(ids), 
                      type=atypes$Utterance, 
@@ -111,6 +112,7 @@ loadText <- function(ids, includeTokens=FALSE) {
   } else
     r <- loadAnnotations(as.character(ids), type=atypes$Utterance, coveredType=NULL)
   r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
+  r[, length:=.N, by=list(corpus,drama) ][]
   r
 }
 
