@@ -16,17 +16,18 @@
 utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = TRUE) {
 
   if (typeof(numberOfFigures) == "double") {
-    # TODO: limitFigures
     t <- limitFigures(t, by="rank", threshold = numberOfFigures)
   }
   # utterance statistics
-  ulength <- aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface, t$begin, t$length), length)
+  ulength <- aggregate(t$Token.surface, by=list(t$corpus,t$drama, t$Speaker.figure_surface, t$begin), length)
 
-  colnames(ulength) <- c("drama", "figure", "begin", "dramaLength","utteranceLength")
+  colnames(ulength) <- c("corpus","drama", "figure", "begin", "utteranceLength")
 
   # normalize by drama length
   if (normalizeByDramaLength == TRUE) {
-    ulength$utteranceLength <- ulength$utteranceLength / ulength$dramaLength
+    dlength <- aggregate(t$Token.surface, by=list(corpus=t$corpus, drama=t$drama), length)
+    ulength <- merge(ulength,dlength, by.x=c("corpus","drama"),by.y=c("corpus","drama"))
+    ulength$utteranceLength <- ulength$utteranceLength / ulength$x
   }
   # skip empty factor levels
   ulength <- droplevels(ulength)

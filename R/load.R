@@ -49,11 +49,11 @@ scene.act.table <- function(ids) {
   
   acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL)
   
-  acts[, Number := as.integer(as.numeric(as.factor(begin))), drama]
+  acts[, Number.Act := as.integer(as.numeric(as.factor(begin))), drama]
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
   scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
-  merged <- merge(acts, scenes, by="drama", 
+  merged <- merge(acts, scenes, by=c("drama","corpus"), 
                   suffixes=c(".Act", ".Scene"), 
                   allow.cartesian = TRUE)
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
@@ -75,8 +75,11 @@ scene.act.table <- function(ids) {
 loadSegmentedText <- function(ids) {
   t <- data.table::data.table(loadText(ids, includeTokens=TRUE))
   sat <- data.table::data.table(scene.act.table(ids=ids))
-  data.table::setkey(sat, "drama", "begin.Scene", "end.Scene")
-  mtext <- data.table::foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
+  data.table::setkey(t, "corpus", "drama", "begin", "end")
+  data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
+  mtext <- data.table::foverlaps(t, sat, type="any",
+                                 by.x=c("corpus", "drama", "begin", "end"), 
+                                 by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
   mtext
 }
 
@@ -101,12 +104,16 @@ load.text2 <- function(...) {
 #' @export
 loadText <- function(ids, includeTokens=FALSE) {
   if (includeTokens == TRUE) {
-    loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(as.character(ids), 
                      type=atypes$Utterance, 
                      coveredType=atypes$Token)
+    
   } else
-    loadAnnotations(as.character(ids), type=atypes$Utterance, coveredType=NULL)
-  }
+    r <- loadAnnotations(as.character(ids), type=atypes$Utterance, coveredType=NULL)
+  r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
+  r
+}
+
 
 #' @title Load annotations
 #' @description Helper method to load covered annotations. Returns a data.table.

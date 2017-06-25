@@ -5,3 +5,4 @@
 ^\.httr-oauth$
 ^Makefile$
 ^java/\.classpath$
+^data-raw$
