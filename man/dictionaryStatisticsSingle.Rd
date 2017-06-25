@@ -7,9 +7,9 @@
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
   normalizeByFigure = FALSE, normalizeByField = FALSE,
   fieldNormalizer = length(wordfield), bylist = ifelse(names == TRUE,
-  "drama,Speaker.figure_surface", "drama,Speaker.figure_id"),
-  column = "Token.surface", ci = TRUE, colnames = c("drama", "figure",
-  "x"))
+  "corpus,drama,Speaker.figure_surface", "corpus,drama,Speaker.figure_id"),
+  column = "Token.surface", ci = TRUE, colnames = c("corpus", "drama",
+  "figure", "x"))
 }
 \arguments{
 \item{t}{A single or multiple text(s)}

@@ -31,25 +31,26 @@ loadFields <- function(fieldnames=c(),
 #' @export
 dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                  fieldnames=c(),
-                                  normalizeByFigure = FALSE, normalizeByField = FALSE, names=FALSE, boost = 1,
-                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-                                  column="Token.surface",ci=TRUE) {
-  bylist <- list(t$drama, t$Speaker.figure_id)
+                                 normalizeByFigure = FALSE, 
+                                 normalizeByField = FALSE, names = FALSE, boost = 1,
+                                 baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
+                                 column="Token.surface", ci = TRUE) {
+  bylist <- list(t$corpus, t$drama, t$Speaker.figure_id)
   if (names == TRUE)
-    bylist <- list(t$drama, t$Speaker.figure_surface)
-  r <- aggregate(t, by=bylist, length)[,1:2]
+    bylist <- list(t$corpus, t$drama, t$Speaker.figure_surface)
+  r <- aggregate(t, by=bylist, length)[,1:3]
   for (fname in names(fields)) {
     r <- cbind(r,  dictionaryStatisticsSingle(t, fields[[fname]], ci=ci,
                                               normalizeByFigure = FALSE, 
                                               normalizeByField = normalizeByField, 
-                                              names=names, column=column)[,3])
+                                              names=names, column=column)[,4])
   }
-  colnames(r) <- c("drama", "figure", names(fields))
+  colnames(r) <- c("corpus","drama", "figure", names(fields))
   if (normalizeByFigure == TRUE) {
     tokens <- aggregate(t$Token.surface, by=bylist, function(x) { length(x) })
-    r[,-(1:2)] <- r[,-(1:2)] / ave(tokens[[3]], tokens[1:2], FUN=function(x) {x})
+    r[,-(1:3)] <- r[,-(1:3)] / ave(tokens[[4]], tokens[1:3], FUN=function(x) {x})
   }
-  r[,-(1:2)] <- r[,-(1:2)] * boost
+  r[,-(1:3)] <- r[,-(1:3)] * boost
   r
 }
 
@@ -76,10 +77,10 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
                                        normalizeByField = FALSE, 
                                        fieldNormalizer=length(wordfield), 
                                        bylist = ifelse(names==TRUE,
-                                                       "drama,Speaker.figure_surface",
-                                                       "drama,Speaker.figure_id"), 
+                                                       "corpus,drama,Speaker.figure_surface",
+                                                       "corpus,drama,Speaker.figure_id"), 
                                        column="Token.surface", ci=TRUE,
-                                       colnames=c("drama","figure","x")) 
+                                       colnames=c("corpus","drama","figure","x")) 
   {
   # we need this to prevent notes in R CMD check
   .N <- NULL
@@ -108,7 +109,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
     colnames(r) <- colnames
   }
   
-  r
+  stats::na.omit(r)
 }
 
 dictionaryStatisticsSingleL <- function(...) {
