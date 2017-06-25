@@ -70,7 +70,16 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
 #' @importFrom stats aggregate
 #' @importFrom stats na.omit
 #' @export
-dictionaryStatisticsSingle <- function(t, wordfield=c(), names = FALSE, normalizeByFigure = FALSE, normalizeByField = FALSE, fieldNormalizer=length(wordfield), bylist = ifelse(names==TRUE,"drama,Speaker.figure_surface","drama,Speaker.figure_id"), column="Token.surface",ci=TRUE,colnames=c("drama","figure","x")) 
+dictionaryStatisticsSingle <- function(t, wordfield=c(), 
+                                       names = FALSE, 
+                                       normalizeByFigure = FALSE, 
+                                       normalizeByField = FALSE, 
+                                       fieldNormalizer=length(wordfield), 
+                                       bylist = ifelse(names==TRUE,
+                                                       "drama,Speaker.figure_surface",
+                                                       "drama,Speaker.figure_id"), 
+                                       column="Token.surface", ci=TRUE,
+                                       colnames=c("drama","figure","x")) 
   {
   dt <- as.data.table(t)
   if (ci) {
