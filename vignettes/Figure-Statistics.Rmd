@@ -91,7 +91,7 @@ So far, we have counted words. Now we will turn to utterances, and their propert
 
 First, we will use the function `utteranceStatistics()` to extract numbers about utterances
 ```{r}
-ustat <- utteranceStatistics(rksp.0.text, 
+ustat <- utteranceStatistics(rksp.0$mtext, 
                               numberOfFigures = 10, # include 10 figures per drama
                               normalizeByDramaLength = FALSE # use absolute values
                             )
@@ -126,9 +126,8 @@ Each dot in this plot represents one utterance, the x-axis is measured in charac
 Now it would be useful to include information on act/scene boundaries in this plot. This can be done by accessing the segmented text table. The first  commands work just as before, with the exception of being applied to the variable `rksp.0.mtext`.
 
 ```{r}
-data(rksp.0.mtext)
 
-ustat <- utteranceStatistics(rksp.0.mtext, 
+ustat <- utteranceStatistics(rksp.0$mtext, 
                               numberOfFigures = 10, # include 10 figures per drama
                               normalizeByDramaLength = FALSE # use absolute values
                             )
@@ -141,7 +140,7 @@ stripchart(begin ~ figure, data=ustat,
            )
 
 # add vertical lines for act beginning
-abline(v=unique(rksp.0.mtext$begin.Act)[-1])
+abline(v=unique(rksp.0$mtext$begin.Act)[-1])
 ```
 
 Please note that the information contained in this plot is very similar to the information in the [visual and relative configuration matrices](Configuration-Matrices).
