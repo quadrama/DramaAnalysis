@@ -123,7 +123,7 @@ dstat <- dictionaryStatistics(
   normalizeByField = TRUE,    # normalization by field
   column = "Token.lemma"        # lemma-based stats
 )
-colnames(dstat)       
+colnames(dstat)
 ```
 
 The variable `dstat` now contains multiple columns, one for each word field.
