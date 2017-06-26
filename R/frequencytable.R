@@ -6,44 +6,57 @@
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @param sep The separation character that goes between drama name and figure (if applicable)
 #' @param normalize Whether to normalize values or not
+#' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)
+#' @importFrom stats xtabs ftable
 #' @examples
-#' data(rksp.0.text)
-#' st <- frequencytable(rksp.0.text)
+#' data(rksp.0)
+#' st <- frequencytable(rksp.0$mtext)
 #' @examples
 #' \dontrun{
 #' require(stylo)
 #' data(vndf.0.text)
-#' tl <- limit.figures.by.tokens(vndf.0.text, minTokens=1000)
+#' tl <- limitFigures(vndf.0.text, by="tokens", threshold=1000)
 #' stylo_table <- frequencytable(tl, names=TRUE, byFigure=TRUE)
 #' stylo(gui=F, frequencies = stylo_table)
 #' }
 #' @export
-frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=TRUE) {
+frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=TRUE, sortResult=FALSE) {
   ft <- t
   if (length(acceptedPOS) > 0)
     ft <- t[t$Token.pos %in% acceptedPOS,]
+  
+  
   if (byFigure == FALSE) {
-    index <- list(ft$drama)
+    xt <- stats::xtabs(~drama + ft[,get(column)], data=ft)
+    r <- as.matrix(stats::ftable(xt, row.vars = c(), col.vars = c()))
   } else if (names == TRUE) {
-    index <- paste(ft$drama, ft$Speaker.figure_surface,sep=sep)
-  } else
-    index <- list(ft$drama, ft$Speaker.figure_id)
-  if (normalize==TRUE) {
-    r <- do.call(rbind, tapply(ft[[column]], index, function(x){prop.table(table(x))}))
+    xt <- stats::xtabs(~ paste(drama,Speaker.figure_surface,sep=sep) + ~ft[,get(column)], data=ft)
+    r <- as.matrix(stats::ftable(xt, row.vars = c(), col.vars = c()))
   } else {
-    r <- do.call(rbind, tapply(ft[[column]], index, function(x){(table(x))}))
+    xt <- stats::xtabs(~paste(drama,Speaker.figure_id,sep=sep)+ft[,get(column)], data=ft)
+    r <- as.matrix(stats::ftable(xt, row.vars = c(), col.vars = c()))
   }
-  as.matrix(r[,order(colSums(r),decreasing=TRUE)])
+  
+  
+  if (normalize == TRUE) {
+    r <- t(apply(r,1,function(x) { x / sum(x)}))
+  } 
+  
+  if (sortResult == TRUE) {
+    r <- r[,order(colSums(r),decreasing = TRUE)]
+  }
+  
+  r
 }
 
 
 #' Extract bigrams instead of words (currently not taking utterance boundaries into account)
-#' @export
 #' @param t The text
 #' @param acceptedPOS A list of accepted pos tags
 #' @param names Whether to use figure names or ids
 #' @param byFigure Wether the count is by figure or by text
 #' @param cols The column names we should use (should be either Token.surface or Token.lemma)
+#' @keywords internal
 frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), byFigure=FALSE) {
   ft <- t
   if (length(acceptedPOS) > 0)

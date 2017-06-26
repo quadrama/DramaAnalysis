@@ -8,9 +8,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -29,7 +29,7 @@ import org.apache.uima.jcas.cas.TOP;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.xml.sax.SAXException;
 
-import de.unistuttgart.ims.uimautil.CoNLLExport;
+import de.unistuttgart.ims.uimautil.TreeBasedTableExport;
 
 public class DataLoader implements IRepository {
 	File rootDirectory;
@@ -115,6 +115,16 @@ public class DataLoader implements IRepository {
 
 	}
 
+	public String[] getAllIds() {
+		Iterator<String> i = this.getIds();
+		ArrayList<String> arr = new ArrayList<String>();
+		while (i.hasNext()) {
+			arr.add(i.next());
+		}
+		return arr.toArray(new String[arr.size()]);
+
+	}
+
 	public String[] getCollections() {
 		return getCollectionsDirectory().list(new FilenameFilter() {
 
@@ -168,28 +178,42 @@ public class DataLoader implements IRepository {
 		return new File(getCollectionsDirectory(), collectionName);
 	}
 
+	@SuppressWarnings("unchecked")
 	public String getAnnotations(String[] dramaIds, String annotationClassName, String coveredAnnotationClassName)
 			throws ClassNotFoundException, UIMAException, SAXException, IOException {
 
-		Class<? extends TOP> annotationClass;
-		annotationClass = (Class<? extends TOP>) Class.forName(annotationClassName);
+		Class<?> cl1 = Class.forName(annotationClassName);
+
+		Class<?> cl2 = null;
+		if (coveredAnnotationClassName != null)
+			cl2 = Class.forName(coveredAnnotationClassName);
+
+		if (!TOP.class.isAssignableFrom(cl1)) {
+			logger.warning("Class " + annotationClassName + " does not inherit from TOP.");
+			return null;
+		}
+		Class<? extends TOP> annotationClass = (Class<? extends TOP>) cl1;
 
 		Class<? extends Annotation> coveredAnnotationClass = null;
-		if (coveredAnnotationClassName != null)
-			coveredAnnotationClass = (Class<? extends Annotation>) Class.forName(coveredAnnotationClassName);
+		if (cl2 != null && Annotation.class.isAssignableFrom(cl2))
+			coveredAnnotationClass = (Class<? extends Annotation>) cl2;
 
 		logger.fine("getAnnotations(" + ArrayUtils.toString(dramaIds) + "," + annotationClassName + ","
 				+ coveredAnnotationClassName + ")");
-		CoNLLExport exporter = new CoNLLExport();
-		exporter.init(config, null, annotationClass, coveredAnnotationClass);
+		JCas jcas = JCasFactory.createJCas();
+		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
+		exporter.addAnnotationType(annotationClass);
+		if (coveredAnnotationClass != null)
+			exporter.addAnnotationType(coveredAnnotationClass);
 
 		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+		boolean header = true;
 		for (String s : dramaIds) {
-			JCas jcas;
+
 			jcas = getJCas(s);
 
-			Util.writeCSV((List<List<Object>>) exporter.convert(jcas), boas);
-			exporter.clearResult();
+			Util.writeCSV(exporter.convert(jcas, header), boas);
+			header = false;
 		}
 		return new String(boas.toByteArray());
 	}

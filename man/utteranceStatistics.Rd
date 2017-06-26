@@ -17,8 +17,8 @@ utteranceStatistics(t, numberOfFigures = 10, normalizeByDramaLength = TRUE)
 This method calculates the length of each utterance, organised by figure and drama.
 }
 \examples{
-data(rksp.0.text)
-ustat <- utteranceStatistics(rksp.0.text, numberOfFigures = 5)
+data(rksp.0)
+ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 5)
 \dontrun{
 boxplot(ustat$utteranceLength ~ ustat$figure,
    col=qd.colors[1:5],

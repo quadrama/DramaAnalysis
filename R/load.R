@@ -1,15 +1,15 @@
 
 #' This function initialises the import from XMI files.
-#' @param datadir A path to the directory in which data and metadata are located
+#' @param dataDirectory A path to the directory in which data and metadata are located. "~/QuaDramA/Data" by default
 #' @export
-setup <- function(datadir = "/Users/reiterns/Documents/QuaDramA/Data") {
-  options(qd.datadir=datadir)
-  options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",datadir))
+setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data")) {
+  options(qd.datadir=dataDirectory)
+  options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
 dlobject <- function() {
   if (is.null(getOption("qd.dl"))) {
-    options(qd.dl=.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
+    options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
   }
   getOption("qd.dl")
 }
@@ -34,21 +34,34 @@ loadSet <- function(setName, addGenreColumn=FALSE) {
 loadSets <- function() {
   dl <- dlobject()
   s <- dl$getListOfSets()
-  l <- unlist(lapply(.jevalArray(s[[2]]),FUN=function(x) {.jsimplify(x)}))
-  data.frame(id=.jevalArray(s[[1]]),size=l)
+  l <- unlist(lapply(rJava::.jevalArray(s[[2]]),FUN=function(x) {rJava::.jsimplify(x)}))
+  data.frame(id=rJava::.jevalArray(s[[1]]),size=l)
 }
 
 scene.act.table <- function(ids) {
-  acts <- loadAnnotations(ids,type=atypes$Act,coveredType=NULL)
   
-  acts[, Number := as.integer(as.numeric(as.factor(begin))),drama]
+  # prevent notes in R CMD check
+  Number <- NULL
+  Number.Act <- NULL
+  begin <- NULL
+  drama <- NULL
+  
+  `:=` <- NULL
+  
+  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL)
+  
+  acts[, Number.Act := as.integer(as.numeric(as.factor(begin))), drama]
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
   scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
-  merged <- merge(acts, scenes, by="drama", suffixes=c(".Act", ".Scene"), allow.cartesian = TRUE)
+  merged <- merge(acts, scenes, by=c("drama","corpus"), 
+                  suffixes=c(".Act", ".Scene"), 
+                  allow.cartesian = TRUE)
   merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
   #merged <- subset(merged, select=c(-5,-9))
-  merged$Number.Scene <- ave(merged$begin.Scene, merged$drama, merged$Number.Act, FUN=function(x) {as.numeric(as.factor(x))})
+  merged$Number.Scene <- stats::ave(merged$begin.Scene, 
+                                    merged$drama, merged$Number.Act, 
+                                    FUN=function(x) {as.numeric(as.factor(x))})
   merged
 }
 
@@ -61,11 +74,25 @@ scene.act.table <- function(ids) {
 #' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
 loadSegmentedText <- function(ids) {
-  t <- data.table(loadText(ids, includeTokens=TRUE))
-  sat <- data.table(scene.act.table(ids=ids))
-  setkey(sat, "drama", "begin.Scene", "end.Scene")
-  mtext <- foverlaps(t, sat, type="any", by.x=c("drama", "begin", "end"), by.y=c("drama", "begin.Scene", "end.Scene"))
+  t <- data.table::data.table(loadText(ids, includeTokens=TRUE))
+  sat <- data.table::data.table(scene.act.table(ids=ids))
+  data.table::setkey(t, "corpus", "drama", "begin", "end")
+  data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
+  mtext <- data.table::foverlaps(t, sat, type="any",
+                                 by.x=c("corpus", "drama", "begin", "end"), 
+                                 by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
   mtext
+}
+
+
+load.text <- function(...) {
+  .Deprecated("loadText")
+  loadText(...)
+}
+
+load.text2 <- function(...) {
+  .Deprecated("loadSegmentedText")
+  loadSegmentedText(...)
 }
 
 
@@ -77,13 +104,22 @@ loadSegmentedText <- function(ids) {
 #' @param includeTokens If set to true, the table also contains each token in an utterance
 #' @export
 loadText <- function(ids, includeTokens=FALSE) {
+  `:=` <- NULL
+  .N <- NULL
+  corpus <- NULL
+  drama <- NULL
   if (includeTokens == TRUE) {
-    loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(as.character(ids), 
                      type=atypes$Utterance, 
                      coveredType=atypes$Token)
+    
   } else
-    loadAnnotations(as.character(ids), type=atypes$Utterance, coveredType=NULL)
-  }
+    r <- loadAnnotations(as.character(ids), type=atypes$Utterance, coveredType=NULL)
+  r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
+  r[, length:=.N, by=list(corpus,drama) ][]
+  r
+}
+
 
 #' @title Load annotations
 #' @description Helper method to load covered annotations. Returns a data.table.
@@ -93,6 +129,7 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' @export
 #' @importFrom data.table fread
 #' @importFrom rJava .jnew .jarray .jnull
+#' @importFrom readr read_csv locale
 #' @examples
 #' \dontrun{
 #' loadAnnotations(c("tg:rksp.0"))
@@ -102,11 +139,12 @@ loadAnnotations <- function(ids,
                              coveredType=atypes$Token) {
   dl <- dlobject()
   if (is.null(coveredType)) {
-    s <- dl$getAnnotations(.jarray(ids),type,.jnull())
+    s <- dl$getAnnotations(rJava::.jarray(ids),type,rJava::.jnull())
   } else {
-    s <- dl$getAnnotations(.jarray(ids),type,coveredType)
+    s <- dl$getAnnotations(rJava::.jarray(ids),type,coveredType)
   }
-  df <- data.table::fread(input=s, check.names = TRUE)
+  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
+  colnames(df) <- make.names(colnames(df))
   df
 }
 
@@ -172,4 +210,98 @@ loadNumbers <- function(ids=c(),
   subset(df,select=c(-1))
 }
 
+#' Returns a list of all ids that are installed
+#' @export
+#' 
+loadAllInstalledIds <- function() {
+  getOption("qd.dl")$getAllIds()
+}
 
+#' @title Download preprocessed drama data
+#' @description This function downloads pre-processed dramatic texts via http and stores them locally in your data directory
+#' @param dataSource Currently, only "tg" (textgrid) is supported
+#' @param dataDirectory The directory in which the data is to be stored
+#' @param downloadSource The server from which to download
+#' @param removeZipFile If true (the default), the downloaded zip file is removed after unpacking
+#' @importFrom utils download.file unzip
+#' @export
+installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims", removeZipFile = TRUE) {
+  dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
+  sourceFilename <- switch(dataSource,tg="tg.zip")
+
+  
+  if (downloadSource == "ims") {
+    sourceUrl <- createIMSUrl(sourceFilename)
+  } else if (downloadSource == "zenodo") {
+    sourceUrl <- createZenodoUrl(803280, sourceFilename)
+  }
+  lm <- lastModifiedDate(sourceUrl)
+  message("Version on server: ", lm)
+  installedV <- getInstalledDate(dataDirectory,sourceFilename)
+    
+  message("Locally installed version: ", as.character(installedV))
+  
+  
+  if (is.na(installedV) | installedV < lm) {
+    message("Downloading new version.")
+    tf <- tempfile()
+    utils::download.file(sourceUrl,destfile = tf)
+    utils::unzip(tf,exdir=file.path(dataDirectory,"xmi"))
+    if (removeZipFile == TRUE) {
+      file.remove(tf)
+    }
+    saveInstalledDate(dataDirectory, sourceFilename, lm)
+  } else {
+    message("No download necessary.")
+  }
+  
+  
+}
+
+#' @importFrom utils read.csv
+getInstalledDate <- function(dataDirectory,filename) {
+  versionsFilename <- file.path(dataDirectory,"versions.csv")
+  if (file.exists(versionsFilename)) {
+    versions <- utils::read.csv(versionsFilename)
+    v <- versions[versions$file == filename,2]
+    if (length(v)>0) {
+      as.Date(v)
+    } else {
+      NA
+    }
+  } else {
+    NA
+  }
+}
+
+#' @importFrom utils write.csv read.csv
+saveInstalledDate <- function(dataDirectory, filename, date) {
+  versionsFilename <- file.path(dataDirectory,"versions.csv")
+  if (file.exists(versionsFilename)) {
+    versions <- utils::read.csv(versionsFilename,stringsAsFactors = FALSE)
+    if (length(versions[versions$file==filename,"date"])>0) {
+      versions[versions$file==filename,"date"] <- date
+    } else {
+      versions[nrow(versions) + 1,] = c(filename,date)
+    }
+  } else {
+    versions <- data.frame(file=c(filename),date=c(date))
+  }
+  utils::write.csv(versions,file=versionsFilename,row.names=FALSE)
+  
+}
+
+#' @importFrom httr HEAD headers
+lastModifiedDate <- function(url) {
+  h <- httr::HEAD(url)
+  lm <- httr::headers(h)$`last-modified`
+  as.Date(lm, "%a, %d %b %Y %H:%M:%S")
+}
+
+createIMSUrl <- function(filename) {
+  paste0("https://www2.ims.uni-stuttgart.de/gcl/reiterns/quadrama/res/",filename)
+}
+
+createZenodoUrl <- function(id,filename) {
+  paste0("https://zenodo.org/record/",id,"/files/",filename)
+}

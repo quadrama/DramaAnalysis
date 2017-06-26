@@ -33,15 +33,15 @@ As configuration matrices [@Pfister:1988aa] are dependent on information about a
 
 ```{r setup}
 require(DramaAnalysis)
-data(rksp.0.mtext)
+data(rksp.0)
 
-colnames(rksp.0.mtext)
+colnames(rksp.0$mtext)
 ```
 
 In addition to the regular text and speakers, this table also contains informatio about the scenes and acts in which each token is spoken.
 
 ```{r}
-c <- configuration(rksp.0.mtext)
+c <- configuration(rksp.0$mtext)
 c$matrix
 c$figure
 ```
@@ -80,7 +80,7 @@ barplot(c$matrix,
 
 Configuration matrices are also often used to get an overview of who is copresent on stage. First, we create a configuration matrix that only represents presence or absence of a figure (and we switch to scenes). Obviously, the resulting matrix has many more columns.
 ```{r}
-c <- configuration(rksp.0.mtext, onlyPresence = TRUE, by="Scene")
+c <- configuration(rksp.0$mtext, onlyPresence = TRUE, by="Scene")
 
 # to see the matrix (not shown here):
 # c$matrix 

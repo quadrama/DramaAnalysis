@@ -4,10 +4,10 @@
 \alias{setup}
 \title{This function initialises the import from XMI files.}
 \usage{
-setup(datadir = "/Users/reiterns/Documents/QuaDramA/Data")
+setup(dataDirectory = file.path(path.expand("~"), "QuaDramA", "Data"))
 }
 \arguments{
-\item{datadir}{A path to the directory in which data and metadata are located}
+\item{dataDirectory}{A path to the directory in which data and metadata are located. "~/QuaDramA/Data" by default}
 }
 \description{
 This function initialises the import from XMI files.

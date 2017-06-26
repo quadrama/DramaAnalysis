@@ -5,8 +5,8 @@
 #' @param normalizeByDramaLength Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
 #' @examples
-#' data(rksp.0.text)
-#' ustat <- utteranceStatistics(rksp.0.text, numberOfFigures = 5)
+#' data(rksp.0)
+#' ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 5)
 #' \dontrun{
 #' boxplot(ustat$utteranceLength ~ ustat$figure,
 #'    col=qd.colors[1:5],
@@ -16,17 +16,18 @@
 utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = TRUE) {
 
   if (typeof(numberOfFigures) == "double") {
-    # TODO: limitFigures
-    t <- limit.figures.by.rank(t, maxRank = numberOfFigures)
+    t <- limitFigures(t, by="rank", threshold = numberOfFigures)
   }
   # utterance statistics
-  ulength <- aggregate(t$Token.surface, by=list(t$drama, t$Speaker.figure_surface, t$begin, t$length), length)
+  ulength <- aggregate(t$Token.surface, by=list(t$corpus,t$drama, t$Speaker.figure_surface, t$begin), length)
 
-  colnames(ulength) <- c("drama", "figure", "begin", "dramaLength","utteranceLength")
+  colnames(ulength) <- c("corpus","drama", "figure", "begin", "utteranceLength")
 
   # normalize by drama length
   if (normalizeByDramaLength == TRUE) {
-    ulength$utteranceLength <- ulength$utteranceLength / ulength$dramaLength
+    dlength <- aggregate(t$Token.surface, by=list(corpus=t$corpus, drama=t$drama), length)
+    ulength <- merge(ulength,dlength, by.x=c("corpus","drama"),by.y=c("corpus","drama"))
+    ulength$utteranceLength <- ulength$utteranceLength / ulength$x
   }
   # skip empty factor levels
   ulength <- droplevels(ulength)
@@ -38,4 +39,10 @@ utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = 
   ulength$figure <- factor(ulength$figure, levels=unique(ulength[order(ulength$drama, ulength$figure),]$figure))
 
   ulength
+}
+
+
+utterance_statistics <- function(...) {
+  .Deprecated("utteranceStatistics")
+  utteranceStatistics(...)
 }

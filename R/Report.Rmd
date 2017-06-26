@@ -1,5 +1,4 @@
 ---
-title: "QuaDramA Report"
 output: 
   html_document:
     toc: true
@@ -17,16 +16,28 @@ params:
 pver <- packageVersion("DramaAnalysis")
 ```
 
-This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io).
+> This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io).
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 setup()
+require(magrittr)
 
 text <- loadText(params$id, includeTokens = TRUE)
 mtext <- loadSegmentedText(params$id)
-
+meta <- loadMeta(params$id, type=atypes$Drama)
+author <- loadMeta(params$id,type=atypes$Author)
+title <- as.character(meta[1,4])
 ```
+
+---
+title: "QuaDramA Report: `r title`"
+
+---
+
+# Meta data
+
+- Author(s): `r paste(paste0("[",author$Name,"](http://d-nb.info/gnd/",author$Pnd,")"),sep=", ")`
 
 # Figure Lists {.tabset}
 
@@ -48,11 +59,28 @@ begins <- aggregate(text$begin, by=list(text$Speaker.figure_surface), min)
 as.character(begins[order(begins$x),]$Group.1)
 ```
 
+## Order vs. order
+
+This plot contains only the figures for which a mapping between entry in dramatis personae and speakers can be established.
+
+```{r, echo=FALSE}
+fRank <- figuresInDramatisPersonae %>% 
+  rankFiguresByDramatisPersonae(columnTitle="dp") %>%
+  rankFiguresByAppearance(text,columnTitle="app")
+
+par(xpd=TRUE)
+plot(fRank$dp, fRank$app,
+     pch=20,frame=FALSE,xlab="Dramatis Personae",
+     ylab="Auftritt")
+text(fRank$dp, fRank$app,labels=fRank$Figure.surface,pos=3)
+
+```
+
 # Overall Speech Distribution
 
 Relative amount of words spoken by each figure. 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, messages=FALSE}
 fstat <- figureStatistics(text, names=TRUE, normalize=FALSE)
 mat <- figurematrix(fstat)
 b <- barplot(mat$values,col=params$col)
@@ -148,12 +176,13 @@ plot.igraph(g,
 ```{r, echo=FALSE}
 baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/"
 
+fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
+fields <- loadFields(fieldNames,baseurl = baseUrl)
+
 text2 <- limitFigures(text, by="tokens")
-fields <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
 dstat <- dictionaryStatistics(
   text2,  # the text
-  fieldnames=fields,  # fields we want to measure
-  baseurl = baseUrl,            # specify url
+  fields=fields,
   names = TRUE,                 # use figure names (instead of ids)
   normalizeByFigure = TRUE,   # normalization by figure
   normalizeByField = TRUE,    # normalization by field
@@ -161,7 +190,6 @@ dstat <- dictionaryStatistics(
 )
 mat <- as.matrix(dstat[,3:7])
 rownames(mat) <- vapply(strsplit(as.character(dstat$figure), ",", fixed=TRUE), `[`,1, FUN.VALUE=character(1))
-
 par(mar=c(10,2,0,10),xpd=TRUE)
 b <- barplot(t(mat), # we select Romeo's line
         col=params$col[1:length(fields)],
@@ -171,6 +199,25 @@ b <- barplot(t(mat), # we select Romeo's line
 legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border=FALSE)
 
 ```
+
+## Bar chart (z-scores)
+
+[Z-scores in wikipedia](https://en.wikipedia.org/wiki/Standard_score)
+
+```{r echo=FALSE}
+zmat <- scale(as.matrix(dstat[,3:7]))
+
+rownames(zmat) <- vapply(strsplit(as.character(dstat$figure), ",", fixed=TRUE), `[`,1, FUN.VALUE=character(1))
+par(mar=c(2,12,0,6),xpd=TRUE)
+b <- barplot(t(zmat), 
+        col=params$col[1:length(fieldNames)],
+        las=1,horiz=TRUE,
+        border=FALSE,beside=TRUE
+        )
+legend(x=max(zmat),y=max(b)+1,legend=colnames(zmat),fill=params$col,bty="n",border=FALSE)
+
+```
+
 
 ## Bar chart (scaled)
 
@@ -192,4 +239,10 @@ legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border
 
 ```{r, echo=FALSE}
 plotWordFields(dstat, col=params$col)
+```
+
+## Word fields
+
+```{r, echo=FALSE}
+fields
 ```

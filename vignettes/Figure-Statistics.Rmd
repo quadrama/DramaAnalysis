@@ -31,16 +31,16 @@ v <- packageVersion("DramaAnalysis")
 ```
 
 
-We're assuming here that we have loaded some texts using `load.text()`, and that this text is stored as a data.frame in the variable `text`. For this example, we have loaded Emilia Galotti and Romeo und Julia, both coming from the TextGrid repository. For demo purposes, one can use the data sets included in the package.
+We're assuming here that we have loaded some texts using `loadText()`, and that this text is stored as a data.frame in the variable `text`. For this example, we have loaded Emilia Galotti and Romeo und Julia, both coming from the TextGrid repository. For demo purposes, one can use the data sets included in the package.
 
 ```{r}
 # Load Emilia Galotti
-data(rksp.0.text)
+data(rksp.0)
 # Load Romeo und Julia
-data(vndf.0.text)
+data(vndf.0)
 
 # make a joint table containing both
-text <- rbind(rksp.0.text, vndf.0.text)
+text <- rbind(rksp.0$mtext, vndf.0$mtext)
 
 ```
 
@@ -91,7 +91,7 @@ So far, we have counted words. Now we will turn to utterances, and their propert
 
 First, we will use the function `utteranceStatistics()` to extract numbers about utterances
 ```{r}
-ustat <- utteranceStatistics(rksp.0.text, 
+ustat <- utteranceStatistics(rksp.0$mtext, 
                               numberOfFigures = 10, # include 10 figures per drama
                               normalizeByDramaLength = FALSE # use absolute values
                             )
@@ -126,9 +126,8 @@ Each dot in this plot represents one utterance, the x-axis is measured in charac
 Now it would be useful to include information on act/scene boundaries in this plot. This can be done by accessing the segmented text table. The first  commands work just as before, with the exception of being applied to the variable `rksp.0.mtext`.
 
 ```{r}
-data(rksp.0.mtext)
 
-ustat <- utteranceStatistics(rksp.0.mtext, 
+ustat <- utteranceStatistics(rksp.0$mtext, 
                               numberOfFigures = 10, # include 10 figures per drama
                               normalizeByDramaLength = FALSE # use absolute values
                             )
@@ -141,7 +140,7 @@ stripchart(begin ~ figure, data=ustat,
            )
 
 # add vertical lines for act beginning
-abline(v=unique(rksp.0.mtext$begin.Act)[-1])
+abline(v=unique(rksp.0$mtext$begin.Act)[-1])
 ```
 
 Please note that the information contained in this plot is very similar to the information in the [visual and relative configuration matrices](Configuration-Matrices).

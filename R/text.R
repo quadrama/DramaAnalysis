@@ -24,22 +24,23 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @param threshold A number specifying the limit
 #' @export
 #' @examples 
-#' data(rksp.0.text)
-#' text.top10 <- limitFigures(rksp.0.text)
+#' data(rksp.0)
+#' text.top10 <- limitFigures(rksp.0$mtext)
 limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10)) {
   if(is.na(pmatch(by, c("tokens", "rank")))) stop("Invalid filtering criterion")
   if (by=="tokens") {
-    limit.figures.by.tokens(text, minTokens=threshold)
+    limitFiguresByTokens(text, minTokens=threshold)
   } else {
-    limit.figures.by.rank(text, maxRank = threshold)
+    limitFiguresByRank(text, maxRank = threshold)
   }
 }
 
 #' This method removes the spoken tokens of all but the most frequent n figures
 #' @param t The text, a data frame listing each token for each figure
 #' @param maxRank Up to maxRank figures remain in the data set
+#' @keywords internal
 #' @importFrom utils head
-limit.figures.by.rank <- function(t, maxRank=10) {
+limitFiguresByRank <- function(t, maxRank=10) {
   counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
   counts <- counts[order(counts$x, decreasing = TRUE),]
   rcounts <- Reduce(rbind, by(counts, counts["Group.1"], head, n=maxRank))
@@ -49,12 +50,24 @@ limit.figures.by.rank <- function(t, maxRank=10) {
 #' This method removes the spoken tokens by all figures that speak infrequently.
 #' @param t The text, a data frame listing each token for each figure
 #' @param minTokens The minimal amount of tokens a figure has to speak
-limit.figures.by.tokens <- function(t, minTokens=100) {
+#' @keywords internal
+limitFiguresByTokens <- function(t, minTokens=100) {
     counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
-    write(paste(length(counts[counts > minTokens]), "remaining."),stderr())
+    write(paste(length(counts[counts > minTokens]), "figures remaining."),stderr())
     subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
 }
 
+
+limit.figures.by.rank <- function(...) {
+  .Deprecated("limitFigures(by=\"rank\"")
+  limitFiguresByRank(...)
+}
+
+
+limit.figures.by.tokens <- function(...) {
+  .Deprecated("limitFigures(by=\"tokens\"")
+  limitFiguresByTokens(...)
+}
 
 tfidf1 <- function(word) {
   docfreq <- sum(word>0)
@@ -77,8 +90,8 @@ tfidf1 <- function(word) {
 #' Values are assumed to be normalized by document, i.e., contain relative frequencies.
 #' @export
 #' @examples
-#' data(rksp.0.text)
-#' rksp.0.ftable <- frequencytable(rksp.0.text,byFigure=TRUE)
+#' data(rksp.0)
+#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE)
 #' rksp.0.tfidf <- tfidf(rksp.0.ftable)
 #' @examples
 #' mat <- matrix(c(0.10,0.2, 0,
@@ -112,8 +125,8 @@ extractTopTerms <- function(mat, top=10) {
 #' @seealso DramaAnalysis::load.text2()
 #' @export
 #' @examples
-#' data(rksp.0.mtext)
-#' cfg <- configuration(rksp.0.mtext)
+#' data(rksp.0)
+#' cfg <- configuration(rksp.0$mtext)
 #' 
 configuration <- function(mtext, by="Act", onlyPresence=FALSE) {
   
@@ -159,7 +172,7 @@ configuration.scene <- function(text) {
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
 #' @export
-report <- function(id="tg:rksp.0", of=paste0("../", id, ".html"), colors=qd.colors) {
+report <- function(id="tg:rksp.0", of=paste0("../", unlist(strsplit(id,":",fixed=TRUE))[2], ".html"), colors=qd.colors) {
   rmarkdown::render("R/Report.Rmd", params=list(id=id, col=colors), 
                     output_format = "html_document", 
                     output_file = of)

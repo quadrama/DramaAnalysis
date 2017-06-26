@@ -46,7 +46,7 @@ wf_love <- c("liebe", "herz")
 We will test this word field on Romeo und Julia, which should be about love. 
 
 ```{r}
-data(vndf.0.text)
+data(vndf.0)
 ```
 
 ## Single word field
@@ -54,7 +54,7 @@ The core of the word field analysis collecting statistics about a dictionary. Th
 
 ```{r}
 dstat <- dictionaryStatisticsSingle(
-  vndf.0.text,         # the text we want to process
+  vndf.0$mtext,         # the text we want to process
   wordfield=wf_love,   # the word field
   names=TRUE,          # we want figure names instead of ids
   column="Token.lemma" # we count lemmas instead of surface forms
@@ -82,7 +82,7 @@ Apparently, Romeo and Juliet are mentioning these words a lot.
 Obviously we would want to **normalize** according to the total number of spoken words by a figure:
 ```{r}
 dstat <- dictionaryStatisticsSingle(
-  vndf.0.text,       # the text we want to process
+  vndf.0$mtext,       # the text we want to process
   wordfield=wf_love, # the word field
   names=TRUE,        # we want figure names instead of ids
   normalizeByFigure = TRUE,   # apply normalization
@@ -103,7 +103,7 @@ barplot(dstat$x,
 
 ## Multiple Word Fields
 
-The function `dictionary.statistics()` can be used to analyse multiple dictionaries at once. To this end, it is assumed that dictionaries are stored in text files that either are stored locally or reachable via a URL. In any case, the parameter `baseurl` can be used to specify a prefix, to which the field names are appended. By default, the baseurl `https://github.com/quadrama/metadata/tree/master/fields/` is used. Appending the field name "Liebe", for instance, thus results in the URL `https://github.com/quadrama/metadata/tree/master/fields/Liebe`, which is a plain text file.
+The function `dictionaryStatistics()` can be used to analyse multiple dictionaries at once. To this end, it is assumed that dictionaries are stored in text files that either are stored locally or reachable via a URL. In any case, the parameter `baseurl` can be used to specify a prefix, to which the field names are appended. By default, the baseurl `https://github.com/quadrama/metadata/tree/master/fields/` is used. Appending the field name "Liebe", for instance, thus results in the URL `https://github.com/quadrama/metadata/tree/master/fields/Liebe`, which is a plain text file.
 
 The following examples use the baseurl `https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/`, i.e., a specific version of the fields we have been using in QuaDramA. 
 
@@ -114,7 +114,7 @@ baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71b
 
 
 dstat <- dictionaryStatistics(
-  vndf.0.text,  # the text
+  vndf.0$mtext,  # the text
   fieldnames=  # fields we want to measure
     c("Liebe", "Krieg", "Familie", "Ratio", "Religion"),
   baseurl = baseUrl,            # specify url
@@ -123,7 +123,7 @@ dstat <- dictionaryStatistics(
   normalizeByField = TRUE,    # normalization by field
   column = "Token.lemma"        # lemma-based stats
 )
-colnames(dstat)       
+colnames(dstat)
 ```
 
 The variable `dstat` now contains multiple columns, one for each word field.

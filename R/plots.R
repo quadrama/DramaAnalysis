@@ -44,11 +44,11 @@ plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors
 #' @importFrom fmsb radarchart
 #' @export
 #' @examples 
-#' data(rksp.0.text)
-#' dstat <- dictionaryStatistics(rksp.0.text, normalizeByField=TRUE, names=TRUE,
+#' data(rksp.0)
+#' dstat <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
 #'                               fieldnames=c("Krieg", "Liebe", "Familie", "Ratio","Religion"))
-#' plotWordFields(dstat[,3:7],names=dstat[,2],max=50)
-plotWordFields <- function(dstat=NULL, mat=dstat[,-c(1,2)], names=dstat[,2], 
+#' plotSpiderWebs(dstat[,3:7],names=dstat[,2],max=50)
+plotSpiderWebs <- function(dstat=NULL, mat=dstat[,-c(1,2)], names=dstat[,2], 
                            symbols=c(17,16,15,4,8),
                            maxValue=max(mat),minValue=min(mat), cglcol="black", 
                            legend=TRUE,
