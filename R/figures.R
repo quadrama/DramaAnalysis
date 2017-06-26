@@ -34,7 +34,7 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
     b <- quote(Speaker.figure_surface)
   }
   setkey(t, "corpus", "drama")
-  r <- t[,`:=`(tokens=length(Token.surface),
+  r <- t[,list(tokens=length(Token.surface),
        types=data.table::uniqueN(Token.surface),
        utterances=data.table::uniqueN(begin),
        utteranceLengthMean=mean(rle(begin)$lengths),
