@@ -12,8 +12,10 @@ output:
     fig_height: 5
     fig_width: 6
 bibliography: bibliography.bib
-vignette: |
-  %\VignetteIndexEntry{R Basics} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+vignette: >
+  %\VignetteIndexEntry{R Basics} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
 ---
 
 ## Variables and Data types
