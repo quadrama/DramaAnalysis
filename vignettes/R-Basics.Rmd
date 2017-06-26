@@ -1,20 +1,19 @@
 ---
 title: "R Basics"
 author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
-date: "`r Sys.Date()`"
-output: 
-  rmarkdown::html_vignette:
-    fig_width: 6
-    fig_height: 5
+date: '`r Sys.Date()`'
+output:
+  pdf_document:
+    toc: yes
   md_document:
+    toc: yes
     variant: markdown_github
-    toc: true
-
-vignette: >
-  %\VignetteIndexEntry{R Basics}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  rmarkdown::html_vignette:
+    fig_height: 5
+    fig_width: 6
 bibliography: bibliography.bib
+vignette: |
+  %\VignetteIndexEntry{R Basics} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
 
 ## Variables and Data types
