@@ -1,5 +1,7 @@
 package de.unistuttgart.ims.drama.data;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.uima.UIMAException;
@@ -12,9 +14,12 @@ public class Devel {
 		// System.out.println(dl.getAnnotations(new String[] { "tc:tc0623",
 		// "tg:rksp.0" },
 		// de.unistuttgart.ims.drama.api.Author.class.getName(), null));
-		System.out.println(dl.getAnnotations(new String[] { "tg:rksp.0", "tc:tc0623" },
+		FileWriter fw = new FileWriter(new File("target/test.csv"));
+		fw.write(dl.getAnnotations(new String[] { "tg:rksp.0", "tc:tc0623" },
 				de.unistuttgart.ims.drama.api.Utterance.class.getName(),
-				de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token.class.getName(), 10));
+				de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token.class.getName()));
+		fw.flush();
+		fw.close();
 	}
 
 }
