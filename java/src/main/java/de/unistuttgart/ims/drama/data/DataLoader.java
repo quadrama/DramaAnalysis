@@ -178,9 +178,24 @@ public class DataLoader implements IRepository {
 		return new File(getCollectionsDirectory(), collectionName);
 	}
 
-	@SuppressWarnings("unchecked")
+	public String getAnnotations(String[] dramaIds, Class<?>... annotationClasses)
+			throws ClassNotFoundException, UIMAException, SAXException, IOException {
+		if (annotationClasses.length >= 2)
+			return getAnnotations(dramaIds, annotationClasses[0].getName(), annotationClasses[1].getName());
+		if (annotationClasses.length >= 1)
+			return getAnnotations(dramaIds, annotationClasses[0].getName(), null);
+		return null;
+
+	}
+
 	public String getAnnotations(String[] dramaIds, String annotationClassName, String coveredAnnotationClassName)
 			throws ClassNotFoundException, UIMAException, SAXException, IOException {
+		return getAnnotations(dramaIds, annotationClassName, coveredAnnotationClassName, -1);
+	}
+
+	@SuppressWarnings("unchecked")
+	public String getAnnotations(String[] dramaIds, String annotationClassName, String coveredAnnotationClassName,
+			int limit) throws ClassNotFoundException, UIMAException, SAXException, IOException {
 
 		Class<?> cl1 = Class.forName(annotationClassName);
 
@@ -212,7 +227,7 @@ public class DataLoader implements IRepository {
 
 			jcas = getJCas(s);
 
-			Util.writeCSV(exporter.convert(jcas, header), boas);
+			Util.writeCSV(exporter.convert(jcas, header), boas, limit);
 			header = false;
 		}
 		return new String(boas.toByteArray());
