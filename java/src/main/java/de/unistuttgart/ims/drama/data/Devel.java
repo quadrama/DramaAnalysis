@@ -12,12 +12,9 @@ public class Devel {
 		// System.out.println(dl.getAnnotations(new String[] { "tc:tc0623",
 		// "tg:rksp.0" },
 		// de.unistuttgart.ims.drama.api.Author.class.getName(), null));
-		System.out.println(dl.getAnnotations(new String[] { "tc:tc0623" },
-				de.unistuttgart.ims.drama.api.CastFigure.class.getName(), null));
-		System.out.println(
-				dl.getAnnotations(new String[] { "tc:tc0623" }, de.unistuttgart.ims.drama.api.Utterance.class.getName(),
-						de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token.class.getName()));
-
+		System.out.println(dl.getAnnotations(new String[] { "tg:rksp.0", "tc:tc0623" },
+				de.unistuttgart.ims.drama.api.Utterance.class.getName(),
+				de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token.class.getName(), 10));
 	}
 
 }
