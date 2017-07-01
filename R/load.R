@@ -130,6 +130,7 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load
+#' @param columnTypes Can be used to specify column types, which are passed to readr::read.csv.
 #' @export
 #' @importFrom data.table fread
 #' @importFrom rJava .jnew .jarray .jnull
