@@ -4,7 +4,8 @@
 \alias{keyness}
 \title{Log-Likelihood}
 \usage{
-keyness(ft, row = 1, epsilon = 1e-100, siglevel = 0.05)
+keyness(ft, row = 1, epsilon = 1e-100, siglevel = 0.05,
+  method = "loglikelihood", minimalFrequency = 10)
 }
 \arguments{
 \item{ft}{The frequency table}
