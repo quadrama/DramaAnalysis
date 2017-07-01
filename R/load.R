@@ -111,10 +111,14 @@ loadText <- function(ids, includeTokens=FALSE) {
   if (includeTokens == TRUE) {
     r <- loadAnnotations(as.character(ids), 
                      type=atypes$Utterance, 
-                     coveredType=atypes$Token)
+                     coveredType=atypes$Token,
+                     columnTypes = "cciiccccc")
     
   } else
-    r <- loadAnnotations(as.character(ids), type=atypes$Utterance, coveredType=NULL)
+    r <- loadAnnotations(as.character(ids), 
+                         type=atypes$Utterance, 
+                         coveredType=NULL,
+                         columnTypes = "cciicci")
   r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
   r[, length:=.N, by=list(corpus,drama) ][]
   r
@@ -135,15 +139,17 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' loadAnnotations(c("tg:rksp.0"))
 #' }
 loadAnnotations <- function(ids, 
-                             type=atypes$Utterance, 
-                             coveredType=atypes$Token) {
+                            type=atypes$Utterance, 
+                            coveredType=atypes$Token,
+                            columnTypes=NULL) {
   dl <- dlobject()
   if (is.null(coveredType)) {
     s <- dl$getAnnotations(rJava::.jarray(ids),type,rJava::.jnull())
   } else {
     s <- dl$getAnnotations(rJava::.jarray(ids),type,coveredType)
   }
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
+  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
+                                                  col_types = columnTypes))
   colnames(df) <- make.names(colnames(df))
   df
 }
