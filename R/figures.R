@@ -13,26 +13,35 @@
 #' @importFrom stats aggregate
 #' @importFrom data.table as.data.table
 #' @examples
-#' data(rksp.0.text)
-#' stat <- figureStatistics(rksp.0.text, names = FALSE)
+#' data(rksp.0)
+#' stat <- figureStatistics(rksp.0$mtext, names = FALSE)
 #' @export
 figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
+  
+  # prevent notes in R CMD check
+  . <- NULL
+  Token.surface <- NULL
+  begin <- NULL
+  end <- NULL
+  drama <- NULL
+  `:=` <- NULL
+  corpus <- NULL
+  
   t <- as.data.table(t)
   
   b <- quote(Speaker.figure_id)
   if (names == TRUE) {
     b <- quote(Speaker.figure_surface)
   }
-
-  r <- t[,.(tokens=length(Token.surface),
-       types=length(unique(Token.surface)),
-       utterances=length(unique(begin)),
+  setkey(t, "corpus", "drama")
+  r <- t[,list(tokens=length(Token.surface),
+       types=data.table::uniqueN(Token.surface),
+       utterances=data.table::uniqueN(begin),
        utteranceLengthMean=mean(rle(begin)$lengths),
        utteranceLengthSd=sd(rle(begin)$lengths),
        firstBegin=min(begin),
-       lastEnd=max(end),
-       length=unique(length)
-       ),.(drama,eval(b))]
+       lastEnd=max(end)
+       ),by=.(corpus,drama,length,eval(b))]
   
   
   colnames(r)[2] <- "figure"
@@ -56,8 +65,8 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 #' figures are ranked ascending.
 #' @importFrom reshape2 dcast
 #' @examples
-#' data(rksp.0.text,vndf.0.text)
-#' text <- rbind(rksp.0.text,vndf.0.text)
+#' data(rksp.0,vndf.0)
+#' text <- rbind(rksp.0$mtext,vndf.0$mtext)
 #' stat <- figureStatistics(text, names = TRUE)
 #' mat <- figurematrix(stat)
 #' # Plot a stacked bar plot
@@ -66,6 +75,11 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 #' text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
 #' @export
 figurematrix <- function(fstat,column="tokens",order=-1) {
+  
+  # prevent note in R CMD check
+  drama <- NULL
+  `:=` <- NULL
+
   fs <- as.data.table(fstat)
   fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
@@ -80,9 +94,6 @@ figurematrix <- function(fstat,column="tokens",order=-1) {
 #' @param figures The figures to rank
 #' @param columnTitle The title for the rank column
 #' @export
-#' @examples 
-#' data(rksp.0.figures)
-#' rankFiguresByDramatisPersonae(rksp.0.figures)
 rankFiguresByDramatisPersonae <- function(figures, columnTitle="Rank (dramatis personae)") {
   figures[[columnTitle]] <- ave(seq(1:nrow(figures)),figures$drama, FUN=rank)
   figures
@@ -97,9 +108,6 @@ rankFiguresByDramatisPersonae <- function(figures, columnTitle="Rank (dramatis p
 #' @param text A text data frame
 #' @param columnTitle The title for the rank column
 #' @export
-#' @examples 
-#' data(rksp.0.text, rksp.0.figures)
-#' rankFiguresByAppearance(rksp.0.figures, rksp.0.text)
 rankFiguresByAppearance <- function(figures, text, columnTitle="Rank (1st appearance)") {
   minimal.utterance.begin <- aggregate(text$begin, by=list(text$drama,
                                                            text$Speaker.figure_surface),

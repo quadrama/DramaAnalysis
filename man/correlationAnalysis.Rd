@@ -20,8 +20,8 @@ correlationAnalysis(text.ft, outcomes, method = "spearman",
 Calculates correlation of a frequency table with an outcome list according to given method
 }
 \examples{
-data(rksp.0.text)
-rksp.0.ft <- frequencytable(rksp.0.text, byFigure=TRUE, names=TRUE)
+data(rksp.0)
+rksp.0.ft <- frequencytable(rksp.0$mtext, byFigure=TRUE, names=TRUE)
 g <- factor(c("m","m","m","m","f","m","m","m","f","m","m","f","m"))
 rksp.0.cor <- correlationAnalysis(rksp.0.ft,g)
 }

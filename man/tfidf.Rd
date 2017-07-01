@@ -19,8 +19,8 @@ containing term \eqn{t}. We add one to the denominator to prevent terms that app
 in every document to become 0.
 }
 \examples{
-data(rksp.0.text)
-rksp.0.ftable <- frequencytable(rksp.0.text,byFigure=TRUE)
+data(rksp.0)
+rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE)
 rksp.0.tfidf <- tfidf(rksp.0.ftable)
 mat <- matrix(c(0.10,0.2, 0,
                 0,   0.2, 0,

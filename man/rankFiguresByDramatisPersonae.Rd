@@ -15,7 +15,3 @@ rankFiguresByDramatisPersonae(figures,
 \description{
 Adds a column to the figures data frame, containing the rank in the dramatis personae.
 }
-\examples{
-data(rksp.0.figures)
-rankFiguresByDramatisPersonae(rksp.0.figures)
-}

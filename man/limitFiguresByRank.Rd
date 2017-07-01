@@ -14,3 +14,4 @@ limitFiguresByRank(t, maxRank = 10)
 \description{
 This method removes the spoken tokens of all but the most frequent n figures
 }
+\keyword{internal}

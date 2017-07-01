@@ -20,8 +20,8 @@ Creates classic drama configuration matrix. Returns a list with
 the three components matrix, drama, and figure
 }
 \examples{
-data(rksp.0.mtext)
-cfg <- configuration(rksp.0.mtext)
+data(rksp.0)
+cfg <- configuration(rksp.0$mtext)
 
 }
 \seealso{

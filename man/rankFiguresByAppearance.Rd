@@ -18,7 +18,3 @@ Given a dramatic text and a table of figures, ranks the figures by
 their first appearance. The lower the rank number, the earlier the figure appears.
 "appears": speaks for the first time.
 }
-\examples{
-data(rksp.0.text, rksp.0.figures)
-rankFiguresByAppearance(rksp.0.figures, rksp.0.text)
-}

@@ -1,7 +1,7 @@
-data("rksp.0.text")
-data("vndf.0.text")
+data("rksp.0")
+data("vndf.0")
 
-require(data.table)
+
 
 toler <- 1e-4
 
@@ -15,7 +15,7 @@ expect_equal(ft[1,2], 2, tolerance=toler)
 expect_equal(ft[2,1], 1, tolerance=toler)
 expect_equal(ft[2,2], 0, tolerance=toler)
 
-text <- rbind(vndf.0.text,rksp.0.text)
+text <- rbind(vndf.0$mtext,rksp.0$mtext)
 
 ft <- frequencytable(text,normalize=FALSE,byFigure = FALSE)
 
