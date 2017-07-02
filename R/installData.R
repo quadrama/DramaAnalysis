@@ -1,5 +1,6 @@
 #' @title Download and install collection data
-#' @description Function to download collection data (grouped texts) from github
+#' @description Function to download collection data (grouped texts) from github. 
+#' Overwrites (!) the current collections.
 #' @param dataDirectory The data directory in which collection and data files are stored
 #' @param branchOrCommit The git branch, commit id, or tag that we want to download
 #' @param repository The repository
