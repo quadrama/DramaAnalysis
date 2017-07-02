@@ -261,9 +261,10 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
   } else {
     message("No download necessary.")
   }
-  
-  
 }
+
+
+
 
 #' @importFrom utils read.csv
 getInstalledDate <- function(dataDirectory,filename) {
