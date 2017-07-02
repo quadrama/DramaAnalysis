@@ -133,7 +133,7 @@ The variable `dstat` now contains multiple columns, one for each word field.
 We can now display the distribution of the words of a single figure over these word fields:
 
 ```{r}
-barplot(as.matrix(dstat[28,3:7]), # we select Romeo's line
+barplot(as.matrix(dstat[28,4:8]), # we select Romeo's line
         main="Romeo's speech",    # plot title
         col=qd.colors             # more colors
         )
