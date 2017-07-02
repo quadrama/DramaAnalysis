@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -178,13 +179,28 @@ public class DataLoader implements IRepository {
 		return new File(getCollectionsDirectory(), collectionName);
 	}
 
-	public String getAnnotations(String[] dramaIds, Class<?>... annotationClasses)
+	public String getAnnotations(String[] dramaIds, Class<? extends TOP>... classes)
 			throws ClassNotFoundException, UIMAException, SAXException, IOException {
-		if (annotationClasses.length >= 2)
-			return getAnnotations(dramaIds, annotationClasses[0].getName(), annotationClasses[1].getName());
-		if (annotationClasses.length >= 1)
-			return getAnnotations(dramaIds, annotationClasses[0].getName(), null);
-		return null;
+		return getAnnotations(dramaIds, -1, classes);
+	}
+
+	public String getAnnotations(String[] dramaIds, int limit, Class<? extends TOP>... classes)
+			throws ClassNotFoundException, UIMAException, SAXException, IOException {
+		JCas jcas = JCasFactory.createJCas();
+		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
+		for (int i = 0; i < classes.length; i++)
+			exporter.addAnnotationType(classes[i]);
+
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+		boolean header = true;
+		for (String s : dramaIds) {
+
+			jcas = getJCas(s);
+
+			Util.writeCSV(exporter.convert(jcas, header), boas, limit);
+			header = false;
+		}
+		return new String(boas.toByteArray());
 
 	}
 
@@ -215,22 +231,16 @@ public class DataLoader implements IRepository {
 
 		logger.fine("getAnnotations(" + ArrayUtils.toString(dramaIds) + "," + annotationClassName + ","
 				+ coveredAnnotationClassName + ")");
-		JCas jcas = JCasFactory.createJCas();
+		return getAnnotations(dramaIds, limit, annotationClass, coveredAnnotationClass);
+
+	}
+
+	protected List<List<Object>> getAnnotations(JCas jcas, Class<? extends TOP>... classes) throws IOException {
 		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
-		exporter.addAnnotationType(annotationClass);
-		if (coveredAnnotationClass != null)
-			exporter.addAnnotationType(coveredAnnotationClass);
+		for (int i = 0; i < classes.length; i++)
+			exporter.addAnnotationType(classes[i]);
+		return exporter.convert(jcas, true);
 
-		ByteArrayOutputStream boas = new ByteArrayOutputStream();
-		boolean header = true;
-		for (String s : dramaIds) {
-
-			jcas = getJCas(s);
-
-			Util.writeCSV(exporter.convert(jcas, header), boas, limit);
-			header = false;
-		}
-		return new String(boas.toByteArray());
 	}
 
 	public Object[][] getListOfSets() {
