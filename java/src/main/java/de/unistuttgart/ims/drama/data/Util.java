@@ -47,9 +47,13 @@ public class Util {
 		return r;
 	}
 
-	public static <T> void writeCSV(List<List<T>> table, OutputStream os) throws IOException {
+	public static <T> void writeCSV(List<List<T>> table, OutputStream os, int limit) throws IOException {
 		CSVPrinter p = new CSVPrinter(new OutputStreamWriter(os), CSVFormat.DEFAULT);
+		int line = 0;
 		for (Object s : table) {
+			if (limit > 0 && line++ > limit)
+				continue;
+
 			if (s instanceof String) {
 				p.printRecord(((String) s).trim());
 			} else if (s instanceof Iterable) {
