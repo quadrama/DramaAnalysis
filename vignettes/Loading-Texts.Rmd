@@ -24,3 +24,34 @@ require(DramaAnalysis)
 
 
 
+In order to use the analysis functions in this package, you need NLP-pre-processed dramatic texts. To facilitate this, we are providing downloadable packages of pre-processed files in the correct format etc. Currently, we provide only the TextGrid repository as a collection, but others are planned. 
+
+## Package Setup
+
+First, you will need to find a directory in which the data files are to be stored. By default, a directory called `QuaDramA` will be created in your home directory (`~`). On Windows, this is known as the Documents-folder.
+
+If you want to specify a different folder, you can do with the `setup()`-function:
+```{r, eval=FALSE}
+setup(dataDirectory = "YOUR_FOLDER")
+```
+
+The setup function is responsible for starting the Java Virtual Machine in the background, which we need in order to load the pre-processed texts. It also sets the option `qd.datadir` to the given directory, such that other functions know this.
+
+## Installation of Data
+
+To install a data package, you simply run the function `installData()`. The download size is approximately 700MB, so it might take a while. Luckily, this only needs to be done once.
+
+```{r, eval=FALSE}
+installData()
+```
+
+In addition, we provide a categorization of these texts into genres. It can be downloaded in a similar way
+
+```{r, eval=FALSE}
+installCollectionData()
+```
+
+## Loading of Dramatic texts
+
+Each dramatic text in one of our data packages has an id, that we need to load the text. The id itself is just a sequence of alphanumeric symbols. The function `loadAllInstalledIds()` gives you a list of all installed ids. This is not particularly helpful, that's why we made an overview here.
+
