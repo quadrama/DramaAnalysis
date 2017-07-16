@@ -158,6 +158,7 @@ configuration.scene <- function(text) {
 
   cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("corpus","drama","Speaker.figure_surface"), timevar = "begin.Scene")
   cfg[is.na(cfg)] <- 0
+  cfg <- cfg[order(as.character(cfg$Speaker.figure_surface)),]
   
   colnames(cfg) <- c("corpus","drama", "Speaker.figure_surface",1:(ncol(cfg)-3))
   list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,2],figure=cfg[,3])
