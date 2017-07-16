@@ -15,7 +15,7 @@ public class Devel {
 
 	public static void main(String[] args) throws ClassNotFoundException, UIMAException, SAXException, IOException {
 		DataLoader dl = new DataLoader("/Users/reiterns/Documents/QuaDramA/Data");
-		System.out.println(dl.getAnnotations(new String[] { "tc:tc0623", "tg:rksp.0" }, Date.class, Date.class));
+		System.out.println(dl.getAnnotations(new String[] { "tc:tc0778", "tg:rksp.0" }, Date.class, Date.class));
 		System.exit(1);
 		FileWriter fw = new FileWriter(new File("target/test.csv"));
 		fw.write(dl.getAnnotations(new String[] { "tg:rksp.0", "tc:tc0623" }, Utterance.class, Token.class));
