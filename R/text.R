@@ -154,11 +154,9 @@ configuration.act <- function(mtext) {
 #' @importFrom stats reshape
 configuration.scene <- function(text) {
   t <- text
-  bylist = list(t$drama, t$Speaker.figure_surface, paste0(t$Number.Act,"-", formatC(t$Number.Scene, width=2)))
-  words.per.segment <- aggregate(t$Token.surface, 
-                                 by=bylist, 
-                                 length)
-  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("Group.1","Group.2"), timevar = "Group.3")
+  words.per.segment <- t[,.N,.(corpus,drama,Speaker.figure_surface,begin.Scene)]
+
+  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("corpus","drama","Speaker.figure_surface"), timevar = "begin.Scene")
   cfg[is.na(cfg)] <- 0
   colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
   list(matrix=as.matrix(cfg[,3:ncol(cfg)]),drama=cfg[,1],figure=cfg[,2])
