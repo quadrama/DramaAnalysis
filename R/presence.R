@@ -24,13 +24,18 @@ passiveConfiguration <- function(mtext,
   m
 }
 
-presence <- function(mtext) {
+presenceCore <- function(activeM,passiveM,N) {
+  ( rowSums(activeM) - rowSums(passiveM) ) / N
+}
+
+
+presence <- function(mtext,presenceFunction=presenceCore) {
   conf.active <- configuration(mtext,by="Scene",onlyPresence = TRUE)
   conf.passive <- passiveConfiguration(mtext)
   
   agg.scenes <- mtext[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)]
   r <- data.table::data.table(conf.passive$meta)
   r <- merge(r,agg.scenes,by.x=c("corpus","drama"),by.y=c("corpus","drama"))
-  r$presence <- ( rowSums(conf.active$matrix) - rowSums(conf.passive$matrix) ) / r$scenes
+  r$presence <- presenceCore(conf.active$matrix, conf.passive$matrix,r$scenes)
   r
 }
