@@ -26,6 +26,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 require(DramaAnalysis)
+require(data.table)
 
 v <- packageVersion("DramaAnalysis")
 ```
