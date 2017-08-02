@@ -215,7 +215,7 @@ public class DataLoader implements IRepository {
 			Util.writeCSV(exporter.convert(jcas, header), boas);
 			header = false;
 		}
-		return new String(boas.toByteArray());
+		return new String(boas.toByteArray(), "UTF-8");
 	}
 
 	public Object[][] getListOfSets() {
