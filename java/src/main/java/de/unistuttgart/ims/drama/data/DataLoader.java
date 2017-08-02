@@ -30,6 +30,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.xml.sax.SAXException;
 
 import de.unistuttgart.ims.uimautil.TreeBasedTableExport;
+import de.unistuttgart.ims.uimautil.TreeBasedTableExport.MissingValueBehaviour;
 
 public class DataLoader implements IRepository {
 	File rootDirectory;
@@ -217,6 +218,7 @@ public class DataLoader implements IRepository {
 				+ coveredAnnotationClassName + ")");
 		JCas jcas = JCasFactory.createJCas();
 		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
+		exporter.setMissingValueBehaviour(MissingValueBehaviour.OMIT);
 		exporter.addAnnotationType(annotationClass);
 		if (coveredAnnotationClass != null)
 			exporter.addAnnotationType(coveredAnnotationClass);
