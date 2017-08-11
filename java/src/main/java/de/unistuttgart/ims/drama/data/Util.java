@@ -48,7 +48,7 @@ public class Util {
 	}
 
 	public static <T> void writeCSV(List<List<T>> table, OutputStream os, int limit) throws IOException {
-		CSVPrinter p = new CSVPrinter(new OutputStreamWriter(os), CSVFormat.DEFAULT);
+		CSVPrinter p = new CSVPrinter(new OutputStreamWriter(os, "UTF-8"), CSVFormat.DEFAULT);
 		int line = 0;
 		for (Object s : table) {
 			if (limit > 0 && line++ > limit)
