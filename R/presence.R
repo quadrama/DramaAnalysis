@@ -29,13 +29,23 @@ presenceCore <- function(activeM,passiveM,N) {
 }
 
 
-presence <- function(mtext,presenceFunction=presenceCore) {
+presence <- function(mtext) {
   conf.active <- configuration(mtext,by="Scene",onlyPresence = TRUE)
   conf.passive <- passiveConfiguration(mtext)
-  
+  rownames(conf.active$matrix) <- conf.active$figure$Speaker.figure_surface
+  rownames(conf.passive$matrix) <- conf.passive$figure$figure
   agg.scenes <- mtext[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)]
   r <- data.table::data.table(conf.passive$meta)
-  r <- merge(r,agg.scenes,by.x=c("corpus","drama"),by.y=c("corpus","drama"))
-  r$presence <- presenceCore(conf.active$matrix, conf.passive$matrix,r$scenes)
+  r <- merge(r, agg.scenes,by.x=c("corpus","drama"),by.y=c("corpus","drama"))
+  
+  # active
+  actives <- rowSums(conf.active$matrix)
+  r <- merge(r, data.frame(figure=names(actives), active=actives), by=c("figure"))
+  
+  # passive
+  passives <- rowSums(conf.passive$matrix)
+  r <- merge( r, data.frame(figure=names(passives), passive=passives), by="figure")
+  
+  r$presence <- ( (r$active - r$passive) / r$scenes )
   r
 }
