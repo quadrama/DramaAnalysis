@@ -4,7 +4,8 @@
 \alias{loadAnnotations}
 \title{Load annotations}
 \usage{
-loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token)
+loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token,
+  columnTypes = NULL)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
@@ -12,6 +13,8 @@ loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token)
 \item{type}{The annotation type to load}
 
 \item{coveredType}{The annotation type of covered annotations we want to load}
+
+\item{columnTypes}{Can be used to specify column types, which are passed to readr::read.csv.}
 }
 \description{
 Helper method to load covered annotations. Returns a data.table.
