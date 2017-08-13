@@ -217,6 +217,7 @@ public class DataLoader implements IRepository {
 		exporter.setMissingValueBehaviour(MissingValueBehaviour.OMIT);
 		exporter.addAnnotationType(Author.class);
 		exporter.addExportFeatures(dramaType, "documentTitle");
+		exporter.addExportFeatures(dramaType, "language");
 		ByteArrayOutputStream boas = new ByteArrayOutputStream();
 		boolean header = true;
 		for (String s : dramaIds) {
