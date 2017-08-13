@@ -22,6 +22,7 @@ public class Devel {
 		Class<? extends TOP>[] classes = new Class[] { Author.class, Translator.class };
 		String[] ids = new String[] { "tc:tc0623", "tg:rksp.0", "tg:vndf.0" };
 
+		System.out.println(dl.getDramaMetaData(ids));
 		System.out.println(dl.getAnnotations(ids, classes));
 		System.exit(1);
 		FileWriter fw = new FileWriter(new File("target/test.csv"));
