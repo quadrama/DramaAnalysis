@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -22,13 +23,17 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.uima.UIMAException;
+import org.apache.uima.cas.Type;
 import org.apache.uima.cas.impl.XmiCasDeserializer;
 import org.apache.uima.fit.factory.JCasFactory;
+import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.TOP;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.xml.sax.SAXException;
 
+import de.unistuttgart.ims.drama.api.Author;
+import de.unistuttgart.ims.drama.api.Drama;
 import de.unistuttgart.ims.uimautil.TreeBasedTableExport;
 import de.unistuttgart.ims.uimautil.TreeBasedTableExport.MissingValueBehaviour;
 
@@ -179,13 +184,50 @@ public class DataLoader implements IRepository {
 		return new File(getCollectionsDirectory(), collectionName);
 	}
 
-	public String getAnnotations(String[] dramaIds, Class<?>... annotationClasses)
+	public String getAnnotations(String[] dramaIds, Class<? extends TOP>... classes)
 			throws ClassNotFoundException, UIMAException, SAXException, IOException {
-		if (annotationClasses.length >= 2)
-			return getAnnotations(dramaIds, annotationClasses[0].getName(), annotationClasses[1].getName());
-		if (annotationClasses.length >= 1)
-			return getAnnotations(dramaIds, annotationClasses[0].getName(), null);
-		return null;
+		return getAnnotations(dramaIds, -1, classes);
+	}
+
+	public String getAnnotations(String[] dramaIds, int limit, Class<? extends TOP>... classes)
+			throws ClassNotFoundException, UIMAException, SAXException, IOException {
+		JCas jcas = JCasFactory.createJCas();
+		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
+		for (int i = 0; i < classes.length; i++)
+			exporter.addAnnotationType(classes[i]);
+
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+		boolean header = true;
+		for (String s : dramaIds) {
+
+			jcas = getJCas(s);
+
+			Util.writeCSV(exporter.convert(jcas, header), boas, limit);
+			header = false;
+		}
+		return new String(boas.toByteArray());
+
+	}
+
+	public String getDramaMetaData(String[] dramaIds) throws UIMAException, SAXException, IOException {
+		JCas jcas = JCasFactory.createJCas();
+
+		Type dramaType = JCasUtil.getType(jcas, Drama.class);
+		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
+		exporter.setMissingValueBehaviour(MissingValueBehaviour.OMIT);
+		exporter.addAnnotationType(Author.class);
+		exporter.addExportFeatures(dramaType, "documentTitle");
+		exporter.addExportFeatures(dramaType, "language");
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+		boolean header = true;
+		for (String s : dramaIds) {
+
+			jcas = getJCas(s);
+
+			Util.writeCSV(exporter.convert(jcas, header), boas, -1);
+			header = false;
+		}
+		return new String(boas.toByteArray(), "UTF-8");
 
 	}
 
@@ -216,23 +258,16 @@ public class DataLoader implements IRepository {
 
 		logger.fine("getAnnotations(" + ArrayUtils.toString(dramaIds) + "," + annotationClassName + ","
 				+ coveredAnnotationClassName + ")");
-		JCas jcas = JCasFactory.createJCas();
+		return getAnnotations(dramaIds, limit, annotationClass, coveredAnnotationClass);
+
+	}
+
+	protected List<List<Object>> getAnnotations(JCas jcas, Class<? extends TOP>... classes) throws IOException {
 		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
-		exporter.setMissingValueBehaviour(MissingValueBehaviour.OMIT);
-		exporter.addAnnotationType(annotationClass);
-		if (coveredAnnotationClass != null)
-			exporter.addAnnotationType(coveredAnnotationClass);
+		for (int i = 0; i < classes.length; i++)
+			exporter.addAnnotationType(classes[i]);
+		return exporter.convert(jcas, true);
 
-		ByteArrayOutputStream boas = new ByteArrayOutputStream();
-		boolean header = true;
-		for (String s : dramaIds) {
-
-			jcas = getJCas(s);
-
-			Util.writeCSV(exporter.convert(jcas, header), boas, limit);
-			header = false;
-		}
-		return new String(boas.toByteArray(), "UTF-8");
 	}
 
 	public Object[][] getListOfSets() {
