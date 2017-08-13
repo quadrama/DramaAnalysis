@@ -23,13 +23,17 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.uima.UIMAException;
+import org.apache.uima.cas.Type;
 import org.apache.uima.cas.impl.XmiCasDeserializer;
 import org.apache.uima.fit.factory.JCasFactory;
+import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.TOP;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.xml.sax.SAXException;
 
+import de.unistuttgart.ims.drama.api.Author;
+import de.unistuttgart.ims.drama.api.Drama;
 import de.unistuttgart.ims.uimautil.TreeBasedTableExport;
 import de.unistuttgart.ims.uimautil.TreeBasedTableExport.MissingValueBehaviour;
 
@@ -202,6 +206,27 @@ public class DataLoader implements IRepository {
 			header = false;
 		}
 		return new String(boas.toByteArray());
+
+	}
+
+	public String getDramaMetaData(String[] dramaIds) throws UIMAException, SAXException, IOException {
+		JCas jcas = JCasFactory.createJCas();
+
+		Type dramaType = JCasUtil.getType(jcas, Drama.class);
+		TreeBasedTableExport exporter = new TreeBasedTableExport(config, jcas.getTypeSystem());
+		exporter.setMissingValueBehaviour(MissingValueBehaviour.OMIT);
+		exporter.addAnnotationType(Author.class);
+		exporter.addExportFeatures(dramaType, "documentTitle");
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+		boolean header = true;
+		for (String s : dramaIds) {
+
+			jcas = getJCas(s);
+
+			Util.writeCSV(exporter.convert(jcas, header), boas, -1);
+			header = false;
+		}
+		return new String(boas.toByteArray(), "UTF-8");
 
 	}
 
