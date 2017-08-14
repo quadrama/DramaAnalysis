@@ -258,7 +258,10 @@ public class DataLoader implements IRepository {
 
 		logger.fine("getAnnotations(" + ArrayUtils.toString(dramaIds) + "," + annotationClassName + ","
 				+ coveredAnnotationClassName + ")");
-		return getAnnotations(dramaIds, limit, annotationClass, coveredAnnotationClass);
+		if (coveredAnnotationClass != null)
+			return getAnnotations(dramaIds, limit, annotationClass, coveredAnnotationClass);
+		else
+			return getAnnotations(dramaIds, limit, annotationClass);
 
 	}
 
