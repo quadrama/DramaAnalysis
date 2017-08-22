@@ -1,6 +1,6 @@
 passiveConfiguration <- function(mtext,
-                                 matchingFunction=pmatch(tolower(mtext$Token.lemma), 
-                                                         tolower(levels(mtext$Speaker.figure_surface)),
+                                 matchingFunction=pmatch(tolower(t$Token.lemma), 
+                                                         tolower(levels(t$Speaker.figure_surface)),
                                                          duplicates.ok = TRUE),
                                  onlyPresence=TRUE) {
   t <- mtext
