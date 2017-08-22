@@ -3,6 +3,7 @@ title: "Presence"
 author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
 date: "`r Sys.Date()`"
 output: 
+  pdf_document: default
   rmarkdown::html_vignette:
     fig_width: 6
     fig_height: 5
@@ -30,6 +31,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 require(DramaAnalysis)
 setup()
+source("../R/presence.R")
 ids <- c("tg:rksp.0", "tg:rjh9.0", "tg:sttf.0")
 texts <- loadSegmentedText(ids)
 ```
@@ -46,7 +48,7 @@ pres[[3]] <- presence(texts[drama=="sttf.0",])
 ## Plotting
 
 ```{r}
-par(xpd=TRUE,mfrow=c(1,1))
+par(xpd=TRUE)
 for (p in pres) {
   plot(p$active/p$scenes, p$passive/p$scenes, frame.plot = FALSE, xlim=c(0,1), ylim=c(0,1), xlab="Active", ylab="Passive")
   text(p$active/p$scenes, p$passive/p$scenes, labels=substr(p$figure,0,20), pos=3)
