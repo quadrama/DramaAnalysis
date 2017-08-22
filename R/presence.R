@@ -6,7 +6,7 @@ passiveConfiguration <- function(mtext,
   t <- mtext
   t$fref <- matchingFunction
   t$fref_n <- levels(t$Speaker.figure_surface)[t$fref]
-  agg.passive <- t[,.N,.(corpus,drama,fref,begin.Scene)]
+  agg.passive <- na.omit(t[,.N,.(corpus,drama,fref,begin.Scene)])
   
   cfg <- stats::reshape(agg.passive, 
                         direction="wide", 
