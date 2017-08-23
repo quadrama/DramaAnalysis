@@ -23,6 +23,15 @@ configuration <- function(mtext, by=c("Act", "Scene"), onlyPresence=FALSE) {
 
 #' @importFrom stats reshape
 configuration.act <- function(mtext) {
+  # prevent notes in R CMD check
+  . <- NULL
+  .N <- NULL
+  corpus <- NULL
+  drama <- NULL
+  Speaker.figure_surface <- NULL
+  Number.Act <- NULL
+  
+  
   t <- mtext
   words.per.segment <- t[,.N,.(corpus,drama,Speaker.figure_surface, Number.Act)]
   cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("corpus","drama","Speaker.figure_surface"), timevar = "Number.Act")
@@ -33,6 +42,15 @@ configuration.act <- function(mtext) {
 
 #' @importFrom stats reshape
 configuration.scene <- function(text) {
+  # prevent notes in R CMD check
+  . <- NULL
+  .N <- NULL
+  corpus <- NULL
+  drama <- NULL
+  Speaker.figure_surface <- NULL
+  begin.Scene <- NULL
+  
+  
   t <- text
   words.per.segment <- t[,.N,.(corpus,drama,Speaker.figure_surface, begin.Scene)]
   cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("corpus","drama","Speaker.figure_surface"), timevar = "begin.Scene")
