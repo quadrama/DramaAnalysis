@@ -24,14 +24,14 @@ bibliography: bibliography.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(DramaAnalysis)
+source("../R/presence.R")
+DramaAnalysis::setup()
 ```
 
 ## Loading texts
 
 ```{r}
-require(DramaAnalysis)
-setup()
-source("../R/presence.R")
 ids <- c("tg:rksp.0", "tg:rjh9.0", "tg:sttf.0")
 texts <- loadSegmentedText(ids)
 ```
