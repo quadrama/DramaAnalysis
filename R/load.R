@@ -161,7 +161,12 @@ loadAnnotations <- function(ids,
 #' @param type The annotation type to load
 #' @export
 loadMeta <- function(ids,type=atypes$Author) {
-  loadAnnotations(ids,type,coveredType = NULL)
+  dl <- dlobject()
+  s <- dl$getDramaMetaData(rJava::.jarray(ids))
+  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
+                                               col_types = NULL))
+  colnames(df) <- make.names(colnames(df))
+  df
 }
 
 #' Function to count the annotations of a certain type in selected texts.
