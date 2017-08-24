@@ -32,7 +32,7 @@ presenceCore <- function(activeM,passiveM,N) {
 presence <- function(mtext) {
   conf.active <- configuration(mtext,by="Scene",onlyPresence = TRUE)
   conf.passive <- passiveConfiguration(mtext)
-  rownames(conf.active$matrix) <- conf.active$figure$Speaker.figure_surface
+  rownames(conf.active$matrix) <- conf.active$figure
   rownames(conf.passive$matrix) <- conf.passive$figure$figure
   agg.scenes <- mtext[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)]
   r <- data.table::data.table(conf.passive$meta)
