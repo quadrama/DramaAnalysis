@@ -37,8 +37,8 @@ keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method="loglikelihoo
     l[pvalues<siglevel]
   } else if (method=="logratio") {
     
-    f1[f1>=minimalFrequency] <- 0
-    f2[f2>=minimalFrequency] <- 0
+    f1[f1<=minimalFrequency] <- 0
+    f2[f2<=minimalFrequency] <- 0
     
     rf1 <- f1 / total1
     rf2 <- f2 / total2
