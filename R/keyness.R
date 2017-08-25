@@ -8,6 +8,12 @@
 #' @param siglevel Return only the keywords above the significance level. Set to 1 to get all words
 #' @return A list of keywords, sorted by their log-likelihood value, calculated according to http://ucrel.lancs.ac.uk/llwizard.html
 #' @export
+#' @examples 
+#' data("rksp.0")
+#' ft <- frequencytable(rksp.0$mtext,byFigure = TRUE,names=TRUE,normalize = FALSE)
+#' keywords <- keyness(ft, method="logratio", row=7, minimalFrequency = 5)
+#' keywords <- keywords[names(keywords) %in% names(keyness(ft, row=1,siglevel=0.01))]
+#' 
 keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method="loglikelihood",minimalFrequency=10) {
   f1 <- colSums(matrix(ft[row,],nrow=length(row),dimnames=list(NULL,colnames(ft))))
   f2 <- colSums(matrix(ft[-1*row,],nrow=nrow(ft)-length(row),dimnames=list(NULL,colnames(ft))))
