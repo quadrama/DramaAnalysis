@@ -1,7 +1,7 @@
-#' @title Log-Likelihood
+#' @title Keywords
 #' @description  Given a frequency table (with texts as rows and words as columns),
-#' this function calculates the log-likelihood of one row against all other rows. 
-#' The return value is a matrix containing log-likelihood scores for each word
+#' this function calculates log-likelihood and log ratio of one set of rows against the other rows. 
+#' The return value is a list containing scores for each word
 #' @param ft The frequency table
 #' @param row The row number we want to compare to the others
 #' @param epsilon null values are replaced by this value, in order to avoid division by zero
