@@ -3,15 +3,20 @@
 #' this function calculates log-likelihood and log ratio of one set of rows against the other rows. 
 #' The return value is a list containing scores for each word
 #' @param ft The frequency table
-#' @param row The row number we want to compare to the others
+#' @param row The row number we want to compare to the others, can be a vector of row numbers
 #' @param epsilon null values are replaced by this value, in order to avoid division by zero
 #' @param siglevel Return only the keywords above the significance level. Set to 1 to get all words
+#' @param method Either "logratio" or "loglikelihood" (default)
+#' @param minimalFrequency Words less frequent than this value are not considered at all
 #' @return A list of keywords, sorted by their log-likelihood value, calculated according to http://ucrel.lancs.ac.uk/llwizard.html
 #' @export
+#' @importFrom stats pchisq chisq.test
 #' @examples 
 #' data("rksp.0")
 #' ft <- frequencytable(rksp.0$mtext,byFigure = TRUE,names=TRUE,normalize = FALSE)
+#' # Calculate log ratio for all words
 #' keywords <- keyness(ft, method="logratio", row=7, minimalFrequency = 5)
+#' # Remove words that are not significantly different
 #' keywords <- keywords[names(keywords) %in% names(keyness(ft, row=1,siglevel=0.01))]
 #' 
 keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method="loglikelihood",minimalFrequency=10) {
@@ -38,7 +43,7 @@ keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method="loglikelihoo
 
   
     l <- sort(l,decreasing = TRUE)
-    pvalues <- 1-pchisq(l, df=1)
+    pvalues <- 1-stats::pchisq(l, df=1)
   
     l[pvalues<siglevel]
   } else if (method=="logratio") {
@@ -54,7 +59,6 @@ keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method="loglikelihoo
     r[is.finite(r)]
   }
 }
-
 
 # R function for calculating LL, by Andrew Hardie, Lancaster University.
 # (with apologies for the inevitable R-n00b blunders)

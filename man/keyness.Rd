@@ -2,7 +2,7 @@
 % Please edit documentation in R/keyness.R
 \name{keyness}
 \alias{keyness}
-\title{Log-Likelihood}
+\title{Keywords}
 \usage{
 keyness(ft, row = 1, epsilon = 1e-100, siglevel = 0.05,
   method = "loglikelihood", minimalFrequency = 10)
@@ -10,17 +10,30 @@ keyness(ft, row = 1, epsilon = 1e-100, siglevel = 0.05,
 \arguments{
 \item{ft}{The frequency table}
 
-\item{row}{The row number we want to compare to the others}
+\item{row}{The row number we want to compare to the others, can be a vector of row numbers}
 
 \item{epsilon}{null values are replaced by this value, in order to avoid division by zero}
 
 \item{siglevel}{Return only the keywords above the significance level. Set to 1 to get all words}
+
+\item{method}{Either "logratio" or "loglikelihood" (default)}
+
+\item{minimalFrequency}{Words less frequent than this value are not considered at all}
 }
 \value{
 A list of keywords, sorted by their log-likelihood value, calculated according to http://ucrel.lancs.ac.uk/llwizard.html
 }
 \description{
 Given a frequency table (with texts as rows and words as columns),
-this function calculates the log-likelihood of one row against all other rows. 
-The return value is a matrix containing log-likelihood scores for each word
+this function calculates log-likelihood and log ratio of one set of rows against the other rows. 
+The return value is a list containing scores for each word
+}
+\examples{
+data("rksp.0")
+ft <- frequencytable(rksp.0$mtext,byFigure = TRUE,names=TRUE,normalize = FALSE)
+# Calculate log ratio for all words
+keywords <- keyness(ft, method="logratio", row=7, minimalFrequency = 5)
+# Remove words that are not significantly different
+keywords <- keywords[names(keywords) \%in\% names(keyness(ft, row=1,siglevel=0.01))]
+
 }
