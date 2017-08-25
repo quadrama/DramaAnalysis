@@ -5,7 +5,7 @@
 \title{Keywords}
 \usage{
 keyness(ft, row = 1, epsilon = 1e-100, siglevel = 0.05,
-  method = "loglikelihood", minimalFrequency = 10)
+  method = c("loglikelihood", "logratio"), minimalFrequency = 10)
 }
 \arguments{
 \item{ft}{The frequency table}

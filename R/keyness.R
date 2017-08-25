@@ -19,45 +19,53 @@
 #' # Remove words that are not significantly different
 #' keywords <- keywords[names(keywords) %in% names(keyness(ft, row=1,siglevel=0.01))]
 #' 
-keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method="loglikelihood",minimalFrequency=10) {
+keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method=c("loglikelihood","logratio"),minimalFrequency=10) {
   f1 <- colSums(matrix(ft[row,],nrow=length(row),dimnames=list(NULL,colnames(ft))))
   f2 <- colSums(matrix(ft[-1*row,],nrow=nrow(ft)-length(row),dimnames=list(NULL,colnames(ft))))
 
+  type <- match.arg(method)
+  switch(type,
+         loglikelihood=keyness.ll(f1, f2, minimalFrequency, epsilon, siglevel),
+         logratio=keyness.logratio(f1,f2,minimalFrequency))
+  
+}
+
+keyness.ll <- function(f1, f2, minimalFrequency, epsilon,siglevel) {
+  
   total1 <- sum(f1)
   total2 <- sum(f2)
   
-  if (method=="loglikelihood") {
-    f1[f1==0] <- epsilon
-    f2[f2==0] <- epsilon
-    other1 <- sum(f1) - f1
-    other2 <- sum(f2) - f2
-    #print(paste("total1",total1))
-    #print(paste("total2",total2))
+  f1[f1==0] <- epsilon
+  f2[f2==0] <- epsilon
+  other1 <- total1 - f1
+  other2 <- total2 - f2
+  #print(paste("total1",total1))
+  #print(paste("total2",total2))
   
-    rf <- (f1 + f2) / ( total1 + total2 )
-    
-    e1 <- total1 * rf
-    e2 <- total2 * rf
+  rf <- (f1 + f2) / ( total1 + total2 )
+  
+  e1 <- total1 * rf
+  e2 <- total2 * rf
+  
+  l <- 2 * ( ( f1 * log(f1/e1)  ) + (f2 * log(f2/e2)  ))
+  
+  
+  l <- sort(l,decreasing = TRUE)
+  pvalues <- 1-stats::pchisq(l, df=1)
+  
+  l[pvalues<siglevel]
+}
 
-    l <- 2 * ( ( f1 * log(f1/e1)  ) + (f2 * log(f2/e2)  ))
-
+keyness.logratio <- function(f1, f2, minimalFrequency) {
+  f1[f1<=minimalFrequency] <- 0
+  f2[f2<=minimalFrequency] <- 0
   
-    l <- sort(l,decreasing = TRUE)
-    pvalues <- 1-stats::pchisq(l, df=1)
+  rf1 <- f1 / sum(f1)
+  rf2 <- f2 / sum(f2)
   
-    l[pvalues<siglevel]
-  } else if (method=="logratio") {
-    
-    f1[f1<=minimalFrequency] <- 0
-    f2[f2<=minimalFrequency] <- 0
-    
-    rf1 <- f1 / total1
-    rf2 <- f2 / total2
-    
-    r <- sort(log2(rf1/rf2),decreasing = TRUE)
-    
-    r[is.finite(r)]
-  }
+  r <- sort(log2(rf1/rf2),decreasing = TRUE)
+  
+  r[is.finite(r)]
 }
 
 # R function for calculating LL, by Andrew Hardie, Lancaster University.
