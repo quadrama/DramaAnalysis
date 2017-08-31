@@ -29,7 +29,7 @@ presenceCore <- function(activeM,passiveM,N) {
 }
 
 
-presence <- function(mtext) {
+presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   conf.active <- configuration(mtext,by="Scene",onlyPresence = TRUE)
   conf.passive <- passiveConfiguration(mtext)
   rownames(conf.active$matrix) <- conf.active$figure
@@ -38,12 +38,24 @@ presence <- function(mtext) {
   r <- data.table::data.table(conf.passive$meta)
   r <- merge(r, agg.scenes,by.x=c("corpus","drama"),by.y=c("corpus","drama"))
   
+
   # active
   actives <- rowSums(conf.active$matrix)
   r <- merge(r, data.frame(figure=names(actives), active=actives), by=c("figure"))
   
   # passive
   passives <- rowSums(conf.passive$matrix)
+  
+  if (passiveOnlyWhenNotActive) {
+    actives.which <- apply(conf.active$matrix, 1, which)
+    passives.which <- apply(conf.passive$matrix, 1, which)
+    
+    overlaps <- mapply(function(x,y) { intersect(x,y) }, actives.which, passives.which )
+    overlaps.cnt <- as.vector(Reduce(rbind,lapply(overlaps, length)))
+    names(overlaps.cnt) <- names(overlaps)
+    passives <- passives - overlaps.cnt
+  }
+  
   r <- merge( r, data.frame(figure=names(passives), passive=passives), by="figure")
   
   r$presence <- ( (r$active - r$passive) / r$scenes )
