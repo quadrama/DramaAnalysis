@@ -36,6 +36,7 @@ configuration.act <- function(mtext) {
   words.per.segment <- t[,.N,.(corpus,drama,Speaker.figure_surface, Number.Act)]
   cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("corpus","drama","Speaker.figure_surface"), timevar = "Number.Act")
   cfg[is.na(cfg)] <- 0
+  cfg <- cfg[order(as.character(cfg$Speaker.figure_surface)),]
   colnames(cfg)[4:(ncol(cfg))] <- seq(1,ncol(cfg)-3)
   list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=as.character(cfg[[3]]))
 }
@@ -55,6 +56,7 @@ configuration.scene <- function(text) {
   words.per.segment <- t[,.N,.(corpus,drama,Speaker.figure_surface, begin.Scene)]
   cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("corpus","drama","Speaker.figure_surface"), timevar = "begin.Scene")
   cfg[is.na(cfg)] <- 0
+  cfg <- cfg[order(as.character(cfg$Speaker.figure_surface)),]
   colnames(cfg)[4:ncol(cfg)] <- seq(1,(ncol(cfg)-3))
   list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=as.character(cfg[[3]]))
 }
