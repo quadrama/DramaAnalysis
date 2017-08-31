@@ -17,7 +17,7 @@ passiveConfiguration <- function(mtext,
   colnames(cfg)[3:ncol(cfg)] <- c("figure",1:(ncol(cfg)-3))
   cfg$figure <- levels(t$Speaker.figure_surface)[cfg$figure]
   cfg <- cfg[order(cfg$figure),]
-  m <- list(matrix=as.matrix(cfg[,4:ncol(cfg)]),figure=cfg[,3],meta=cfg[,1:3])
+  m <- list(matrix=as.matrix(cfg[,4:ncol(cfg)]),figure=cfg[[3]],meta=cfg[,1:3])
   
   if (onlyPresence == TRUE)
     m$matrix <- m$matrix > 0
@@ -33,7 +33,7 @@ presence <- function(mtext) {
   conf.active <- configuration(mtext,by="Scene",onlyPresence = TRUE)
   conf.passive <- passiveConfiguration(mtext)
   rownames(conf.active$matrix) <- conf.active$figure
-  rownames(conf.passive$matrix) <- conf.passive$figure$figure
+  rownames(conf.passive$matrix) <- conf.passive$figure
   agg.scenes <- mtext[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)]
   r <- data.table::data.table(conf.passive$meta)
   r <- merge(r, agg.scenes,by.x=c("corpus","drama"),by.y=c("corpus","drama"))
