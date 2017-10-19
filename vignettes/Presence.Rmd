@@ -26,7 +26,6 @@ bibliography: bibliography.bib
 knitr::opts_chunk$set(echo = TRUE)
 require(DramaAnalysis)
 v <- packageVersion("DramaAnalysis")
-setup()
 ```
 
 ## Loading texts
