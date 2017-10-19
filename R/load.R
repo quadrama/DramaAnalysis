@@ -1,9 +1,14 @@
 
 #' This function initialises the import from XMI files.
-#' @param dataDirectory A path to the directory in which data and metadata are located. "~/QuaDramA/Data" by default
+#' @param dataDirectory A path to the directory in which data and metadata are located. 
+#' "~/QuaDramA/Data" by default.
+#' @param collectionDirectory A path to the directory in which collections are stored. 
+#' By default, the directory is called "collection" below the data directory.
 #' @export
-setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data")) {
+setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data"), 
+                  collectionDirectory = file.path(dataDirectory,"collections")) {
   options(qd.datadir=dataDirectory)
+  options(qd.collectionDirectory=collectionDirectory)
   options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
@@ -15,11 +20,11 @@ dlobject <- function() {
 }
 
 loadSetsInternally <- function() {
-  setNames <- list.files(file.path( getOption("qd.datadir"), "collections"))
+  setNames <- list.files(getOption("qd.collectionDirectory"))
   sets <- lapply(setNames, 
                  function(x) { 
                    readLines(
-                     file.path(getOption("qd.datadir"), "collections", x),
+                     file.path(getOption("qd.collectionDirectory"), x),
                      encoding = "UTF-8"
                    ) 
                  })
