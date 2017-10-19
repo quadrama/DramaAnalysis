@@ -130,3 +130,46 @@ report <- function(id="tg:rksp.0", of=paste0("../", unlist(strsplit(id,":",fixed
                     output_format = "html_document", 
                     output_file = of)
 }
+
+#' @title Extract section
+#' @param input Segmented text (can be multiple texts)
+#' @param op Whether to extract exactly one or more than one
+#' @param by Act or Scene, or matching substring
+#' @export
+#' @examples 
+#' data(rksp.0)
+#' # Extract the second last scene
+#' tail(rksp.0$mtext, by="Scene", op="==", n=2)
+tail <- function(input, by=c("Act","Scene"), op="==", n=1) {
+  oper <- match.fun(FUN=op)
+  by <- match.arg(by)
+  switch(by,
+         Act=input[,.SD[oper(begin.Act,last(unique(begin.Act), n))],.(corpus,drama)][],
+         Scene=input[,.SD[oper(begin.Scene,last(unique(begin.Scene), n))],.(corpus,drama)][])
+}
+
+#' @title Extract section
+#' @export
+#' @param input Segmented text (can be multiple texts)
+#' @param op Whether to extract exactly one or more than one
+#' @param by Act or Scene, or matching substring
+#' @examples 
+#' data(rksp.0)
+#' # Extract everything before the 4th scene
+#' head(rksp.0$mtext, by="Scene", op="<", n=4)
+head <- function(input, by=c("Act", "Scene"), op="==", n=1) {
+  oper <- match.fun(FUN=op)
+  by <- match.arg(by)
+  switch(by,
+         Act=input[,.SD[oper(begin.Act,first(unique(begin.Act), n))],.(corpus,drama)][],
+         Scene=input[,.SD[oper(begin.Scene,first(unique(begin.Scene), n))],.(corpus,drama)][])
+}
+
+first <- function(x,n=0) {
+  sort(x)[n]
+}
+
+last <- function(x, n=0) {
+  len <- length(x)
+  sort(x,partial=len-(n-1))[len-(n-1)]
+}
