@@ -140,7 +140,7 @@ report <- function(id="tg:rksp.0", of=paste0("../", unlist(strsplit(id,":",fixed
 #' data(rksp.0)
 #' # Extract the second last scene
 #' tail(rksp.0$mtext, by="Scene", op="==", n=2)
-tail <- function(input, by=c("Act","Scene"), op="==", n=1) {
+dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
   oper <- match.fun(FUN=op)
   by <- match.arg(by)
   switch(by,
@@ -157,7 +157,7 @@ tail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 #' data(rksp.0)
 #' # Extract everything before the 4th scene
 #' head(rksp.0$mtext, by="Scene", op="<", n=4)
-head <- function(input, by=c("Act", "Scene"), op="==", n=1) {
+dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
   oper <- match.fun(FUN=op)
   by <- match.arg(by)
   switch(by,
