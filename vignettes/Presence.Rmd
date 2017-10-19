@@ -1,0 +1,58 @@
+---
+title: "Presence"
+author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document: default
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 5
+  md_document:
+    variant: markdown_github
+    toc: true
+    includes:
+      before_body:
+      - version.md
+
+
+vignette: >
+  %\VignetteIndexEntry{Measuring speech topics using word fields}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(DramaAnalysis)
+v <- packageVersion("DramaAnalysis")
+setup()
+```
+
+## Loading texts
+
+```{r}
+ids <- c("tg:rksp.0", "tg:rjh9.0", "tg:sttf.0")
+texts <- loadSegmentedText(ids)
+```
+
+## Calculating presences
+```{r}
+pres <- list()
+pres[[1]] <- presence(texts[drama=="rksp.0",])
+pres[[2]] <- presence(texts[drama=="rjh9.0",])
+pres[[3]] <- presence(texts[drama=="sttf.0",])
+
+```
+
+## Plotting
+
+```{r}
+par(xpd=TRUE)
+for (p in pres) {
+  plot(p$active/p$scenes, p$passive/p$scenes, frame.plot = FALSE, xlim=c(0,1), ylim=c(0,1), xlab="Active", ylab="Passive")
+  text(p$active/p$scenes, p$passive/p$scenes, labels=substr(p$figure,0,20), pos=3)
+  
+}
+
+```
