@@ -14,28 +14,38 @@ dlobject <- function() {
   getOption("qd.dl")
 }
 
-#' Function to load a set from QuaDramA web service.
+loadSetsInternally <- function() {
+  setNames <- list.files(file.path( getOption("qd.datadir"), "collections"))
+  sets <- lapply(setNames, 
+                 function(x) { 
+                   readLines(
+                     file.path(getOption("qd.datadir"), "collections", x),
+                     encoding = "UTF-8"
+                   ) 
+                 })
+  names(sets) <- setNames
+  sets
+}
+
+#' Function to load a set from collection files
 #' Can optionally set the set name as a genre in the returned table
 #' @param setName The name of the set to retrieve
 #' @param addGenreColumn Whether to set the Genre-column in the returned table to the set name
 #' @export
 loadSet <- function(setName, addGenreColumn=FALSE) {
-  dl <- dlobject()
-  ds <- data.frame(id=dl$getCollectionEntries(setName))
+  sets <- loadSetsInternally()
   if (addGenreColumn == TRUE) {
-    ds$Genre <- setName
+    data.frame(id=sets[[setName]],Genre=setName)
+  } else {
+    data.frame(id=sets[[setName]])
   }
-  ds
 }
 
 #' A function to get a list of all collections and the number of plays in that collection
 #' @export
-#' @importFrom rJava .jevalArray .jsimplify
 loadSets <- function() {
-  dl <- dlobject()
-  s <- dl$getListOfSets()
-  l <- unlist(lapply(rJava::.jevalArray(s[[2]]),FUN=function(x) {rJava::.jsimplify(x)}))
-  data.frame(id=rJava::.jevalArray(s[[1]]),size=l)
+  sets <- loadSetsInternally()
+  data.frame(size=unlist(lapply(sets,length)))
 }
 
 scene.act.table <- function(ids, defaultCollection="tg") {
