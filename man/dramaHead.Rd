@@ -16,5 +16,5 @@ dramaHead(input, by = c("Act", "Scene"), op = "==", n = 1)
 \examples{
 data(rksp.0)
 # Extract everything before the 4th scene
-head(rksp.0$mtext, by="Scene", op="<", n=4)
+dramaHead(rksp.0$mtext, by="Scene", op="<", n=4)
 }

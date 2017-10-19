@@ -16,5 +16,5 @@ dramaTail(input, by = c("Act", "Scene"), op = "==", n = 1)
 \examples{
 data(rksp.0)
 # Extract the second last scene
-tail(rksp.0$mtext, by="Scene", op="==", n=2)
+dramaTail(rksp.0$mtext, by="Scene", op="==", n=2)
 }
