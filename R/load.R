@@ -145,9 +145,9 @@ loadAnnotations <- function(ids,
                             columnTypes=NULL) {
   dl <- dlobject()
   if (is.null(coveredType)) {
-    s <- dl$getAnnotations(rJava::.jarray(ids),type,rJava::.jnull())
+    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,rJava::.jnull())
   } else {
-    s <- dl$getAnnotations(rJava::.jarray(ids),type,coveredType)
+    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,coveredType)
   }
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
                                                   col_types = columnTypes))
@@ -162,7 +162,7 @@ loadAnnotations <- function(ids,
 #' @export
 loadMeta <- function(ids,type=atypes$Author) {
   dl <- dlobject()
-  s <- dl$getDramaMetaData(rJava::.jarray(ids))
+  s <- dl$getDramaMetaData(rJava::.jarray(as.character(ids)))
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
                                                col_types = NULL))
   colnames(df) <- make.names(colnames(df))
