@@ -109,13 +109,13 @@ loadText <- function(ids, includeTokens=FALSE) {
   corpus <- NULL
   drama <- NULL
   if (includeTokens == TRUE) {
-    r <- loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(ids, 
                      type=atypes$Utterance, 
                      coveredType=atypes$Token,
                      columnTypes = "cciiccccc")
     
   } else
-    r <- loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(ids, 
                          type=atypes$Utterance, 
                          coveredType=NULL,
                          columnTypes = "cciicci")
