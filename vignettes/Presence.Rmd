@@ -24,9 +24,9 @@ bibliography: bibliography.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(DramaAnalysis)
-source("../R/presence.R")
-DramaAnalysis::setup()
+require(DramaAnalysis)
+v <- packageVersion("DramaAnalysis")
+setup()
 ```
 
 ## Loading texts
