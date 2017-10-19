@@ -32,16 +32,16 @@ setup()
 ## Loading texts
 
 ```{r}
-ids <- c("tg:rksp.0", "tg:rjh9.0", "tg:sttf.0")
-texts <- loadSegmentedText(ids)
+data("rksp.0")
+data("vndf.0")
+texts <- rbind(rksp.0$mtext, vndf.0$mtext)
 ```
 
 ## Calculating presences
 ```{r}
 pres <- list()
 pres[[1]] <- presence(texts[drama=="rksp.0",])
-pres[[2]] <- presence(texts[drama=="rjh9.0",])
-pres[[3]] <- presence(texts[drama=="sttf.0",])
+#pres[[2]] <- presence(texts[drama=="vndf.0",])
 
 ```
 
