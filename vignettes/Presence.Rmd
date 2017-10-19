@@ -3,7 +3,6 @@ title: "Presence"
 author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
 date: "`r Sys.Date()`"
 output: 
-  pdf_document: default
   rmarkdown::html_vignette:
     fig_width: 6
     fig_height: 5
@@ -13,10 +12,11 @@ output:
     includes:
       before_body:
       - version.md
+      - vig-Figure-Statistics.md
 
 
 vignette: >
-  %\VignetteIndexEntry{Measuring speech topics using word fields}
+  %\VignetteIndexEntry{Measuring character presence}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: bibliography.bib
