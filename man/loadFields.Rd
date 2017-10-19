@@ -5,12 +5,15 @@
 \title{Load dictionary from github}
 \usage{
 loadFields(fieldnames = c(),
-  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/")
+  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
+  fileSuffix = ".txt")
 }
 \arguments{
 \item{fieldnames}{A list of names for the dictionaries. It is expected that files with that name can be found below the URL.}
 
 \item{baseurl}{The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().}
+
+\item{fileSuffix}{The suffix for the dictionary files}
 }
 \description{
 This function loads the word fields that are available on the web.
