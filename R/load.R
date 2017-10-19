@@ -263,7 +263,7 @@ loadAllInstalledIds <- function() {
 #' @export
 installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims", removeZipFile = TRUE) {
   dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
-  sourceFilename <- switch(dataSource,tg="tg.zip")
+  sourceFilename <- switch(dataSource,tg="tg.zip",gdc="gdc.zip")
 
   
   if (downloadSource == "ims") {
