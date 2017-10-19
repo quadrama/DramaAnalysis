@@ -38,7 +38,7 @@ loadSets <- function() {
   data.frame(id=rJava::.jevalArray(s[[1]]),size=l)
 }
 
-scene.act.table <- function(ids) {
+scene.act.table <- function(ids, defaultCollection="tg") {
   
   # prevent notes in R CMD check
   Number <- NULL
@@ -48,12 +48,12 @@ scene.act.table <- function(ids) {
   
   `:=` <- NULL
   
-  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL)
+  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL, defaultCollection = defaultCollection)
   
   acts[, Number.Act := as.integer(as.numeric(as.factor(begin))), drama]
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
+  scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL, defaultCollection = defaultCollection)
   merged <- merge(acts, scenes, by=c("drama","corpus"), 
                   suffixes=c(".Act", ".Scene"), 
                   allow.cartesian = TRUE)
@@ -68,14 +68,15 @@ scene.act.table <- function(ids) {
 #' Similar to load.text(), but the table also includes scene and act markings.
 #' @param ids The ids for which we want to get the text
 #' @importFrom data.table setkey foverlaps data.table
+#' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 #' @examples 
 #' \dontrun{
 #' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
-loadSegmentedText <- function(ids) {
-  t <- data.table::data.table(loadText(ids, includeTokens=TRUE))
-  sat <- data.table::data.table(scene.act.table(ids=ids))
+loadSegmentedText <- function(ids,defaultCollection="tg") {
+  t <- data.table::data.table(loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection))
+  sat <- data.table::data.table(scene.act.table(ids=ids, defaultCollection=defaultCollection))
   data.table::setkey(t, "corpus", "drama", "begin", "end")
   data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
   mtext <- data.table::foverlaps(t, sat, type="any",
@@ -102,22 +103,25 @@ load.text2 <- function(...) {
 #'
 #' @param ids A vector containing drama ids to be downloaded
 #' @param includeTokens If set to true, the table also contains each token in an utterance
+#' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
-loadText <- function(ids, includeTokens=FALSE) {
+loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg") {
   `:=` <- NULL
   .N <- NULL
   corpus <- NULL
   drama <- NULL
   if (includeTokens == TRUE) {
-    r <- loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(ids, 
                      type=atypes$Utterance, 
                      coveredType=atypes$Token,
+                     defaultCollection=defaultCollection,
                      columnTypes = "cciiccccc")
     
   } else
-    r <- loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(ids, 
                          type=atypes$Utterance, 
                          coveredType=NULL,
+                         defaultCollection=defaultCollection,
                          columnTypes = "cciicci")
   r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
   r[, length:=.N, by=list(corpus,drama) ][]
@@ -131,6 +135,7 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load
 #' @param columnTypes Can be used to specify column types, which are passed to readr::read.csv.
+#' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 #' @importFrom data.table fread
 #' @importFrom rJava .jnew .jarray .jnull
@@ -142,12 +147,16 @@ loadText <- function(ids, includeTokens=FALSE) {
 loadAnnotations <- function(ids, 
                             type=atypes$Utterance, 
                             coveredType=atypes$Token,
+                            defaultCollection="tg",
                             columnTypes=NULL) {
   dl <- dlobject()
+  
+  ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
+                function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
   if (is.null(coveredType)) {
-    s <- dl$getAnnotations(rJava::.jarray(ids),type,rJava::.jnull())
+    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,rJava::.jnull())
   } else {
-    s <- dl$getAnnotations(rJava::.jarray(ids),type,coveredType)
+    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,coveredType)
   }
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
                                                   col_types = columnTypes))
@@ -162,7 +171,7 @@ loadAnnotations <- function(ids,
 #' @export
 loadMeta <- function(ids,type=atypes$Author) {
   dl <- dlobject()
-  s <- dl$getDramaMetaData(rJava::.jarray(ids))
+  s <- dl$getDramaMetaData(rJava::.jarray(as.character(ids)))
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
                                                col_types = NULL))
   colnames(df) <- make.names(colnames(df))
