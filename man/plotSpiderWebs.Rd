@@ -4,16 +4,16 @@
 \alias{plotSpiderWebs}
 \title{Spider-Webs}
 \usage{
-plotSpiderWebs(dstat = NULL, mat = dstat[, -c(1, 2)], names = dstat[, 2],
-  symbols = c(17, 16, 15, 4, 8), maxValue = max(mat), minValue = min(mat),
-  cglcol = "black", legend = TRUE, legend.cex = 0.7,
-  legend.pos.x = "bottomright", legend.pos.y = NA,
+plotSpiderWebs(dstat = NULL, mat = dstat[, -c(1, 2, 3)], names = dstat[,
+  3], symbols = c(17, 16, 15, 4, 8), maxValue = max(mat),
+  minValue = min(mat), cglcol = "black", legend = TRUE,
+  legend.cex = 0.7, legend.pos.x = "bottomright", legend.pos.y = NA,
   legend.horizontal = FALSE, pcol = qd.colors, ...)
 }
 \arguments{
 \item{dstat}{A data frame containing data, e.g., output from dictionaryStatistics()}
 
-\item{mat}{A data frame that only contains data assignments. Defaults to all columns except for the first two from dstat.}
+\item{mat}{A data frame that only contains data assignments. Defaults to all columns except for the first three from dstat.}
 
 \item{names}{A list of names for the legend}
 
