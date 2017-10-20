@@ -12,6 +12,11 @@ dramaHead(input, by = c("Act", "Scene"), op = "==", n = 1)
 \item{by}{Act or Scene, or matching substring}
 
 \item{op}{Whether to extract exactly one or more than one}
+
+\item{n}{The number of segments to extract}
+}
+\description{
+Extracts a sub segment of the text(s)
 }
 \examples{
 data(rksp.0)

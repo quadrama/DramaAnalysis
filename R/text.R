@@ -133,9 +133,11 @@ report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(i
 }
 
 #' @title Extract section
+#' @description Extracts a sub segment of the text(s)
 #' @param input Segmented text (can be multiple texts)
 #' @param op Whether to extract exactly one or more than one
 #' @param by Act or Scene, or matching substring
+#' @param n The number of segments to extract
 #' @export
 #' @examples 
 #' data(rksp.0)
@@ -151,9 +153,11 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 
 #' @title Extract section
 #' @export
+#' @description Extracts a sub segment of the text(s)
 #' @param input Segmented text (can be multiple texts)
 #' @param op Whether to extract exactly one or more than one
 #' @param by Act or Scene, or matching substring
+#' @param n The number of segments to extract
 #' @examples 
 #' data(rksp.0)
 #' # Extract everything before the 4th scene
