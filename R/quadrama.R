@@ -13,6 +13,7 @@ atypes <- list(
   Figure="de.unistuttgart.ims.drama.api.Figure",
   FigureName="de.unistuttgart.ims.drama.api.FigureName",
   FigureDescription="de.unistuttgart.ims.drama.api.FigureDescription",
+  FigureMention="de.unistuttgart.ims.drama.api.FigureMention",
   Speaker="de.unistuttgart.ims.drama.api.Speaker",
   Speech="de.unistuttgart.ims.drama.api.Speech",
   # quadrama non-annotation types
