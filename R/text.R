@@ -126,7 +126,7 @@ extractTopTerms <- function(mat, top=10) {
 #' @importFrom rmarkdown render
 #' @export
 report <- function(id="tg:rksp.0", of=paste0("../", unlist(strsplit(id,":",fixed=TRUE))[2], ".html"), colors=qd.colors) {
-  rmarkdown::render("R/Report.Rmd", params=list(id=id, col=colors), 
+  rmarkdown::render(system.file("rmd/Report.Rmd", package="DramaAnalysis"), params=list(id=id, col=colors), 
                     output_format = "html_document", 
                     output_file = of)
 }
