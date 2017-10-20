@@ -3,6 +3,14 @@ passiveConfiguration <- function(mtext,
                                                          tolower(levels(t$Speaker.figure_surface)),
                                                          duplicates.ok = TRUE),
                                  onlyPresence=TRUE) {
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  fref <- NULL
+  begin.Scene <- NULL
+  .N <- NULL
+  . <- NULL
+  
   t <- mtext
   t$fref <- matchingFunction
   t$fref_n <- levels(t$Speaker.figure_surface)[t$fref]
@@ -42,6 +50,15 @@ presenceCore <- function(activeM,passiveM,N) {
 #' data(rksp.0)
 #' presence(rksp.0$mtext)
 presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
+  
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  fref <- NULL
+  begin.Scene <- NULL
+  .N <- NULL
+  . <- NULL
+  
   conf.active <- configuration(mtext,by="Scene",onlyPresence = TRUE)
   conf.passive <- passiveConfiguration(mtext)
   rownames(conf.active$matrix) <- conf.active$figure

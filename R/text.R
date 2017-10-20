@@ -144,6 +144,15 @@ report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(i
 #' # Extract the second last scene
 #' dramaTail(rksp.0$mtext, by="Scene", op="==", n=2)
 dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
+  
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
+  .SD <- NULL
+  . <- NULL
+  
   oper <- match.fun(FUN=op)
   by <- match.arg(by)
   switch(by,
@@ -163,6 +172,15 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 #' # Extract everything before the 4th scene
 #' dramaHead(rksp.0$mtext, by="Scene", op="<", n=4)
 dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
+  
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
+  .SD <- NULL
+  . <- NULL
+  
   oper <- match.fun(FUN=op)
   by <- match.arg(by)
   switch(by,
