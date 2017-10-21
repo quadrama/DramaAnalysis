@@ -317,12 +317,12 @@ saveInstalledDate <- function(dataDirectory, filename, date) {
   if (file.exists(versionsFilename)) {
     versions <- utils::read.csv(versionsFilename,stringsAsFactors = FALSE)
     if (length(versions[versions$file==filename,"date"])>0) {
-      versions[versions$file==filename,"date"] <- date
+      versions[versions$file==filename,"date"] <- format(date)
     } else {
-      versions[nrow(versions) + 1,] = c(filename,date)
+      versions[nrow(versions) + 1,] = c(filename,format(date))
     }
   } else {
-    versions <- data.frame(file=c(filename),date=c(date))
+    versions <- data.frame(file=c(filename),date=c(format(date)))
   }
   utils::write.csv(versions,file=versionsFilename,row.names=FALSE)
   
