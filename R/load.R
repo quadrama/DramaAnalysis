@@ -272,10 +272,10 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
     sourceUrl <- createZenodoUrl(803280, sourceFilename)
   }
   lm <- lastModifiedDate(sourceUrl)
-  message("Version on server: ", lm)
+  message("Version on server: ", format(lm))
   installedV <- getInstalledDate(dataDirectory,sourceFilename)
     
-  message("Locally installed version: ", as.character(installedV))
+  message("Locally installed version: ", format(installedV))
   
   
   if (is.na(installedV) | installedV < lm) {
