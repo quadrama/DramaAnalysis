@@ -299,7 +299,7 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
 getInstalledDate <- function(dataDirectory,filename) {
   versionsFilename <- file.path(dataDirectory,"versions.csv")
   if (file.exists(versionsFilename)) {
-    versions <- utils::read.csv(versionsFilename)
+    versions <- utils::read.csv(versionsFilename,as.is=1:2)
     v <- versions[versions$file == filename,2]
     if (length(v)>0) {
       as.Date(v)
