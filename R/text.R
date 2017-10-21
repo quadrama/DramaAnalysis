@@ -125,8 +125,74 @@ extractTopTerms <- function(mat, top=10) {
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
 #' @export
-report <- function(id="tg:rksp.0", of=paste0("../", unlist(strsplit(id,":",fixed=TRUE))[2], ".html"), colors=qd.colors) {
-  rmarkdown::render("R/Report.Rmd", params=list(id=id, col=colors), 
+report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], "html")), colors=qd.colors) {
+  force(of)
+  rmarkdown::render(system.file("rmd/Report.Rmd", package="DramaAnalysis"), params=list(id=id, col=colors), 
                     output_format = "html_document", 
                     output_file = of)
+}
+
+#' @title Extract section
+#' @description Extracts a sub segment of the text(s)
+#' @param input Segmented text (can be multiple texts)
+#' @param op Whether to extract exactly one or more than one
+#' @param by Act or Scene, or matching substring
+#' @param n The number of segments to extract
+#' @export
+#' @examples 
+#' data(rksp.0)
+#' # Extract the second last scene
+#' dramaTail(rksp.0$mtext, by="Scene", op="==", n=2)
+dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
+  
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
+  .SD <- NULL
+  . <- NULL
+  
+  oper <- match.fun(FUN=op)
+  by <- match.arg(by)
+  switch(by,
+         Act=input[,.SD[oper(begin.Act,last(unique(begin.Act), n))],.(corpus,drama)][],
+         Scene=input[,.SD[oper(begin.Scene,last(unique(begin.Scene), n))],.(corpus,drama)][])
+}
+
+#' @title Extract section
+#' @export
+#' @description Extracts a sub segment of the text(s)
+#' @param input Segmented text (can be multiple texts)
+#' @param op Whether to extract exactly one or more than one
+#' @param by Act or Scene, or matching substring
+#' @param n The number of segments to extract
+#' @examples 
+#' data(rksp.0)
+#' # Extract everything before the 4th scene
+#' dramaHead(rksp.0$mtext, by="Scene", op="<", n=4)
+dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
+  
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
+  .SD <- NULL
+  . <- NULL
+  
+  oper <- match.fun(FUN=op)
+  by <- match.arg(by)
+  switch(by,
+         Act=input[,.SD[oper(begin.Act,first(unique(begin.Act), n))],.(corpus,drama)][],
+         Scene=input[,.SD[oper(begin.Scene,first(unique(begin.Scene), n))],.(corpus,drama)][])
+}
+
+first <- function(x,n=0) {
+  sort(x)[n]
+}
+
+last <- function(x, n=0) {
+  len <- length(x)
+  sort(x,partial=len-(n-1))[len-(n-1)]
 }

@@ -5,7 +5,7 @@
 \title{Load annotations}
 \usage{
 loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token,
-  columnTypes = NULL)
+  defaultCollection = "tg", columnTypes = NULL)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
@@ -13,6 +13,8 @@ loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token,
 \item{type}{The annotation type to load}
 
 \item{coveredType}{The annotation type of covered annotations we want to load}
+
+\item{defaultCollection}{The collection prefix is added if no prefix is found}
 
 \item{columnTypes}{Can be used to specify column types, which are passed to readr::read.csv.}
 }

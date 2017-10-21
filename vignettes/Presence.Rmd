@@ -1,0 +1,57 @@
+---
+title: "Presence"
+author: "Nils Reiter, nils.reiter@ims.uni-stuttgart.de"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 6
+    fig_height: 5
+  md_document:
+    variant: markdown_github
+    toc: true
+    includes:
+      before_body:
+      - version.md
+      - vig-Figure-Statistics.md
+
+
+vignette: >
+  %\VignetteIndexEntry{Measuring character presence}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(DramaAnalysis)
+v <- packageVersion("DramaAnalysis")
+```
+
+## Loading texts
+
+```{r}
+data("rksp.0")
+data("vndf.0")
+texts <- rbind(rksp.0$mtext, vndf.0$mtext)
+```
+
+## Calculating presences
+```{r}
+pres <- list()
+pres[[1]] <- presence(texts[drama=="rksp.0",])
+#pres[[2]] <- presence(texts[drama=="vndf.0",])
+
+```
+
+## Plotting
+
+```{r}
+par(xpd=TRUE)
+for (p in pres) {
+  plot(p$active/p$scenes, p$passive/p$scenes, frame.plot = FALSE, xlim=c(0,1), ylim=c(0,1), xlab="Active", ylab="Passive")
+  text(p$active/p$scenes, p$passive/p$scenes, labels=substr(p$figure,0,20), pos=3)
+  
+}
+
+```

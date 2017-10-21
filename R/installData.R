@@ -31,7 +31,7 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
   
   # move new dir into place
   file.rename(from=file.path(repoDirectory,"collections"),
-              to=file.path(dataDirectory,"collections"))
+              to=getOption("qd.collectionDirectory"))
   
   # remove repo directory
   unlink(repoDirectory,recursive = TRUE)

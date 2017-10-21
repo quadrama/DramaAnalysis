@@ -5,12 +5,14 @@
 \title{Loads a CSV-formatted text from the server,
 assuming the main server url has been set correctly.}
 \usage{
-loadText(ids, includeTokens = FALSE)
+loadText(ids, includeTokens = FALSE, defaultCollection = "tg")
 }
 \arguments{
 \item{ids}{A vector containing drama ids to be downloaded}
 
 \item{includeTokens}{If set to true, the table also contains each token in an utterance}
+
+\item{defaultCollection}{The collection prefix is added if no prefix is found}
 }
 \description{
 Loads a CSV-formatted text from the server,
