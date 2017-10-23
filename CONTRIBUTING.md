@@ -1,6 +1,6 @@
 ## Git branching scheme
 
-We follow the scheme described (here)[http://nvie.com/posts/a-successful-git-branching-model/], which can be summarised like this:
+We follow the scheme described [here](http://nvie.com/posts/a-successful-git-branching-model/), which can be summarised like this:
 
 - `master`: only stable, released code
 - `develop`: latest updates, new features integrated here
