@@ -19,7 +19,7 @@ public class Devel {
 	public static void main(String[] args) throws ClassNotFoundException, UIMAException, SAXException, IOException {
 		DataLoader dl = new DataLoader("/Users/reiterns/Documents/QuaDramA/Data");
 
-		System.out.println(dl.getAnnotations(new String[] { "tg:rksp.0" }, Utterance.class.getCanonicalName(), null));
+		System.out.println(dl.getAnnotations(new String[] { "gdc:rksp.0" }, Utterance.class.getCanonicalName(), null));
 
 		Class<? extends TOP>[] classes = new Class[] { Act.class, Scene.class };
 		String[] ids = new String[] { "tg:sj6g.0", "tc:tc0623", "tg:rksp.0", "tg:vndf.0" };

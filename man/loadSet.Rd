@@ -2,7 +2,7 @@
 % Please edit documentation in R/load.R
 \name{loadSet}
 \alias{loadSet}
-\title{Function to load a set from QuaDramA web service.
+\title{Function to load a set from collection files
 Can optionally set the set name as a genre in the returned table}
 \usage{
 loadSet(setName, addGenreColumn = FALSE)
@@ -13,6 +13,6 @@ loadSet(setName, addGenreColumn = FALSE)
 \item{addGenreColumn}{Whether to set the Genre-column in the returned table to the set name}
 }
 \description{
-Function to load a set from QuaDramA web service.
+Function to load a set from collection files
 Can optionally set the set name as a genre in the returned table
 }

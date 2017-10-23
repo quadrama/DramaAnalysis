@@ -7,7 +7,7 @@
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
 			<artifactId>de.unistuttgart.ims.drama.api</artifactId>
-			<version>0.5.1</version>
+			<version>0.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
@@ -48,5 +48,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<version>1.0.3</version>
+	<version>1.1.0</version>
 </project>

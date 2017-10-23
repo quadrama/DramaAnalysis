@@ -6,3 +6,4 @@
 ^Makefile$
 ^java/\.classpath$
 ^data-raw$
+^CONTRIBUTING.md$
