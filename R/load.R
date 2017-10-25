@@ -143,7 +143,12 @@ loadAnnotations <- function(ids,
   df
 }
 
-loadCSV <- function(ids, variant=c("UtterancesWithTokens", "Segments")) {
+loadCSV <- function(ids, 
+                    variant=c("UtterancesWithTokens", "Segments"), 
+                    defaultCollection="tg") {
+  
+  ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
+                       function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
   cvar <- match.arg(variant)
   dl <- dlobject()
   
