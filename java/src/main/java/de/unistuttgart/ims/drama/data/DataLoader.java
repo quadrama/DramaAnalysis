@@ -221,10 +221,12 @@ public class DataLoader implements IRepository {
 
 		variant.header(p);
 		for (String s : dramaIds) {
-
 			JCas jcas = getJCas(s);
 			variant.convert(jcas, p);
 		}
+
+		p.flush();
+		p.close();
 
 		return new String(boas.toByteArray());
 	}
