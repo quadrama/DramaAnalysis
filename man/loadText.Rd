@@ -10,7 +10,7 @@ loadText(ids, includeTokens = FALSE, defaultCollection = "tg")
 \arguments{
 \item{ids}{A vector containing drama ids to be downloaded}
 
-\item{includeTokens}{If set to true, the table also contains each token in an utterance}
+\item{includeTokens}{This argument has no meaning anymore. Tokens are always included.}
 
 \item{defaultCollection}{The collection prefix is added if no prefix is found}
 }
