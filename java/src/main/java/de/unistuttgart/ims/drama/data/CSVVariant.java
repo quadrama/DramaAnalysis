@@ -25,7 +25,7 @@ public enum CSVVariant {
 	public void header(CSVPrinter p) throws IOException {
 		switch (this) {
 		case Segments:
-			p.printRecord("drama", "corpus", "begin.Act", "end.Act", "Number.Act", "begin.Scene", "end.Scene",
+			p.printRecord("corpus", "drama", "begin.Act", "end.Act", "Number.Act", "begin.Scene", "end.Scene",
 					"Number.Scene");
 			break;
 		default:
