@@ -12,21 +12,27 @@ import org.apache.uima.jcas.JCas;
 
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.unistuttgart.ims.drama.api.Act;
+import de.unistuttgart.ims.drama.api.Author;
 import de.unistuttgart.ims.drama.api.Drama;
 import de.unistuttgart.ims.drama.api.FigureMention;
 import de.unistuttgart.ims.drama.api.Scene;
 import de.unistuttgart.ims.drama.api.Speaker;
+import de.unistuttgart.ims.drama.api.Translator;
 import de.unistuttgart.ims.drama.api.Utterance;
 import de.unistuttgart.ims.drama.util.DramaUtil;
 
 public enum CSVVariant {
-	UtterancesWithTokens, Segments;
+	UtterancesWithTokens, Segments, Metadata;
 
 	public void header(CSVPrinter p) throws IOException {
 		switch (this) {
 		case Segments:
 			p.printRecord("corpus", "drama", "begin.Act", "end.Act", "Number.Act", "begin.Scene", "end.Scene",
 					"Number.Scene");
+			break;
+		case Metadata:
+			p.printRecord("corpus", "drama", "documentTitle", "language", "Name", "Pnd", "Translator.Name",
+					"Translator.Pnd", "Date.Written", "Date.Printed", "Date.Premiere", "Date.Translation");
 			break;
 		default:
 			p.printRecord("corpus", "drama", "begin", "end", "Speaker.figure_surface", "Speaker.figure_id",
@@ -37,6 +43,9 @@ public enum CSVVariant {
 
 	public void convert(JCas jcas, CSVPrinter p) throws IOException {
 		switch (this) {
+		case Metadata:
+			this.convertMeta(jcas, p);
+			break;
 		case Segments:
 			this.convertSegments(jcas, p);
 			break;
@@ -44,6 +53,24 @@ public enum CSVVariant {
 			this.convertUtterancesWithTokens(jcas, p);
 		}
 
+	}
+
+	private void convertMeta(JCas jcas, CSVPrinter p) throws IOException {
+		Drama drama = JCasUtil.selectSingle(jcas, Drama.class);
+		for (Author author : JCasUtil.select(jcas, Author.class)) {
+			if (JCasUtil.exists(jcas, Translator.class))
+				for (Translator transl : JCasUtil.select(jcas, Translator.class)) {
+					p.printRecord(drama.getCollectionId(), drama.getDocumentId(), drama.getDocumentTitle(),
+							drama.getLanguage(), author.getName(), author.getPnd(), transl.getName(), transl.getPnd(),
+							drama.getDateWritten(), drama.getDatePrinted(), drama.getDatePremiere(),
+							drama.getDateTranslation());
+				}
+			else {
+				p.printRecord(drama.getCollectionId(), drama.getDocumentId(), drama.getDocumentTitle(),
+						drama.getLanguage(), author.getName(), author.getPnd(), null, null, drama.getDateWritten(),
+						drama.getDatePrinted(), drama.getDatePremiere(), drama.getDateTranslation());
+			}
+		}
 	}
 
 	private void convertSegments(JCas jcas, CSVPrinter p) throws IOException {

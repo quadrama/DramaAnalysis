@@ -144,7 +144,7 @@ loadAnnotations <- function(ids,
 }
 
 loadCSV <- function(ids, 
-                    variant=c("UtterancesWithTokens", "Segments"), 
+                    variant=c("UtterancesWithTokens", "Segments", "Metadata"), 
                     defaultCollection="tg") {
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
@@ -161,15 +161,10 @@ loadCSV <- function(ids,
 #' @title Load meta data
 #' @description helper method to load meta data about dramatic texts (E.g., author, year)
 #' @param ids A vector or list of drama ids
-#' @param type The annotation type to load
+#' @param type The annotation type to load. No longer used.
 #' @export
 loadMeta <- function(ids,type=atypes$Author) {
-  dl <- dlobject()
-  s <- dl$getDramaMetaData(rJava::.jarray(as.character(ids)))
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
-                                               col_types = NULL))
-  colnames(df) <- make.names(colnames(df))
-  df
+  loadCSV(ids, variant="Metadata")
 }
 
 #' Function to count the annotations of a certain type in selected texts.
