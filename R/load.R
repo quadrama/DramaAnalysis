@@ -73,8 +73,8 @@ scene.act.table <- function(ids, defaultCollection="tg") {
 #' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
 loadSegmentedText <- function(ids,defaultCollection="tg") {
-  t <- data.table::data.table(loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection))
-  sat <- data.table::data.table(scene.act.table(ids=ids, defaultCollection=defaultCollection))
+  t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
+  sat <- scene.act.table(ids=ids, defaultCollection=defaultCollection)
   data.table::setkey(t, "corpus", "drama", "begin", "end")
   data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
   mtext <- data.table::foverlaps(t, sat, type="any",
