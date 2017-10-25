@@ -100,30 +100,11 @@ load.text2 <- function(...) {
 #'
 #'
 #' @param ids A vector containing drama ids to be downloaded
-#' @param includeTokens If set to true, the table also contains each token in an utterance
+#' @param includeTokens This argument has no meaning anymore. Tokens are always included.
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg") {
-  `:=` <- NULL
-  .N <- NULL
-  corpus <- NULL
-  drama <- NULL
-  if (includeTokens == TRUE) {
-    r <- loadAnnotations(ids, 
-                     type=atypes$Utterance, 
-                     coveredType=atypes$Token,
-                     defaultCollection=defaultCollection,
-                     columnTypes = "cciiccccc")
-    
-  } else
-    r <- loadAnnotations(ids, 
-                         type=atypes$Utterance, 
-                         coveredType=NULL,
-                         defaultCollection=defaultCollection,
-                         columnTypes = "cciicci")
-  r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
-  r[, length:=.N, by=list(corpus,drama) ][]
-  r
+  loadCSV(ids, defaultCollection = defaultCollection)
 }
 
 
