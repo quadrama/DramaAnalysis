@@ -54,29 +54,12 @@ loadSets <- function() {
 }
 
 scene.act.table <- function(ids, defaultCollection="tg") {
-  
-  # prevent notes in R CMD check
-  Number <- NULL
-  Number.Act <- NULL
-  begin <- NULL
-  drama <- NULL
-  
-  `:=` <- NULL
-  
-  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL, defaultCollection = defaultCollection)
-  
-  acts[, Number.Act := as.integer(as.numeric(as.factor(begin))), drama]
-  
-  #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL, defaultCollection = defaultCollection)
-  merged <- merge(acts, scenes, by=c("drama","corpus"), 
-                  suffixes=c(".Act", ".Scene"), 
-                  allow.cartesian = TRUE)
-  merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
-  #merged <- subset(merged, select=c(-5,-9))
+  merged <- loadCSV(ids, "Segments", defaultCollection = defaultCollection)
+  merged$Number.Act <- as.numeric(as.factor(data.table::frank(merged$begin.Act, ties.method = "min")))
   merged$Number.Scene <- stats::ave(merged$begin.Scene, 
                                     merged$drama, merged$Number.Act, 
                                     FUN=function(x) {as.numeric(as.factor(x))})
+  
   merged
 }
 
