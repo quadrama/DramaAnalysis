@@ -1,4 +1,4 @@
-#' This function generates a matrix of word frequencies by figure or drama.
+#' This function generates a matrix of word frequencies by drama, act or scene and/or by figure.
 #' @param t The text table, potentially covering multiple texts
 #' @param acceptedPOS A list of accepted pos tags
 #' @param names Whether to use figure names or ids
