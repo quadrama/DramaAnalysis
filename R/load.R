@@ -152,7 +152,7 @@ loadCSV <- function(ids,
   cvar <- match.arg(variant)
   dl <- dlobject()
   
-  jvar <- J("de.unistuttgart.ims.drama.data.CSVVariant")
+  jvar <- rJava::J("de.unistuttgart.ims.drama.data.CSVVariant")
   s <- dl$getCSV(rJava::.jarray(as.character(ids)),jvar$valueOf(cvar))
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
   df
