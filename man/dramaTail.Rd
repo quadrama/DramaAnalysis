@@ -16,7 +16,10 @@ dramaTail(input, by = c("Act", "Scene"), op = "==", n = 1)
 \item{n}{The number of segments to extract}
 }
 \description{
-Extracts a sub segment of the text(s)
+Extracts a sub segment of the text(s).
+The result is an empty table if more scenes or acts
+are given than exist in the play. In this case, a
+warning is printed.
 }
 \examples{
 data(rksp.0)
