@@ -1,5 +1,4 @@
 data(rksp.0)
-data(vndf.0)
 
 t <- dramaHead(rksp.0$mtext, n=1)
 expect_length(unique(t$begin.Act), 1)
