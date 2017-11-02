@@ -4,10 +4,12 @@
 \alias{loadSegmentedText}
 \title{Similar to load.text(), but the table also includes scene and act markings.}
 \usage{
-loadSegmentedText(ids)
+loadSegmentedText(ids, defaultCollection = "tg")
 }
 \arguments{
 \item{ids}{The ids for which we want to get the text}
+
+\item{defaultCollection}{The collection prefix is added if no prefix is found}
 }
 \description{
 Similar to load.text(), but the table also includes scene and act markings.

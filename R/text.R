@@ -91,7 +91,7 @@ tfidf1 <- function(word) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE)
+#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE,normalize=TRUE)
 #' rksp.0.tfidf <- tfidf(rksp.0.ftable)
 #' @examples
 #' mat <- matrix(c(0.10,0.2, 0,
@@ -116,54 +116,7 @@ extractTopTerms <- function(mat, top=10) {
   lapply(r, unlist)
 }
 
-#' Creates classic drama configuration matrix. Returns a list with 
-#' the three components matrix, drama, and figure
-#' @param mtext The text including Act and Scene markings
-#' @param by A string, either "Act" or "Scene"
-#' @param onlyPresence If TRUE, the resulting matrix only contains 
-#' logical values for stage presence
-#' @seealso DramaAnalysis::load.text2()
-#' @export
-#' @examples
-#' data(rksp.0)
-#' cfg <- configuration(rksp.0$mtext)
-#' 
-configuration <- function(mtext, by="Act", onlyPresence=FALSE) {
-  
-  if (by=="Scene") {
-    c <- configuration.scene(mtext)
-  } else {
-    c <- configuration.act(mtext)
-  }
-  if (onlyPresence)
-    c$matrix <- c$matrix>0
-  c
-}
 
-#' @importFrom stats reshape
-configuration.act <- function(mtext) {
-  t <- mtext
-  words.per.segment <- aggregate(Token.surface ~ drama + Speaker.figure_surface + Number.Act, 
-                                 data=t, length)
-  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("drama","Speaker.figure_surface"), timevar = "Number.Act")
-  cfg[is.na(cfg)] <- 0
-  colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
-  list(matrix=as.matrix(cfg[,3:ncol(cfg)]),drama=cfg[,1],figure=cfg[,2])
-}
-
-#' @importFrom stats reshape
-configuration.scene <- function(text) {
-  t <- text
-  bylist = list(t$drama, t$Speaker.figure_surface, paste0(t$Number.Act,"-", formatC(t$Number.Scene, width=2)))
-  words.per.segment <- aggregate(t$Token.surface, 
-                                 by=bylist, 
-                                 length)
-  cfg <- stats::reshape(words.per.segment, direction="wide", idvar = c("Group.1","Group.2"), timevar = "Group.3")
-  cfg[is.na(cfg)] <- 0
-  colnames(cfg) <- c("drama", "Speaker.figure_surface",seq(1,(ncol(cfg)-2)))
-  list(matrix=as.matrix(cfg[,3:ncol(cfg)]),drama=cfg[,1],figure=cfg[,2])
-  
-}
 
 #' @title Report
 #' @description generates a report for a specific dramatic text
@@ -172,8 +125,102 @@ configuration.scene <- function(text) {
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
 #' @export
-report <- function(id="tg:rksp.0", of=paste0("../", unlist(strsplit(id,":",fixed=TRUE))[2], ".html"), colors=qd.colors) {
-  rmarkdown::render("R/Report.Rmd", params=list(id=id, col=colors), 
+report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], "html")), colors=qd.colors) {
+  force(of)
+  rmarkdown::render(system.file("rmd/Report.Rmd", package="DramaAnalysis"), params=list(id=id, col=colors), 
                     output_format = "html_document", 
                     output_file = of)
+}
+
+#' @title Extract section
+#' @description Extracts a sub segment of the text(s).
+#' The result is an empty table if more scenes or acts
+#' are given than exist in the play. In this case, a
+#' warning is printed.
+#' @param input Segmented text (can be multiple texts)
+#' @param op Whether to extract exactly one or more than one
+#' @param by Act or Scene, or matching substring
+#' @param n The number of segments to extract
+#' @export
+#' @examples 
+#' data(rksp.0)
+#' # Extract the second last scene
+#' dramaTail(rksp.0$mtext, by="Scene", op="==", n=2)
+dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
+  
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
+  .SD <- NULL
+  . <- NULL
+  
+  oper <- match.fun(FUN=op)
+  by <- match.arg(by)
+  
+  switch(by,
+         Act=ifelse(n>length(unique(input$begin.Act)), 
+                    warning(paste("Play has only", length(unique(input$begin.Act)) , "acts."), call. = FALSE),
+                    NA),
+         Scene=ifelse(n>length(unique(input$begin.Scene)), 
+                      warning(paste("Play has only", length(unique(input$begin.Scene)) , "scenes."), call. = FALSE),
+                      NA))
+  
+  switch(by,
+         Act=input[,.SD[oper(begin.Act,last(unique(begin.Act), n))],.(corpus,drama)][],
+         Scene=input[,.SD[oper(begin.Scene,last(unique(begin.Scene), n))],.(corpus,drama)][])
+}
+
+#' @title Extract section
+#' @export
+#' @description Extracts a sub segment of the text(s). 
+#' The result is an empty table if more scenes or acts
+#' are given than exist in the play. In this case, a
+#' warning is printed.
+#' @param input Segmented text (can be multiple texts)
+#' @param op Whether to extract exactly one or more than one
+#' @param by Act or Scene, or matching substring
+#' @param n The number of segments to extract
+#' @examples 
+#' data(rksp.0)
+#' # Extract everything before the 4th scene
+#' dramaHead(rksp.0$mtext, by="Scene", op="<", n=4)
+dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
+  
+  # prevent notes in R CMD check
+  corpus <- NULL
+  drama <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
+  .SD <- NULL
+  . <- NULL
+  
+  
+  
+  oper <- match.fun(FUN=op)
+  by <- match.arg(by)
+  switch(by,
+         Act=ifelse(n>length(unique(input$begin.Act)), 
+                    warning(paste("Play has only", length(unique(input$begin.Act)) , "acts."), call. = FALSE),
+                    NA),
+         Scene=ifelse(n>length(unique(input$begin.Scene)), 
+                      warning(paste("Play has only", length(unique(input$begin.Scene)) , "scenes."), call. = FALSE),
+                      NA))
+  
+  switch(by,
+         Act=input[,.SD[oper(begin.Act,first(unique(begin.Act), n))],.(corpus,drama)][],
+         Scene=input[,.SD[oper(begin.Scene,first(unique(begin.Scene), n))],.(corpus,drama)][])
+}
+
+first <- function(x,n=0) {
+  sort(x)[n]
+}
+
+last <- function(x, n=0) {
+  len <- length(x)
+  if (n > len) {
+    return(NA)
+  }
+  sort(x,partial=len-(n-1))[len-(n-1)]
 }

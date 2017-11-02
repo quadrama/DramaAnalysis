@@ -1,9 +1,14 @@
 
 #' This function initialises the import from XMI files.
-#' @param dataDirectory A path to the directory in which data and metadata are located. "~/QuaDramA/Data" by default
+#' @param dataDirectory A path to the directory in which data and metadata are located. 
+#' "~/QuaDramA/Data" by default.
+#' @param collectionDirectory A path to the directory in which collections are stored. 
+#' By default, the directory is called "collection" below the data directory.
 #' @export
-setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data")) {
+setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data"), 
+                  collectionDirectory = file.path(dataDirectory,"collections")) {
   options(qd.datadir=dataDirectory)
+  options(qd.collectionDirectory=collectionDirectory)
   options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
@@ -14,31 +19,41 @@ dlobject <- function() {
   getOption("qd.dl")
 }
 
-#' Function to load a set from QuaDramA web service.
+loadSetsInternally <- function() {
+  setNames <- list.files(getOption("qd.collectionDirectory"))
+  sets <- lapply(setNames, 
+                 function(x) { 
+                   readLines(
+                     file.path(getOption("qd.collectionDirectory"), x),
+                     encoding = "UTF-8"
+                   ) 
+                 })
+  names(sets) <- setNames
+  sets
+}
+
+#' Function to load a set from collection files
 #' Can optionally set the set name as a genre in the returned table
 #' @param setName The name of the set to retrieve
 #' @param addGenreColumn Whether to set the Genre-column in the returned table to the set name
 #' @export
 loadSet <- function(setName, addGenreColumn=FALSE) {
-  dl <- dlobject()
-  ds <- data.frame(id=dl$getCollectionEntries(setName))
+  sets <- loadSetsInternally()
   if (addGenreColumn == TRUE) {
-    ds$Genre <- setName
+    data.frame(id=sets[[setName]],Genre=setName)
+  } else {
+    data.frame(id=sets[[setName]])
   }
-  ds
 }
 
 #' A function to get a list of all collections and the number of plays in that collection
 #' @export
-#' @importFrom rJava .jevalArray .jsimplify
 loadSets <- function() {
-  dl <- dlobject()
-  s <- dl$getListOfSets()
-  l <- unlist(lapply(rJava::.jevalArray(s[[2]]),FUN=function(x) {rJava::.jsimplify(x)}))
-  data.frame(id=rJava::.jevalArray(s[[1]]),size=l)
+  sets <- loadSetsInternally()
+  data.frame(size=unlist(lapply(sets,length)))
 }
 
-scene.act.table <- function(ids) {
+scene.act.table <- function(ids, defaultCollection="tg") {
   
   # prevent notes in R CMD check
   Number <- NULL
@@ -48,12 +63,12 @@ scene.act.table <- function(ids) {
   
   `:=` <- NULL
   
-  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL)
+  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL, defaultCollection = defaultCollection)
   
   acts[, Number.Act := as.integer(as.numeric(as.factor(begin))), drama]
   
   #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL)
+  scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL, defaultCollection = defaultCollection)
   merged <- merge(acts, scenes, by=c("drama","corpus"), 
                   suffixes=c(".Act", ".Scene"), 
                   allow.cartesian = TRUE)
@@ -68,14 +83,15 @@ scene.act.table <- function(ids) {
 #' Similar to load.text(), but the table also includes scene and act markings.
 #' @param ids The ids for which we want to get the text
 #' @importFrom data.table setkey foverlaps data.table
+#' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 #' @examples 
 #' \dontrun{
 #' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
-loadSegmentedText <- function(ids) {
-  t <- data.table::data.table(loadText(ids, includeTokens=TRUE))
-  sat <- data.table::data.table(scene.act.table(ids=ids))
+loadSegmentedText <- function(ids,defaultCollection="tg") {
+  t <- data.table::data.table(loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection))
+  sat <- data.table::data.table(scene.act.table(ids=ids, defaultCollection=defaultCollection))
   data.table::setkey(t, "corpus", "drama", "begin", "end")
   data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
   mtext <- data.table::foverlaps(t, sat, type="any",
@@ -102,22 +118,25 @@ load.text2 <- function(...) {
 #'
 #' @param ids A vector containing drama ids to be downloaded
 #' @param includeTokens If set to true, the table also contains each token in an utterance
+#' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
-loadText <- function(ids, includeTokens=FALSE) {
+loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg") {
   `:=` <- NULL
   .N <- NULL
   corpus <- NULL
   drama <- NULL
   if (includeTokens == TRUE) {
-    r <- loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(ids, 
                      type=atypes$Utterance, 
                      coveredType=atypes$Token,
+                     defaultCollection=defaultCollection,
                      columnTypes = "cciiccccc")
     
   } else
-    r <- loadAnnotations(as.character(ids), 
+    r <- loadAnnotations(ids, 
                          type=atypes$Utterance, 
                          coveredType=NULL,
+                         defaultCollection=defaultCollection,
                          columnTypes = "cciicci")
   r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
   r[, length:=.N, by=list(corpus,drama) ][]
@@ -131,6 +150,7 @@ loadText <- function(ids, includeTokens=FALSE) {
 #' @param type The annotation type to load
 #' @param coveredType The annotation type of covered annotations we want to load
 #' @param columnTypes Can be used to specify column types, which are passed to readr::read.csv.
+#' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 #' @importFrom data.table fread
 #' @importFrom rJava .jnew .jarray .jnull
@@ -142,12 +162,16 @@ loadText <- function(ids, includeTokens=FALSE) {
 loadAnnotations <- function(ids, 
                             type=atypes$Utterance, 
                             coveredType=atypes$Token,
+                            defaultCollection="tg",
                             columnTypes=NULL) {
   dl <- dlobject()
+  
+  ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
+                function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
   if (is.null(coveredType)) {
-    s <- dl$getAnnotations(rJava::.jarray(ids),type,rJava::.jnull())
+    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,rJava::.jnull())
   } else {
-    s <- dl$getAnnotations(rJava::.jarray(ids),type,coveredType)
+    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,coveredType)
   }
   df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
                                                   col_types = columnTypes))
@@ -161,7 +185,12 @@ loadAnnotations <- function(ids,
 #' @param type The annotation type to load
 #' @export
 loadMeta <- function(ids,type=atypes$Author) {
-  loadAnnotations(ids,type,coveredType = NULL)
+  dl <- dlobject()
+  s <- dl$getDramaMetaData(rJava::.jarray(as.character(ids)))
+  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
+                                               col_types = NULL))
+  colnames(df) <- make.names(colnames(df))
+  df
 }
 
 #' Function to count the annotations of a certain type in selected texts.
@@ -234,8 +263,11 @@ loadAllInstalledIds <- function() {
 #' @export
 installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims", removeZipFile = TRUE) {
   dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
-  sourceFilename <- switch(dataSource,tg="tg.zip")
-
+  sourceFilename <- switch(dataSource,
+                           tg="tg.zip",
+                           gdc="gdc.zip",
+                           tc="tc.zip",
+                           gbd="gbd.zip")
   
   if (downloadSource == "ims") {
     sourceUrl <- createIMSUrl(sourceFilename)
@@ -243,10 +275,10 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
     sourceUrl <- createZenodoUrl(803280, sourceFilename)
   }
   lm <- lastModifiedDate(sourceUrl)
-  message("Version on server: ", lm)
+  message("Version on server: ", format(lm))
   installedV <- getInstalledDate(dataDirectory,sourceFilename)
     
-  message("Locally installed version: ", as.character(installedV))
+  message("Locally installed version: ", format(installedV))
   
   
   if (is.na(installedV) | installedV < lm) {
@@ -267,10 +299,10 @@ installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),d
 
 
 #' @importFrom utils read.csv
-getInstalledDate <- function(dataDirectory,filename) {
+getInstalledDate <- function(dataDirectory=getOption("qd.datadir"),filename) {
   versionsFilename <- file.path(dataDirectory,"versions.csv")
   if (file.exists(versionsFilename)) {
-    versions <- utils::read.csv(versionsFilename)
+    versions <- utils::read.csv(versionsFilename,stringsAsFactors = FALSE)
     v <- versions[versions$file == filename,2]
     if (length(v)>0) {
       as.Date(v)
@@ -288,12 +320,12 @@ saveInstalledDate <- function(dataDirectory, filename, date) {
   if (file.exists(versionsFilename)) {
     versions <- utils::read.csv(versionsFilename,stringsAsFactors = FALSE)
     if (length(versions[versions$file==filename,"date"])>0) {
-      versions[versions$file==filename,"date"] <- date
+      versions[versions$file==filename,"date"] <- format(date)
     } else {
-      versions[nrow(versions) + 1,] = c(filename,date)
+      versions[nrow(versions) + 1,] = c(filename,format(date))
     }
   } else {
-    versions <- data.frame(file=c(filename),date=c(date))
+    versions <- data.frame(file=c(filename),date=c(format(date)))
   }
   utils::write.csv(versions,file=versionsFilename,row.names=FALSE)
   

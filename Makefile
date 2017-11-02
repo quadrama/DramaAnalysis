@@ -1,11 +1,12 @@
 TDIR=../DramaAnalysis.wiki
 VIG=vignettes
 
-wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md 
+wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md ${TDIR}/Presence.md
 
 ${VIG}/%.md: vignettes/%.Rmd ${VIG}/version.md ${VIG}/vig-%.md
 	Rscript -e "library(rmarkdown); render('$<', output_format='md_document', clean=TRUE)"
-	
+
+
 ${TDIR}/%.md: vignettes/%.md
 	rm -rf ${TDIR}/$*_files
 	mv -f vignettes/$*_files ${TDIR}/

@@ -28,7 +28,7 @@ plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors
 #' they can easily become misleading. They are in this package 
 #' for historic reasons, but should not be used anymore.
 #' @param dstat A data frame containing data, e.g., output from dictionaryStatistics()
-#' @param mat A data frame that only contains data assignments. Defaults to all columns except for the first two from dstat.
+#' @param mat A data frame that only contains data assignments. Defaults to all columns except for the first three from dstat.
 #' @param names A list of names for the legend
 #' @param symbols Symbols to be used in the plot
 #' @param maxValue The maximal value. Defaults to the highest value in mat.
@@ -48,7 +48,7 @@ plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors
 #' dstat <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
 #'                               fieldnames=c("Krieg", "Liebe", "Familie", "Ratio","Religion"))
 #' plotSpiderWebs(dstat[,3:7],names=dstat[,2],max=50)
-plotSpiderWebs <- function(dstat=NULL, mat=dstat[,-c(1,2)], names=dstat[,2], 
+plotSpiderWebs <- function(dstat=NULL, mat=dstat[,-c(1,2,3)], names=dstat[,3], 
                            symbols=c(17,16,15,4,8),
                            maxValue=max(mat),minValue=min(mat), cglcol="black", 
                            legend=TRUE,

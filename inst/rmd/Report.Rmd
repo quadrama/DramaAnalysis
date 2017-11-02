@@ -16,7 +16,6 @@ params:
 pver <- packageVersion("DramaAnalysis")
 ```
 
-> This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io).
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -27,7 +26,7 @@ text <- loadText(params$id, includeTokens = TRUE)
 mtext <- loadSegmentedText(params$id)
 meta <- loadMeta(params$id, type=atypes$Drama)
 author <- loadMeta(params$id,type=atypes$Author)
-title <- as.character(meta[1,4])
+title <- as.character(meta[1,"documentTitle"])
 ```
 
 ---
@@ -39,16 +38,7 @@ title: "QuaDramA Report: `r title`"
 
 - Author(s): `r paste(paste0("[",author$Name,"](http://d-nb.info/gnd/",author$Pnd,")"),sep=", ")`
 
-# Figure Lists {.tabset}
-
-## Dramatis Personae 
-
-All figurs as listed in the dramatis personae:
-
-```{r, echo=FALSE}
-figuresInDramatisPersonae <- loadAnnotations(params$id, type=atypes$DramatisPersonae, coveredType = atypes$Figure)
-as.character(figuresInDramatisPersonae$Figure.surface)
-```
+# Character Lists {.tabset}
 
 ## By Order of appearance
 
@@ -58,6 +48,17 @@ All figures, in the order they have their first appearance
 begins <- aggregate(text$begin, by=list(text$Speaker.figure_surface), min)
 as.character(begins[order(begins$x),]$Group.1)
 ```
+
+## Dramatis Personae 
+
+All figurs as listed in the dramatis personae:
+
+```{r, echo=FALSE}
+figuresInDramatisPersonae <- loadAnnotations(params$id, type=atypes$DramatisPersonae, coveredType = atypes$Figure)
+as.character(figuresInDramatisPersonae$Figure.name)
+```
+
+
 
 ## Order vs. order
 
@@ -188,7 +189,7 @@ dstat <- dictionaryStatistics(
   normalizeByField = TRUE,    # normalization by field
   column = "Token.lemma"        # lemma-based stats
 )
-mat <- as.matrix(dstat[,3:7])
+mat <- as.matrix(dstat[,4:8])
 rownames(mat) <- vapply(strsplit(as.character(dstat$figure), ",", fixed=TRUE), `[`,1, FUN.VALUE=character(1))
 par(mar=c(10,2,0,10),xpd=TRUE)
 b <- barplot(t(mat), # we select Romeo's line
@@ -205,7 +206,7 @@ legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border
 [Z-scores in wikipedia](https://en.wikipedia.org/wiki/Standard_score)
 
 ```{r echo=FALSE}
-zmat <- scale(as.matrix(dstat[,3:7]))
+zmat <- scale(as.matrix(dstat[,4:8]))
 
 rownames(zmat) <- vapply(strsplit(as.character(dstat$figure), ",", fixed=TRUE), `[`,1, FUN.VALUE=character(1))
 par(mar=c(2,12,0,6),xpd=TRUE)
@@ -238,7 +239,7 @@ legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border
 ## Spider Web
 
 ```{r, echo=FALSE}
-plotWordFields(dstat, col=params$col)
+plotSpiderWebs(dstat, col=params$col)
 ```
 
 ## Word fields
@@ -246,3 +247,27 @@ plotWordFields(dstat, col=params$col)
 ```{r, echo=FALSE}
 fields
 ```
+
+# Personnel Exchange
+
+The following chart shows for each scene boundary the number of characters exchanged over the boundary. Different metrics have been proposd, the plot shows all of them in comparison.
+
+```{r, echo=FALSE}
+ham <- hamming(mtext)
+
+par(mar=c(3,3,3,3))
+layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
+plot(0,type="n",axes=FALSE,xlab="",ylab="")
+legend(x="center",lty=2:3,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
+
+plot(ham, type="l", lty=2, xlab="Scene boundary",ylab="",ylim=c(0,1),frame=TRUE)
+par(new=TRUE)
+plot(hamming(mtext, variant = "NormalizedHamming"), type="l", lty=3,xlab="",ylab="",axes=FALSE)
+par(new=TRUE)
+plot(scenicDifference(mtext), type="l",lty=4,axes=FALSE)
+
+```
+
+# About
+
+This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io). Please report errors [here](https://github.com/quadrama/DramaAnalysis/issues), or contact [me](mailto:nils.reiter@ims.uni-stuttgart.de).

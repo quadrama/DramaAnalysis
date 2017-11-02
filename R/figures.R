@@ -44,7 +44,7 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
        ),by=.(corpus,drama,length,eval(b))]
   
   
-  colnames(r)[2] <- "figure"
+  colnames(r)[4] <- "figure"
   if (normalize == TRUE) {
     r$tokens <- r$tokens / r$length
     r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
