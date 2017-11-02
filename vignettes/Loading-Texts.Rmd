@@ -35,7 +35,7 @@ If you want to specify a different folder, you can do with the `setup()`-functio
 setup(dataDirectory = "YOUR_FOLDER")
 ```
 
-The setup function is responsible for starting the Java Virtual Machine in the background, which we need in order to load the pre-processed texts. It also sets the option `qd.datadir` to the given directory, such that other functions know this.
+The setup function is responsible for starting the Java Virtual Machine in the background, which we need in order to load the pre-processed texts. It also sets the option `qd.datadir` to the given directory, such that other functions know this. **Whenever the R session is restarted, this function needs to be called again.**
 
 ## Installation of Data
 
@@ -45,7 +45,7 @@ To install a data package, you simply run the function `installData()`. The down
 installData()
 ```
 
-In addition, we provide a categorization of these texts into genres. It can be downloaded in a similar way
+In addition, we provide a categorization of these texts into genres. It can be downloaded in a similar way.
 
 ```{r, eval=FALSE}
 installCollectionData()
