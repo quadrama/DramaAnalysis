@@ -6,16 +6,26 @@
 #' logical values for stage presence
 #' @param useCharacterId Logical. If true, characters are represented 
 #' by their id instead of their surface form.
+#' @param asList Logical, defaults to TRUE. Whether to return as a list 
+#' instead of a data frame.
 #' @export
 #' @examples
 #' data(rksp.0)
 #' cfg <- configuration(rksp.0$mtext)
 #' 
-configuration <- function(mtext, by=c("Act", "Scene"), onlyPresence=FALSE, useCharacterId=FALSE) {
+configuration <- function(mtext, 
+                          by=c("Act", "Scene"), 
+                          onlyPresence=FALSE, 
+                          useCharacterId=FALSE, 
+                          asList=TRUE) {
   by <- match.arg(by)
   c <- switch(by, 
-              Scene=configuration.scene(mtext, .useCharacterId=useCharacterId),
-              Act=configuration.act(mtext, .useCharacterId=useCharacterId))
+              Scene=configuration.scene(mtext, 
+                                        .useCharacterId=useCharacterId,
+                                        .asList = asList),
+              Act=configuration.act(mtext, 
+                                    .useCharacterId = useCharacterId,
+                                    .asList = asList))
     
   if (onlyPresence)
     c$matrix <- c$matrix>0
@@ -23,7 +33,7 @@ configuration <- function(mtext, by=c("Act", "Scene"), onlyPresence=FALSE, useCh
 }
 
 #' @importFrom stats reshape
-configuration.act <- function(mtext, .useCharacterId=FALSE) {
+configuration.act <- function(mtext, .useCharacterId=FALSE, .asList=TRUE) {
   # prevent notes in R CMD check
   . <- NULL
   .N <- NULL
@@ -44,11 +54,15 @@ configuration.act <- function(mtext, .useCharacterId=FALSE) {
                         timevar = "Number.Act")
   cfg[is.na(cfg)] <- 0
   colnames(cfg)[3:(ncol(cfg))] <- c(as.character(characterColumn),seq(1,ncol(cfg)-3))
-  list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=cfg[[3]])
+  if (.asList) {
+    return(list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=cfg[[3]]))
+  } else {
+    return(cfg)
+  }
 }
 
 #' @importFrom stats reshape
-configuration.scene <- function(text, .useCharacterId=FALSE) {
+configuration.scene <- function(text, .useCharacterId=FALSE, .asList=TRUE) {
   # prevent notes in R CMD check
   . <- NULL
   .N <- NULL
@@ -71,7 +85,11 @@ configuration.scene <- function(text, .useCharacterId=FALSE) {
   #cfg <- cfg[order(as.character(cfg$Speaker.figure_surface)),]
   if (length(4:ncol(cfg)) > 0)
     colnames(cfg)[3:ncol(cfg)] <- c(as.character(characterColumn),seq(1,length(4:ncol(cfg))))
-  list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=as.character(cfg[[3]]))
+  if (.asList) {
+    return(list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=cfg[[3]]))
+  } else {
+    return(cfg)
+  }
 }
 
 
