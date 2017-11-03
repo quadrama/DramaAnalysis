@@ -5,13 +5,17 @@
 \title{Creates classic drama configuration matrix. Returns a list with 
 the three components matrix, drama, and figure}
 \usage{
-configuration(mtext, by = c("Act", "Scene"), onlyPresence = FALSE,
-  useCharacterId = FALSE, asList = TRUE)
+configuration(mtext, by = c("Act", "Scene"), mode = c("Active", "Passive"),
+  onlyPresence = FALSE, useCharacterId = FALSE, asList = TRUE)
 }
 \arguments{
 \item{mtext}{The text including Act and Scene markings}
 
 \item{by}{A string, either "Act" or "Scene". Partial matching allowed.}
+
+\item{mode}{Character vector, should be either "Active" or "Passive".
+Passive configurations express when characters are mentioned, active
+ones when they speak themselves.}
 
 \item{onlyPresence}{If TRUE, the resulting matrix only contains 
 logical values for stage presence}
