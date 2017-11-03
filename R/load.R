@@ -102,12 +102,26 @@ load.text2 <- function(...) {
 #' @param ids A vector containing drama ids to be downloaded
 #' @param includeTokens This argument has no meaning anymore. Tokens are always included.
 #' @param defaultCollection The collection prefix is added if no prefix is found
+#' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
+#' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
 #' @export
-loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg") {
+loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyCharacterFactors=TRUE) {
   t <- loadCSV(ids, defaultCollection = defaultCollection)
-  t$Speaker.figure_id <- factor(t$Speaker.figure_id)
-  t$Speaker.figure_surface <- factor(t$Speaker.figure_surface)
   t$Token.pos <- factor(t$Token.pos)
+
+  if (unifyCharacterFactors) {
+    # Handling character factors
+    # ids
+    allids <- union(levels(factor(t$Speaker.figure_id)),
+                    levels(factor(t$Mentioned.figure_id)))
+    t$Speaker.figure_id <- factor(t$Speaker.figure_id, levels=allids)
+    t$Mentioned.figure_id <- factor(t$Mentioned.figure_id, levels=allids)
+    # names
+    allids <- union(levels(factor(t$Speaker.figure_surface)),
+                    levels(factor(t$Mentioned.figure_surface)))
+    t$Speaker.figure_surface <- factor(t$Speaker.figure_surface, levels=allids)
+    t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface, levels=allids)
+  }
   t
 }
 
