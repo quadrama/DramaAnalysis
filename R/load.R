@@ -104,7 +104,11 @@ load.text2 <- function(...) {
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg") {
-  loadCSV(ids, defaultCollection = defaultCollection)
+  t <- loadCSV(ids, defaultCollection = defaultCollection)
+  t$Speaker.figure_id <- factor(t$Speaker.figure_id)
+  t$Speaker.figure_surface <- factor(t$Speaker.figure_surface)
+  t$Token.pos <- factor(t$Token.pos)
+  t
 }
 
 
