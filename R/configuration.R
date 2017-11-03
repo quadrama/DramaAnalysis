@@ -27,9 +27,14 @@ configuration <- function(mtext,
                                     .useCharacterId = useCharacterId,
                                     .asList = asList))
     
-  if (onlyPresence)
+  if (onlyPresence & asList) {
     c$matrix <- c$matrix>0
-  c
+  } else if (onlyPresence) {
+    for (col in 4:ncol(c)) {
+      c[[col]] <- as.logical(c[[col]])
+    }
+  }
+  c 
 }
 
 #' @importFrom stats reshape
