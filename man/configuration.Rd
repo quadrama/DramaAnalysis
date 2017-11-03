@@ -5,7 +5,8 @@
 \title{Creates classic drama configuration matrix. Returns a list with 
 the three components matrix, drama, and figure}
 \usage{
-configuration(mtext, by = c("Act", "Scene"), onlyPresence = FALSE)
+configuration(mtext, by = c("Act", "Scene"), onlyPresence = FALSE,
+  useCharacterId = FALSE)
 }
 \arguments{
 \item{mtext}{The text including Act and Scene markings}
@@ -14,6 +15,9 @@ configuration(mtext, by = c("Act", "Scene"), onlyPresence = FALSE)
 
 \item{onlyPresence}{If TRUE, the resulting matrix only contains 
 logical values for stage presence}
+
+\item{useCharacterId}{Logical. If true, characters are represented 
+by their id instead of their surface form.}
 }
 \description{
 Creates classic drama configuration matrix. Returns a list with 
@@ -23,7 +27,4 @@ the three components matrix, drama, and figure
 data(rksp.0)
 cfg <- configuration(rksp.0$mtext)
 
-}
-\seealso{
-DramaAnalysis::load.text2()
 }
