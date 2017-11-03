@@ -38,7 +38,7 @@ configuration <- function(mtext,
 }
 
 #' @importFrom stats reshape
-configuration.act <- function(mtext, .useCharacterId=FALSE, .asList=TRUE) {
+configuration.act <- function(mtext, .useCharacterId=FALSE, .asList=TRUE, .segment=c("Act", "Scene")) {
   # prevent notes in R CMD check
   . <- NULL
   .N <- NULL
@@ -46,17 +46,22 @@ configuration.act <- function(mtext, .useCharacterId=FALSE, .asList=TRUE) {
   drama <- NULL
   Speaker.figure_surface <- NULL
   Number.Act <- NULL
-  
-  
+
   t <- mtext
+  .segment <- match.arg(.segment)
+  
+  segmentColumn <- switch(.segment,
+                          Act=quote(Number.Act),
+                          Scene=quote(begin.Scene))
+
   characterColumn <- quote(Speaker.figure_surface)
   if (.useCharacterId) {
     characterColumn <- quote(Speaker.figure_id)
   }
-  words.per.segment <- t[,.N,.(corpus,drama,eval(characterColumn), Number.Act)]
+  words.per.segment <- t[,.N,.(corpus,drama, eval(characterColumn), eval(segmentColumn))]
   cfg <- stats::reshape(words.per.segment, direction="wide", 
                         idvar = c("corpus","drama","characterColumn"), 
-                        timevar = "Number.Act")
+                        timevar = "segmentColumn")
   cfg[is.na(cfg)] <- 0
   colnames(cfg)[3:(ncol(cfg))] <- c(as.character(characterColumn),seq(1,ncol(cfg)-3))
   if (.asList) {
@@ -68,6 +73,8 @@ configuration.act <- function(mtext, .useCharacterId=FALSE, .asList=TRUE) {
 
 #' @importFrom stats reshape
 configuration.scene <- function(text, .useCharacterId=FALSE, .asList=TRUE) {
+  .Deprecated("configuration")
+  
   # prevent notes in R CMD check
   . <- NULL
   .N <- NULL
