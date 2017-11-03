@@ -44,7 +44,7 @@ configuration.act <- function(mtext, .useCharacterId=FALSE) {
                         timevar = "Number.Act")
   cfg[is.na(cfg)] <- 0
   colnames(cfg)[3:(ncol(cfg))] <- c(as.character(characterColumn),seq(1,ncol(cfg)-3))
-  list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=as.character(cfg[[3]]))
+  list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=cfg[[3]])
 }
 
 #' @importFrom stats reshape
