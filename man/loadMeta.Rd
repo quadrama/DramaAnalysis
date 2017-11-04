@@ -9,7 +9,7 @@ loadMeta(ids, type = atypes$Author)
 \arguments{
 \item{ids}{A vector or list of drama ids}
 
-\item{type}{The annotation type to load}
+\item{type}{The annotation type to load. No longer used.}
 }
 \description{
 helper method to load meta data about dramatic texts (E.g., author, year)

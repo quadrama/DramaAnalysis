@@ -5,14 +5,18 @@
 \title{Loads a CSV-formatted text from the server,
 assuming the main server url has been set correctly.}
 \usage{
-loadText(ids, includeTokens = FALSE, defaultCollection = "tg")
+loadText(ids, includeTokens = FALSE, defaultCollection = "tg",
+  unifyCharacterFactors = TRUE)
 }
 \arguments{
 \item{ids}{A vector containing drama ids to be downloaded}
 
-\item{includeTokens}{If set to true, the table also contains each token in an utterance}
+\item{includeTokens}{This argument has no meaning anymore. Tokens are always included.}
 
 \item{defaultCollection}{The collection prefix is added if no prefix is found}
+
+\item{unifyCharacterFactors}{Logical value, defaults to TRUE. Controls whether columns 
+representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels}
 }
 \description{
 Loads a CSV-formatted text from the server,
