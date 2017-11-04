@@ -55,11 +55,7 @@ configuration <- function(mtext,
   if (mode == "Passive") {
     words.per.segment <- na.omit(words.per.segment)
   }
-  cfg <- stats::reshape(words.per.segment, direction="wide", 
-                        idvar = c("corpus","drama","characterColumn"), 
-                        timevar = "segmentColumn")
-  
-  cfg[is.na(cfg)] <- 0
+  cfg <- configuration.int(t, characterColumn, segmentColumn, ifelse(mode=="Passive",na.omit,identity))
   colnames(cfg)[3:(ncol(cfg))] <- c("figure",seq(1,ncol(cfg)-3))
   
   if (onlyPresence) {
@@ -77,3 +73,14 @@ configuration <- function(mtext,
   }
 }
 
+configuration.int <- function(t, characterColumn, segmentColumn, postFun=identity) {
+  words.per.segment <- postFun(t[,.N,.(corpus,drama, eval(characterColumn), eval(segmentColumn))])
+  
+  cfg <- stats::reshape(words.per.segment, direction="wide", 
+                        idvar = c("corpus","drama","characterColumn"), 
+                        timevar = "segmentColumn")
+  
+  cfg[is.na(cfg)] <- 0
+  
+  cfg
+}
