@@ -168,13 +168,24 @@ loadCSV <- function(ids,
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
                        function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
+  splittedIds <- strsplit(ids,":",fixed=TRUE)
   cvar <- match.arg(variant)
-  dl <- dlobject()
   
-  jvar <- rJava::J("de.unistuttgart.ims.drama.data.CSVVariant")
-  s <- dl$getCSV(rJava::.jarray(as.character(ids)),jvar$valueOf(cvar))
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
-  df
+  tables <- lapply(splittedIds, function(x) {
+    filename <- file.path(getOption("qd.datadir"),
+                          "xmi",
+                          id[1],
+                          paste(id[2],variant,"csv",
+                                sep="."))
+    if (file.exists(filename)) {
+      tab <- data.table::data.table(readr::read_csv(filename, 
+                                                    locale = readr::locale(encoding = "UTF-8")))
+      return(tab)
+    } else {
+      return(NA)
+    }
+  })
+  Reduce(rbind, tables)
 }
 
 #' @title Load meta data
