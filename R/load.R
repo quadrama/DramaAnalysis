@@ -23,10 +23,11 @@ loadSetsInternally <- function() {
   setNames <- list.files(getOption("qd.collectionDirectory"))
   sets <- lapply(setNames, 
                  function(x) { 
-                   readLines(
+                   read.table(
                      file.path(getOption("qd.collectionDirectory"), x),
-                     encoding = "UTF-8"
-                   ) 
+                     encoding = "UTF-8",
+                     stringsAsFactors = FALSE
+                   )$V1
                  })
   names(sets) <- setNames
   sets
