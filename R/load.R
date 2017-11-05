@@ -204,7 +204,6 @@ loadMeta <- function(ids,type=atypes$Author) {
 #' @param type A string, the fully qualified type name we want to count
 #' @param debug Logical value, whether to print debug information
 #' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
-#' @export
 countAnnotations <- function(ids, 
                              type=atypes$Utterance,
                              debug=FALSE,
@@ -230,7 +229,6 @@ countAnnotations <- function(ids,
 #' @param ids A vector containing drama ids
 #' @param types A character vector containing the annotation types we want to count
 #' @param debug Logical value, whether to print out debug info
-#' @export
 #' @examples 
 #' \dontrun{
 #' loadNumbers(c("rksp.0", "vndf.0"))
