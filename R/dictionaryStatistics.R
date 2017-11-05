@@ -1,9 +1,16 @@
-#' @title Load dictionary from github
-#' @description This function loads the word fields that are available on the web.
+
+
+#' @title Dictionary Handling
+#' @description \code{loadFields()} loads dictionaries that are available on the web as plain text files.
 #' @param fieldnames A list of names for the dictionaries. It is expected that files with that name can be found below the URL.
 #' @param baseurl The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().
 #' @param fileSuffix The suffix for the dictionary files
 #' @importFrom utils read.csv
+#' @section File Format:
+#' Dictionary files should contain one word per line, with no comments or any other meta information. 
+#' The entry name for the dictionary is given as the file name. It's therefore best if it does not contain
+#' special characters. The dictionary must be in UTF-8 encoding, and the file needs to end on .txt.
+#' @rdname dictionaryHandling
 #' @export
 loadFields <- function(fieldnames=c(),
                       baseurl="https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
@@ -15,6 +22,36 @@ loadFields <- function(fieldnames=c(),
   }
   r
 }
+
+#' @description \code{enrichDictionary()} enriches an existing dictionary by addition of similar words, as 
+#' measured in a word2vec model.
+#' @param dictionary The base dictionary, a named list of lists.
+#' @param model the loaded word2vec model
+#' @param top A maximal number of words that we consider 
+#' @param minimalSimilarity The minimal similarity for a word in order 
+#' to be added
+#' @importFrom wordVectors closest_to
+#' @rdname dictionaryHandling
+#' @export
+#' @examples 
+#' \dontrun{
+#' # Load base dictionary
+#' dict_base <- loadFields(fieldnames=c("Familie","Liebe"))
+#' # Load the word2vec model
+#' model = read.vectors("models/german-fiction_vectors.bin")
+#' # Create a new dictionary with added words
+#' dict_enriched <- enrichDictionary(dict_base, model)
+#' }
+enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) {
+  r <- dictionary
+  for (f in 1:length(dictionary)) {
+    fn <- names(dictionary)[[f]]
+    sims <- topicmodels::closest_to(model,dictionary[[f]],n=top,fancy_names = FALSE)
+    r[[fn]] <- c(r[[fn]],sims[sims$similarity>=minimalSimilarity,1])
+  }
+  r
+}
+
 
 #' @name dictionaryStatistics
 #' @title Dictionary Use
