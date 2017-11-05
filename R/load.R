@@ -174,8 +174,8 @@ loadCSV <- function(ids,
   tables <- lapply(splittedIds, function(x) {
     filename <- file.path(getOption("qd.datadir"),
                           "xmi",
-                          id[1],
-                          paste(id[2],variant,"csv",
+                          x[1],
+                          paste(x[2],variant,"csv",
                                 sep="."))
     if (file.exists(filename)) {
       tab <- data.table::data.table(readr::read_csv(filename, 
