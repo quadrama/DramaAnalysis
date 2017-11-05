@@ -18,14 +18,15 @@ Imports:
    readr (>= 1.1.1),
    rJava (>= 0.9-8), 
    data.table (>= 1.10.4),
-   httr (>= 1.2.1)
+   httr (>= 1.2.1),
+   wordVectors (>= 2.0)
 Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
-    igraph,
-    wordVectors
+    igraph
 Encoding: UTF-8
 SystemRequirements: Java
 VignetteBuilder: knitr
+Remotes: bmschmidt/wordVectors@2.0
