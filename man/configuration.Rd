@@ -2,8 +2,7 @@
 % Please edit documentation in R/configuration.R
 \name{configuration}
 \alias{configuration}
-\title{Creates classic drama configuration matrix. Returns a list with 
-the three components matrix, drama, and figure}
+\title{Character Configuration}
 \usage{
 configuration(mtext, by = c("Act", "Scene"), mode = c("Active", "Passive"),
   onlyPresence = FALSE, useCharacterId = FALSE, asList = TRUE)
@@ -27,11 +26,24 @@ by their id instead of their surface form.}
 instead of a data frame.}
 }
 \description{
-Creates classic drama configuration matrix. Returns a list with 
-the three components matrix, drama, and figure
+Creates classic drama configuration matrix. Returns either a list with 
+the three components matrix, drama, and figure, or a data.frame containing everything.
 }
+\section{Active and Passive Configurations}{
+
+By default, we generate active matrices that are based on 
+the character speech. A character is present in a scene or 
+act, if they make an utterance. 
+Using the argument \code{mode}, we can also create passive
+configuration matrices. They look very similar, but are based
+on who's mentioned in a scene or an act.
+}
+
 \examples{
+# Active configuration matrix
 data(rksp.0)
-cfg <- configuration(rksp.0$mtext)
+cfg <- configuration(rksp.0$mtext, asList=FALSE)
+# Passive configuration matrix
+cfg <- configuration(rksp.0$mtext, asList=FALSE, mode="Passive")
 
 }
