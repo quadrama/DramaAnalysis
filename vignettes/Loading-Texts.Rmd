@@ -57,10 +57,18 @@ Each dramatic text in one of our data packages has an id and we load texts using
 
 Most functions expect text that is loaded by using the function `loadSegmentedText()`. 
 
-```{r, warning=FALSE, message=FALSE}
+```{r, echo=FALSE}
+library(DramaAnalysis)
+text <- data("rksp.0")
+```
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
 library(DramaAnalysis)
 setup()
 text <- loadSegmentedText("tg:rksp.0")
+```
+
+```{r}
 colnames(text)
 ```
 
