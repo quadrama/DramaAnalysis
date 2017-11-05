@@ -11,6 +11,11 @@
 		</dependency>
 		<dependency>
 			<groupId>de.unistuttgart.ims</groupId>
+			<artifactId>de.unistuttgart.ims.drama.util</artifactId>
+			<version>0.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.unistuttgart.ims</groupId>
 			<artifactId>uimautil</artifactId>
 			<version>0.7.5-SNAPSHOT</version>
 		</dependency>

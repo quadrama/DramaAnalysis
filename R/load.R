@@ -23,10 +23,11 @@ loadSetsInternally <- function() {
   setNames <- list.files(getOption("qd.collectionDirectory"))
   sets <- lapply(setNames, 
                  function(x) { 
-                   readLines(
+                   read.table(
                      file.path(getOption("qd.collectionDirectory"), x),
-                     encoding = "UTF-8"
-                   ) 
+                     encoding = "UTF-8",
+                     stringsAsFactors = FALSE
+                   )$V1
                  })
   names(sets) <- setNames
   sets
@@ -54,29 +55,12 @@ loadSets <- function() {
 }
 
 scene.act.table <- function(ids, defaultCollection="tg") {
-  
-  # prevent notes in R CMD check
-  Number <- NULL
-  Number.Act <- NULL
-  begin <- NULL
-  drama <- NULL
-  
-  `:=` <- NULL
-  
-  acts <- loadAnnotations(ids,type=atypes$Act, coveredType=NULL, defaultCollection = defaultCollection)
-  
-  acts[, Number.Act := as.integer(as.numeric(as.factor(begin))), drama]
-  
-  #acts$Number <- ave(acts$begin, acts$drama, FUN=function(x) {as.numeric(as.factor(x))})
-  scenes <- loadAnnotations(ids,type=atypes$Scene,coveredType = NULL, defaultCollection = defaultCollection)
-  merged <- merge(acts, scenes, by=c("drama","corpus"), 
-                  suffixes=c(".Act", ".Scene"), 
-                  allow.cartesian = TRUE)
-  merged <- merged[merged$begin.Act <= merged$begin.Scene & merged$end.Act >= merged$end.Scene,]
-  #merged <- subset(merged, select=c(-5,-9))
+  merged <- loadCSV(ids, "Segments", defaultCollection = defaultCollection)
+  merged$Number.Act <- as.numeric(as.factor(data.table::frank(merged$begin.Act, ties.method = "min")))
   merged$Number.Scene <- stats::ave(merged$begin.Scene, 
                                     merged$drama, merged$Number.Act, 
                                     FUN=function(x) {as.numeric(as.factor(x))})
+  
   merged
 }
 
@@ -90,8 +74,8 @@ scene.act.table <- function(ids, defaultCollection="tg") {
 #' mtext <- loadSegmentedText("tg:rksp.0")
 #' }
 loadSegmentedText <- function(ids,defaultCollection="tg") {
-  t <- data.table::data.table(loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection))
-  sat <- data.table::data.table(scene.act.table(ids=ids, defaultCollection=defaultCollection))
+  t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
+  sat <- scene.act.table(ids=ids, defaultCollection=defaultCollection)
   data.table::setkey(t, "corpus", "drama", "begin", "end")
   data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
   mtext <- data.table::foverlaps(t, sat, type="any",
@@ -117,30 +101,29 @@ load.text2 <- function(...) {
 #'
 #'
 #' @param ids A vector containing drama ids to be downloaded
-#' @param includeTokens If set to true, the table also contains each token in an utterance
+#' @param includeTokens This argument has no meaning anymore. Tokens are always included.
 #' @param defaultCollection The collection prefix is added if no prefix is found
+#' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
+#' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
 #' @export
-loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg") {
-  `:=` <- NULL
-  .N <- NULL
-  corpus <- NULL
-  drama <- NULL
-  if (includeTokens == TRUE) {
-    r <- loadAnnotations(ids, 
-                     type=atypes$Utterance, 
-                     coveredType=atypes$Token,
-                     defaultCollection=defaultCollection,
-                     columnTypes = "cciiccccc")
-    
-  } else
-    r <- loadAnnotations(ids, 
-                         type=atypes$Utterance, 
-                         coveredType=NULL,
-                         defaultCollection=defaultCollection,
-                         columnTypes = "cciicci")
-  r$Speaker.figure_surface <- factor(r$Speaker.figure_surface)
-  r[, length:=.N, by=list(corpus,drama) ][]
-  r
+loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyCharacterFactors=TRUE) {
+  t <- loadCSV(ids, defaultCollection = defaultCollection)
+  t$Token.pos <- factor(t$Token.pos)
+
+  if (unifyCharacterFactors) {
+    # Handling character factors
+    # ids
+    allids <- union(levels(factor(t$Speaker.figure_id)),
+                    levels(factor(t$Mentioned.figure_id)))
+    t$Speaker.figure_id <- factor(t$Speaker.figure_id, levels=allids)
+    t$Mentioned.figure_id <- factor(t$Mentioned.figure_id, levels=allids)
+    # names
+    allids <- union(levels(factor(t$Speaker.figure_surface)),
+                    levels(factor(t$Mentioned.figure_surface)))
+    t$Speaker.figure_surface <- factor(t$Speaker.figure_surface, levels=allids)
+    t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface, levels=allids)
+  }
+  t
 }
 
 
@@ -179,18 +162,28 @@ loadAnnotations <- function(ids,
   df
 }
 
+loadCSV <- function(ids, 
+                    variant=c("UtterancesWithTokens", "Segments", "Metadata"), 
+                    defaultCollection="tg") {
+  
+  ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
+                       function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
+  cvar <- match.arg(variant)
+  dl <- dlobject()
+  
+  jvar <- rJava::J("de.unistuttgart.ims.drama.data.CSVVariant")
+  s <- dl$getCSV(rJava::.jarray(as.character(ids)),jvar$valueOf(cvar))
+  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
+  df
+}
+
 #' @title Load meta data
 #' @description helper method to load meta data about dramatic texts (E.g., author, year)
 #' @param ids A vector or list of drama ids
-#' @param type The annotation type to load
+#' @param type The annotation type to load. No longer used.
 #' @export
 loadMeta <- function(ids,type=atypes$Author) {
-  dl <- dlobject()
-  s <- dl$getDramaMetaData(rJava::.jarray(as.character(ids)))
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
-                                               col_types = NULL))
-  colnames(df) <- make.names(colnames(df))
-  df
+  loadCSV(ids, variant="Metadata")
 }
 
 #' Function to count the annotations of a certain type in selected texts.
