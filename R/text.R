@@ -1,4 +1,5 @@
-#' color scheme to be used for QuaDramA plots
+#' @title QuaDramA colors
+#' @description color scheme to be used for QuaDramA plots
 #' Taken from http://google.github.io/palette.js/, tol-rainbow, 10 colors
 #' @export
 qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
