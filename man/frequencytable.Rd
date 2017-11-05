@@ -2,7 +2,7 @@
 % Please edit documentation in R/frequencytable.R
 \name{frequencytable}
 \alias{frequencytable}
-\title{This function generates a matrix of word frequencies by drama, act or scene and/or by figure.}
+\title{Word frequencies}
 \usage{
 frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
   column = "Token.surface", byFigure = FALSE, sep = "|",
@@ -28,7 +28,8 @@ frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
 \item{by}{Whether the count is by drama (default), act or scene}
 }
 \description{
-This function generates a matrix of word frequencies by drama, act or scene and/or by figure.
+This function generates a matrix of word frequencies 
+by drama, act or scene and/or by figure.
 }
 \examples{
 data(rksp.0)
