@@ -93,7 +93,8 @@ figurematrix <- function(fstat,column="tokens",order=-1) {
   list(values=mat_values,labels=mat_labels,cs=mat_cs)
 }
 
-#' Adds a column to the figures data frame, containing the rank in the dramatis personae.
+#' @title Rank figures by the dramatis personae
+#' @description Adds a column to the figures data frame, containing the rank in the dramatis personae.
 #' @param figures The figures to rank
 #' @param columnTitle The title for the rank column
 #' @export
