@@ -24,7 +24,7 @@ require(DramaAnalysis)
 
 
 
-In order to use the analysis functions in this package, you need NLP-pre-processed dramatic texts. To facilitate this, we are providing downloadable packages of pre-processed files in the correct format etc. Currently, we provide only the TextGrid repository as a collection, but others are planned. 
+In order to use the analysis functions in this package, you need NLP-pre-processed dramatic texts. To facilitate this, we are providing downloadable packages of pre-processed files in the correct format etc. Currently, we provide only the TextGrid repository as a collection, but others are planned. The current state of each data package is documented in [this repository](https://github.com/quadrama/Corpora).
 
 ## Package Setup
 
@@ -53,5 +53,19 @@ installCollectionData()
 
 ## Loading of Dramatic texts
 
-Each dramatic text in one of our data packages has an id, that we need to load the text. The id itself is just a sequence of alphanumeric symbols. The function `loadAllInstalledIds()` gives you a list of all installed ids. This is not particularly helpful, that's why we made an overview here.
+Each dramatic text in one of our data packages has an id and we load texts using this id. The id itself is just a sequence of alphanumeric symbols. The function `loadAllInstalledIds()` gives you a list of all installed ids. This is not particularly helpful, that's why we keep an overview [in the corpus repository](https://github.com/quadrama/Corpora). 
 
+Most functions expect text that is loaded by using the function `loadSegmentedText()`. 
+
+```{r, warning=FALSE, message=FALSE}
+library(DramaAnalysis)
+setup()
+text <- loadSegmentedText("tg:rksp.0")
+colnames(text)
+```
+
+The resulting [data.frame](http://www.r-tutor.com/r-introduction/data-frame) contains 18 columns, with each word on a separate row. Column names are displayed above: Columns 1, 2, and 16 are about the entire dramatic text (corpus, id, and length in tokens), columns 3-8 are about the segment(s) a word appears in, columns 9-12 are about utterances: begin and end character position of the utterance, and the speaker name and numeric id. Columns 13-15  contain the surface, part of speech and lemma of each token, and columns 17 and 18 show information about mentioned characters.
+
+```{r}
+summary(text)
+```
