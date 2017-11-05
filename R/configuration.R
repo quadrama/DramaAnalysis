@@ -1,5 +1,6 @@
-#' Creates classic drama configuration matrix. Returns a list with 
-#' the three components matrix, drama, and figure
+#' @title Character Configuration
+#' @description Creates classic drama configuration matrix. Returns either a list with 
+#' the three components matrix, drama, and figure, or a data.frame containing everything.
 #' @param mtext The text including Act and Scene markings
 #' @param by A string, either "Act" or "Scene". Partial matching allowed.
 #' @param onlyPresence If TRUE, the resulting matrix only contains 
@@ -12,10 +13,20 @@
 #' Passive configurations express when characters are mentioned, active
 #' ones when they speak themselves.
 #' @importFrom stats reshape
+#' @section Active and Passive Configurations:
+#' By default, we generate active matrices that are based on 
+#' the character speech. A character is present in a scene or 
+#' act, if they make an utterance. 
+#' Using the argument \code{mode}, we can also create passive
+#' configuration matrices. They look very similar, but are based
+#' on who's mentioned in a scene or an act. 
 #' @export
 #' @examples
+#' # Active configuration matrix
 #' data(rksp.0)
-#' cfg <- configuration(rksp.0$mtext)
+#' cfg <- configuration(rksp.0$mtext, asList=FALSE)
+#' # Passive configuration matrix
+#' cfg <- configuration(rksp.0$mtext, asList=FALSE, mode="Passive")
 #' 
 configuration <- function(mtext, 
                           by=c("Act", "Scene"), 

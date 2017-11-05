@@ -2,8 +2,7 @@
 % Please edit documentation in R/figures.R
 \name{figurematrix}
 \alias{figurematrix}
-\title{This function takes a data frame describing various metrics of figures in dramas 
-and creates a matrix that can be used to create a stacked bar plot.}
+\title{Stacked matrix}
 \usage{
 figurematrix(fstat, column = "tokens", order = -1)
 }

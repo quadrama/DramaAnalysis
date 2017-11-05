@@ -2,7 +2,7 @@
 % Please edit documentation in R/figures.R
 \name{rankFiguresByDramatisPersonae}
 \alias{rankFiguresByDramatisPersonae}
-\title{Adds a column to the figures data frame, containing the rank in the dramatis personae.}
+\title{Rank figures by the dramatis personae}
 \usage{
 rankFiguresByDramatisPersonae(figures,
   columnTitle = "Rank (dramatis personae)")
