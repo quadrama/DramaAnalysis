@@ -179,7 +179,8 @@ loadCSV <- function(ids,
                                 sep="."))
     if (file.exists(filename)) {
       tab <- data.table::data.table(readr::read_csv(filename, 
-                                                    locale = readr::locale(encoding = "UTF-8")))
+                                                    locale = readr::locale(encoding = "UTF-8"),
+                                                    col_types = readr::cols()))
       return(tab)
     } else {
       return(NA)
