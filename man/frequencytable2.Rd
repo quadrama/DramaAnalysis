@@ -6,7 +6,7 @@
 \usage{
 frequencytable2(t, acceptedPOS = postags$de$words, names = FALSE,
   cols = c("Token.surface", "Token.surface"), byFigure = FALSE,
-  by = "drama")
+  by = c("Drama", "Act", "Scene"))
 }
 \arguments{
 \item{t}{The text}

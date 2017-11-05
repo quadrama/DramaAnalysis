@@ -21,28 +21,29 @@
 #' stylo(gui=F, frequencies = stylo_table)
 #' }
 #' @export
-frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=FALSE, sortResult=FALSE, by="drama") {
+frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=FALSE, sortResult=FALSE, by=c("Drama","Act","Scene")) {
   ft <- t
   if (length(acceptedPOS) > 0)
     ft <- t[t$Token.pos %in% acceptedPOS,]
   
+  by <- match.arg(by)
   switch(by,
-         drama = { 
+         Drama = { 
            if (byFigure == FALSE) { xt <- stats::xtabs(~drama + ft[,get(column)], data=ft) }
            else if (names == TRUE) { xt <- stats::xtabs(~ paste(drama,Speaker.figure_surface,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
-         act = {
+         Act = {
            if (byFigure == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,sep=sep) + ~ft[,get(column)], data=ft) }
            else if (names == TRUE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Speaker.figure_surface,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Number.Act,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
-         scene = {
+         Scene = {
            if (byFigure == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,sep=sep) + ~ft[,get(column)], data=ft) }
            else if (names == TRUE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,Speaker.figure_surface,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
-         stop("Please enter valid string-value for argument 'by' (default = 'drama', 'act' or 'scene').")
+         stop("Please enter valid string-value for argument 'by' (default = 'Drama', 'Act' or 'Scene').")
   )
   
   r <- as.matrix(stats::ftable(xt, row.vars = c(), col.vars = c()))
@@ -67,29 +68,29 @@ frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, colum
 #' @param by Whether the count is by drama (default), act or scene
 #' @param cols The column names we should use (should be either Token.surface or Token.lemma)
 #' @keywords internal
-frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), byFigure=FALSE, by="drama") {
+frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), byFigure=FALSE, by=c("Drama","Act","Scene")) {
   ft <- t
   if (length(acceptedPOS) > 0) {
     ft <- t[t$Token.pos %in% acceptedPOS,]
   }
-  
+  by <- match.arg(by)
   switch(by,
-         drama = { 
+         Drama = { 
            if (byFigure == FALSE) { index <- paste(ft$drama) }
            else if (names == TRUE) { index <- paste(ft$drama, ft$Speaker.figure_surface) }
            else { index <- paste(ft$drama, ft$Speaker.figure_id) }
          },
-         act = {
+         Act = {
            if (byFigure == FALSE) { index <- paste(ft$drama, ft$Number.Act) }
            else if (names == TRUE) { index <- paste(ft$drama, ft$Number.Act, ft$Speaker.figure_surface) }
            else { index <- paste(ft$drama, ft$Number.Act, ft$Speaker.figure_id) }
          },
-         scene = {
+         Scene = {
            if (byFigure == FALSE) { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene) }
            else if (names == TRUE) { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene, ft$Speaker.figure_surface) }
            else { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene, ft$Speaker.figure_id) }
          },
-         stop("Please enter valid string-value for argument 'by' (default = 'drama', 'act' or 'scene').")
+         stop("Please enter valid string-value for argument 'by' (default = 'Drama', 'Act' or 'Scene').")
   )
   
   r <- do.call(rbind, tapply(paste(ft[[cols[1]]], ft[[cols[2]]][-1]), index, function(x){prop.table(table(x))}))
