@@ -1,4 +1,5 @@
-#' a list of names of the UIMA annotation types used
+#' @title UIMA Annotation types
+#' @description a list of names of the UIMA annotation types used
 #' @export
 atypes <- list(
   # dkpro types
