@@ -3,7 +3,7 @@
 \docType{data}
 \name{atypes}
 \alias{atypes}
-\title{a list of names of the UIMA annotation types used}
+\title{UIMA Annotation types}
 \format{An object of class \code{list} of length 21.}
 \usage{
 atypes

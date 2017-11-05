@@ -16,27 +16,46 @@ loadFields <- function(fieldnames=c(),
   r
 }
 
-#' This method retrieves word lists from the given URL (e.g., github) and
-#' counts the number of occurrences of the words in the dictionaries
-#' @param t A text
-#' @param fieldnames A list of names for the dictionaries. It is expected that files with that name can be found below the URL.
-#' @param fields A list of lists that contains the actual field names. This overrides whatever is given via fieldnames.
-#' @param normalizeByFigure Whether to normalize by figure speech length
-#' @param normalizeByField Whether to normalize by dictionary size. You usually want this.
-#' @param names Whether the resulting table contains figure ids or names
-#' @param boost A scaling factor to generate nicer values
-#' @param baseurl The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().
-#' @param column The table column we apply the dictionary on. Should be either "Token.surface" or "Token.lemma".
+#' @name dictionaryStatistics
+#' @title Dictionary Use
+#' @description These methods retrieve 
+#' count the number of occurrences of the words in the dictionaries, 
+#' across different speakers and/or segments.
+#' The function \code{dictionaryStatistics()} calculates statistics for 
+#' dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
+#' for a single word list. Functions ending on \code{L} return a list with 
+#' multiple components.
+#' @param t A text (data.frame or data.table)
+#' @param fieldnames A list of names for the dictionaries. 
+#' @param fields A list of lists that contains the actual field names. 
+#' By default, we try to load the dictionaries using \code{fieldnames} and \code{baseurl}.
+#' @param normalizeByFigure Logical. Whether to normalize by figure speech length
+#' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
+#' @param names Logical. Whether the resulting table contains figure ids or names.
+#' @param boost A scaling factor to generate nicer values.
+#' @param baseurl The base path delivering the dictionaries. 
+#' Should end in a \code{/}.
+#' @param column The table column we apply the dictionary on. 
+#' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
 #' @importFrom stats aggregate
 #' @importFrom stats ave
+#' @seealso \code{\link{loadFields}}
+#' @rdname dictionaryStatistics
+#' @examples
+#' # Check multiple dictionary entries
+#' data(rksp.0)
+#' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
 #' @export
 dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                  fieldnames=c(),
                                  normalizeByFigure = FALSE, 
-                                 normalizeByField = FALSE, names = FALSE, boost = 1,
+                                 normalizeByField = FALSE, 
+                                 names = FALSE, 
+                                 boost = 1,
                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-                                 column="Token.surface", ci = TRUE) {
+                                 column="Token.surface", 
+                                 ci = TRUE) {
   bylist <- list(t$corpus, t$drama, t$Speaker.figure_id)
   if (names == TRUE)
     bylist <- list(t$corpus, t$drama, t$Speaker.figure_surface)
@@ -56,22 +75,18 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
   r
 }
 
-#' Calculates dictionary statistics for a single word field that is given as a character vector
-#' @param t A single or multiple text(s)
-#' @param wordfield A character vector containing the words or lemmas to be counted
-#' @param names A logical values. Whether to use figure names or ids
-#' @param normalizeByFigure A logical value. Whether to normalize by the amount of tokens a figure speaks
-#' @param normalizeByField A logical value. Whether to normalize by the size of the word field
+#' @param wordfield A character vector containing the words or lemmas to be counted 
+#' (only for \code{*Single}-functions)
 #' @param fieldNormalizer defaults to the length of the wordfield
 #' @param bylist A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas
-#' @param column "Token.surface" or "Token.lemma"
 #' @param colnames The column names to be used
-#' @param ci Logical. Wether to ignore case. Defaults to TRUE
 #' @examples
+#' # Check a single dictionary entries
 #' data(rksp.0)
 #' fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
 #' @importFrom stats aggregate
 #' @importFrom stats na.omit
+#' @rdname dictionaryStatistics
 #' @export
 dictionaryStatisticsSingle <- function(t, wordfield=c(), 
                                        names = FALSE, 
@@ -119,16 +134,15 @@ dictionaryStatisticsSingleL <- function(...) {
   as.list(dstat)
 }
 
-#' @title Dictionary Statistics as a list
-#' @description This function applies the same logic as \code{\link{dictionaryStatistics}}, but returns the result as a list with multiple components, and the core data as a matrix
 #' @param ... All parameters are passed to \code{\link{dictionaryStatistics}}
-#' @seealso \code{\link{dictionaryStatistics}}
-#' @details The returned list has three named elements:
+#' @section Returned Lists:
+#' The returned list has three named elements:
 #' \describe{
 #' \item{drama}{The drama in which these counts have been counted}
 #' \item{figure}{the figure these values has spoken}
 #' \item{mat}{A matrix containing the actual values}
 #' }
+#' @rdname dictionaryStatistics
 #' @export
 dictionaryStatisticsL <- function(...) {
   dstat <- dictionaryStatistics(...)
