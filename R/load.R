@@ -33,22 +33,34 @@ loadSetsInternally <- function() {
   sets
 }
 
-#' Function to load a set from collection files
-#' Can optionally set the set name as a genre in the returned table
-#' @param setName The name of the set to retrieve
-#' @param addGenreColumn Whether to set the Genre-column in the returned table to the set name
+#' @title Load Collections
+#' @description Function to load a set from collection files
+#' Can optionally set the set name as a genre in the returned table. 
+#' \code{loadSets()} returns table of all defined collections (and the
+#' number of plays in each).
+#' @param setName A character vector. The name of the set(s) to retrieve.
+#' @param addGenreColumn Logical. Whether to set the Genre-column in 
+#' the returned table to the set name. If set to FALSE (default), a vector
+#' is returned. In this case, association to collections is not returned.
+#' Otherwise, it's a data.frame.
 #' @export
 loadSet <- function(setName, addGenreColumn=FALSE) {
   sets <- loadSetsInternally()
+  s <- sets[setName]
   if (addGenreColumn == TRUE) {
-    data.frame(id=sets[[setName]],Genre=setName)
+    Reduce(rbind,
+           mapply(function(x,y) { data.frame(id=x, Genre=rep(y,length(x))) },
+                  x=s, 
+                  y=names(s),
+                  SIMPLIFY = FALSE)
+           )
   } else {
-    data.frame(id=sets[[setName]])
+    Reduce(c,s)
   }
 }
 
-#' A function to get a list of all collections and the number of plays in that collection
 #' @export
+#' @rdname loadSet
 loadSets <- function() {
   sets <- loadSetsInternally()
   data.frame(size=unlist(lapply(sets,length)))
