@@ -4,12 +4,13 @@
 \alias{limitFigures}
 \title{Filtering figures}
 \usage{
-limitFigures(text, by = "rank", threshold = ifelse(by == "tokens", 500, 10))
+limitFigures(text, by = c("rank", "tokens"), threshold = ifelse(by ==
+  "tokens", 500, 10))
 }
 \arguments{
 \item{text}{The dramatic text in table form}
 
-\item{by}{A character vector, either "rank" or "tokens"}
+\item{by}{A character vector, either "rank" or "tokens" (or unambigious sub string)}
 
 \item{threshold}{A number specifying the limit}
 }
