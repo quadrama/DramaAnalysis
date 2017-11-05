@@ -1,4 +1,6 @@
-#' This function extracts figure statistics from a drama text table.
+
+#' @title Basic Character Statistics
+#' @description This function extracts figure statistics from a drama text table.
 #' @return A data frame with the following columns and one row for each figure:
 #' tokens: The number of tokens spoken by that figure
 #' types : The number of different tokens (= types) spoken by each figure
@@ -55,7 +57,8 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 }
 
 
-#' This function takes a data frame describing various metrics of figures in dramas 
+#' @title Stacked matrix
+#' @description This function takes a data frame describing various metrics of figures in dramas 
 #' and creates a matrix that can be used to create a stacked bar plot.
 #' @param fstat The figure statistics table, i.e., the output of figureStatistics(). Coerced to a data.table if needed.
 #' @param column A column name found in the statistics table. This count is used 
