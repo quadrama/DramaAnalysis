@@ -255,8 +255,24 @@ loadNumbers <- function(ids=c(),
 #' Returns a list of all ids that are installed
 #' @export
 #' 
-loadAllInstalledIds <- function() {
-  getOption("qd.dl")$getAllIds()
+loadAllInstalledIds <- function(asDataFrame=FALSE) {
+  files <- list.files(path=file.path(getOption("qd.datadir"),"xmi"),pattern=".*\\.(csv|xmi)", recursive = TRUE)
+  files <- strsplit(files, .Platform$file.sep, fixed=TRUE)
+  files <- lapply(files, function(x) {
+    parts <- unlist(strsplit(x[2],".",fixed=TRUE))
+    if (data.table::last(parts)=="xmi") {
+      x[2] <- paste(parts[1:(length(parts)-1)],sep=".",collapse=".")
+    } else if (data.table::last(parts)=="csv") {
+      x[2] <- paste(parts[1:(length(parts)-2)],sep=".",collapse=".")
+    }
+    x
+  })
+  files <- unique(files)
+  if (asDataFrame) {
+    data.frame(matrix(unlist(files), nrow=length(files), byrow=T))
+  } else {
+    unlist(lapply(files, function(x) { paste(x,sep=":", collapse=":") }))
+  }
 }
 
 #' @title Download preprocessed drama data
