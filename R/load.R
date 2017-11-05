@@ -147,6 +147,7 @@ loadAnnotations <- function(ids,
                             coveredType=atypes$Token,
                             defaultCollection="tg",
                             columnTypes=NULL) {
+  .Deprecated("loadCSV")
   dl <- dlobject()
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
