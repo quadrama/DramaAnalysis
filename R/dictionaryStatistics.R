@@ -53,7 +53,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
   r <- dictionary
   for (f in 1:length(dictionary)) {
     fn <- names(dictionary)[[f]]
-    sims <- topicmodels::closest_to(model,dictionary[[f]],n=top,fancy_names = FALSE)
+    sims <- wordVectors::closest_to(model,dictionary[[f]],n=top,fancy_names = FALSE)
     r[[fn]] <- c(r[[fn]],sims[sims$similarity>=minimalSimilarity,1])
   }
   r
