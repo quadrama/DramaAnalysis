@@ -14,4 +14,3 @@ version.md
 vignettes/*.html
 vignettes/*.R
 .httr-oauth
-.git
