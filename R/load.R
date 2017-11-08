@@ -9,15 +9,8 @@ setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data"),
                   collectionDirectory = file.path(dataDirectory,"collections")) {
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
-  #options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
-dlobject <- function() {
-  if (is.null(getOption("qd.dl"))) {
-    #options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
-  }
-  getOption("qd.dl")
-}
 
 #' @importFrom utils read.table
 loadSetsInternally <- function() {
@@ -95,17 +88,6 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
                                  by.x=c("corpus", "drama", "begin", "end"), 
                                  by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
   mtext
-}
-
-
-load.text <- function(...) {
-  .Deprecated("loadText")
-  loadText(...)
-}
-
-load.text2 <- function(...) {
-  .Deprecated("loadSegmentedText")
-  loadSegmentedText(...)
 }
 
 
@@ -195,57 +177,6 @@ loadCSV <- function(ids,
 #' @export
 loadMeta <- function(ids,type=atypes$Author) {
   loadCSV(ids, variant="Metadata")
-}
-
-#' Function to count the annotations of a certain type in selected texts.
-#' @param ids A vector or list of drama ids
-#' @param type A string, the fully qualified type name we want to count
-#' @param debug Logical value, whether to print debug information
-#' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
-countAnnotations <- function(ids, 
-                             type=atypes$Utterance,
-                             debug=FALSE,
-                             shortname=TRUE) {
-  r <- data.frame(c())
-  s <- ""
-  if (shortname == TRUE) {
-    lname <- utils::tail(unlist(strsplit(type, split=".",fixed=TRUE)),n=1)
-  } else {
-    lname <- type
-  }
-  for (a in ids) {
-    tryCatch({
-      data2 <- loadAnnotations(ids,type,NULL)
-      r[a,lname] = nrow(data2)
-    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
-  }
-  r
-}
-
-#' This function loads the number of annotations of different types for several 
-#' dramas at once.
-#' @param ids A vector containing drama ids
-#' @param types A character vector containing the annotation types we want to count
-#' @param debug Logical value, whether to print out debug info
-#' @examples 
-#' \dontrun{
-#' loadNumbers(c("rksp.0", "vndf.0"))
-#' }
-loadNumbers <- function(ids=c(),
-                        types=c(atypes$Act,
-                                atypes$Scene, 
-                                atypes$Utterance,
-                                atypes$Token,
-                                atypes$Sentence,
-                                atypes$DramatisPersonae),
-                        debug=FALSE) {
-  df <- data.frame(ids)
-  rownames(df) <- df$ids
-  for (a in types) {
-    annos <- countAnnotations(ids, type=a, debug=debug)
-    df <- cbind(df, annos)
-  }
-  subset(df,select=c(-1))
 }
 
 #' Returns a list of all ids that are installed
