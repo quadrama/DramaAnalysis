@@ -9,12 +9,12 @@ setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data"),
                   collectionDirectory = file.path(dataDirectory,"collections")) {
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
-  options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
+  #options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
 dlobject <- function() {
   if (is.null(getOption("qd.dl"))) {
-    options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
+    #options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
   }
   getOption("qd.dl")
 }
