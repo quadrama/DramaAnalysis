@@ -4,7 +4,7 @@
 \alias{loadAllInstalledIds}
 \title{Returns a list of all ids that are installed}
 \usage{
-loadAllInstalledIds()
+loadAllInstalledIds(asDataFrame = FALSE)
 }
 \description{
 Returns a list of all ids that are installed

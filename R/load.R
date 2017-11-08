@@ -9,15 +9,8 @@ setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data"),
                   collectionDirectory = file.path(dataDirectory,"collections")) {
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
-  options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
-dlobject <- function() {
-  if (is.null(getOption("qd.dl"))) {
-    options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
-  }
-  getOption("qd.dl")
-}
 
 #' @importFrom utils read.table
 loadSetsInternally <- function() {
@@ -98,17 +91,6 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
 }
 
 
-load.text <- function(...) {
-  .Deprecated("loadText")
-  loadText(...)
-}
-
-load.text2 <- function(...) {
-  .Deprecated("loadSegmentedText")
-  loadSegmentedText(...)
-}
-
-
 #' Loads a CSV-formatted text from the server,
 #' assuming the main server url has been set correctly.
 #'
@@ -148,9 +130,7 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
 #' @param columnTypes Can be used to specify column types, which are passed to readr::read.csv.
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
-#' @importFrom data.table fread
-#' @importFrom rJava .jnew .jarray .jnull
-#' @importFrom readr read_csv locale
+#' @importFrom readr read_csv locale cols
 #' @examples
 #' \dontrun{
 #' loadAnnotations(c("tg:rksp.0"))
@@ -160,19 +140,7 @@ loadAnnotations <- function(ids,
                             coveredType=atypes$Token,
                             defaultCollection="tg",
                             columnTypes=NULL) {
-  dl <- dlobject()
-  
-  ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
-                function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
-  if (is.null(coveredType)) {
-    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,rJava::.jnull())
-  } else {
-    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,coveredType)
-  }
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
-                                                  col_types = columnTypes))
-  colnames(df) <- make.names(colnames(df))
-  df
+  stop("This function is no longer supported. Use loadCSV() instead.")
 }
 
 loadCSV <- function(ids, 
@@ -181,13 +149,25 @@ loadCSV <- function(ids,
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
                        function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
+  splittedIds <- strsplit(ids,":",fixed=TRUE)
   cvar <- match.arg(variant)
-  dl <- dlobject()
   
-  jvar <- rJava::J("de.unistuttgart.ims.drama.data.CSVVariant")
-  s <- dl$getCSV(rJava::.jarray(as.character(ids)),jvar$valueOf(cvar))
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
-  df
+  tables <- lapply(splittedIds, function(x) {
+    filename <- file.path(getOption("qd.datadir"),
+                          "xmi",
+                          x[1],
+                          paste(x[2],variant,"csv",
+                                sep="."))
+    if (file.exists(filename)) {
+      tab <- data.table::data.table(readr::read_csv(filename, 
+                                                    locale = readr::locale(encoding = "UTF-8"),
+                                                    col_types = readr::cols()))
+      return(tab)
+    } else {
+      return(NA)
+    }
+  })
+  Reduce(rbind, tables)
 }
 
 #' @title Load meta data
@@ -199,63 +179,26 @@ loadMeta <- function(ids,type=atypes$Author) {
   loadCSV(ids, variant="Metadata")
 }
 
-#' Function to count the annotations of a certain type in selected texts.
-#' @param ids A vector or list of drama ids
-#' @param type A string, the fully qualified type name we want to count
-#' @param debug Logical value, whether to print debug information
-#' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
-#' @export
-countAnnotations <- function(ids, 
-                             type=atypes$Utterance,
-                             debug=FALSE,
-                             shortname=TRUE) {
-  r <- data.frame(c())
-  s <- ""
-  if (shortname == TRUE) {
-    lname <- utils::tail(unlist(strsplit(type, split=".",fixed=TRUE)),n=1)
-  } else {
-    lname <- type
-  }
-  for (a in ids) {
-    tryCatch({
-      data2 <- loadAnnotations(ids,type,NULL)
-      r[a,lname] = nrow(data2)
-    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
-  }
-  r
-}
-
-#' This function loads the number of annotations of different types for several 
-#' dramas at once.
-#' @param ids A vector containing drama ids
-#' @param types A character vector containing the annotation types we want to count
-#' @param debug Logical value, whether to print out debug info
-#' @export
-#' @examples 
-#' \dontrun{
-#' loadNumbers(c("rksp.0", "vndf.0"))
-#' }
-loadNumbers <- function(ids=c(),
-                        types=c(atypes$Act,
-                                atypes$Scene, 
-                                atypes$Utterance,
-                                atypes$Token,
-                                atypes$Sentence,
-                                atypes$DramatisPersonae),
-                        debug=FALSE) {
-  df <- data.frame(ids)
-  rownames(df) <- df$ids
-  for (a in types) {
-    annos <- countAnnotations(ids, type=a, debug=debug)
-    df <- cbind(df, annos)
-  }
-  subset(df,select=c(-1))
-}
-
 #' Returns a list of all ids that are installed
 #' @export
 #' 
-loadAllInstalledIds <- function() {
-  getOption("qd.dl")$getAllIds()
+loadAllInstalledIds <- function(asDataFrame=FALSE) {
+  files <- list.files(path=file.path(getOption("qd.datadir"),"xmi"),pattern=".*\\.(csv|xmi)", recursive = TRUE)
+  files <- strsplit(files, .Platform$file.sep, fixed=TRUE)
+  files <- lapply(files, function(x) {
+    parts <- unlist(strsplit(x[2],".",fixed=TRUE))
+    if (data.table::last(parts)=="xmi") {
+      x[2] <- paste(parts[1:(length(parts)-1)],sep=".",collapse=".")
+    } else if (data.table::last(parts)=="csv") {
+      x[2] <- paste(parts[1:(length(parts)-2)],sep=".",collapse=".")
+    }
+    x
+  })
+  files <- unique(files)
+  if (asDataFrame) {
+    data.frame(matrix(unlist(files), nrow=length(files), byrow=T))
+  } else {
+    unlist(lapply(files, function(x) { paste(x,sep=":", collapse=":") }))
+  }
 }
 
