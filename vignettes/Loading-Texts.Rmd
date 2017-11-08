@@ -9,6 +9,11 @@ output:
   md_document:
     variant: markdown_github
     toc: true
+    includes:
+      before_body:
+      - version.md
+      - vig-Loading-Texts.md
+
 
 vignette: >
   %\VignetteIndexEntry{Loading Texts}
@@ -20,6 +25,8 @@ bibliography: bibliography.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 require(DramaAnalysis)
+v <- packageVersion("DramaAnalysis")
+
 ```
 
 

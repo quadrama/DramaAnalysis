@@ -1,4 +1,4 @@
-[![release](https://img.shields.io/badge/release-1.0.3-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v1.0.3)
+[![release](https://img.shields.io/badge/release-1.2.0-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v1.2.0)
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
 [![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
 [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
@@ -14,31 +14,23 @@ This package contains a number of functions to support the analyis of dramatic t
 - Generation of a report for a dramatic text
 - Reads in preprocessed texts 
 
+# Requirements
+DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes, but the JVM needs a bit of memory, so we assume to be working on the **64bit** variants.
 
-## Download and Installation
-Please check [this page](https://github.com/quadrama/DramaAnalysis/releases).
+- R (64 bit)
+- Java
+- [rJava](https://cran.r-project.org/web/packages/rJava/index.html)
+   - Please make sure rJava finds the correct Java installation on your machine. Windows: [This answer](http://stackoverflow.com/a/7604469) worked when testing.
 
-## Usage and Howto
-Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
+# Updating
+In some cases, the old java code is not replaced if you just install the new version. Please restart R *before* and *do not* run `setup()` before installation.
 
-# Release workflow
-- Make a new branch for the release (e.g. `release/1.0.0`)
-- Set all version numbers to the correct version
-  - `DESCRIPTION` file for the R package
-  - `pom.xml` for the Java code
-- Compile the Java code by running `mvn -f java/pom.xml clean package`
-- Go one directory up `cd ..`
-- Create vignettes by running `devtools::build_vignettes()` in R
-- Check that the R package is well: `R CMD check DramaAnalysis`
-- Make a source package by running `R CMD build DramaAnalysis`
-- If all works well, merge the branch into master, tag it with `v1.0.0`
-- Create a new release on the [github release page](https://github.com/quadrama/DramaAnalysis/releases)
-- Upload the source package
-- Copy the following installations instructions in release note (with fixed version numbers)
-   ```R
-   install.packages("https://github.com/quadrama/DramaAnalysis/releases/download/v1.0.0/DramaAnalysis_1.0.0.tar.gz",
-   repos=NULL, type="source")
-   ```
-- Add the PDF documentation for the R package to the release page
-- Update zenodo-DOI in README.md on master branch
-- Post the updated vignettes on the wiki
+# Installation
+```R
+install.packages("https://github.com/quadrama/DramaAnalysis/releases/download/v1.2.0/DramaAnalysis_1.2.0.tar.gz",
+   repos=NULL, type="source", INSTALL_opts="--no-multiarch")
+```
+
+# Usage and Howto
+Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki).
+

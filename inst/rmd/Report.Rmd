@@ -19,7 +19,11 @@ pver <- packageVersion("DramaAnalysis")
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setup()
+
+if (is.null(.Options$qd.datadir)) { 
+  setup()
+}
+
 require(magrittr)
 
 text <- loadText(params$id, includeTokens = TRUE)

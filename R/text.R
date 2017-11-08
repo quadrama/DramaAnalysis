@@ -1,4 +1,5 @@
-#' color scheme to be used for QuaDramA plots
+#' @title QuaDramA colors
+#' @description color scheme to be used for QuaDramA plots
 #' Taken from http://google.github.io/palette.js/, tol-rainbow, 10 colors
 #' @export
 qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
@@ -20,19 +21,18 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' by tokens is a lower limit: Every figure that speaks more than $threshold$ figures is
 #' included.
 #' @param text The dramatic text in table form
-#' @param by A character vector, either "rank" or "tokens"
+#' @param by A character vector, either "rank" or "tokens" (or unambigious sub string)
 #' @param threshold A number specifying the limit
 #' @export
 #' @examples 
 #' data(rksp.0)
 #' text.top10 <- limitFigures(rksp.0$mtext)
-limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10)) {
-  if(is.na(pmatch(by, c("tokens", "rank")))) stop("Invalid filtering criterion")
-  if (by=="tokens") {
-    limitFiguresByTokens(text, minTokens=threshold)
-  } else {
-    limitFiguresByRank(text, maxRank = threshold)
-  }
+limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="tokens",500,10)) {
+  by <- match.arg(by)
+  switch(by,
+         tokens=limitFiguresByTokens(text, minTokens=threshold),
+         rank=limitFiguresByRank(text, maxRank = threshold),
+         stop("Invalid filtering criterion"))
 }
 
 #' This method removes the spoken tokens of all but the most frequent n figures
@@ -125,7 +125,7 @@ extractTopTerms <- function(mat, top=10) {
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
 #' @export
-report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], "html")), colors=qd.colors) {
+report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), colors=qd.colors) {
   force(of)
   rmarkdown::render(system.file("rmd/Report.Rmd", package="DramaAnalysis"), params=list(id=id, col=colors), 
                     output_format = "html_document", 

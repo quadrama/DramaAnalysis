@@ -2,7 +2,7 @@
 % Please edit documentation in R/genre.R
 \name{correlationAnalysis}
 \alias{correlationAnalysis}
-\title{Calculates correlation of a frequency table with an outcome list according to given method}
+\title{Correlation analysis}
 \usage{
 correlationAnalysis(text.ft, outcomes, method = "spearman",
   minimalFrequency = 10)
