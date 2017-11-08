@@ -16,7 +16,6 @@ Imports:
    fmsb (>= 0.6.0),
    rmarkdown (>= 1.5),
    readr (>= 1.1.1),
-   rJava (>= 0.9-8), 
    data.table (>= 1.10.4),
    httr (>= 1.2.1),
    wordVectors (>= 2.0)
@@ -27,6 +26,5 @@ Suggests: testthat,
     knitr,
     igraph
 Encoding: UTF-8
-SystemRequirements: Java
 VignetteBuilder: knitr
 Remotes: bmschmidt/wordVectors@2.0
