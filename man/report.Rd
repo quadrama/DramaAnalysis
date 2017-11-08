@@ -5,7 +5,7 @@
 \title{Report}
 \usage{
 report(id = "tg:rksp.0", of = file.path(getwd(), paste0(unlist(strsplit(id,
-  ":", fixed = TRUE))[2], "html")), colors = qd.colors)
+  ":", fixed = TRUE))[2], ".html")), colors = qd.colors)
 }
 \arguments{
 \item{id}{The id of the text}

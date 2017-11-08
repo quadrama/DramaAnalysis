@@ -12,7 +12,7 @@ output:
     includes:
       before_body:
       - version.md
-      - vig-Figure-Statistics.md
+      - vig-Presence.md
 
 
 vignette: >

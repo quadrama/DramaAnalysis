@@ -1,9 +1,9 @@
 Package: DramaAnalysis
 Type: Package
 Title: Scripts to support analysis of dramatic texts
-Version: 1.1.0
-Date: 2017-10-23
-Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
+Version: 1.2.0
+Date: 2017-11-08
+Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>, Tim Strohmayer <st151528@stud.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Description: This package can be used to import and analyse pre-processed dramatic texts.
   The texts are expected to be in csv format. There is not much to do without preprocessed texts.
@@ -18,7 +18,8 @@ Imports:
    readr (>= 1.1.1),
    rJava (>= 0.9-8), 
    data.table (>= 1.10.4),
-   httr (>= 1.2.1)
+   httr (>= 1.2.1),
+   wordVectors (>= 2.0)
 Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.0.1
@@ -28,3 +29,4 @@ Suggests: testthat,
 Encoding: UTF-8
 SystemRequirements: Java
 VignetteBuilder: knitr
+Remotes: bmschmidt/wordVectors@2.0

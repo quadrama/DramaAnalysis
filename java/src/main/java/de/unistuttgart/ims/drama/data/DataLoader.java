@@ -8,6 +8,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +20,8 @@ import java.util.logging.Logger;
 import org.apache.commons.configuration2.CombinedConfiguration;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.tree.OverrideCombiner;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -207,6 +211,24 @@ public class DataLoader implements IRepository {
 		}
 		return new String(boas.toByteArray());
 
+	}
+
+	public String getCSV(String[] dramaIds, CSVVariant variant)
+			throws UnsupportedEncodingException, IOException, UIMAException, SAXException {
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+
+		CSVPrinter p = new CSVPrinter(new OutputStreamWriter(boas, "UTF-8"), CSVFormat.DEFAULT);
+
+		variant.header(p);
+		for (String s : dramaIds) {
+			JCas jcas = getJCas(s);
+			variant.convert(jcas, p);
+		}
+
+		p.flush();
+		p.close();
+
+		return new String(boas.toByteArray());
 	}
 
 	public String getDramaMetaData(String[] dramaIds) throws UIMAException, SAXException, IOException {

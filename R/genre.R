@@ -1,5 +1,6 @@
 
-#' Calculates correlation of a frequency table with an outcome list according to given method
+#' @title Correlation analysis
+#' @description Calculates correlation of a frequency table with an outcome list according to given method
 #' @param text.ft A matrix, containing words in columns and figures (or plays) in rows
 #' @param outcomes A list of outcomes, will be cast as numeric
 #' @param minimalFrequency An integer. Words that appear less than x times can be filtered in advance

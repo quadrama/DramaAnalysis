@@ -2,17 +2,24 @@
 % Please edit documentation in R/load.R
 \name{loadSet}
 \alias{loadSet}
-\title{Function to load a set from collection files
-Can optionally set the set name as a genre in the returned table}
+\alias{loadSets}
+\title{Load Collections}
 \usage{
 loadSet(setName, addGenreColumn = FALSE)
+
+loadSets()
 }
 \arguments{
-\item{setName}{The name of the set to retrieve}
+\item{setName}{A character vector. The name of the set(s) to retrieve.}
 
-\item{addGenreColumn}{Whether to set the Genre-column in the returned table to the set name}
+\item{addGenreColumn}{Logical. Whether to set the Genre-column in 
+the returned table to the set name. If set to FALSE (default), a vector
+is returned. In this case, association to collections is not returned.
+Otherwise, it's a data.frame.}
 }
 \description{
 Function to load a set from collection files
-Can optionally set the set name as a genre in the returned table
+Can optionally set the set name as a genre in the returned table. 
+\code{loadSets()} returns table of all defined collections (and the
+number of plays in each).
 }

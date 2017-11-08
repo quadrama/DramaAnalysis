@@ -2,11 +2,11 @@
 % Please edit documentation in R/frequencytable.R
 \name{frequencytable}
 \alias{frequencytable}
-\title{This function generates a matrix of word frequencies by figure or drama.}
+\title{Word frequencies}
 \usage{
 frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
   column = "Token.surface", byFigure = FALSE, sep = "|",
-  normalize = TRUE, sortResult = FALSE)
+  normalize = FALSE, sortResult = FALSE, by = c("Drama", "Act", "Scene"))
 }
 \arguments{
 \item{t}{The text table, potentially covering multiple texts}
@@ -24,9 +24,12 @@ frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
 \item{normalize}{Whether to normalize values or not}
 
 \item{sortResult}{Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)}
+
+\item{by}{Whether the count is by drama (default), act or scene}
 }
 \description{
-This function generates a matrix of word frequencies by figure or drama.
+This function generates a matrix of word frequencies 
+by drama, act or scene and/or by figure.
 }
 \examples{
 data(rksp.0)

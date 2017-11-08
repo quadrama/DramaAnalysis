@@ -3,8 +3,7 @@
 \docType{data}
 \name{qd.colors}
 \alias{qd.colors}
-\title{color scheme to be used for QuaDramA plots
-Taken from http://google.github.io/palette.js/, tol-rainbow, 10 colors}
+\title{QuaDramA colors}
 \format{An object of class \code{character} of length 10.}
 \usage{
 qd.colors
