@@ -1,8 +1,8 @@
 Package: DramaAnalysis
 Type: Package
 Title: Scripts to support analysis of dramatic texts
-Version: 1.1.0
-Date: 2017-10-23
+Version: 1.2.0
+Date: 2017-11-08
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>, Tim Strohmayer <st151528@stud.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Description: This package can be used to import and analyse pre-processed dramatic texts.
