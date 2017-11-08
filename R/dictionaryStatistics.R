@@ -5,6 +5,10 @@
 #' @param fieldnames A list of names for the dictionaries. It is expected that files with that name can be found below the URL.
 #' @param baseurl The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().
 #' @param fileSuffix The suffix for the dictionary files
+#' @param directory The last component of the base url. 
+#' Useful to retrieve enriched word fields from metadata repo.
+#' @param fileSep The file separator used to construct the URL
+#' Can be overwritten to load local dictionaries.
 #' @importFrom utils read.csv
 #' @section File Format:
 #' Dictionary files should contain one word per line, with no comments or any other meta information. 
@@ -13,8 +17,11 @@
 #' @rdname dictionaryHandling
 #' @export
 loadFields <- function(fieldnames=c(),
-                      baseurl="https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-                      fileSuffix=".txt") {
+                      baseurl=paste("https://raw.githubusercontent.com/quadrama/metadata/master",
+                                    ensureSuffix(directory,fileSep),sep=fileSep),
+                      directory="fields/",
+                      fileSuffix=".txt",
+                      fileSep = "/") {
   r <- list()
   for (field in fieldnames) {
     url <- paste(baseurl, field, fileSuffix, sep="")

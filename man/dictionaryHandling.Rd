@@ -6,8 +6,9 @@
 \title{Dictionary Handling}
 \usage{
 loadFields(fieldnames = c(),
-  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-  fileSuffix = ".txt")
+  baseurl = paste("https://raw.githubusercontent.com/quadrama/metadata/master",
+  ensureSuffix(directory, fileSep), sep = fileSep), directory = "fields/",
+  fileSuffix = ".txt", fileSep = "/")
 
 enrichDictionary(dictionary, model, top = 100, minimalSimilarity = 0.4)
 }
@@ -16,7 +17,13 @@ enrichDictionary(dictionary, model, top = 100, minimalSimilarity = 0.4)
 
 \item{baseurl}{The base path delivering the dictionaries. Should end in a /, field names will be appended and fed into read.csv().}
 
+\item{directory}{The last component of the base url. 
+Useful to retrieve enriched word fields from metadata repo.}
+
 \item{fileSuffix}{The suffix for the dictionary files}
+
+\item{fileSep}{The file separator used to construct the URL
+Can be overwritten to load local dictionaries.}
 
 \item{dictionary}{The base dictionary, a named list of lists.}
 
