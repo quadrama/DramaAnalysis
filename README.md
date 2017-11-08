@@ -15,15 +15,9 @@ This package contains a number of functions to support the analyis of dramatic t
 - Reads in preprocessed texts 
 
 # Requirements
-DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes, but the JVM needs a bit of memory, so we assume to be working on the **64bit** variants.
+DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes.
 
-- R (64 bit)
-- Java
-- [rJava](https://cran.r-project.org/web/packages/rJava/index.html)
-   - Please make sure rJava finds the correct Java installation on your machine. Windows: [This answer](http://stackoverflow.com/a/7604469) worked when testing.
-
-# Updating
-In some cases, the old java code is not replaced if you just install the new version. Please restart R *before* and *do not* run `setup()` before installation.
+- R
 
 # Installation
 ```R
