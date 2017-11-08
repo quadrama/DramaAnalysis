@@ -19,11 +19,12 @@ dlobject <- function() {
   getOption("qd.dl")
 }
 
+#' @importFrom utils read.table
 loadSetsInternally <- function() {
   setNames <- list.files(getOption("qd.collectionDirectory"))
   sets <- lapply(setNames, 
                  function(x) { 
-                   read.table(
+                   utils::read.table(
                      file.path(getOption("qd.collectionDirectory"), x),
                      encoding = "UTF-8",
                      stringsAsFactors = FALSE
