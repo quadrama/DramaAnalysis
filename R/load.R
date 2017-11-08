@@ -179,7 +179,12 @@ loadMeta <- function(ids,type=atypes$Author) {
   loadCSV(ids, variant="Metadata")
 }
 
-#' Returns a list of all ids that are installed
+
+#' @title Installed texts
+#' @description Returns a list of all ids that are installed
+#' @param asDataFrame Logical value. Controls whether 
+#' the return value is a list (with colon-joined ids) 
+#' or a data.frame with two columns (corpus, drama)
 #' @export
 #' 
 loadAllInstalledIds <- function(asDataFrame=FALSE) {

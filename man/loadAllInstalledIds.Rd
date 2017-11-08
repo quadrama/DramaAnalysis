@@ -2,9 +2,14 @@
 % Please edit documentation in R/load.R
 \name{loadAllInstalledIds}
 \alias{loadAllInstalledIds}
-\title{Returns a list of all ids that are installed}
+\title{Installed texts}
 \usage{
 loadAllInstalledIds(asDataFrame = FALSE)
+}
+\arguments{
+\item{asDataFrame}{Logical value. Controls whether 
+the return value is a list (with colon-joined ids) 
+or a data.frame with two columns (corpus, drama)}
 }
 \description{
 Returns a list of all ids that are installed
