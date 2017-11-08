@@ -125,7 +125,7 @@ extractTopTerms <- function(mat, top=10) {
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
 #' @export
-report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], "html")), colors=qd.colors) {
+report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), colors=qd.colors) {
   force(of)
   rmarkdown::render(system.file("rmd/Report.Rmd", package="DramaAnalysis"), params=list(id=id, col=colors), 
                     output_format = "html_document", 
