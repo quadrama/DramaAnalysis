@@ -1,4 +1,4 @@
-[![release](https://img.shields.io/badge/release-1.2.0-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v1.2.0)
+[![release](https://img.shields.io/badge/release-2.0.0-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v2.0.0)
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
 [![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
 [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
@@ -21,7 +21,7 @@ DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes.
 
 # Installation
 ```R
-install.packages("https://github.com/quadrama/DramaAnalysis/releases/download/v1.2.0/DramaAnalysis_1.2.0.tar.gz",
+install.packages("https://github.com/quadrama/DramaAnalysis/releases/download/v2.0.0/DramaAnalysis_2.0.0.tar.gz",
    repos=NULL, type="source", INSTALL_opts="--no-multiarch")
 ```
 
