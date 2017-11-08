@@ -148,9 +148,7 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
 #' @param columnTypes Can be used to specify column types, which are passed to readr::read.csv.
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
-#' @importFrom data.table fread
-#' @importFrom rJava .jnew .jarray .jnull
-#' @importFrom readr read_csv locale
+#' @importFrom readr read_csv locale cols
 #' @examples
 #' \dontrun{
 #' loadAnnotations(c("tg:rksp.0"))
@@ -160,20 +158,7 @@ loadAnnotations <- function(ids,
                             coveredType=atypes$Token,
                             defaultCollection="tg",
                             columnTypes=NULL) {
-  .Deprecated("loadCSV")
-  dl <- dlobject()
-  
-  ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
-                function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
-  if (is.null(coveredType)) {
-    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,rJava::.jnull())
-  } else {
-    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,coveredType)
-  }
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
-                                                  col_types = columnTypes))
-  colnames(df) <- make.names(colnames(df))
-  df
+  stop("This function is no longer supported. Use loadCSV() instead.")
 }
 
 loadCSV <- function(ids, 
