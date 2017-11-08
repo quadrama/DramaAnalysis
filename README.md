@@ -21,9 +21,15 @@ DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes.
 
 # Installation
 ```R
-install.packages("devtools") # this is only necessary once per system
+# this is only necessary once per system
+install.packages("devtools") 
 library(devtools)
-install_github("quadrama/DramaAnalysis")
+
+# Install newest version
+install_github("quadrama/DramaAnalysis") 
+
+# Install specific version (2.0.0)
+install_github("quadrama/DramaAnalysis", ref="v2.0.0") 
 ```
 
 # Usage and Howto
