@@ -1,4 +1,5 @@
-#' color scheme to be used for QuaDramA plots
+#' @title QuaDramA colors
+#' @description color scheme to be used for QuaDramA plots
 #' Taken from http://google.github.io/palette.js/, tol-rainbow, 10 colors
 #' @export
 qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
@@ -20,19 +21,18 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' by tokens is a lower limit: Every figure that speaks more than $threshold$ figures is
 #' included.
 #' @param text The dramatic text in table form
-#' @param by A character vector, either "rank" or "tokens"
+#' @param by A character vector, either "rank" or "tokens" (or unambigious sub string)
 #' @param threshold A number specifying the limit
 #' @export
 #' @examples 
 #' data(rksp.0)
 #' text.top10 <- limitFigures(rksp.0$mtext)
-limitFigures <- function(text, by="rank", threshold=ifelse(by=="tokens",500,10)) {
-  if(is.na(pmatch(by, c("tokens", "rank")))) stop("Invalid filtering criterion")
-  if (by=="tokens") {
-    limitFiguresByTokens(text, minTokens=threshold)
-  } else {
-    limitFiguresByRank(text, maxRank = threshold)
-  }
+limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="tokens",500,10)) {
+  by <- match.arg(by)
+  switch(by,
+         tokens=limitFiguresByTokens(text, minTokens=threshold),
+         rank=limitFiguresByRank(text, maxRank = threshold),
+         stop("Invalid filtering criterion"))
 }
 
 #' This method removes the spoken tokens of all but the most frequent n figures
@@ -91,7 +91,7 @@ tfidf1 <- function(word) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE)
+#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE,normalize=TRUE)
 #' rksp.0.tfidf <- tfidf(rksp.0.ftable)
 #' @examples
 #' mat <- matrix(c(0.10,0.2, 0,
@@ -133,7 +133,10 @@ report <- function(id="tg:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(i
 }
 
 #' @title Extract section
-#' @description Extracts a sub segment of the text(s)
+#' @description Extracts a sub segment of the text(s).
+#' The result is an empty table if more scenes or acts
+#' are given than exist in the play. In this case, a
+#' warning is printed.
 #' @param input Segmented text (can be multiple texts)
 #' @param op Whether to extract exactly one or more than one
 #' @param by Act or Scene, or matching substring
@@ -155,6 +158,15 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
   
   oper <- match.fun(FUN=op)
   by <- match.arg(by)
+  
+  switch(by,
+         Act=ifelse(n>length(unique(input$begin.Act)), 
+                    warning(paste("Play has only", length(unique(input$begin.Act)) , "acts."), call. = FALSE),
+                    NA),
+         Scene=ifelse(n>length(unique(input$begin.Scene)), 
+                      warning(paste("Play has only", length(unique(input$begin.Scene)) , "scenes."), call. = FALSE),
+                      NA))
+  
   switch(by,
          Act=input[,.SD[oper(begin.Act,last(unique(begin.Act), n))],.(corpus,drama)][],
          Scene=input[,.SD[oper(begin.Scene,last(unique(begin.Scene), n))],.(corpus,drama)][])
@@ -162,7 +174,10 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 
 #' @title Extract section
 #' @export
-#' @description Extracts a sub segment of the text(s)
+#' @description Extracts a sub segment of the text(s). 
+#' The result is an empty table if more scenes or acts
+#' are given than exist in the play. In this case, a
+#' warning is printed.
 #' @param input Segmented text (can be multiple texts)
 #' @param op Whether to extract exactly one or more than one
 #' @param by Act or Scene, or matching substring
@@ -181,8 +196,18 @@ dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
   .SD <- NULL
   . <- NULL
   
+  
+  
   oper <- match.fun(FUN=op)
   by <- match.arg(by)
+  switch(by,
+         Act=ifelse(n>length(unique(input$begin.Act)), 
+                    warning(paste("Play has only", length(unique(input$begin.Act)) , "acts."), call. = FALSE),
+                    NA),
+         Scene=ifelse(n>length(unique(input$begin.Scene)), 
+                      warning(paste("Play has only", length(unique(input$begin.Scene)) , "scenes."), call. = FALSE),
+                      NA))
+  
   switch(by,
          Act=input[,.SD[oper(begin.Act,first(unique(begin.Act), n))],.(corpus,drama)][],
          Scene=input[,.SD[oper(begin.Scene,first(unique(begin.Scene), n))],.(corpus,drama)][])
@@ -194,5 +219,8 @@ first <- function(x,n=0) {
 
 last <- function(x, n=0) {
   len <- length(x)
+  if (n > len) {
+    return(NA)
+  }
   sort(x,partial=len-(n-1))[len-(n-1)]
 }

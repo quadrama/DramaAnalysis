@@ -252,6 +252,26 @@ plotSpiderWebs(dstat, col=params$col)
 fields
 ```
 
+# Personnel Exchange
+
+The following chart shows for each scene boundary the number of characters exchanged over the boundary. Different metrics have been proposd, the plot shows all of them in comparison.
+
+```{r, echo=FALSE}
+ham <- hamming(mtext)
+
+par(mar=c(3,3,3,3))
+layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
+plot(0,type="n",axes=FALSE,xlab="",ylab="")
+legend(x="center",lty=2:3,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
+
+plot(ham, type="l", lty=2, xlab="Scene boundary",ylab="",ylim=c(0,1),frame=TRUE)
+par(new=TRUE)
+plot(hamming(mtext, variant = "NormalizedHamming"), type="l", lty=3,xlab="",ylab="",axes=FALSE)
+par(new=TRUE)
+plot(scenicDifference(mtext), type="l",lty=4,axes=FALSE)
+
+```
+
 # About
 
 This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io). Please report errors [here](https://github.com/quadrama/DramaAnalysis/issues), or contact [me](mailto:nils.reiter@ims.uni-stuttgart.de).

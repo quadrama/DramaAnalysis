@@ -2,7 +2,7 @@
 % Please edit documentation in R/figures.R
 \name{figureStatistics}
 \alias{figureStatistics}
-\title{This function extracts figure statistics from a drama text table.}
+\title{Basic Character Statistics}
 \usage{
 figureStatistics(t, names = FALSE, normalize = FALSE)
 }
