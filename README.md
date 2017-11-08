@@ -31,6 +31,6 @@ install.packages("https://github.com/quadrama/DramaAnalysis/releases/download/v1
    repos=NULL, type="source", INSTALL_opts="--no-multiarch")
 ```
 
-## Usage and Howto
-Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki)
+# Usage and Howto
+Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki).
 
