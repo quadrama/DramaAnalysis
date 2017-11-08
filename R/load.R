@@ -100,7 +100,6 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
 #' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
-#' @export
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyCharacterFactors=TRUE) {
   t <- loadCSV(ids, defaultCollection = defaultCollection)
   t$Token.pos <- factor(t$Token.pos)
