@@ -19,6 +19,9 @@ presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   
   # prevent notes in R CMD check
   corpus <- NULL
+  actives <- NULL
+  passives <- NULL
+  figure <- NULL
   drama <- NULL
   fref <- NULL
   begin.Scene <- NULL
