@@ -18,7 +18,7 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
   utils::download.file(paste0(baseUrl,
                               repository,
                               "/archive/",
-                              branchOrCommit,".zip"), 
+                              branchOrCommit,".csv.zip"), 
                        destfile=tf)
   
   # unzip for temp file
