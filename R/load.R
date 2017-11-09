@@ -144,7 +144,8 @@ loadAnnotations <- function(ids,
 
 loadCSV <- function(ids, 
                     variant=c("UtterancesWithTokens", "Segments", "Metadata"), 
-                    defaultCollection="tg") {
+                    defaultCollection="tg",
+                    dataDirectory=getOption("qd.datadir")) {
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
                        function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
@@ -152,11 +153,12 @@ loadCSV <- function(ids,
   cvar <- match.arg(variant)
   
   tables <- lapply(splittedIds, function(x) {
-    filename <- file.path(getOption("qd.datadir"),
-                          "xmi",
+    filename <- file.path(dataDirectory,
                           x[1],
-                          paste(x[2],variant,"csv",
+                          "csv",
+                          paste(x[2],cvar,"csv",
                                 sep="."))
+    print(filename)
     if (file.exists(filename)) {
       tab <- data.table::data.table(readr::read_csv(filename, 
                                                     locale = readr::locale(encoding = "UTF-8"),
@@ -186,15 +188,16 @@ loadMeta <- function(ids,type=NULL) {
 #' or a data.frame with two columns (corpus, drama)
 #' @export
 #' 
-loadAllInstalledIds <- function(asDataFrame=FALSE) {
-  files <- list.files(path=file.path(getOption("qd.datadir"),"xmi"),pattern=".*\\.(csv|xmi)", recursive = TRUE)
+loadAllInstalledIds <- function(asDataFrame=FALSE, 
+                                dataDirectory=getOption("qd.datadir")) {
+  files <- list.files(path=file.path(dataDirectory),pattern=".*\\.(csv|xmi)", recursive = TRUE)
   files <- strsplit(files, .Platform$file.sep, fixed=TRUE)
   files <- lapply(files, function(x) {
-    parts <- unlist(strsplit(x[2],".",fixed=TRUE))
+    parts <- unlist(strsplit(x[3],".",fixed=TRUE))
     if (data.table::last(parts)=="xmi") {
-      x[2] <- paste(parts[1:(length(parts)-1)],sep=".",collapse=".")
+      x[3] <- paste(parts[1:(length(parts)-1)],sep=".",collapse=".")
     } else if (data.table::last(parts)=="csv") {
-      x[2] <- paste(parts[1:(length(parts)-2)],sep=".",collapse=".")
+      x[3] <- paste(parts[1:(length(parts)-2)],sep=".",collapse=".")
     }
     x
   })
@@ -202,7 +205,7 @@ loadAllInstalledIds <- function(asDataFrame=FALSE) {
   if (asDataFrame) {
     data.frame(matrix(unlist(files), nrow=length(files), byrow=T))
   } else {
-    unlist(lapply(files, function(x) { paste(x,sep=":", collapse=":") }))
+    unlist(lapply(files, function(x) { paste(x[c(1,3)],sep=":", collapse=":") }))
   }
 }
 
