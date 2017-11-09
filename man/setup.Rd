@@ -4,7 +4,7 @@
 \alias{setup}
 \title{This function initialises the import from XMI files.}
 \usage{
-setup(dataDirectory = file.path(path.expand("~"), "QuaDramA", "Data"),
+setup(dataDirectory = file.path(path.expand("~"), "QuaDramA", "Data2"),
   collectionDirectory = file.path(dataDirectory, "collections"))
 }
 \arguments{
