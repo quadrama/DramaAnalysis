@@ -135,8 +135,8 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
 #' loadAnnotations(c("tg:rksp.0"))
 #' }
 loadAnnotations <- function(ids, 
-                            type=atypes$Utterance, 
-                            coveredType=atypes$Token,
+                            type=NULL, 
+                            coveredType=NULL,
                             defaultCollection="tg",
                             columnTypes=NULL) {
   stop("This function is no longer supported. Use loadCSV() instead.")
@@ -174,7 +174,7 @@ loadCSV <- function(ids,
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load. No longer used.
 #' @export
-loadMeta <- function(ids,type=atypes$Author) {
+loadMeta <- function(ids,type=NULL) {
   loadCSV(ids, variant="Metadata")
 }
 
