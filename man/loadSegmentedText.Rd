@@ -2,7 +2,7 @@
 % Please edit documentation in R/load.R
 \name{loadSegmentedText}
 \alias{loadSegmentedText}
-\title{Similar to load.text(), but the table also includes scene and act markings.}
+\title{Text Loading}
 \usage{
 loadSegmentedText(ids, defaultCollection = "tg")
 }
@@ -12,10 +12,11 @@ loadSegmentedText(ids, defaultCollection = "tg")
 \item{defaultCollection}{The collection prefix is added if no prefix is found}
 }
 \description{
-Similar to load.text(), but the table also includes scene and act markings.
+Loads a text with its segmentation
 }
 \examples{
 \dontrun{
-mtext <- loadSegmentedText("tg:rksp.0")
+installData("test")
+mtext <- loadSegmentedText("test:rksp.0")
 }
 }
