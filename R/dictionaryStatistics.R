@@ -16,7 +16,7 @@
 #' special characters. The dictionary must be in UTF-8 encoding, and the file needs to end on .txt.
 #' @rdname dictionaryHandling
 #' @export
-loadFields <- function(fieldnames=c(),
+loadFields <- function(fieldnames=c("Liebe","Familie"),
                       baseurl=paste("https://raw.githubusercontent.com/quadrama/metadata/master",
                                     ensureSuffix(directory,fileSep),sep=fileSep),
                       directory="fields/",
