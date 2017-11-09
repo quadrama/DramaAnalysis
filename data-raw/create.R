@@ -1,6 +1,6 @@
 require(DramaAnalysis)
 
-DramaAnalysis::setup()
+setup()
 
 rksp.0 <- list(mtext=loadSegmentedText("tg:rksp.0"))
 levels(rksp.0$mtext$Speaker.figure_surface) <- c("Angelo", "Appiani", "Battista", "Camillo", "Claudia G.", "Claudia G.", "Conti", "Kammerdiener", "Prinz", "Emilia G.", "Marinelli", "Odoardo G.", "Odoardo G.", "Orsina", "Pirro")
