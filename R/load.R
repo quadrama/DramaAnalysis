@@ -186,6 +186,8 @@ loadMeta <- function(ids,type=NULL) {
 #' @param asDataFrame Logical value. Controls whether 
 #' the return value is a list (with colon-joined ids) 
 #' or a data.frame with two columns (corpus, drama)
+#' @param dataDirectory The directory in which precompiled 
+#' drama data is installed
 #' @export
 #' 
 loadAllInstalledIds <- function(asDataFrame=FALSE, 
