@@ -51,37 +51,21 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
 installData <- function(dataSource="tg", 
                         dataDirectory=getOption("qd.datadir"),
                         downloadSource="ims", 
-                        removeZipFile = TRUE) {
-  dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
-  sourceFilename <- switch(dataSource,
-                           tg="tg.zip",
-                           gdc="gdc.zip",
-                           tc="tc.zip",
-                           gbd="gbd.zip")
-  
-  if (downloadSource == "ims") {
-    sourceUrl <- createIMSUrl(sourceFilename)
-  } else if (downloadSource == "zenodo") {
-    sourceUrl <- createZenodoUrl(803280, sourceFilename)
-  }
-  lm <- lastModifiedDate(sourceUrl)
-  message("Version on server: ", format(lm))
-  installedV <- getInstalledDate(dataDirectory,sourceFilename)
-  
-  message("Locally installed version: ", format(installedV))
-  
-  
-  if (is.na(installedV) | installedV < lm) {
-    message("Downloading new version.")
-    tf <- tempfile()
-    utils::download.file(sourceUrl,destfile = tf)
-    utils::unzip(tf,exdir=file.path(dataDirectory,"xmi"))
-    if (removeZipFile == TRUE) {
-      file.remove(tf)
-    }
-    saveInstalledDate(dataDirectory, sourceFilename, lm)
+                        removeZipFile = TRUE,
+                        baseUrl = "https://github.com/quadrama",
+                        remoteUrl = paste0(baseUrl,"/data_",dataSource,".git")) {
+  dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE)
+  localDirectory <- file.path(dataDirectory, dataSource)
+  sourceFilename <- paste(dataSource, "git", sep=".")
+
+
+  if (git2r::in_repository(localDirectory)) {
+    repo <- git2r::repository(localDirectory)
+    message("Pulling new data from ", remoteUrl, ".")
+    git2r::pull(repo)
   } else {
-    message("No download necessary.")
+    message("Cloning ", remoteUrl, ".")
+    git2r::clone(remoteUrl,localDirectory)
   }
 }
 
