@@ -48,7 +48,10 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
 #' @param removeZipFile If true (the default), the downloaded zip file is removed after unpacking
 #' @importFrom utils download.file unzip
 #' @export
-installData <- function(dataSource="tg", dataDirectory=getOption("qd.datadir"),downloadSource="ims", removeZipFile = TRUE) {
+installData <- function(dataSource="tg", 
+                        dataDirectory=getOption("qd.datadir"),
+                        downloadSource="ims", 
+                        removeZipFile = TRUE) {
   dir.create(dataDirectory, recursive = TRUE, showWarnings = FALSE) 
   sourceFilename <- switch(dataSource,
                            tg="tg.zip",
