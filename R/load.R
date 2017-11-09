@@ -144,7 +144,8 @@ loadAnnotations <- function(ids,
 
 loadCSV <- function(ids, 
                     variant=c("UtterancesWithTokens", "Segments", "Metadata"), 
-                    defaultCollection="tg") {
+                    defaultCollection="tg",
+                    dataDirectory=getOption("qd.datadir")) {
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
                        function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
