@@ -4,7 +4,7 @@
 \alias{loadMeta}
 \title{Load meta data}
 \usage{
-loadMeta(ids, type = atypes$Author)
+loadMeta(ids, type = NULL)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
