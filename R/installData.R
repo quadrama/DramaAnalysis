@@ -44,9 +44,11 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
 #' @description This function downloads pre-processed dramatic texts via http and stores them locally in your data directory
 #' @param dataSource Currently, only "tg" (textgrid) is supported
 #' @param dataDirectory The directory in which the data is to be stored
-#' @param downloadSource The server from which to download
-#' @param removeZipFile If true (the default), the downloaded zip file is removed after unpacking
-#' @importFrom utils download.file unzip
+#' @param downloadSource No longer used.
+#' @param removeZipFile No longer used.
+#' @param baseUrl The remote repository owner (e.g., https://github.com/quadrama)
+#' @param remoteUrl The URL of the remote repository.
+#' @importFrom git2r clone pull in_repository repository
 #' @export
 installData <- function(dataSource="tg", 
                         dataDirectory=getOption("qd.datadir"),
