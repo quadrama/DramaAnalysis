@@ -70,14 +70,16 @@ scene.act.table <- function(ids, defaultCollection="tg") {
   merged
 }
 
-#' Similar to load.text(), but the table also includes scene and act markings.
+#' @title Text Loading
+#' @description Loads a text with its segmentation
 #' @param ids The ids for which we want to get the text
 #' @importFrom data.table setkey foverlaps data.table
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 #' @examples 
 #' \dontrun{
-#' mtext <- loadSegmentedText("tg:rksp.0")
+#' installData("test")
+#' mtext <- loadSegmentedText("test:rksp.0")
 #' }
 loadSegmentedText <- function(ids,defaultCollection="tg") {
   t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
@@ -91,15 +93,12 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
 }
 
 
-#' Loads a CSV-formatted text from the server,
-#' assuming the main server url has been set correctly.
-#'
-#'
 #' @param ids A vector containing drama ids to be downloaded
 #' @param includeTokens This argument has no meaning anymore. Tokens are always included.
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
 #' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
+#' @keywords internal
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyCharacterFactors=TRUE) {
   t <- loadCSV(ids, defaultCollection = defaultCollection)
   t$Token.pos <- factor(t$Token.pos)
