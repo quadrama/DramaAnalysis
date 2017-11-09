@@ -5,7 +5,7 @@ VERSION=$(shell grep -o -e 'Version:.*' DESCRIPTION | egrep -o '\d+\.\d+\.\d+')
 check:
 	cd .. && R CMD build DramaAnalysis && R CMD check DramaAnalysis_${VERSION}.tar.gz
 
-wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md ${TDIR}/Presence.md ${TDIR}/Loading-Texts.md
+wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md ${TDIR}/Loading-Texts.md
 
 ${VIG}/%.md: vignettes/%.Rmd ${VIG}/version.md ${VIG}/vig-%.md
 	Rscript -e "library(rmarkdown); render('$<', output_format='md_document', clean=TRUE)"

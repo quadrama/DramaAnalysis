@@ -145,3 +145,30 @@ abline(v=unique(rksp.0$mtext$begin.Act)[-1])
 ```
 
 Please note that the information contained in this plot is very similar to the information in the [visual and relative configuration matrices](Configuration-Matrices).
+
+## When are characters mentioned?
+
+When characters are speaking on stage, they are actively present. But they can also be passively present, if other characters refer to them. Both levels of presence can be extracted with the `presence()` function:
+```{r}
+pres <- presence(rksp.0$mtext)
+pres
+```
+
+As we can see, each character has a few numbers associated: The column `actives` shows the number of scenes in which the character is actively present. This is equivalent to the information in the configuration matrix. The column `passives` shows the number of scenes in which a character is mentioned. By default, this excludes the scenes in which they are present themselves (this behaviour can be changed by adding the parameter `passiveOnlyWhenNotActive = TRUE` to the call of the `presence` function). 
+
+A simple visualisation that shows the characters active and passive presence in one plot can be generated like this: The first line (`plot()`) is responsible for the plotting of the symbols, the second line (`text()`) adds the character names or ids numbers.
+
+```{r}
+plot(x=pres$active/pres$scenes, 
+     y=pres$passive/pres$scenes, 
+     xlim=c(0,1), 
+     ylim=c(0,1), 
+     xlab="Active", 
+     ylab="Passive",
+     main="Character Presence")
+text(x=pres$active/pres$scenes, 
+     y=pres$passive/pres$scenes, 
+     labels=substr(pres$figure,0,20), 
+     pos=3)
+```
+
