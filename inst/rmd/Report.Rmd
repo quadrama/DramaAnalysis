@@ -52,34 +52,6 @@ begins <- aggregate(mtext$begin, by=list(mtext$Speaker.figure_surface), min)
 as.character(begins[order(begins$x),]$Group.1)
 ```
 
-## Dramatis Personae 
-
-All figurs as listed in the dramatis personae:
-
-```{r, echo=FALSE}
-figuresInDramatisPersonae <- loadAnnotations(params$id, type=atypes$DramatisPersonae, coveredType = atypes$Figure)
-as.character(figuresInDramatisPersonae$Figure.name)
-```
-
-
-
-## Order vs. order
-
-This plot contains only the figures for which a mapping between entry in dramatis personae and speakers can be established.
-
-```{r, echo=FALSE}
-fRank <- figuresInDramatisPersonae %>% 
-  rankFiguresByDramatisPersonae(columnTitle="dp") %>%
-  rankFiguresByAppearance(text,columnTitle="app")
-
-par(xpd=TRUE)
-plot(fRank$dp, fRank$app,
-     pch=20,frame=FALSE,xlab="Dramatis Personae",
-     ylab="Auftritt")
-text(fRank$dp, fRank$app,labels=fRank$Figure.surface,pos=3)
-
-```
-
 # Overall Speech Distribution
 
 Relative amount of words spoken by each figure. 
