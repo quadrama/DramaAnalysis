@@ -8,7 +8,7 @@ output:
     toc: true
     toc_depth: 2
 params:
-  id: "tg:rksp.0"
+  id: "test:rksp.0"
   col: "grey"
 ---
 
