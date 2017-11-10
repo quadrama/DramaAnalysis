@@ -117,7 +117,13 @@ barplot(c$matrix,
 ```
 
 
-# Copresence Network
+#  Network Analysis  {.tabset}
+
+## Copresence Network
+
+In a copresence network, two vertices are connected if the characters they represent appear together on stage (= are co-present on stage). The network shown here is based on scenes, i.e., the thicker an edge, the more scenes the two connected characters are copresent.
+
+
 ```{r, echo=FALSE, message=FALSE}
 c <- configuration(mtext, onlyPresence = TRUE, by="Scene")
 co <- c$matrix %*% t(c$matrix)
@@ -142,6 +148,37 @@ plot.igraph(g,
             vertex.frame.color=NA,        # no vertex border
             edge.width=E(g)$weight        # scale edges according to their weight
             )  
+```
+
+## Gossip Network
+
+The "gossip network" represents character that talk about other characters. The colors don't follow a particular pattern and are just added for readability. Edge thickness represent how often (number of scenes) this happens, and is scaled logarithmically.
+Currently, this includes scenes in which both characters are present. This will be changed later.
+
+```{r, echo=FALSE}
+m <- as.matrix(
+  as.data.frame.matrix(
+    xtabs( ~ Speaker.figure_id + Mentioned.figure_id,
+           mtext[,.N,.(Speaker.figure_id,Mentioned.figure_id,begin.Scene)]
+           [!is.na(Mentioned.figure_id)])))
+
+g <- graph_from_adjacency_matrix(m, 
+                                 weighted=TRUE,     # weighted graph
+                                 mode="directed", # no direction
+                                 diag=FALSE         # no looping edges
+                                )
+coords <- layout_(g, on_grid())
+plot.igraph(g,
+            layout=coords,                # how to lay out the graph
+            vertex.label.cex=0.6,         # label size
+            vertex.label.color="black",   # font color
+            vertex.color=qd.colors[4],    # vertex color
+            vertex.frame.color=NA,        # no vertex border
+            edge.curved = TRUE,           # curved edges
+            edge.width=log(E(g)$weight)+1,  # scale edges according to their weight
+            edge.color=rep(qd.colors,100)
+            )  
+
 ```
 
 
