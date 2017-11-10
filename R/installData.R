@@ -61,7 +61,7 @@ installData <- function(dataSource="tg",
   sourceFilename <- paste(dataSource, "git", sep=".")
 
 
-  if (git2r::in_repository(localDirectory)) {
+  if (dir.exists(localDirectory) && git2r::in_repository(localDirectory)) {
     repo <- git2r::repository(localDirectory)
     message("Pulling new data from ", remoteUrl, ".")
     git2r::pull(repo)
