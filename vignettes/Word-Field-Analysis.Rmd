@@ -46,7 +46,7 @@ wf_love <- c("liebe", "herz")
 We will test this word field on Romeo und Julia, which should be about love. 
 
 ```{r}
-data(vndf.0)
+data("rksp.0")
 ```
 
 ## Single word field
@@ -54,7 +54,7 @@ The core of the word field analysis collecting statistics about a dictionary. Th
 
 ```{r}
 dstat <- dictionaryStatisticsSingle(
-  vndf.0$mtext,         # the text we want to process
+  rksp.0$mtext,         # the text we want to process
   wordfield=wf_love,   # the word field
   names=TRUE,          # we want figure names instead of ids
   column="Token.lemma" # we count lemmas instead of surface forms
@@ -82,7 +82,7 @@ Apparently, Romeo and Juliet are mentioning these words a lot.
 Obviously we would want to **normalize** according to the total number of spoken words by a figure:
 ```{r}
 dstat <- dictionaryStatisticsSingle(
-  vndf.0$mtext,       # the text we want to process
+  rksp.0$mtext,       # the text we want to process
   wordfield=wf_love, # the word field
   names=TRUE,        # we want figure names instead of ids
   normalizeByFigure = TRUE,   # apply normalization
@@ -114,7 +114,7 @@ baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71b
 
 
 dstat <- dictionaryStatistics(
-  vndf.0$mtext,  # the text
+  rksp.0$mtext,  # the text
   fieldnames=  # fields we want to measure
     c("Liebe", "Krieg", "Familie", "Ratio", "Religion"),
   baseurl = baseUrl,            # specify url
