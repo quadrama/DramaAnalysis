@@ -230,7 +230,11 @@ The following chart shows for each scene boundary the number of characters excha
 ```{r, echo=FALSE}
 ham <- hamming(mtext)
 
-par(mar=c(2,2,2,2))
+if (length(ham)+1 != length(unique(mtext$begin.Scene))) {
+  warning("Something is seriously wrong here. Please report this issue.")
+}
+
+par(mar=c(3,3,3,3))
 layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
 plot(0,type="n",axes=FALSE,xlab="",ylab="")
 legend(x="center",lty=2:4,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
@@ -254,9 +258,9 @@ rect(0:(length(ham)),0,
      ylim=c(0,1),
      xlim=c(1,length(ham)),
      col=c(rgb(0.9,0.9,0.9,0.7),"white"))
-axis(2)
+axis(2, las=2)
 #axis(1)
-axis(1, at=0.5:(length(ham)+1),labels=sceneLabels)
+axis(1, at=0.5:(length(sceneLabels)),labels=sceneLabels, cex=0.1)
 par(new=TRUE)
 plot(x=1:length(ham),
      y=ham, type="l", 
