@@ -258,12 +258,43 @@ The following chart shows for each scene boundary the number of characters excha
 ```{r, echo=FALSE}
 ham <- hamming(mtext)
 
-par(mar=c(3,3,3,3))
+par(mar=c(2,2,2,2))
 layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
 plot(0,type="n",axes=FALSE,xlab="",ylab="")
-legend(x="center",lty=2:3,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
+legend(x="center",lty=2:4,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
 
-plot(ham, type="l", lty=2, xlab="Scene boundary",ylab="",ylim=c(0,1),frame=TRUE)
+sceneLabels <- paste(as.roman(mtext[,.N,.(Number.Act, Number.Scene)]$Number.Act), mtext[,.N,.(Number.Act, Number.Scene)]$Number.Scene, sep=".")
+actBoundaries <- mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1
+s <- 0
+for (i in 1:length(actBoundaries)) {
+  actBoundaries[i] <- actBoundaries[i] + s
+  s <- actBoundaries[i]
+}
+
+
+
+plot(0,type="n",axes=FALSE,xlab="Scene boundary",ylab="",
+     ylim=c(0,1),
+     xlim=c(1,length(ham)))
+rect(0:(length(ham)),0,
+     0:(length(ham))+1,1,
+     border=NA,
+     ylim=c(0,1),
+     xlim=c(1,length(ham)),
+     col=c(rgb(0.9,0.9,0.9,0.7),"white"))
+axis(2)
+#axis(1)
+axis(1, at=0.5:(length(ham)+1),labels=sceneLabels)
+par(new=TRUE)
+plot(x=1:length(ham),
+     y=ham, type="l", 
+     lty=2, 
+     xlab="Scene boundary",ylab="",
+     ylim=c(0,1),
+     xlim=c(1,length(ham)),
+     frame=FALSE,
+     axes=FALSE)
+abline(v=actBoundaries[1:(length(actBoundaries)-1)],xpd=FALSE,xlim=c(2,length(ham)))
 par(new=TRUE)
 plot(hamming(mtext, variant = "NormalizedHamming"), type="l", lty=3,xlab="",ylab="",axes=FALSE)
 par(new=TRUE)
