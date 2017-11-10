@@ -26,7 +26,6 @@ if (is.null(.Options$qd.datadir)) {
 
 require(magrittr)
 
-text <- loadText(params$id, includeTokens = TRUE)
 mtext <- loadSegmentedText(params$id)
 meta <- loadMeta(params$id, type=atypes$Drama)
 author <- loadMeta(params$id,type=atypes$Author)
@@ -49,7 +48,7 @@ title: "QuaDramA Report: `r title`"
 All figures, in the order they have their first appearance
 
 ```{r, echo=FALSE}
-begins <- aggregate(text$begin, by=list(text$Speaker.figure_surface), min)
+begins <- aggregate(mtext$begin, by=list(mtext$Speaker.figure_surface), min)
 as.character(begins[order(begins$x),]$Group.1)
 ```
 
@@ -86,7 +85,7 @@ text(fRank$dp, fRank$app,labels=fRank$Figure.surface,pos=3)
 Relative amount of words spoken by each figure. 
 
 ```{r, echo=FALSE, messages=FALSE}
-fstat <- figureStatistics(text, names=TRUE, normalize=FALSE)
+fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
 mat <- figurematrix(fstat)
 b <- barplot(mat$values,col=params$col)
 
@@ -184,7 +183,7 @@ baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71b
 fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
 fields <- loadFields(fieldNames,baseurl = baseUrl)
 
-text2 <- limitFigures(text, by="tokens")
+text2 <- limitFigures(mtext, by="tokens")
 dstat <- dictionaryStatistics(
   text2,  # the text
   fields=fields,
