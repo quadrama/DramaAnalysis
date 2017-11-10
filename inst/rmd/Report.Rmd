@@ -27,9 +27,9 @@ if (is.null(.Options$qd.datadir)) {
 require(magrittr)
 
 mtext <- loadSegmentedText(params$id)
-meta <- loadMeta(params$id, type=atypes$Drama)
-author <- loadMeta(params$id,type=atypes$Author)
+meta <- loadMeta(params$id)
 title <- as.character(meta[1,"documentTitle"])
+
 ```
 
 ---
@@ -39,7 +39,7 @@ title: "QuaDramA Report: `r title`"
 
 # Meta data
 
-- Author(s): `r paste(paste0("[",author$Name,"](http://d-nb.info/gnd/",author$Pnd,")"),sep=", ")`
+- Author(s): `r paste(paste0("[",meta$Name,"](http://d-nb.info/gnd/",meta$Pnd,")"),sep=", ")`
 
 # Character Lists {.tabset}
 
