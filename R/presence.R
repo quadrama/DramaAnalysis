@@ -55,6 +55,9 @@ presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   # passive
   conf.passive$passives <- rowSums(conf.passive[,4:ncol(conf.passive)])
 
+  conf.active <- conf.active[order(conf.active$figure)]
+  conf.passive <- conf.passive[order(conf.passive$figure)]  
+  
   r <- merge(r, 
              conf.active[,.(corpus,drama,figure,actives)],
              by=c("corpus","drama","figure"), all.x = TRUE)
