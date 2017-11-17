@@ -163,9 +163,11 @@ loadCSV <- function(ids,
                                                     col_types = readr::cols()))
       return(tab)
     } else {
+      message(paste(filename, "could not be loaded and was skipped"))
       return(NA)
     }
   })
+  tables <- tables[!is.na(tables)]
   Reduce(rbind, tables)
 }
 
