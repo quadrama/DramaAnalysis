@@ -157,7 +157,6 @@ loadCSV <- function(ids,
                           "csv",
                           paste(x[2],cvar,"csv",
                                 sep="."))
-    print(filename)
     if (file.exists(filename)) {
       tab <- data.table::data.table(readr::read_csv(filename, 
                                                     locale = readr::locale(encoding = "UTF-8"),
