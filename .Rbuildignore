@@ -5,5 +5,6 @@
 ^\.httr-oauth$
 ^Makefile$
 ^java/\.classpath$
+^java$
 ^data-raw$
 ^CONTRIBUTING.md$
