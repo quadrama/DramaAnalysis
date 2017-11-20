@@ -70,7 +70,7 @@ configuration <- function(mtext,
                         idvar = c("corpus","drama","characterColumn"), 
                         timevar = "segmentColumn")
   # replace NA values with zero
-  for (col in 4:ncol(cfg)) set(cfg, which(is.na(cfg[[col]])), col, 0)
+  for (col in 4:ncol(cfg)) data.table::set(cfg, which(is.na(cfg[[col]])), col, 0)
   colnames(cfg)[3:(ncol(cfg))] <- c("figure",seq(1,ncol(cfg)-3))
   
   if (onlyPresence) {
