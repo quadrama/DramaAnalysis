@@ -141,8 +141,23 @@ loadAnnotations <- function(ids,
   stop("This function is no longer supported. Use loadCSV() instead.")
 }
 
+#' @title Character data loading
+#' @description Loads a table of characters and meta data
+#' @param ids a list or vector of ids
+#' @param defaultCollection the default collection
+#' @param dataDirectory the data directory
+#' @export
+loadCharacters <- function(ids, 
+                           defaultCollection="tg", 
+                           dataDirectory=getOption("qd.datadir")) {
+  loadCSV(ids, 
+          variant="Characters", 
+          defaultCollection = defaultCollection, 
+          dataDirectory = dataDirectory)
+}
+
 loadCSV <- function(ids, 
-                    variant=c("UtterancesWithTokens", "Segments", "Metadata"), 
+                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters"), 
                     defaultCollection="tg",
                     dataDirectory=getOption("qd.datadir")) {
   
