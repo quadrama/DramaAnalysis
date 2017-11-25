@@ -103,7 +103,21 @@ barplot(dstat$x,
 
 ## Multiple Word Fields
 
-The function `dictionaryStatistics()` can be used to analyse multiple dictionaries at once. To this end, it is assumed that dictionaries are stored in text files that either are stored locally or reachable via a URL. In any case, the parameter `baseurl` can be used to specify a prefix, to which the field names are appended. By default, the baseurl `https://github.com/quadrama/metadata/tree/master/fields/` is used. Appending the field name "Liebe", for instance, thus results in the URL `https://github.com/quadrama/metadata/tree/master/fields/Liebe`, which is a plain text file.
+The function `dictionaryStatistics()` can be used to analyse multiple dictionaries at once. To this end, dictionaries are represented as lists of character vectors. The (named) outer list contains the keywords, the vectors are just words associated with the keyword.
+
+New dictionaries can be easily like this:
+```{r}
+wf <- list(Liebe=c("Liebe","Herz","Schmerz"), Hass=c("Hass","hassen"))
+```
+
+This dictionary contains the two entries `Liebe` (love) and `Hass` (hate), with 3 respective 2 entries. Dictionaries can be created in code, like shown above. In addition, the function `loadFields()` can be used to download dictionary content from a URL or a directory. By default, the function loads [this dictionary](https://github.com/quadrama/metadata/tree/master/fields/) from GitHub (that we used in publications), for the keywords `Liebe` and `Familie` (family).
+
+```{r}
+wf <- loadFields()
+names(wf)
+```
+
+`loadFields()` offers parameters to load from different URLs via http or to load from plain text files that are stored locally. The latter can be achieved by specifying the directory as `baseurl`. Entries for each keyword should then be stored in a file named like the keyword, and ending with `txt` (by default, can be overwritten). See `?loadFields` for details. Some of the options can also be specified through `dictionaryStatistics()`, as exemplified below.
 
 The following examples use the baseurl `https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/`, i.e., a specific version of the fields we have been using in QuaDramA. 
 
@@ -153,4 +167,49 @@ barplot(as.matrix(dstat$Liebe),
         col=qd.colors,            # more colors
         cex.names = 0.7           # font size
         )
+```
+
+## Dictionary Based Distance
+
+Technically, the output of `dictionaryStatistics()` is a  `data.frame`. This is suitable for most uses. In some cases, however, it's more suited to work with a matrix that only contains the raw numbers (i.e., number of family words). Calculating character distance based on dictionaries, for instance. In these cases, the function  `dictionaryStatisticsL()` can be used. The function takes the same arguments as `dictionaryStatistics()` and behaves in the same way. But instead of returning a data.frame, the function returns a list with four components. The first three components (`corpus`, `drama`, `figure`) contain meta data, while the fourth component (`mat`) contains the values as a matrix.
+
+You typically want to assign rownames to this matrix. If you're studying individual characters, their name might be a good idea.
+
+```{r}
+dsl <- dictionaryStatisticsL(rksp.0$mtext, 
+                             fieldnames = c("Liebe","Krieg","Familie","Religion"),
+                             normalizeByFigure=TRUE)
+rownames(dsl$mat) <- dsl$figure
+dsl$mat
+```
+
+
+Every character is now represent with four numbers, which can be interpreted as a vector in four-dimensional space. This means, we can easily apply distance metrics supplied by the function `dist()` (from the default package `stats`). By default, `dist()` calculates [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance). The data structure here is now similar to the one in the weighted configuration matrix, which means everything from [this vignette](Configuration-Matrices) can be applied here.
+
+```{r}
+cdist <- dist(dsl$mat)
+cdist
+```
+
+In particular, we can show these distances in a network:
+
+```{r}
+require(igraph)
+g <- graph_from_adjacency_matrix(as.matrix(cdist), 
+                                 weighted=TRUE,     # weighted graph
+                                 mode="undirected", # no direction
+                                 diag=FALSE         # no looping edges
+                                )
+
+# Now we plot
+plot.igraph(g, 
+            layout=layout_with_fr,       # how to lay out the graph
+            main="Dictionary distance network",  # title
+            vertex.label.cex=0.6,         # label size
+            vertex.label.color="black",   # font color
+            vertex.color=qd.colors[5],    # vertex color
+            vertex.frame.color=NA,        # no vertex border
+            edge.width=E(g)$weight*100    # scale edges according to their weight 
+                                          # (since the distances are so small, we multiply)
+            )  
 ```
