@@ -190,8 +190,8 @@ dictionaryStatisticsSingleL <- function(...) {
 #' @export
 dictionaryStatisticsL <- function(...) {
   dstat <- dictionaryStatistics(...)
-  r <- as.list(dstat[,1:2])
-  r$mat <- as.matrix(dstat[,-c(1,2)])
+  r <- as.list(dstat[,1:3])
+  r$mat <- as.matrix(dstat[,-c(1:3)])
   r
 }
 
