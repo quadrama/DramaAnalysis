@@ -7,17 +7,16 @@
 \title{Dictionary Use}
 \usage{
 dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
-  fieldnames = c(), normalizeByFigure = FALSE, normalizeByField = FALSE,
-  names = FALSE, boost = 1,
+  fieldnames = c(), segment = c("Drama", "Act", "Scene"),
+  normalizeByFigure = FALSE, normalizeByField = FALSE, names = FALSE,
+  boost = 1,
   baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
   column = "Token.surface", ci = TRUE)
 
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
-  normalizeByFigure = FALSE, normalizeByField = FALSE,
-  fieldNormalizer = length(wordfield), bylist = ifelse(names == TRUE,
-  "corpus,drama,Speaker.figure_surface", "corpus,drama,Speaker.figure_id"),
-  column = "Token.surface", ci = TRUE, colnames = c("corpus", "drama",
-  "figure", "x"))
+  segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
+  normalizeByField = FALSE, fieldNormalizer = length(wordfield),
+  column = "Token.surface", ci = TRUE, colnames = NULL)
 
 dictionaryStatisticsL(...)
 }
@@ -28,6 +27,10 @@ dictionaryStatisticsL(...)
 By default, we try to load the dictionaries using \code{fieldnames} and \code{baseurl}.}
 
 \item{fieldnames}{A list of names for the dictionaries.}
+
+\item{segment}{The segment level that should be used. By default, 
+the entire play will be used. Possible values are "Drama" (default), 
+"Act" or "Scene"}
 
 \item{normalizeByFigure}{Logical. Whether to normalize by figure speech length}
 
@@ -45,12 +48,10 @@ Should be either "Token.surface" or "Token.lemma".}
 
 \item{ci}{Whether to ignore case. Defaults to TRUE, i.e., case is ignored.}
 
-\item{wordfield}{A character vector containing the words or lemmas to be counted 
-(only for \code{*Single}-functions)}
+\item{wordfield}{A character vector containing the words or lemmas 
+to be counted (only for \code{*Single}-functions)}
 
 \item{fieldNormalizer}{defaults to the length of the wordfield}
-
-\item{bylist}{A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas}
 
 \item{colnames}{The column names to be used}
 
