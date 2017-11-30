@@ -19,7 +19,8 @@ Imports:
    data.table (>= 1.10.4),
    httr (>= 1.2.1),
    wordVectors (>= 2.0),
-   git2r (>= 0.19.0)
+   git2r (>= 0.19.0),
+   igraph (>= 1.1.2)
 Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.0.1
