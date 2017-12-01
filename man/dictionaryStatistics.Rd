@@ -46,6 +46,8 @@ Should end in a \code{/}.}
 \item{column}{The table column we apply the dictionary on. 
 Should be either "Token.surface" or "Token.lemma".}
 
+\item{asList}{Logical. Whether to return a list with separated components or a single data.frame.}
+
 \item{ci}{Whether to ignore case. Defaults to TRUE, i.e., case is ignored.}
 
 \item{wordfield}{A character vector containing the words or lemmas 

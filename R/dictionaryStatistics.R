@@ -82,6 +82,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
+#' @param asList Logical. Whether to return a list with separated components or a single data.frame.
 #' @importFrom stats aggregate
 #' @importFrom stats ave
 #' @seealso \code{\link{loadFields}}
@@ -100,6 +101,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                  boost = 1,
                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
                                  column="Token.surface", 
+                                 asList = FALSE,
                                  ci = TRUE) {
   
   # we need this to prevent notes in R CMD check
@@ -148,7 +150,16 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
     r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
     r$N <- NULL
   }
-  r
+  
+  if (asList == TRUE) {
+    l <- as.list(r[,1:switch(segment,Drama=3,Act=4,Scene=5)])
+    l$figure <- r[[switch(segment,Drama=3,Act=4,Scene=5)]]
+    l$mat <- as.matrix(r[,(ncol(r)-length(fields)+1):ncol(r)])
+    rownames(l$mat) <- l$figure
+    l
+  } else {
+    r
+  }
 }
 
 #' @param wordfield A character vector containing the words or lemmas 
@@ -236,10 +247,8 @@ dictionaryStatisticsSingleL <- function(...) {
 #' @rdname dictionaryStatistics
 #' @export
 dictionaryStatisticsL <- function(...) {
-  dstat <- dictionaryStatistics(...)
-  r <- as.list(dstat[,1:3])
-  r$mat <- as.matrix(dstat[,-c(1:3)])
-  r
+  .Deprecated(dictionaryStatistics)
+  dictionaryStatistics(..., asList=TRUE)
 }
 
 
