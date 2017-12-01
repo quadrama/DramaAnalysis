@@ -7,11 +7,11 @@
 \title{Dictionary Use}
 \usage{
 dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
-  fieldnames = c(), segment = c("Drama", "Act", "Scene"),
+  fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
   normalizeByFigure = FALSE, normalizeByField = FALSE, names = FALSE,
   boost = 1,
   baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-  column = "Token.surface", ci = TRUE)
+  column = "Token.surface", asList = FALSE, ci = TRUE)
 
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
   segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
