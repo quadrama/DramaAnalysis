@@ -92,7 +92,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
 #' @export
 dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
-                                 fieldnames=c(),
+                                 fieldnames=c("Liebe"),
                                  segment=c("Drama","Act","Scene"),
                                  normalizeByFigure = FALSE, 
                                  normalizeByField = FALSE, 
