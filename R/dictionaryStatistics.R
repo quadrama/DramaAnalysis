@@ -126,7 +126,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                         normalizeByField = normalizeByField, 
                                         names=names, column=column)
     colnames(dss)[ncol(dss)] <- x
-    if (x == fieldnames[[1]]) {
+    if (x == names(fields)[[1]]) {
       dss
     } else {
       dss[,x,with=FALSE]
