@@ -52,7 +52,10 @@ begins <- aggregate(mtext$begin, by=list(mtext$Speaker.figure_surface), min)
 as.character(begins[order(begins$x),]$Group.1)
 ```
 
-# Overall Speech Distribution
+# Overall Speech Distribution {.tabset}
+
+
+## Bar chart 
 
 Relative amount of words spoken by each figure. 
 
@@ -65,6 +68,13 @@ top <- 15
 
 text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
      labels=t(substr(head(mat$labels,top),0,20)),cex=0.5)
+
+```
+
+## Table
+
+```{r,echo=FALSE, results="asis"}
+knitr::kable(fstat, 'html')
 ```
 
 # Presence and Utterances
