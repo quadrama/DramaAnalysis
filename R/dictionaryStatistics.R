@@ -236,6 +236,9 @@ dictionaryStatisticsSingleL <- function(...) {
   as.list(dstat)
 }
 
+#' @description \code{dictionaryStatisticsL()} should not be used 
+#' anymore. Please use \code{dictionaryStatistics()} with the parameter
+#' \code{asList=TRUE}
 #' @param ... All parameters are passed to \code{\link{dictionaryStatistics}}
 #' @section Returned Lists:
 #' The returned list has three named elements:

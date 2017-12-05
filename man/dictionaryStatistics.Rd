@@ -67,6 +67,10 @@ The function \code{dictionaryStatistics()} calculates statistics for
 dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
 for a single word list. Functions ending on \code{L} return a list with 
 multiple components.
+
+\code{dictionaryStatisticsL()} should not be used 
+anymore. Please use \code{dictionaryStatistics()} with the parameter
+\code{asList=TRUE}
 }
 \section{Returned Lists}{
 
