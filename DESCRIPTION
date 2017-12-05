@@ -14,7 +14,7 @@ Imports:
    utils (>= 3.3.1), 
    reshape2 (>= 1.4.2), 
    fmsb (>= 0.6.0),
-   rmarkdown (>= 1.8.3),
+   rmarkdown (>= 1.8),
    readr (>= 1.1.1),
    data.table (>= 1.10.4),
    httr (>= 1.2.1),
