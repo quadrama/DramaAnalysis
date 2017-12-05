@@ -247,7 +247,7 @@ dictionaryStatisticsSingleL <- function(...) {
 #' @rdname dictionaryStatistics
 #' @export
 dictionaryStatisticsL <- function(...) {
-  .Deprecated(dictionaryStatistics)
+  .Deprecated("dictionaryStatistics")
   dictionaryStatistics(..., asList=TRUE)
 }
 
