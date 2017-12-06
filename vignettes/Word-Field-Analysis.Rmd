@@ -56,7 +56,6 @@ The core of the word field analysis collecting statistics about a dictionary. Th
 dstat <- dictionaryStatisticsSingle(
   rksp.0$mtext,         # the text we want to process
   wordfield=wf_love,   # the word field
-  names=TRUE,          # we want figure names instead of ids
   column="Token.lemma" # we count lemmas instead of surface forms
 )
 
@@ -77,14 +76,13 @@ barplot(dstat$x,                   # what to plot
       )
 ```
 
-Apparently, Romeo and Juliet are mentioning these words a lot. 
+Apparently, the prince is mentioning these words a lot. 
 
 Obviously we would want to **normalize** according to the total number of spoken words by a figure:
 ```{r}
 dstat <- dictionaryStatisticsSingle(
   rksp.0$mtext,       # the text we want to process
   wordfield=wf_love, # the word field
-  names=TRUE,        # we want figure names instead of ids
   normalizeByFigure = TRUE,   # apply normalization
   column = "Token.lemma"
 )
