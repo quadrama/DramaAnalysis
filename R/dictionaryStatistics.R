@@ -223,7 +223,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   }
   
   colnames(r)[ncol(r)] <- "x"
-
+  colnames(r)[ncol(r)-1] <- "figure"
   if (! is.null(colnames)) {
     colnames(r) <- colnames
   }
