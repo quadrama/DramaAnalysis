@@ -82,6 +82,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
+#' @param asList Logical. Whether to return a list with separated components or a single data.frame.
 #' @importFrom stats aggregate
 #' @importFrom stats ave
 #' @seealso \code{\link{loadFields}}
@@ -92,37 +93,81 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
 #' @export
 dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
-                                 fieldnames=c(),
+                                 fieldnames=c("Liebe"),
+                                 segment=c("Drama","Act","Scene"),
                                  normalizeByFigure = FALSE, 
                                  normalizeByField = FALSE, 
                                  names = FALSE, 
                                  boost = 1,
                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
                                  column="Token.surface", 
+                                 asList = FALSE,
                                  ci = TRUE) {
+  
+  # we need this to prevent notes in R CMD check
+  .N <- NULL
+  . <- NULL
+  corpus <- NULL
+  drama <- NULL
+  Speaker.figure_surface <- NULL
+  Speaker.figure_id <- NULL
+  
+  
+  segment <- match.arg(segment)
+  
   bylist <- list(t$corpus, t$drama, t$Speaker.figure_id)
   if (names == TRUE)
     bylist <- list(t$corpus, t$drama, t$Speaker.figure_surface)
   r <- aggregate(t, by=bylist, length)[,1:3]
-  for (fname in names(fields)) {
-    r <- cbind(r,  dictionaryStatisticsSingle(t, fields[[fname]], ci=ci,
-                                              normalizeByFigure = FALSE, 
-                                              normalizeByField = normalizeByField, 
-                                              names=names, column=column)[,4])
-  }
-  colnames(r) <- c("corpus","drama", "figure", names(fields))
+  
+  first <- TRUE
+  singles <- lapply(names(fields),function(x) {
+    dss <- dictionaryStatisticsSingle(t, fields[[x]], ci=ci,
+                                        segment=segment,
+                                        normalizeByFigure = FALSE, 
+                                        normalizeByField = normalizeByField, 
+                                        names=names, column=column)
+    colnames(dss)[ncol(dss)] <- x
+    if (x == names(fields)[[1]]) {
+      dss
+    } else {
+      dss[,x,with=FALSE]
+    }
+  })
+  r <- Reduce(cbind,singles)
+
+  
+  
   if (normalizeByFigure == TRUE) {
-    tokens <- aggregate(t$Token.surface, by=bylist, function(x) { length(x) })
-    r[,-(1:3)] <- r[,-(1:3)] / ave(tokens[[4]], tokens[1:3], FUN=function(x) {x})
+    if (names == TRUE) {
+      tokens <- t[,.N,
+                  .(corpus,drama,Speaker.figure_surface)]
+    } else {
+      tokens <- t[,.N,
+                  .(corpus,drama,Speaker.figure_id)]
+    }
+    r <- merge(r,tokens,by=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),allow.cartesian = TRUE)
+    r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
+    r$N <- NULL
   }
-  r[,-(1:3)] <- r[,-(1:3)] * boost
-  r
+  
+  if (asList == TRUE) {
+    l <- as.list(r[,1:switch(segment,Drama=3,Act=4,Scene=5)])
+    l$figure <- r[[switch(segment,Drama=3,Act=4,Scene=5)]]
+    l$mat <- as.matrix(r[,(ncol(r)-length(fields)+1):ncol(r)])
+    rownames(l$mat) <- l$figure
+    l
+  } else {
+    r
+  }
 }
 
-#' @param wordfield A character vector containing the words or lemmas to be counted 
-#' (only for \code{*Single}-functions)
+#' @param wordfield A character vector containing the words or lemmas 
+#' to be counted (only for \code{*Single}-functions)
 #' @param fieldNormalizer defaults to the length of the wordfield
-#' @param bylist A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas
+#' @param segment The segment level that should be used. By default, 
+#' the entire play will be used. Possible values are "Drama" (default), 
+#' "Act" or "Scene"
 #' @param colnames The column names to be used
 #' @examples
 #' # Check a single dictionary entries
@@ -134,17 +179,28 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
 #' @export
 dictionaryStatisticsSingle <- function(t, wordfield=c(), 
                                        names = FALSE, 
+                                       segment=c("Drama","Act","Scene"),
                                        normalizeByFigure = FALSE, 
                                        normalizeByField = FALSE, 
                                        fieldNormalizer=length(wordfield), 
-                                       bylist = ifelse(names==TRUE,
-                                                       "corpus,drama,Speaker.figure_surface",
-                                                       "corpus,drama,Speaker.figure_id"), 
                                        column="Token.surface", ci=TRUE,
-                                       colnames=c("corpus","drama","figure","x")) 
+                                       colnames=NULL)
   {
   # we need this to prevent notes in R CMD check
   .N <- NULL
+  
+  segment <- match.arg(segment)
+  bycolumns <- c("corpus",
+                 switch(segment,
+                        Drama=c("drama"),
+                        Act=c("drama","Number.Act"),
+                        Scene=c("drama","Number.Act","Number.Scene")),
+                 ifelse(names==TRUE,
+                        "Speaker.figure_surface",
+                        "Speaker.figure_id")
+                 )
+  bylist <- paste(bycolumns,collapse=",")
+  
   dt <- as.data.table(t)
   if (ci) {
     wordfield <- tolower(wordfield)
@@ -166,6 +222,8 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
            ]
   }
   
+  colnames(r)[ncol(r)] <- "x"
+
   if (! is.null(colnames)) {
     colnames(r) <- colnames
   }
@@ -178,6 +236,9 @@ dictionaryStatisticsSingleL <- function(...) {
   as.list(dstat)
 }
 
+#' @description \code{dictionaryStatisticsL()} should not be used 
+#' anymore. Please use \code{dictionaryStatistics()} with the parameter
+#' \code{asList=TRUE}
 #' @param ... All parameters are passed to \code{\link{dictionaryStatistics}}
 #' @section Returned Lists:
 #' The returned list has three named elements:
@@ -189,10 +250,8 @@ dictionaryStatisticsSingleL <- function(...) {
 #' @rdname dictionaryStatistics
 #' @export
 dictionaryStatisticsL <- function(...) {
-  dstat <- dictionaryStatistics(...)
-  r <- as.list(dstat[,1:3])
-  r$mat <- as.matrix(dstat[,-c(1:3)])
-  r
+  .Deprecated("dictionaryStatistics")
+  dictionaryStatistics(..., asList=TRUE)
 }
 
 

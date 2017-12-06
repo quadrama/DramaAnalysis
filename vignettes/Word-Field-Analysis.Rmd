@@ -147,8 +147,8 @@ The variable `dstat` now contains multiple columns, one for each word field.
 We can now display the distribution of the words of a single figure over these word fields:
 
 ```{r}
-barplot(as.matrix(dstat[28,4:8]), # we select Romeo's line
-        main="Romeo's speech",    # plot title
+barplot(as.matrix(dstat[9,4:8]), # we select Emilia's line
+        main="Emilia's speech",    # plot title
         col=qd.colors             # more colors
         )
 ```
@@ -162,7 +162,7 @@ barplot(as.matrix(dstat[28,4:8]), # we select Romeo's line
 barplot(as.matrix(dstat$Liebe),
         main="Use of love words", # title for plot
         beside = TRUE,            # not stacked
-        names.arg = dstat$figure, # x axis labels
+        names.arg = dstat[[3]],  # x axis labels
         las=3,                    # rotation for labels
         col=qd.colors,            # more colors
         cex.names = 0.7           # font size
@@ -171,15 +171,15 @@ barplot(as.matrix(dstat$Liebe),
 
 ## Dictionary Based Distance
 
-Technically, the output of `dictionaryStatistics()` is a  `data.frame`. This is suitable for most uses. In some cases, however, it's more suited to work with a matrix that only contains the raw numbers (i.e., number of family words). Calculating character distance based on dictionaries, for instance. In these cases, the function  `dictionaryStatisticsL()` can be used. The function takes the same arguments as `dictionaryStatistics()` and behaves in the same way. But instead of returning a data.frame, the function returns a list with four components. The first three components (`corpus`, `drama`, `figure`) contain meta data, while the fourth component (`mat`) contains the values as a matrix.
+Technically, the output of `dictionaryStatistics()` is a  `data.frame`. This is suitable for most uses. In some cases, however, it's more suited to work with a matrix that only contains the raw numbers (i.e., number of family words). Calculating character distance based on dictionaries, for instance. For these cases, the function  offers a parameter `asList`. If it is set to `TRUE`, the function returns a list with four to six components. The first three components (`corpus`, `drama`, `figure`, `Number.Act`, `Number.Scene`) contain meta data, while the fourth component (`mat`) contains the values as a matrix.
 
 You typically want to assign rownames to this matrix. If you're studying individual characters, their name might be a good idea.
 
 ```{r}
-dsl <- dictionaryStatisticsL(rksp.0$mtext, 
-                             fieldnames = c("Liebe","Krieg","Familie","Religion"),
-                             normalizeByFigure=TRUE)
-rownames(dsl$mat) <- dsl$figure
+dsl <- dictionaryStatistics(rksp.0$mtext, 
+                            fieldnames = c("Liebe","Krieg","Familie","Religion"),
+                            normalizeByFigure=TRUE,
+                            asList=TRUE)
 dsl$mat
 ```
 
