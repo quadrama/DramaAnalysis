@@ -43,7 +43,7 @@ In R, we can put them in a character vector:
 wf_love <- c("liebe", "herz")
 ```
 
-We will test this word field on Romeo und Julia, which should be about love. 
+We will test this word field on Emilia Galotti, which should be about love. 
 
 ```{r}
 data("rksp.0")
