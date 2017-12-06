@@ -146,16 +146,18 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
       tokens <- t[,.N,
                   .(corpus,drama,Speaker.figure_id)]
     }
-    r <- merge(r,tokens,by=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),allow.cartesian = TRUE)
+    r <- merge(r,tokens,by.x=c("corpus","drama","figure"),by.y=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),allow.cartesian = TRUE)
     r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
     r$N <- NULL
   }
   
   if (asList == TRUE) {
-    l <- as.list(r[,1:switch(segment,Drama=3,Act=4,Scene=5)])
-    l$figure <- r[[switch(segment,Drama=3,Act=4,Scene=5)]]
+    l <- as.list(r[,1:switch(segment,Drama=3,Act=4,Scene=6)])
     l$mat <- as.matrix(r[,(ncol(r)-length(fields)+1):ncol(r)])
-    rownames(l$mat) <- l$figure
+    rownames(l$mat) <- switch(segment, 
+                              Drama=as.character(l$figure),
+                              Act=paste(l$figure,as.roman(l$Number.Act)),
+                              Scene=paste(l$figure,as.roman(l$Number.Act),l$Number.Scene))
     l
   } else {
     r
@@ -194,7 +196,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
                  switch(segment,
                         Drama=c("drama"),
                         Act=c("drama","Number.Act"),
-                        Scene=c("drama","Number.Act","Number.Scene")),
+                        Scene=c("drama","Number.Act","Number.Scene","begin.Scene")),
                  ifelse(names==TRUE,
                         "Speaker.figure_surface",
                         "Speaker.figure_id")
@@ -223,7 +225,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   }
   
   colnames(r)[ncol(r)] <- "x"
-
+  colnames(r)[ncol(r)-1] <- "figure"
   if (! is.null(colnames)) {
     colnames(r) <- colnames
   }
