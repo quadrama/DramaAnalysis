@@ -40,6 +40,8 @@ title: "QuaDramA Report: `r title`"
 # Meta data
 
 - Author(s): `r paste(paste0("[",meta$Name,"](http://d-nb.info/gnd/",meta$Pnd,")"),sep=", ")`
+- Acts: `r length(unique(mtext$begin.Act))`
+- Scenes: `r mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1`
 
 # Character Lists {.tabset}
 
