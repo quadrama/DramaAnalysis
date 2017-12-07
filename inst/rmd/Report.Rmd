@@ -28,6 +28,7 @@ require(magrittr)
 
 mtext <- loadSegmentedText(params$id)
 meta <- loadMeta(params$id)
+characters <- loadCharacters(params$id)
 title <- as.character(meta[1,"documentTitle"])
 
 ```
@@ -62,7 +63,7 @@ as.character(begins[order(begins$x),]$Group.1)
 Relative amount of words spoken by each figure. 
 
 ```{r, echo=FALSE, messages=FALSE}
-fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
+fstat <- figureStatistics(mtext, names=FALSE, normalize=FALSE)
 mat <- figurematrix(fstat)
 b <- barplot(mat$values,col=params$col)
 
@@ -76,7 +77,10 @@ text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
 ## Table
 
 ```{r,echo=FALSE, results="asis"}
-knitr::kable(fstat, 'html')
+table <- merge(fstat, characters, 
+               by.x=c("corpus","drama","figure"),
+               by.y=c("corpus","drama","figure_id"))
+knitr::kable(table, 'html')
 ```
 
 # Presence and Utterances
