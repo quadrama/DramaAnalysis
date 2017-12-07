@@ -221,9 +221,10 @@ Since version 2.0 of this package, we can also count word fields by segment, i.e
 ```{r}
 dsl <- dictionaryStatistics(rksp.0$mtext, 
                             fieldnames = c("Liebe","Krieg","Familie","Religion"),
+                            baseurl = "/Users/reiterns/Documents/QuaDramA/metadata/fields/",
                             normalizeByFigure=TRUE,
                             asList=TRUE,
-                            segment="Act")
+                            segment="Scene")
 
 dsl <- individualize(dsl)
 
@@ -236,4 +237,10 @@ matplot(dsl$marinelli$mat,type="l",col="black")
 legend(x="topright",legend=colnames(dsl$marinelli$mat),lty=1:5)
 ```
 
+Or cumulatively add up the numbers:
 
+```{r}
+mat <- apply(dsl$marinelli$mat,2,cumsum)
+matplot(mat,type="l",col="black")
+legend(x="topright",legend=colnames(mat),lty=1:5)
+```
