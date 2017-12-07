@@ -226,7 +226,7 @@ dsl <- dictionaryStatistics(rksp.0$mtext,
                             asList=TRUE,
                             segment="Scene")
 
-dsl <- individualize(dsl)
+dsl <- regroup(dsl)
 
 ```
 
