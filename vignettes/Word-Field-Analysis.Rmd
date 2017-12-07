@@ -211,3 +211,33 @@ plot.igraph(g,
                                           # (since the distances are so small, we multiply)
             )  
 ```
+
+## Development over the course of the play
+
+Since version 2.0 of this package, we can also count word fields by segment, i.e., by act or scene in a play. To do that, we add the parameter `segment="Act"` when we call the function `dictionaryStatistics()`. With the function `individualize()`, we can then re-organize this output so that each character has its own list.
+
+```{r}
+dsl <- dictionaryStatistics(rksp.0$mtext, 
+                            fieldnames = c("Liebe","Krieg","Familie","Religion"),
+                            normalizeByFigure=TRUE,
+                            asList=TRUE,
+                            segment="Scene")
+
+dsl <- regroup(dsl)
+
+```
+
+We can now easily plot the theme progress over the course of the play:
+
+```{r}
+matplot(dsl$marinelli$mat,type="l",col="black")
+legend(x="topright",legend=colnames(dsl$marinelli$mat),lty=1:5)
+```
+
+Or cumulatively add up the numbers:
+
+```{r}
+mat <- apply(dsl$marinelli$mat,2,cumsum)
+matplot(mat,type="l",col="black")
+legend(x="topright",legend=colnames(mat),lty=1:5)
+```

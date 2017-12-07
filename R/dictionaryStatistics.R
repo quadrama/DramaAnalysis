@@ -85,6 +85,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param asList Logical. Whether to return a list with separated components or a single data.frame.
 #' @importFrom stats aggregate
 #' @importFrom stats ave
+#' @importFrom utils as.roman
 #' @seealso \code{\link{loadFields}}
 #' @rdname dictionaryStatistics
 #' @examples
@@ -124,7 +125,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
   singles <- lapply(names(fields),function(x) {
     dss <- dictionaryStatisticsSingle(t, fields[[x]], ci=ci,
                                         segment=segment,
-                                        normalizeByFigure = FALSE, 
+                                        normalizeByFigure = normalizeByFigure, 
                                         normalizeByField = normalizeByField, 
                                         names=names, column=column)
     colnames(dss)[ncol(dss)] <- x
@@ -138,7 +139,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
 
   
   
-  if (normalizeByFigure == TRUE) {
+  if (FALSE==TRUE && normalizeByFigure == TRUE) {
     if (names == TRUE) {
       tokens <- t[,.N,
                   .(corpus,drama,Speaker.figure_surface)]
@@ -146,7 +147,10 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
       tokens <- t[,.N,
                   .(corpus,drama,Speaker.figure_id)]
     }
-    r <- merge(r,tokens,by.x=c("corpus","drama","figure"),by.y=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),allow.cartesian = TRUE)
+    r <- merge(r,tokens,
+               by.x=c("corpus","drama","figure"),
+               by.y=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),
+               allow.cartesian = TRUE)
     r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
     r$N <- NULL
   }
@@ -156,8 +160,8 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
     l$mat <- as.matrix(r[,(ncol(r)-length(fields)+1):ncol(r)])
     rownames(l$mat) <- switch(segment, 
                               Drama=as.character(l$figure),
-                              Act=paste(l$figure,as.roman(l$Number.Act)),
-                              Scene=paste(l$figure,as.roman(l$Number.Act),l$Number.Scene))
+                              Act=paste(l$figure,utils::as.roman(l$Number.Act)),
+                              Scene=paste(l$figure,utils::as.roman(l$Number.Act),l$Number.Scene))
     l
   } else {
     r
@@ -177,6 +181,8 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
 #' fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
 #' @importFrom stats aggregate
 #' @importFrom stats na.omit
+#' @importFrom reshape2 melt
+#' @importFrom stats as.formula
 #' @rdname dictionaryStatistics
 #' @export
 dictionaryStatisticsSingle <- function(t, wordfield=c(), 
@@ -190,6 +196,8 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   {
   # we need this to prevent notes in R CMD check
   .N <- NULL
+  . <- NULL
+  .SD <- NULL
   
   segment <- match.arg(segment)
   bycolumns <- c("corpus",
@@ -210,18 +218,19 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   } else {
     casing <- identity
   }
+  if (normalizeByField == FALSE) {
+    fieldNormalizer <- 1
+  }
+  
+  dt$match <- casing(dt[[column]]) %in% wordfield
+  form <- stats::as.formula(paste0("~ ", paste(c(bycolumns,"match"), collapse=" + ")))
+  xt <- data.table(reshape2::melt(xtabs(form, data=dt)))
   if (normalizeByFigure == TRUE) {
-    r <- dt[,
-            ((length(stats::na.omit(match(casing(get(column)), wordfield))) / .N) 
-              / ifelse(normalizeByField,fieldNormalizer,1)),
-           keyby=bylist
-           ]
+    r <- xt[,.((sum(.SD[match==TRUE]$value)/fieldNormalizer)/sum(.SD$value)),
+       keyby=bylist]
   } else {
-    r <- dt[,
-            (length(stats::na.omit(match(casing(get(column)), wordfield)))
-              / ifelse(normalizeByField,fieldNormalizer,1)),
-            keyby=bylist
-           ]
+    r <- xt[,.(sum(.SD[match==TRUE]$value)/fieldNormalizer),
+            keyby=bylist]
   }
   
   colnames(r)[ncol(r)] <- "x"
@@ -230,7 +239,8 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
     colnames(r) <- colnames
   }
   
-  stats::na.omit(r)
+  r[is.nan(r$x)]$x <- 0
+  r
 }
 
 dictionaryStatisticsSingleL <- function(...) {
@@ -260,4 +270,75 @@ dictionaryStatisticsL <- function(...) {
 dictionary.statistics <- function(...) {
   .Deprecated("dictionaryStatistics")
   dictionaryStatistics(...)
+}
+
+#' @title regroup
+#' @description This function isolates the dictionary statistics for
+#' each character. The return value is a list containing lists similar
+#' to the output of `dictionaryStatistics()`, but only containing 
+#' the table for one character.
+#' @param dstat A list generated by `dictionaryStatistics()`, 
+#' using the `asList` parameter
+#' @param by A character vector, either "Character" or "Field".
+#' Depending on this parameter, we get a list organized by character 
+#' or a list organized by field. If it's organised by character, it allows
+#' comparison of fields for a single character. If organised by field, 
+#' we can compare different characters for a single field.
+#' @export
+#' @examples
+#' data(rksp.0)
+#' field <- list(Liebe=c("liebe","lieben","herz"))
+#' dsl <- dictionaryStatistics(rksp.0$mtext, 
+#'    fields=field,
+#'    normalizeByFigure=TRUE,
+#'    asList=TRUE,
+#'    segment="Scene")
+#' dslr <- regroup(dsl, by="Field")
+#' \dontrun{
+#' matplot(apply(dslr$Liebe, 1, cumsum),type="l", main="Liebe", col=rainbow(14))
+#' legend(x="topleft", legend=rownames(dslr$Liebe),lty=1:5,col=rainbow(14), cex = 0.4)
+#' }
+regroup <- function(dstat, by=c("Character","Field")) {
+  by = match.arg(by)
+  switch(by,
+         Character={
+          l <- lapply(levels(dstat$figure), function(x) {
+          myLines = which(dstat$figure == x)
+    
+          innerList <- list()
+          innerList$mat <- dstat$mat[myLines,]
+          if ("Number.Scene" %in% names(dstat)) {
+            innerList$Number.Scene <- dstat$Number.Scene[myLines]
+          }
+          if ("Number.Act" %in% names(dstat)) {
+            innerList$Number.Act <- dstat$Number.Act[myLines]
+          }
+          innerList
+        })
+        names(l) <- levels(dstat$figure)
+        return(l)
+        },
+        Field={
+          l <- lapply(colnames(dstat$mat), function(x) {
+            df <- data.frame(Field=dstat$mat[,x])
+            df$figure <- dstat$figure
+            if ("Number.Scene" %in% names(dstat)) {
+              df$Number.Scene <- dstat$Number.Scene
+            }
+            if ("Number.Act" %in% names(dstat)) {
+              df$Number.Act <- dstat$Number.Act
+            }
+            if ("Number.Act" %in% names(dstat) && "Number.Scene" %in% names(dstat)) {
+              df$Segment <- paste(as.roman(df$Number.Act), df$Number.Scene)
+            }
+            
+            df2 <- reshape(df, direction="wide", timevar=c("Segment"), idvar=c("figure"),drop=c("Number.Act","Number.Scene"))
+            rownames(df2) <- df2$figure
+            df2$figure <- NULL
+            colnames(df2) <- substr(colnames(df2), 7, 100)
+            df2
+          })
+          names(l) <- colnames(dstat$mat)
+          return(l)
+        });
 }
