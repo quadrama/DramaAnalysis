@@ -231,7 +231,7 @@ We can now easily plot the theme progress over the course of the play:
 
 ```{r}
 matplot(dsl$marinelli$mat,type="l",col="black")
-legend(x="topright",legend=colnames(dsl$marinelli$mat),lty=1:5)
+legend(x="topleft",legend=colnames(dsl$marinelli$mat),lty=1:5)
 ```
 
 Or cumulatively add up the numbers:
@@ -239,5 +239,5 @@ Or cumulatively add up the numbers:
 ```{r}
 mat <- apply(dsl$marinelli$mat,2,cumsum)
 matplot(mat,type="l",col="black")
-legend(x="topright",legend=colnames(mat),lty=1:5)
+legend(x="topleft",legend=colnames(mat),lty=1:5)
 ```
