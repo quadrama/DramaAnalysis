@@ -15,9 +15,8 @@ This package contains a number of functions to support the analyis of dramatic t
 - Reads in preprocessed texts 
 
 # Requirements
-DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes.
+DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes, and is mostly used in [RStudio](https://www.rstudio.com).
 
-- R
 
 # Installation
 ```R
