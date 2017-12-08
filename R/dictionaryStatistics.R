@@ -224,7 +224,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   
   dt$match <- casing(dt[[column]]) %in% wordfield
   form <- stats::as.formula(paste0("~ ", paste(c(bycolumns,"match"), collapse=" + ")))
-  xt <- data.table(reshape2::melt(xtabs(form, data=dt)))
+  xt <- data.table::data.table(reshape2::melt(xtabs(form, data=dt)))
   if (normalizeByFigure == TRUE) {
     r <- xt[,.((sum(.SD[match==TRUE]$value)/fieldNormalizer)/sum(.SD$value)),
        keyby=bylist]
