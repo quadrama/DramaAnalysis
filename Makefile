@@ -5,6 +5,9 @@ VERSION=$(shell grep -o -e 'Version:.*' DESCRIPTION | egrep -o '\d+\.\d+\.\d+')
 check:
 	cd .. && R CMD build DramaAnalysis && R CMD check DramaAnalysis_${VERSION}.tar.gz
 
+build:
+	cd .. && R CMD build DramaAnalysis
+
 wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md ${TDIR}/Loading-Texts.md
 
 ${VIG}/%.md: vignettes/%.Rmd ${VIG}/version.md ${VIG}/vig-%.md
