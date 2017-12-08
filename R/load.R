@@ -5,19 +5,12 @@
 #' @param collectionDirectory A path to the directory in which collections are stored. 
 #' By default, the directory is called "collection" below the data directory.
 #' @export
-setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data"), 
+setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2"), 
                   collectionDirectory = file.path(dataDirectory,"collections")) {
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
-  options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",dataDirectory))
 }
 
-dlobject <- function() {
-  if (is.null(getOption("qd.dl"))) {
-    options(qd.dl=rJava::.jnew("de/unistuttgart/ims/drama/data/DataLoader",getOption("qd.datadir")))
-  }
-  getOption("qd.dl")
-}
 
 #' @importFrom utils read.table
 loadSetsInternally <- function() {
@@ -77,14 +70,16 @@ scene.act.table <- function(ids, defaultCollection="tg") {
   merged
 }
 
-#' Similar to load.text(), but the table also includes scene and act markings.
+#' @title Text Loading
+#' @description Loads a text with its segmentation
 #' @param ids The ids for which we want to get the text
 #' @importFrom data.table setkey foverlaps data.table
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
 #' @examples 
 #' \dontrun{
-#' mtext <- loadSegmentedText("tg:rksp.0")
+#' installData("test")
+#' mtext <- loadSegmentedText("test:rksp.0")
 #' }
 loadSegmentedText <- function(ids,defaultCollection="tg") {
   t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
@@ -98,27 +93,12 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
 }
 
 
-load.text <- function(...) {
-  .Deprecated("loadText")
-  loadText(...)
-}
-
-load.text2 <- function(...) {
-  .Deprecated("loadSegmentedText")
-  loadSegmentedText(...)
-}
-
-
-#' Loads a CSV-formatted text from the server,
-#' assuming the main server url has been set correctly.
-#'
-#'
-#' @param ids A vector containing drama ids to be downloaded
-#' @param includeTokens This argument has no meaning anymore. Tokens are always included.
-#' @param defaultCollection The collection prefix is added if no prefix is found
-#' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
-#' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
-#' @export
+## @param ids A vector containing drama ids to be downloaded
+## @param includeTokens This argument has no meaning anymore. Tokens are always included.
+## @param defaultCollection The collection prefix is added if no prefix is found
+## @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
+## representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
+## @keywords internal
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyCharacterFactors=TRUE) {
   t <- loadCSV(ids, defaultCollection = defaultCollection)
   t$Token.pos <- factor(t$Token.pos)
@@ -148,46 +128,62 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
 #' @param columnTypes Can be used to specify column types, which are passed to readr::read.csv.
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @export
-#' @importFrom data.table fread
-#' @importFrom rJava .jnew .jarray .jnull
-#' @importFrom readr read_csv locale
+#' @importFrom readr read_csv locale cols
 #' @examples
 #' \dontrun{
 #' loadAnnotations(c("tg:rksp.0"))
 #' }
 loadAnnotations <- function(ids, 
-                            type=atypes$Utterance, 
-                            coveredType=atypes$Token,
+                            type=NULL, 
+                            coveredType=NULL,
                             defaultCollection="tg",
                             columnTypes=NULL) {
-  dl <- dlobject()
-  
-  ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
-                function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
-  if (is.null(coveredType)) {
-    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,rJava::.jnull())
-  } else {
-    s <- dl$getAnnotations(rJava::.jarray(as.character(ids)),type,coveredType)
-  }
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8"),
-                                                  col_types = columnTypes))
-  colnames(df) <- make.names(colnames(df))
-  df
+  stop("This function is no longer supported. Use loadCSV() instead.")
+}
+
+#' @title Character data loading
+#' @description Loads a table of characters and meta data
+#' @param ids a list or vector of ids
+#' @param defaultCollection the default collection
+#' @param dataDirectory the data directory
+#' @export
+loadCharacters <- function(ids, 
+                           defaultCollection="tg", 
+                           dataDirectory=getOption("qd.datadir")) {
+  loadCSV(ids, 
+          variant="Characters", 
+          defaultCollection = defaultCollection, 
+          dataDirectory = dataDirectory)
 }
 
 loadCSV <- function(ids, 
-                    variant=c("UtterancesWithTokens", "Segments", "Metadata"), 
-                    defaultCollection="tg") {
+                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters"), 
+                    defaultCollection="tg",
+                    dataDirectory=getOption("qd.datadir")) {
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
                        function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
+  splittedIds <- strsplit(ids,":",fixed=TRUE)
   cvar <- match.arg(variant)
-  dl <- dlobject()
   
-  jvar <- rJava::J("de.unistuttgart.ims.drama.data.CSVVariant")
-  s <- dl$getCSV(rJava::.jarray(as.character(ids)),jvar$valueOf(cvar))
-  df <- data.table::data.table(readr::read_csv(s, locale = readr::locale(encoding = "UTF-8")))
-  df
+  tables <- lapply(splittedIds, function(x) {
+    filename <- file.path(dataDirectory,
+                          x[1],
+                          "csv",
+                          paste(x[2],cvar,"csv",
+                                sep="."))
+    if (file.exists(filename)) {
+      tab <- data.table::data.table(readr::read_csv(filename, 
+                                                    locale = readr::locale(encoding = "UTF-8"),
+                                                    col_types = readr::cols()))
+      return(tab)
+    } else {
+      message(paste(filename, "could not be loaded and was skipped"))
+      return(NA)
+    }
+  })
+  tables <- tables[!is.na(tables)]
+  Reduce(rbind, tables)
 }
 
 #' @title Load meta data
@@ -195,67 +191,38 @@ loadCSV <- function(ids,
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load. No longer used.
 #' @export
-loadMeta <- function(ids,type=atypes$Author) {
+loadMeta <- function(ids,type=NULL) {
   loadCSV(ids, variant="Metadata")
 }
 
-#' Function to count the annotations of a certain type in selected texts.
-#' @param ids A vector or list of drama ids
-#' @param type A string, the fully qualified type name we want to count
-#' @param debug Logical value, whether to print debug information
-#' @param shortname Logical value, whether to only use the local name of type in the returned data frame.
-#' @export
-countAnnotations <- function(ids, 
-                             type=atypes$Utterance,
-                             debug=FALSE,
-                             shortname=TRUE) {
-  r <- data.frame(c())
-  s <- ""
-  if (shortname == TRUE) {
-    lname <- utils::tail(unlist(strsplit(type, split=".",fixed=TRUE)),n=1)
-  } else {
-    lname <- type
-  }
-  for (a in ids) {
-    tryCatch({
-      data2 <- loadAnnotations(ids,type,NULL)
-      r[a,lname] = nrow(data2)
-    }, finally=function(w) {print()}, error=function(w){}, warning=function(w){})
-  }
-  r
-}
 
-#' This function loads the number of annotations of different types for several 
-#' dramas at once.
-#' @param ids A vector containing drama ids
-#' @param types A character vector containing the annotation types we want to count
-#' @param debug Logical value, whether to print out debug info
-#' @export
-#' @examples 
-#' \dontrun{
-#' loadNumbers(c("rksp.0", "vndf.0"))
-#' }
-loadNumbers <- function(ids=c(),
-                        types=c(atypes$Act,
-                                atypes$Scene, 
-                                atypes$Utterance,
-                                atypes$Token,
-                                atypes$Sentence,
-                                atypes$DramatisPersonae),
-                        debug=FALSE) {
-  df <- data.frame(ids)
-  rownames(df) <- df$ids
-  for (a in types) {
-    annos <- countAnnotations(ids, type=a, debug=debug)
-    df <- cbind(df, annos)
-  }
-  subset(df,select=c(-1))
-}
-
-#' Returns a list of all ids that are installed
+#' @title Installed texts
+#' @description Returns a list of all ids that are installed
+#' @param asDataFrame Logical value. Controls whether 
+#' the return value is a list (with colon-joined ids) 
+#' or a data.frame with two columns (corpus, drama)
+#' @param dataDirectory The directory in which precompiled 
+#' drama data is installed
 #' @export
 #' 
-loadAllInstalledIds <- function() {
-  getOption("qd.dl")$getAllIds()
+loadAllInstalledIds <- function(asDataFrame=FALSE, 
+                                dataDirectory=getOption("qd.datadir")) {
+  files <- list.files(path=file.path(dataDirectory),pattern=".*\\.(csv|xmi)", recursive = TRUE)
+  files <- strsplit(files, .Platform$file.sep, fixed=TRUE)
+  files <- lapply(files, function(x) {
+    parts <- unlist(strsplit(x[3],".",fixed=TRUE))
+    if (data.table::last(parts)=="xmi") {
+      x[3] <- paste(parts[1:(length(parts)-1)],sep=".",collapse=".")
+    } else if (data.table::last(parts)=="csv") {
+      x[3] <- paste(parts[1:(length(parts)-2)],sep=".",collapse=".")
+    }
+    x
+  })
+  files <- unique(files)
+  if (asDataFrame) {
+    data.frame(matrix(unlist(files), nrow=length(files), byrow=T))
+  } else {
+    unlist(lapply(files, function(x) { paste(x[c(1,3)],sep=":", collapse=":") }))
+  }
 }
 

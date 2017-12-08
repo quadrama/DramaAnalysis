@@ -15,20 +15,16 @@ Three additional *types* of branches are used:
 - Make a new branch for the release (e.g. `release/1.0.0`)
 - Set all version numbers to the correct version
   - `DESCRIPTION` file for the R package
-  - `pom.xml` for the Java code
-- Compile the Java code by running `mvn -f java/pom.xml clean package`
-- Go one directory up `cd ..`
+  - `README.md` for badge
 - Create vignettes by running `devtools::build_vignettes()` in R
-- Check that the R package is well: `R CMD check DramaAnalysis`
-- Make a source package by running `R CMD build DramaAnalysis`
+- Go one directory up `cd ..`
+- Check that the R package is well: `make check`
+- Make a source package by running `make build`
 - If all works well, merge the branch into master, tag it with `v1.0.0`
 - Create a new release on the [github release page](https://github.com/quadrama/DramaAnalysis/releases)
-- Upload the source package
 - Copy the following installations instructions in release note (with fixed version numbers)
-   ```R
-   install.packages("https://github.com/quadrama/DramaAnalysis/releases/download/v1.2.0/DramaAnalysis_1.2.0.tar.gz",
-   repos=NULL, type="source")
-   ```
+  ```R
+  install_github("quadrama/DramaAnalysis", ref="v2.0.0") 
+  ```
 - Add the PDF documentation for the R package to the release page
-- Update zenodo-DOI in README.md on master branch
-- Post the updated vignettes on the wiki
+- Post the updated vignettes on the wiki: `make wiki`

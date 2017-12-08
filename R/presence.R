@@ -42,7 +42,7 @@ presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   
   conf.passive <- merge(meta, conf.passive, all.x=TRUE)
   for (j in seq_len(ncol(conf.passive)))
-    data.table::set(conf.passive,which(is.na(conf.passive[[j]])),j,FALSE)
+    data.table::set(conf.passive, which(is.na(conf.passive[[j]])),j,FALSE)
   
   rownames(conf.active) <- conf.active$figure
   rownames(conf.passive) <- conf.passive$figure
@@ -55,6 +55,9 @@ presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   # passive
   conf.passive$passives <- rowSums(conf.passive[,4:ncol(conf.passive)])
 
+  conf.active <- conf.active[order(conf.active$figure)]
+  conf.passive <- conf.passive[order(conf.passive$figure)]  
+  
   r <- merge(r, 
              conf.active[,.(corpus,drama,figure,actives)],
              by=c("corpus","drama","figure"), all.x = TRUE)
@@ -64,8 +67,12 @@ presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   
   
   if (passiveOnlyWhenNotActive) {
-    actives.which <- apply(conf.active[,4:(ncol(conf.active)-1)], 1, which)
-    passives.which <- apply(conf.passive[,4:(ncol(conf.passive)-1)], 1, which)
+    actives.mat <- as.matrix(conf.active[,4:(ncol(conf.active)-1)])
+    passives.mat <- as.matrix(conf.passive[,4:(ncol(conf.passive)-1)])
+    actives.which <- lapply(split(actives.mat, seq(nrow(actives.mat))), 
+                            function(x) {which(unlist(x))})
+    passives.which <- lapply(split(passives.mat, seq(nrow(passives.mat))), 
+                            function(x) {which(unlist(x))})
     
     overlaps <- mapply(function(x,y) { intersect(x,y) }, actives.which, passives.which )
     overlaps.cnt <- as.vector(Reduce(rbind,lapply(overlaps, length)))

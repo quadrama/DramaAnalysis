@@ -69,8 +69,8 @@ configuration <- function(mtext,
   cfg <- stats::reshape(words.per.segment, direction="wide", 
                         idvar = c("corpus","drama","characterColumn"), 
                         timevar = "segmentColumn")
-  
-  cfg[is.na(cfg)] <- 0
+  # replace NA values with zero
+  for (col in 4:ncol(cfg)) data.table::set(cfg, which(is.na(cfg[[col]])), col, 0)
   colnames(cfg)[3:(ncol(cfg))] <- c("figure",seq(1,ncol(cfg)-3))
   
   if (onlyPresence) {

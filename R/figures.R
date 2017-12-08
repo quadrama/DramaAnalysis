@@ -68,8 +68,8 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
 #' figures are ranked ascending.
 #' @importFrom reshape2 dcast
 #' @examples
-#' data(rksp.0,vndf.0)
-#' text <- rbind(rksp.0$mtext,vndf.0$mtext)
+#' data(rksp.0,rjmw.0)
+#' text <- rbind(rksp.0$mtext,rjmw.0$mtext)
 #' stat <- figureStatistics(text, names = TRUE)
 #' mat <- figurematrix(stat)
 #' # Plot a stacked bar plot

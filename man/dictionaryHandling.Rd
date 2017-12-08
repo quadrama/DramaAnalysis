@@ -5,7 +5,7 @@
 \alias{enrichDictionary}
 \title{Dictionary Handling}
 \usage{
-loadFields(fieldnames = c(),
+loadFields(fieldnames = c("Liebe", "Familie"),
   baseurl = paste("https://raw.githubusercontent.com/quadrama/metadata/master",
   ensureSuffix(directory, fileSep), sep = fileSep), directory = "fields/",
   fileSuffix = ".txt", fileSep = "/")

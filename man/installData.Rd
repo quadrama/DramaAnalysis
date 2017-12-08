@@ -5,16 +5,22 @@
 \title{Download preprocessed drama data}
 \usage{
 installData(dataSource = "tg", dataDirectory = getOption("qd.datadir"),
-  downloadSource = "ims", removeZipFile = TRUE)
+  downloadSource = "ims", removeZipFile = TRUE,
+  baseUrl = "https://github.com/quadrama", remoteUrl = paste0(baseUrl,
+  "/data_", dataSource, ".git"))
 }
 \arguments{
 \item{dataSource}{Currently, only "tg" (textgrid) is supported}
 
 \item{dataDirectory}{The directory in which the data is to be stored}
 
-\item{downloadSource}{The server from which to download}
+\item{downloadSource}{No longer used.}
 
-\item{removeZipFile}{If true (the default), the downloaded zip file is removed after unpacking}
+\item{removeZipFile}{No longer used.}
+
+\item{baseUrl}{The remote repository owner (e.g., https://github.com/quadrama)}
+
+\item{remoteUrl}{The URL of the remote repository.}
 }
 \description{
 This function downloads pre-processed dramatic texts via http and stores them locally in your data directory

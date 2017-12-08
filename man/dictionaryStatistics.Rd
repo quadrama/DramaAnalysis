@@ -7,17 +7,17 @@
 \title{Dictionary Use}
 \usage{
 dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
-  fieldnames = c(), normalizeByFigure = FALSE, normalizeByField = FALSE,
+  fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
+  normalizeByFigure = FALSE, normalizeByField = FALSE, byFigure = TRUE,
   names = FALSE, boost = 1,
   baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-  column = "Token.surface", ci = TRUE)
+  column = "Token.surface", asList = FALSE, ci = TRUE)
 
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
-  normalizeByFigure = FALSE, normalizeByField = FALSE,
-  fieldNormalizer = length(wordfield), bylist = ifelse(names == TRUE,
-  "corpus,drama,Speaker.figure_surface", "corpus,drama,Speaker.figure_id"),
-  column = "Token.surface", ci = TRUE, colnames = c("corpus", "drama",
-  "figure", "x"))
+  segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
+  normalizeByField = FALSE, byFigure = TRUE,
+  fieldNormalizer = length(wordfield), column = "Token.surface",
+  ci = TRUE, colnames = NULL)
 
 dictionaryStatisticsL(...)
 }
@@ -29,28 +29,35 @@ By default, we try to load the dictionaries using \code{fieldnames} and \code{ba
 
 \item{fieldnames}{A list of names for the dictionaries.}
 
+\item{segment}{The segment level that should be used. By default, 
+the entire play will be used. Possible values are "Drama" (default), 
+"Act" or "Scene"}
+
 \item{normalizeByFigure}{Logical. Whether to normalize by figure speech length}
 
 \item{normalizeByField}{Logical. Whether to normalize by dictionary size. You usually want this.}
+
+\item{byFigure}{Logical, defaults to TRUE. If false, values will be calculated
+for the entire segment (play, act, or scene), and not for individual characters.}
 
 \item{names}{Logical. Whether the resulting table contains figure ids or names.}
 
 \item{boost}{A scaling factor to generate nicer values.}
 
-\item{baseurl}{The base path delivering the dictionaries. 
+\item{baseurl}{The base path delivering the dictionaries.
 Should end in a \code{/}.}
 
 \item{column}{The table column we apply the dictionary on. 
 Should be either "Token.surface" or "Token.lemma".}
 
+\item{asList}{Logical. Whether to return a list with separated components or a single data.frame.}
+
 \item{ci}{Whether to ignore case. Defaults to TRUE, i.e., case is ignored.}
 
-\item{wordfield}{A character vector containing the words or lemmas to be counted 
-(only for \code{*Single}-functions)}
+\item{wordfield}{A character vector containing the words or lemmas 
+to be counted (only for \code{*Single}-functions)}
 
 \item{fieldNormalizer}{defaults to the length of the wordfield}
-
-\item{bylist}{A list of columns, to be passed into the aggregate function. Can be used to control whether to count by figures or by dramas}
 
 \item{colnames}{The column names to be used}
 
@@ -64,6 +71,10 @@ The function \code{dictionaryStatistics()} calculates statistics for
 dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
 for a single word list. Functions ending on \code{L} return a list with 
 multiple components.
+
+\code{dictionaryStatisticsL()} should not be used 
+anymore. Please use \code{dictionaryStatistics()} with the parameter
+\code{asList=TRUE}
 }
 \section{Returned Lists}{
 

@@ -8,7 +8,7 @@ output:
     toc: true
     toc_depth: 2
 params:
-  id: "tg:rksp.0"
+  id: "test:rksp.0"
   col: "grey"
 ---
 
@@ -26,11 +26,11 @@ if (is.null(.Options$qd.datadir)) {
 
 require(magrittr)
 
-text <- loadText(params$id, includeTokens = TRUE)
 mtext <- loadSegmentedText(params$id)
-meta <- loadMeta(params$id, type=atypes$Drama)
-author <- loadMeta(params$id,type=atypes$Author)
+meta <- loadMeta(params$id)
+characters <- loadCharacters(params$id)
 title <- as.character(meta[1,"documentTitle"])
+
 ```
 
 ---
@@ -40,7 +40,9 @@ title: "QuaDramA Report: `r title`"
 
 # Meta data
 
-- Author(s): `r paste(paste0("[",author$Name,"](http://d-nb.info/gnd/",author$Pnd,")"),sep=", ")`
+- Author(s): `r paste(paste0("[",meta$Name,"](http://d-nb.info/gnd/",meta$Pnd,")"),sep=", ")`
+- Acts: `r length(unique(mtext$begin.Act))`
+- Scenes: `r mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1`
 
 # Character Lists {.tabset}
 
@@ -49,44 +51,19 @@ title: "QuaDramA Report: `r title`"
 All figures, in the order they have their first appearance
 
 ```{r, echo=FALSE}
-begins <- aggregate(text$begin, by=list(text$Speaker.figure_surface), min)
+begins <- aggregate(mtext$begin, by=list(mtext$Speaker.figure_surface), min)
 as.character(begins[order(begins$x),]$Group.1)
 ```
 
-## Dramatis Personae 
-
-All figurs as listed in the dramatis personae:
-
-```{r, echo=FALSE}
-figuresInDramatisPersonae <- loadAnnotations(params$id, type=atypes$DramatisPersonae, coveredType = atypes$Figure)
-as.character(figuresInDramatisPersonae$Figure.name)
-```
+# Overall Speech Distribution {.tabset}
 
 
-
-## Order vs. order
-
-This plot contains only the figures for which a mapping between entry in dramatis personae and speakers can be established.
-
-```{r, echo=FALSE}
-fRank <- figuresInDramatisPersonae %>% 
-  rankFiguresByDramatisPersonae(columnTitle="dp") %>%
-  rankFiguresByAppearance(text,columnTitle="app")
-
-par(xpd=TRUE)
-plot(fRank$dp, fRank$app,
-     pch=20,frame=FALSE,xlab="Dramatis Personae",
-     ylab="Auftritt")
-text(fRank$dp, fRank$app,labels=fRank$Figure.surface,pos=3)
-
-```
-
-# Overall Speech Distribution
+## Bar chart 
 
 Relative amount of words spoken by each figure. 
 
 ```{r, echo=FALSE, messages=FALSE}
-fstat <- figureStatistics(text, names=TRUE, normalize=FALSE)
+fstat <- figureStatistics(mtext, names=FALSE, normalize=FALSE)
 mat <- figurematrix(fstat)
 b <- barplot(mat$values,col=params$col)
 
@@ -94,6 +71,16 @@ top <- 15
 
 text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
      labels=t(substr(head(mat$labels,top),0,20)),cex=0.5)
+
+```
+
+## Table
+
+```{r,echo=FALSE, results="asis"}
+table <- merge(fstat, characters, 
+               by.x=c("corpus","drama","figure"),
+               by.y=c("corpus","drama","figure_id"))
+knitr::kable(table, 'html')
 ```
 
 # Presence and Utterances
@@ -146,7 +133,13 @@ barplot(c$matrix,
 ```
 
 
-# Copresence Network
+#  Network Analysis  {.tabset}
+
+## Copresence Network
+
+In a copresence network, two vertices are connected if the characters they represent appear together on stage (= are co-present on stage). The network shown here is based on scenes, i.e., the thicker an edge, the more scenes the two connected characters are copresent.
+
+
 ```{r, echo=FALSE, message=FALSE}
 c <- configuration(mtext, onlyPresence = TRUE, by="Scene")
 co <- c$matrix %*% t(c$matrix)
@@ -173,6 +166,37 @@ plot.igraph(g,
             )  
 ```
 
+## Gossip Network
+
+The "gossip network" represents character that talk about other characters. The colors don't follow a particular pattern and are just added for readability. Edge thickness represent how often (number of scenes) this happens, and is scaled logarithmically.
+Currently, this includes scenes in which both characters are present. This will be changed later.
+
+```{r, echo=FALSE}
+m <- as.matrix(
+  as.data.frame.matrix(
+    xtabs( ~ Speaker.figure_id + Mentioned.figure_id,
+           mtext[,.N,.(Speaker.figure_id,Mentioned.figure_id,begin.Scene)]
+           [!is.na(Mentioned.figure_id)])))
+
+g <- graph_from_adjacency_matrix(m, 
+                                 weighted=TRUE,     # weighted graph
+                                 mode="directed", # no direction
+                                 diag=FALSE         # no looping edges
+                                )
+coords <- layout_(g, on_grid())
+plot.igraph(g,
+            layout=coords,                # how to lay out the graph
+            vertex.label.cex=0.6,         # label size
+            vertex.label.color="black",   # font color
+            vertex.color=qd.colors[4],    # vertex color
+            vertex.frame.color=NA,        # no vertex border
+            edge.curved = TRUE,           # curved edges
+            edge.width=log(E(g)$weight)+1,  # scale edges according to their weight
+            edge.color=rep(qd.colors,100)
+            )  
+
+```
+
 
 # Word Fields  {.tabset}
 
@@ -184,24 +208,27 @@ baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71b
 fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
 fields <- loadFields(fieldNames,baseurl = baseUrl)
 
-text2 <- limitFigures(text, by="tokens")
+text2 <- limitFigures(mtext, by="tokens")
 dstat <- dictionaryStatistics(
   text2,  # the text
   fields=fields,
   names = TRUE,                 # use figure names (instead of ids)
   normalizeByFigure = TRUE,   # normalization by figure
   normalizeByField = TRUE,    # normalization by field
-  column = "Token.lemma"        # lemma-based stats
+  column = "Token.lemma",        # lemma-based stats
+  asList = TRUE
 )
-mat <- as.matrix(dstat[,4:8])
-rownames(mat) <- vapply(strsplit(as.character(dstat$figure), ",", fixed=TRUE), `[`,1, FUN.VALUE=character(1))
 par(mar=c(10,2,0,10),xpd=TRUE)
-b <- barplot(t(mat), # we select Romeo's line
+b <- barplot(t(dstat$mat), 
         col=params$col[1:length(fields)],
         las=3,
         border=FALSE
         )
-legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border=FALSE)
+legend(x=max(b)+1,y=max(dstat$mat),
+       legend=colnames(dstat$mat),
+       fill=params$col,
+       bty="n",
+       border=FALSE)
 
 ```
 
@@ -210,9 +237,9 @@ legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border
 [Z-scores in wikipedia](https://en.wikipedia.org/wiki/Standard_score)
 
 ```{r echo=FALSE}
-zmat <- scale(as.matrix(dstat[,4:8]))
+zmat <- scale(dstat$mat)
 
-rownames(zmat) <- vapply(strsplit(as.character(dstat$figure), ",", fixed=TRUE), `[`,1, FUN.VALUE=character(1))
+
 par(mar=c(2,12,0,6),xpd=TRUE)
 b <- barplot(t(zmat), 
         col=params$col[1:length(fieldNames)],
@@ -227,7 +254,7 @@ legend(x=max(zmat),y=max(b)+1,legend=colnames(zmat),fill=params$col,bty="n",bord
 ## Bar chart (scaled)
 
 ```{r, echo=FALSE}
-mat <- t(scale(t(mat),center=FALSE,scale=rowSums(mat)))
+mat <- t(scale(t(dstat$mat),center=FALSE,scale=rowSums(dstat$mat)))
 
 par(mar=c(10,2,1,10),xpd=TRUE)
 b <- barplot(t(mat),
@@ -235,7 +262,7 @@ b <- barplot(t(mat),
         las=3,
         border=FALSE
         )
-legend(x=max(b)+1,y=max(mat),legend=colnames(mat),fill=params$col,bty="n",border=FALSE)
+legend(x=max(b)+1,y=max(dstat$mat),legend=colnames(dstat$mat),fill=params$col,bty="n",border=FALSE)
 
 ```
 
@@ -259,12 +286,47 @@ The following chart shows for each scene boundary the number of characters excha
 ```{r, echo=FALSE}
 ham <- hamming(mtext)
 
+if (length(ham)+1 != length(unique(mtext$begin.Scene))) {
+  warning("Something is seriously wrong here. Please report this issue.")
+}
+
 par(mar=c(3,3,3,3))
 layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
 plot(0,type="n",axes=FALSE,xlab="",ylab="")
-legend(x="center",lty=2:3,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
+legend(x="center",lty=2:4,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
 
-plot(ham, type="l", lty=2, xlab="Scene boundary",ylab="",ylim=c(0,1),frame=TRUE)
+sceneLabels <- paste(as.roman(mtext[,.N,.(Number.Act, Number.Scene)]$Number.Act), mtext[,.N,.(Number.Act, Number.Scene)]$Number.Scene, sep=".")
+actBoundaries <- mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1
+s <- 0
+for (i in 1:length(actBoundaries)) {
+  actBoundaries[i] <- actBoundaries[i] + s
+  s <- actBoundaries[i]
+}
+
+
+
+plot(0,type="n",axes=FALSE,xlab="Scene boundary",ylab="",
+     ylim=c(0,1),
+     xlim=c(1,length(ham)))
+rect(0:(length(ham)),0,
+     0:(length(ham))+1,1,
+     border=NA,
+     ylim=c(0,1),
+     xlim=c(1,length(ham)),
+     col=c(rgb(0.9,0.9,0.9,0.7),"white"))
+axis(2, las=2)
+#axis(1)
+axis(1, at=0.5:(length(sceneLabels)),labels=sceneLabels, cex=0.1)
+par(new=TRUE)
+plot(x=1:length(ham),
+     y=ham, type="l", 
+     lty=2, 
+     xlab="Scene boundary",ylab="",
+     ylim=c(0,1),
+     xlim=c(1,length(ham)),
+     frame=FALSE,
+     axes=FALSE)
+abline(v=actBoundaries[1:(length(actBoundaries)-1)],xpd=FALSE,xlim=c(2,length(ham)))
 par(new=TRUE)
 plot(hamming(mtext, variant = "NormalizedHamming"), type="l", lty=3,xlab="",ylab="",axes=FALSE)
 par(new=TRUE)

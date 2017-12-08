@@ -4,7 +4,7 @@
 \alias{loadAnnotations}
 \title{Load annotations}
 \usage{
-loadAnnotations(ids, type = atypes$Utterance, coveredType = atypes$Token,
+loadAnnotations(ids, type = NULL, coveredType = NULL,
   defaultCollection = "tg", columnTypes = NULL)
 }
 \arguments{

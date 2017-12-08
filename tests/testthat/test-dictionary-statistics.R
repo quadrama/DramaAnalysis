@@ -14,4 +14,4 @@ expect_that(length(dstat), equals(4))
 expect_that(as.numeric(dstat[6,4]), equals(0.5))
 
 dstat <- dictionaryStatistics(rksp.0$mtext, fields=list(Familie=list("aber")))
-expect_that(as.numeric(dstat[4,4]), equals(29))
+expect_that(as.numeric(dstat[10,4]), equals(29))

@@ -1,7 +1,14 @@
 TDIR=../DramaAnalysis.wiki
 VIG=vignettes
+VERSION=$(shell grep -o -e 'Version:.*' DESCRIPTION | egrep -o '\d+\.\d+\.\d+')
 
-wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md ${TDIR}/Presence.md
+check:
+	cd .. && R CMD build DramaAnalysis && R CMD check DramaAnalysis_${VERSION}.tar.gz
+
+build:
+	cd .. && R CMD build DramaAnalysis
+
+wiki: ${TDIR}/Configuration-Matrices.md ${TDIR}/Figure-Statistics.md ${TDIR}/Word-Field-Analysis.md ${TDIR}/Loading-Texts.md
 
 ${VIG}/%.md: vignettes/%.Rmd ${VIG}/version.md ${VIG}/vig-%.md
 	Rscript -e "library(rmarkdown); render('$<', output_format='md_document', clean=TRUE)"
@@ -9,8 +16,8 @@ ${VIG}/%.md: vignettes/%.Rmd ${VIG}/version.md ${VIG}/vig-%.md
 
 ${TDIR}/%.md: vignettes/%.md
 	rm -rf ${TDIR}/$*_files
-	mv -f vignettes/$*_files ${TDIR}/
-	mv -f $< ${TDIR}/
+	mv -f vignettes/$*_files ${TDIR}/ || true
+	mv -f $< ${TDIR}/ || true
 
 ${VIG}/version.md: DESCRIPTION
 	grep -o -e 'Version:.*' DESCRIPTION  | egrep -o '\d+\.\d+\.\d+' | xargs perl -e 'my $$v = shift; print "![$$v](https://img.shields.io/badge/v-$$v-blue.svg)";' > ${VIG}/version.md

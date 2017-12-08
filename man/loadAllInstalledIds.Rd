@@ -2,9 +2,18 @@
 % Please edit documentation in R/load.R
 \name{loadAllInstalledIds}
 \alias{loadAllInstalledIds}
-\title{Returns a list of all ids that are installed}
+\title{Installed texts}
 \usage{
-loadAllInstalledIds()
+loadAllInstalledIds(asDataFrame = FALSE,
+  dataDirectory = getOption("qd.datadir"))
+}
+\arguments{
+\item{asDataFrame}{Logical value. Controls whether 
+the return value is a list (with colon-joined ids) 
+or a data.frame with two columns (corpus, drama)}
+
+\item{dataDirectory}{The directory in which precompiled 
+drama data is installed}
 }
 \description{
 Returns a list of all ids that are installed

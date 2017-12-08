@@ -45,10 +45,11 @@ plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors
 #' @export
 #' @examples 
 #' data(rksp.0)
-#' dstat <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
-#'                               fieldnames=c("Krieg", "Liebe", "Familie", "Ratio","Religion"))
-#' plotSpiderWebs(dstat[,3:7],names=dstat[,2],max=50)
-plotSpiderWebs <- function(dstat=NULL, mat=dstat[,-c(1,2,3)], names=dstat[,3], 
+#' fnames <- c("Krieg", "Liebe", "Familie", "Ratio","Religion")
+#' ds <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
+#'                               fieldnames=fnames, asList=TRUE)
+#' plotSpiderWebs(dstat=ds,max=50)
+plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure, 
                            symbols=c(17,16,15,4,8),
                            maxValue=max(mat),minValue=min(mat), cglcol="black", 
                            legend=TRUE,
