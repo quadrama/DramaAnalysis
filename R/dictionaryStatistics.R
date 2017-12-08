@@ -77,7 +77,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
 #' @param names Logical. Whether the resulting table contains figure ids or names.
 #' @param boost A scaling factor to generate nicer values.
-#' @param baseurl The base path delivering the dictionaries. 
+#' @param baseurl The base path delivering the dictionaries.
 #' Should end in a \code{/}.
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
@@ -98,6 +98,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                  segment=c("Drama","Act","Scene"),
                                  normalizeByFigure = FALSE, 
                                  normalizeByField = FALSE, 
+                                 byFigure = TRUE,
                                  names = FALSE, 
                                  boost = 1,
                                  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
@@ -125,6 +126,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
   singles <- lapply(names(fields),function(x) {
     dss <- dictionaryStatisticsSingle(t, fields[[x]], ci=ci,
                                         segment=segment,
+                                        byFigure = byFigure,
                                         normalizeByFigure = normalizeByFigure, 
                                         normalizeByField = normalizeByField, 
                                         names=names, column=column)
@@ -175,6 +177,8 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
 #' the entire play will be used. Possible values are "Drama" (default), 
 #' "Act" or "Scene"
 #' @param colnames The column names to be used
+#' @param byFigure Logical, defaults to TRUE. If false, values will be calculated
+#' for the entire segment (play, act, or scene), and not for individual characters.
 #' @examples
 #' # Check a single dictionary entries
 #' data(rksp.0)
@@ -190,6 +194,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
                                        segment=c("Drama","Act","Scene"),
                                        normalizeByFigure = FALSE, 
                                        normalizeByField = FALSE, 
+                                       byFigure = TRUE,
                                        fieldNormalizer=length(wordfield), 
                                        column="Token.surface", ci=TRUE,
                                        colnames=NULL)
@@ -204,13 +209,15 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
                  switch(segment,
                         Drama=c("drama"),
                         Act=c("drama","Number.Act"),
-                        Scene=c("drama","Number.Act","Number.Scene")),
-                 ifelse(names==TRUE,
-                        "Speaker.figure_surface",
-                        "Speaker.figure_id")
+                        Scene=c("drama","Number.Act","Number.Scene"))
                  )
-  bylist <- paste(bycolumns,collapse=",")
+  if (byFigure == TRUE) {
+    bycolumns <- c(bycolumns, ifelse(names==TRUE,
+                                     "Speaker.figure_surface",
+                                     "Speaker.figure_id"))
+  }
   
+  bylist <- paste(bycolumns,collapse=",")
   dt <- as.data.table(t)
   if (ci) {
     wordfield <- tolower(wordfield)

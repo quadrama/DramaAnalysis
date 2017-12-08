@@ -8,15 +8,16 @@
 \usage{
 dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
-  normalizeByFigure = FALSE, normalizeByField = FALSE, names = FALSE,
-  boost = 1,
+  normalizeByFigure = FALSE, normalizeByField = FALSE, byFigure = TRUE,
+  names = FALSE, boost = 1,
   baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
   column = "Token.surface", asList = FALSE, ci = TRUE)
 
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
   segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
-  normalizeByField = FALSE, fieldNormalizer = length(wordfield),
-  column = "Token.surface", ci = TRUE, colnames = NULL)
+  normalizeByField = FALSE, byFigure = TRUE,
+  fieldNormalizer = length(wordfield), column = "Token.surface",
+  ci = TRUE, colnames = NULL)
 
 dictionaryStatisticsL(...)
 }
@@ -36,11 +37,14 @@ the entire play will be used. Possible values are "Drama" (default),
 
 \item{normalizeByField}{Logical. Whether to normalize by dictionary size. You usually want this.}
 
+\item{byFigure}{Logical, defaults to TRUE. If false, values will be calculated
+for the entire segment (play, act, or scene), and not for individual characters.}
+
 \item{names}{Logical. Whether the resulting table contains figure ids or names.}
 
 \item{boost}{A scaling factor to generate nicer values.}
 
-\item{baseurl}{The base path delivering the dictionaries. 
+\item{baseurl}{The base path delivering the dictionaries.
 Should end in a \code{/}.}
 
 \item{column}{The table column we apply the dictionary on. 
