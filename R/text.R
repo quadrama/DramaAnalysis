@@ -124,6 +124,7 @@ extractTopTerms <- function(mat, top=10) {
 #' @param of The output file
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
+#' @importFrom igraph graph_from_adjacency_matrix plot.igraph layout_ on_grid
 #' @export
 report <- function(id="test:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), colors=qd.colors) {
   force(of)
