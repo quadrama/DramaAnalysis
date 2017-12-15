@@ -239,5 +239,11 @@ Or cumulatively add up the numbers:
 ```{r}
 mat <- apply(dsl$marinelli$mat,2,cumsum)
 matplot(mat,type="l",col="black")
+
+# Add act lines
+al <- rle(dsl$marinelli$Number.Act)
+abline(v=cumsum(al$lengths[-1]))
+
 legend(x="topleft",legend=colnames(mat),lty=1:5)
+
 ```
