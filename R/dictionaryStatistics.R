@@ -138,7 +138,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                      by.x="begin.Scene",
                      by.y="begin.Scene")
         dss$begin.Scene <- NULL
-        setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","figure",x))
+        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","figure",x))
       }
       dss
     } else {
