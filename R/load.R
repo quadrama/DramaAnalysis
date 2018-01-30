@@ -7,6 +7,7 @@
 #' @export
 setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2"), 
                   collectionDirectory = file.path(dataDirectory,"collections")) {
+  message("Since 2.1 it is no longer necessary to call setup() if you're happy with the default paths.")
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
 }
