@@ -6,5 +6,5 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage(paste("DramaAnalysis",packageVersion("DramaAnalysis")))
+  packageStartupMessage(paste("DramaAnalysis",utils::packageVersion("DramaAnalysis")))
 }
