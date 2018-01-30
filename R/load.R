@@ -96,6 +96,13 @@ scene.act.table <- function(ids, defaultCollection="tg") {
 loadSegmentedText <- function(ids,defaultCollection="tg") {
   t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
   sat <- scene.act.table(ids=ids, defaultCollection=defaultCollection)
+
+  # if scene begin/end field is NA, we replace it with the act begin/end
+  # therefore, we don't loose any text
+  sat[is.na(begin.Scene),  `:=`(begin.Scene  = begin.Act),]
+  sat[is.na(end.Scene),    `:=`(end.Scene    = end.Act),]
+  sat[is.na(Number.Scene), `:=`(Number.Scene = 0),]
+  
   data.table::setkey(t, "corpus", "drama", "begin", "end")
   data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
   mtext <- data.table::foverlaps(t, sat, type="any",
