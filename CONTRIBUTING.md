@@ -17,7 +17,6 @@ Three additional *types* of branches are used:
   - `DESCRIPTION` file for the R package
   - `README.md` for badge
 - Create vignettes by running `devtools::build_vignettes()` in R
-- Go one directory up `cd ..`
 - Check that the R package is well: `make check`
 - Make a source package by running `make build`
 - If all works well, merge the branch into master, tag it with `v1.0.0`
