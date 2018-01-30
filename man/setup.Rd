@@ -18,11 +18,11 @@ setDataDirectory(dataDirectory = file.path(path.expand("~"), "QuaDramA",
 }
 \arguments{
 \item{dataDirectory}{A path to the directory in which data and metadata are located. 
-"~/QuaDramA/Data" by default.}
+"~/QuaDramA/Data2" by default.}
 
 \item{collectionDirectory}{A path to the directory in which collections are stored. 
 By default, the directory is called "collection" below the data directory.}
 }
 \description{
-This function initialises the import from XMI files.
+This function initialises the paths to data files.
 }
