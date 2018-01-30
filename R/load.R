@@ -12,6 +12,17 @@ setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2")
   options(qd.collectionDirectory=collectionDirectory)
 }
 
+#' @export
+#' @rdname setup
+setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2")) {
+  options(qd.datadir=dataDirectory)
+}
+
+#' @export
+#' @rdname setup
+setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd.datadir"), "collections")) {
+  options(qd.collectionDirectory=collectionDirectory)
+}
 
 #' @importFrom utils read.table
 loadSetsInternally <- function() {

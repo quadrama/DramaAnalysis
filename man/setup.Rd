@@ -2,10 +2,19 @@
 % Please edit documentation in R/load.R
 \name{setup}
 \alias{setup}
-\title{This function initialises the import from XMI files.}
+\alias{setDataDirectory}
+\alias{setCollectionDirectory}
+\title{This function initialises the paths to data files.}
 \usage{
 setup(dataDirectory = file.path(path.expand("~"), "QuaDramA", "Data2"),
   collectionDirectory = file.path(dataDirectory, "collections"))
+
+setDataDirectory(dataDirectory = file.path(path.expand("~"), "QuaDramA",
+  "Data2"))
+
+
+  setCollectionDirectory(collectionDirectory = file.path(getOption("qd.datadir"),
+  "collections"))
 }
 \arguments{
 \item{dataDirectory}{A path to the directory in which data and metadata are located. 
