@@ -1,16 +1,28 @@
 
-#' This function initialises the import from XMI files.
+#' This function initialises the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
-#' "~/QuaDramA/Data" by default.
+#' "~/QuaDramA/Data2" by default.
 #' @param collectionDirectory A path to the directory in which collections are stored. 
 #' By default, the directory is called "collection" below the data directory.
 #' @export
 setup <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2"), 
                   collectionDirectory = file.path(dataDirectory,"collections")) {
+  message("Since 2.1 it is no longer necessary to call setup() if you're happy with the default paths.")
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
 }
 
+#' @export
+#' @rdname setup
+setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2")) {
+  options(qd.datadir=dataDirectory)
+}
+
+#' @export
+#' @rdname setup
+setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd.datadir"), "collections")) {
+  options(qd.collectionDirectory=collectionDirectory)
+}
 
 #' @importFrom utils read.table
 loadSetsInternally <- function() {
