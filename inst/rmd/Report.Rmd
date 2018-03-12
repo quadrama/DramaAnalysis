@@ -63,7 +63,7 @@ as.character(begins[order(begins$x),]$Group.1)
 Relative amount of words spoken by each figure. 
 
 ```{r, echo=FALSE, messages=FALSE}
-fstat <- figureStatistics(mtext, names=FALSE, normalize=FALSE)
+fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
 mat <- figurematrix(fstat)
 b <- barplot(mat$values,col=params$col)
 
