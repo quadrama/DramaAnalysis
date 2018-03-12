@@ -80,7 +80,7 @@ text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
 table <- merge(fstat, characters, 
                by.x=c("corpus","drama","figure"),
                by.y=c("corpus","drama","figure_id"))
-knitr::kable(table, 'html')
+knitr::kable(table)
 ```
 
 # Presence and Utterances
