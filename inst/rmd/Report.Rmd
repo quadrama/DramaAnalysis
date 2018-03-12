@@ -281,9 +281,17 @@ fields
 
 # Personnel Exchange
 
+```{r, echo=FALSE}
+showPersonnelExchange = length(unique(mtext$begin.Act)) > 1
+```
+
 The following chart shows for each scene boundary the number of characters exchanged over the boundary. Different metrics have been proposd, the plot shows all of them in comparison.
 
-```{r, echo=FALSE}
+```{r,echo=FALSE,eval=!showPersonnelExchange, results='asis'}
+print("*Not applicable for this file.*")
+```
+
+```{r, echo=FALSE, eval=showPersonnelExchange}
 ham <- hamming(mtext)
 
 if (length(ham)+1 != length(unique(mtext$begin.Scene))) {
