@@ -1,4 +1,4 @@
-[![release](https://img.shields.io/badge/release-2.0.1-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v2.0.1)
+[![release](https://img.shields.io/badge/release-2.0.2-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v2.0.2)
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
 [![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
 [![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
@@ -30,8 +30,8 @@ install_github("quadrama/DramaAnalysis", build_vignettes = TRUE)
 # Install newest development version
 install_github("quadrama/DramaAnalysis", ref="develop/2.x", build_vignettes = TRUE)
 
-# Install specific version (2.0.1)
-install_github("quadrama/DramaAnalysis", ref="v2.0.1", build_vignettes = TRUE) 
+# Install specific version (2.0.2)
+install_github("quadrama/DramaAnalysis", ref="v2.0.2", build_vignettes = TRUE) 
 ```
 
 # Usage and Howto
