@@ -52,12 +52,10 @@ limitFiguresByRank <- function(t, maxRank=10) {
 #' @param minTokens The minimal amount of tokens a figure has to speak
 #' @keywords internal
 limitFiguresByTokens <- function(t, minTokens=100) {
-    counts <- tapply(t$Speaker.figure_surface, paste(t$drama, t$Speaker.figure_id), length)
-    write(paste(length(counts[counts > minTokens]), "figures remaining."),stderr())
-    r <- subset(t, counts[paste(t$drama, t$Speaker.figure_id)] > minTokens )
-    r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
-    r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
-    r
+  r <- rksp.0$mtext[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n>=minTokens],by=.(corpus,drama)][,n:=NULL][]
+  r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
+  r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
+  r
 }
 
 
