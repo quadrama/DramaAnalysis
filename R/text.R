@@ -41,10 +41,7 @@ limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="toke
 #' @keywords internal
 #' @importFrom utils head
 limitFiguresByRank <- function(t, maxRank=10) {
-  counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id), length)
-  counts <- counts[order(counts$x, decreasing = TRUE),]
-  rcounts <- Reduce(rbind, by(counts, counts["Group.1"], head, n=maxRank))
-  r <- t[paste(t$drama, t$Speaker.figure_id) %in% paste(rcounts$Group.1, rcounts$Group.2),]
+  r <- rksp.0$mtext[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n%in%maxN(unique(n),maxRank)], by=.(corpus,drama)][,n:=NULL,][]
   r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
   r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
   r
@@ -230,4 +227,13 @@ last <- function(x, n=0) {
     return(NA)
   }
   sort(x,partial=len-(n-1))[len-(n-1)]
+}
+
+maxN <- function(x, N=2){
+  len <- length(x)
+  if(N>len){
+    warning('N greater than length(x).  Setting N=length(x)')
+    N <- length(x)
+  }
+  sort(x,partial=len-N+1)[(len-N+1):(len)]
 }
