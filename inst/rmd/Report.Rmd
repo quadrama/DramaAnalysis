@@ -10,6 +10,7 @@ output:
 params:
   id: "test:rksp.0"
   col: NULL
+  dynamic: TRUE
 ---
 
 ```{r,echo=FALSE}
@@ -279,13 +280,15 @@ plotSpiderWebs(dstat, col=params$col)
 fields
 ```
 
-# Personnel Exchange
+# Personnel Exchange   {.tabset}
 
 ```{r, echo=FALSE}
 showPersonnelExchange = length(unique(mtext$begin.Act)) > 1
 ```
 
-The following chart shows for each scene boundary the number of characters exchanged over the boundary. Different metrics have been proposd, the plot shows all of them in comparison.
+## Overview
+
+The following chart shows for each scene boundary the number of characters exchanged over the boundary. Different metrics have been proposed, the plot shows all of them in comparison.
 
 ```{r,echo=FALSE,eval=!showPersonnelExchange, results='asis'}
 print("*Not applicable for this file.*")
@@ -307,26 +310,54 @@ if (is.null(params$col)) {
 } else {
   colors <- params$col[c(1,4,7)]
 }
-par(mar=c(3,3,3,3))
-layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
-plot(0,type="n",axes=FALSE,xlab="",ylab="")
-legend(x="center",legend=c("Hamming (Normalized)", 
-                           "Trilcke et al. (2017)", 
-                           "Scenic Difference"),bty="n",horiz=TRUE,fill = colors)
 
+names <- c("Hamming (Normalized)", 
+                             "Trilcke et al. (2017)", 
+                             "Scenic Difference")
 sceneLabels <- paste(as.roman(mtext[,.N,.(Number.Act, Number.Scene)]$Number.Act), mtext[,.N,.(Number.Act, Number.Scene)]$Number.Scene, sep=".")
-actBoundaries <- mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1
-s <- 0
-for (i in 1:length(actBoundaries)) {
-  actBoundaries[i] <- actBoundaries[i] + s
-  s <- actBoundaries[i]
-}
+  par(mar=c(3,3,3,3))
+  layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
+  plot(0,type="n",axes=FALSE,xlab="",ylab="")
+  legend(x="center",legend=c("Hamming (Normalized)", 
+                             "Trilcke et al. (2017)", 
+                             "Scenic Difference"),bty="n",horiz=TRUE,fill = colors)
+  
+  
+  actBoundaries <- mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1
+  s <- 0
+  for (i in 1:length(actBoundaries)) {
+    actBoundaries[i] <- actBoundaries[i] + s
+    s <- actBoundaries[i]
+  }
+  
+  b <- barplot(Reduce(rbind, df), beside=TRUE,col = colors)
+  axis(1, at=seq(0.5,max(b[3,])+1,4),labels=sceneLabels, cex=0.1)
+  
 
-b <- barplot(Reduce(rbind, df), beside=TRUE,col = colors)
-axis(1, at=seq(0.5,max(b[3,])+1,4),labels=sceneLabels, cex=0.1)
 
+```
 
+## Dynamic
 
+```{r, echo=FALSE, eval=showPersonnelExchange}
+highchart() %>%
+  hc_yAxis(max=1) %>%
+  hc_xAxis(categories=sceneLabels,
+           tickmarkPlacement="between",
+           labels.x=-15) %>%
+  hc_add_series(df$ham, pointPadding=0,
+                type="column",
+                name=names[[1]],
+                color=colors[[1]]) %>%
+  hc_add_series(df$trilcke,
+                pointPadding=0,
+                type="column",
+                name=names[[2]],
+                color=colors[[2]]) %>%
+  hc_add_series(df$sd, pointPadding=0,
+                type="column",
+                name=names[[3]],
+                color=colors[[3]])
 ```
 
 # About
