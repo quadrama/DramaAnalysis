@@ -9,7 +9,7 @@ output:
     toc_depth: 2
 params:
   id: "test:rksp.0"
-  col: "grey"
+  col: NULL
 ---
 
 ```{r,echo=FALSE}
@@ -292,16 +292,27 @@ print("*Not applicable for this file.*")
 ```
 
 ```{r, echo=FALSE, eval=showPersonnelExchange}
-ham <- hamming(mtext)
 
-if (length(ham)+1 != length(unique(mtext$begin.Scene))) {
+df <- list()
+df$ham <- hamming(mtext, variant="NormalizedHamming")
+df$trilcke <- hamming(mtext, variant="Trilcke")
+df$sd <- scenicDifference(mtext)
+
+if (length(df$ham)+1 != length(unique(mtext$begin.Scene))) {
   warning("Something is seriously wrong here. Please report this issue.")
 }
 
+if (is.null(params$col)) {
+  colors <- gray.colors(3)
+} else {
+  colors <- params$col[c(1,4,7)]
+}
 par(mar=c(3,3,3,3))
 layout(matrix(c(1,2,2,2,2),5,1,byrow=TRUE))
 plot(0,type="n",axes=FALSE,xlab="",ylab="")
-legend(x="center",lty=2:4,legend=c("Trilcke et al. (2017)", "Hamming (Normalized)", "Scenic Difference"),bty="n",horiz=TRUE)
+legend(x="center",legend=c("Hamming (Normalized)", 
+                           "Trilcke et al. (2017)", 
+                           "Scenic Difference"),bty="n",horiz=TRUE,fill = colors)
 
 sceneLabels <- paste(as.roman(mtext[,.N,.(Number.Act, Number.Scene)]$Number.Act), mtext[,.N,.(Number.Act, Number.Scene)]$Number.Scene, sep=".")
 actBoundaries <- mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1
@@ -311,34 +322,10 @@ for (i in 1:length(actBoundaries)) {
   s <- actBoundaries[i]
 }
 
+b <- barplot(Reduce(rbind, df), beside=TRUE,col = colors)
+axis(1, at=seq(0.5,max(b[3,])+1,4),labels=sceneLabels, cex=0.1)
 
 
-plot(0,type="n",axes=FALSE,xlab="Scene boundary",ylab="",
-     ylim=c(0,1),
-     xlim=c(1,length(ham)))
-rect(0:(length(ham)),0,
-     0:(length(ham))+1,1,
-     border=NA,
-     ylim=c(0,1),
-     xlim=c(1,length(ham)),
-     col=c(rgb(0.9,0.9,0.9,0.7),"white"))
-axis(2, las=2)
-#axis(1)
-axis(1, at=0.5:(length(sceneLabels)),labels=sceneLabels, cex=0.1)
-par(new=TRUE)
-plot(x=1:length(ham),
-     y=ham, type="l", 
-     lty=2, 
-     xlab="Scene boundary",ylab="",
-     ylim=c(0,1),
-     xlim=c(1,length(ham)),
-     frame=FALSE,
-     axes=FALSE)
-abline(v=actBoundaries[1:(length(actBoundaries)-1)],xpd=FALSE,xlim=c(2,length(ham)),ylim=c(0,1))
-par(new=TRUE)
-plot(hamming(mtext, variant = "NormalizedHamming"), type="l", lty=3,xlab="",ylab="",axes=FALSE,ylim=c(0,1))
-par(new=TRUE)
-plot(scenicDifference(mtext), type="l",lty=4,axes=FALSE,ylim=c(0,1))
 
 ```
 
