@@ -103,7 +103,7 @@ knitr::kable(table)
 
 ```{r,echo=FALSE}
 ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
-
+ustat$figure <- tools::toTitleCase(tolower(ustat$figure))
 ```
 
 ## All Utterances
