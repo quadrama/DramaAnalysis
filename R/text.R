@@ -130,7 +130,7 @@ extractTopTerms <- function(mat, top=10) {
 report <- function(id="test:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), ...) {
   force(of)
   rmarkdown::render(system.file("rmd/Report.Rmd", package="DramaAnalysis"), 
-                    params=list(id=id, ...), 
+                    params=list(id=id,col=qd.colors,...), 
                     output_format = "html_document", 
                     output_file = of)
 }
