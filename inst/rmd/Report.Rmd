@@ -83,9 +83,8 @@ Relative amount of words spoken by each figure.
 fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
 mat <- figurematrix(fstat)
 b <- barplot(mat$values,col=params$col)
-
+mat$labels <- tools::toTitleCase(tolower(mat$labels))
 top <- 15
-
 text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
      labels=t(substr(head(mat$labels,top),0,20)),cex=0.5)
 
@@ -181,8 +180,8 @@ c <- configuration(mtext, onlyPresence = TRUE, by="Scene")
 co <- c$matrix %*% t(c$matrix)
 
 # add figure names
-rownames(co) <- c$figure
-colnames(co) <- c$figure
+rownames(co) <- toFigureName(c$figure)
+colnames(co) <- toFigureName(c$figure)
 require(igraph)
 
 g <- graph_from_adjacency_matrix(co, 
@@ -254,6 +253,7 @@ dstat <- dictionaryStatistics(
   column = "Token.lemma",        # lemma-based stats
   asList = TRUE
 )
+rownames(dstat$mat) <- toFigureName(rownames(dstat$mat))
 par(mar=c(10,2,0,10),xpd=TRUE)
 b <- barplot(t(dstat$mat), 
         col=params$col[1:length(fields)],
