@@ -93,10 +93,13 @@ text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
 ## Table
 
 ```{r,echo=FALSE, results="asis"}
+fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
+
 table <- merge(fstat, characters, 
                by.x=c("corpus","drama","figure"),
                by.y=c("corpus","drama","figure_id"))
-knitr::kable(table)
+print(table)
+knitr::kable(table,format="html")
 ```
 
 # Presence and Utterances {.tabset}
