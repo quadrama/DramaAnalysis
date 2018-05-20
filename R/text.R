@@ -41,7 +41,7 @@ limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="toke
 #' @keywords internal
 #' @importFrom utils head
 limitFiguresByRank <- function(t, maxRank=10) {
-  r <- rksp.0$mtext[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n%in%maxN(unique(n),maxRank)], by=.(corpus,drama)][,n:=NULL,][]
+  r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n%in%maxN(unique(n),maxRank)], by=.(corpus,drama)][,n:=NULL,][]
   r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
   r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
   r
@@ -52,7 +52,7 @@ limitFiguresByRank <- function(t, maxRank=10) {
 #' @param minTokens The minimal amount of tokens a figure has to speak
 #' @keywords internal
 limitFiguresByTokens <- function(t, minTokens=100) {
-  r <- rksp.0$mtext[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n>=minTokens],by=.(corpus,drama)][,n:=NULL][]
+  r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n>=minTokens],by=.(corpus,drama)][,n:=NULL][]
   r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
   r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
   r
