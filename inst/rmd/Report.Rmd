@@ -99,7 +99,7 @@ table <- merge(fstat, characters,
 knitr::kable(table)
 ```
 
-# Presence and Utterances
+# Presence and Utterances {.tabset}
 
 ```{r,echo=FALSE}
 ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
