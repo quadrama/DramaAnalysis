@@ -25,7 +25,8 @@ Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.0.1
 Suggests: testthat,
-    knitr
+    knitr,
+    highcharter
 Encoding: UTF-8
 VignetteBuilder: knitr
 Remotes: bmschmidt/wordVectors@2.0
