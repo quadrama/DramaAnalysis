@@ -25,7 +25,23 @@ if (is.null(.Options$qd.datadir)) {
   setup()
 }
 
-require(magrittr)
+getYPositions <- function(x,b,limit=100) {
+  rl <- apply(x, 2, function(xx) {
+    xx <- as.double(xx)
+    cs <- c(0,head(cumsum(xx),-1))
+    r <- cs + xx/2
+    r[xx<=limit] <- NA
+    r  
+  })
+  rl
+}
+
+toFigureName <- function(x) {
+  tools::toTitleCase(tolower(x))
+}
+
+library(magrittr)
+library(highcharter)
 
 mtext <- loadSegmentedText(params$id)
 meta <- loadMeta(params$id)
@@ -109,14 +125,24 @@ boxplot(utteranceLength ~ figure, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
 ## By Act 
 ```{r, echo=FALSE}
 c <- configuration(mtext)
+
 c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
-barplot(c$matrix, 
-        legend.text=c$figure, # set legend text
-        args.legend = list(cex=0.5, # legend font size
-                           x=7.5, # legend x position
-                           y=max(colSums(c$matrix)) # legend y pos
-                        ),
+rownames(c$matrix) <- c$figure
+
+b <- barplot(c$matrix,
         col=params$col)
+
+
+
+yPositions <- as.vector(getYPositions(c$matrix,b,limit=0.1))
+xPositions <- rep(b,each=nrow(c$matrix))
+lab <- rep(as.character(c$figure),ncol(c$matrix))
+
+xPositions <- xPositions[which(!is.na(yPositions))]
+lab <- lab[which(!is.na(yPositions))]
+yPositions <- yPositions[which(!is.na(yPositions))]
+
+text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.6)
 ```
 
 ## By Scene
@@ -124,13 +150,22 @@ barplot(c$matrix,
 ```{r, echo=FALSE}
 c <- configuration(mtext, by="Scene")
 c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
-barplot(c$matrix, 
-        legend.text=c$figure, # set legend text
-        args.legend = list(cex=0.5, # legend font size
-                           x=7.5, # legend x position
-                           y=max(colSums(c$matrix)) # legend y pos
-                        ),
+rownames(c$matrix) <- c$figure
+
+b <- barplot(c$matrix,
         col=params$col)
+
+
+
+yPositions <- as.vector(getYPositions(c$matrix,b,limit=0.3))
+xPositions <- rep(b,each=nrow(c$matrix))
+lab <- rep(as.character(c$figure),ncol(c$matrix))
+
+xPositions <- xPositions[which(!is.na(yPositions))]
+lab <- lab[which(!is.na(yPositions))]
+yPositions <- yPositions[which(!is.na(yPositions))]
+
+text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.4,srt=90)
 ```
 
 
