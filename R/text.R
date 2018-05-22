@@ -121,7 +121,7 @@ extractTopTerms <- function(mat, top=10) {
 
 #' @title Report
 #' @description generates a report for a specific dramatic text
-#' @param id The id of the text
+#' @param id The id of the text or a list of ids
 #' @param of The output file
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render

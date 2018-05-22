@@ -8,7 +8,7 @@ output:
     toc: true
     toc_depth: 2
 params:
-  ids:
+  id:
   - "turm:1"
   - "turm:2"
   - "turm:3"
@@ -50,11 +50,11 @@ library(magrittr)
 library(highcharter)
 library(stringdist)
 
-print(class(params$ids))
-print(params$ids[[2]])
-text <- loadSegmentedText(params$ids)
-meta <- loadMeta(params$ids)
-characters <- loadCharacters(params$ids)
+#print(class(params$id))
+#print(params$id[[2]])
+text <- loadSegmentedText(params$id)
+meta <- loadMeta(params$id)
+characters <- loadCharacters(params$id)
 #titles <- lapply(meta,function(x) { as.character(x[1,"documentTitle"]) })
 
 ```
