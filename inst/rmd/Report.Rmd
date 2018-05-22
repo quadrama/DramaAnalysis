@@ -98,7 +98,6 @@ fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
 table <- merge(fstat, characters, 
                by.x=c("corpus","drama","figure"),
                by.y=c("corpus","drama","figure_id"))
-print(table)
 knitr::kable(table,format="html")
 ```
 
