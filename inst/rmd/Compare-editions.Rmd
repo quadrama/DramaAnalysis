@@ -201,14 +201,34 @@ knitr::kable(t(xt), format="markdown")
 
 ### Lengths
 
+This plot shows the distribution of utterange lengths for the top *n* characters in each play. If two characters are aligned, their box is shown side by side. More on [box plots in Wikipedia](https://en.wikipedia.org/wiki/Box_plot). Dots outside of the box indicate potential outliers, color shows the play they belong to.
+
 ```{r}
 #tl <- limitFigures(text, threshold = 15)
 ustat <- utteranceStatistics(text, numberOfFigures = params$topn)
 
+if (is.null(params$col)) {
+  col = "black"
+} else {
+  col = params$col[1:length(params$id)]
+}
 
-  hcboxplot(x=ustat$utteranceLength, var=as.character(ustat$figure), var2=as.character(ustat$drama))
+hcboxplot(x=ustat$utteranceLength, 
+          var=as.character(ustat$figure), 
+          var2=as.character(ustat$drama),
+          color=col
+          )
 
 
+```
+
+### Table
+
+```{r, results="asis"}
+
+#b <- boxplot(utteranceLength~drama+figure, data=ustat, plot=FALSE)
+
+#knitr::kable(ustat,format="markdown")
 ```
 
 
