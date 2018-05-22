@@ -127,9 +127,17 @@ extractTopTerms <- function(mat, top=10) {
 #' @importFrom rmarkdown render
 #' @importFrom igraph graph_from_adjacency_matrix plot.igraph layout_ on_grid
 #' @export
-report <- function(id="test:rksp.0", of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), ...) {
+report <- function(id="test:rksp.0", 
+                   of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), 
+                   type=c("Single", "Compare"),
+                   ...) {
   force(of)
-  rmarkdown::render(system.file("rmd/Report.Rmd", package="DramaAnalysis"), 
+  type <- match.arg(type)
+  
+  fileName <- switch(type,
+         Single="Report.Rmd",
+         Compare="Compare.Rmd")
+  rmarkdown::render(system.file(paste0("rmd/",fileName), package="DramaAnalysis"), 
                     params=list(id=id,col=qd.colors,...), 
                     output_format = "html_document", 
                     output_file = of)
