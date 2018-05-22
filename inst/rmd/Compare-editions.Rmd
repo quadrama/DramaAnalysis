@@ -15,6 +15,7 @@ params:
   col: NULL
   dynamic: TRUE
   charAlignment: NULL
+  topn: 10
 ---
 
 
@@ -157,7 +158,7 @@ knitr::kable(as.matrix(dist(tblm)))
 ### Overview
 
 ```{r}
-tl <- limitFigures(text, threshold = 15)
+tl <- limitFigures(text, threshold = params$topn)
 
 fstat <- figureStatistics(tl, names=TRUE)
 
@@ -202,7 +203,7 @@ knitr::kable(t(xt), format="markdown")
 
 ```{r}
 #tl <- limitFigures(text, threshold = 15)
-ustat <- utteranceStatistics(text, numberOfFigures = 20)
+ustat <- utteranceStatistics(text, numberOfFigures = params$topn)
 
 
   hcboxplot(x=ustat$utteranceLength, var=as.character(ustat$figure), var2=as.character(ustat$drama))
