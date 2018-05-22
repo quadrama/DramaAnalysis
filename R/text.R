@@ -136,7 +136,7 @@ report <- function(id="test:rksp.0",
   
   fileName <- switch(type,
          Single="Report.Rmd",
-         Compare="Compare.Rmd")
+         Compare="Compare-editions.Rmd")
   rmarkdown::render(system.file(paste0("rmd/",fileName), package="DramaAnalysis"), 
                     params=list(id=id,col=qd.colors,...), 
                     output_format = "html_document", 
