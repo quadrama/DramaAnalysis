@@ -70,6 +70,33 @@ limit.figures.by.tokens <- function(...) {
   limitFiguresByTokens(...)
 }
 
+#' @title Filtering Mentioned Figures
+#' @description This function can be used to remove the mentions of figures 
+#' that do not appear as speakers in the subsetted input text (after using 
+#' limitFigures(), for example), or to summarize them as 'OTHER'.
+#' @param t The text, a data frame listing each token for each figure
+#' @param other Whether to summarize mentioned figures as 'OTHER'
+#' @export
+#' @examples 
+#' data(rksp.0)
+#' text.top10.filtered <- filterMentioned(limitFigures(rksp.0$mtext))
+filterMentioned <- function(t, other=FALSE) {
+  figure_id.set <- unique(t$Speaker.figure_id)
+  figure_surface.set <- unique(t$Speaker.figure_surface)
+  if (other == FALSE) {
+    t$Mentioned.figure_id[!(t$Mentioned.figure_id %in% figure_id.set)] <- NA
+    t$Mentioned.figure_surface[!t$Mentioned.figure_surface %in% figure_surface.set] <- NA
+  } else {
+    levels(t$Mentioned.figure_id) <- c(levels(t$Mentioned.figure_id),"OTHER")
+    levels(t$Mentioned.figure_surface) <- c(levels(t$Mentioned.figure_surface),"OTHER")
+    t$Mentioned.figure_id[!(t$Mentioned.figure_id %in% figure_id.set) & !(is.na(t$Mentioned.figure_id))] <- "OTHER"
+    t$Mentioned.figure_surface[!(t$Mentioned.figure_surface %in% figure_surface.set) & !(is.na(t$Mentioned.figure_surface))] <- "OTHER"
+  }
+  t$Mentioned.figure_id <- droplevels(t$Mentioned.figure_id)
+  t$Mentioned.figure_surface <- droplevels(t$Mentioned.figure_surface)
+  t
+}
+
 tfidf1 <- function(word) {
   docfreq <- sum(word>0)
   docfreq <- log((length(word)+1) / (sum(word>0)))
