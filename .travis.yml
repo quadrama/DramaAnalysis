@@ -1,6 +1,6 @@
 language: r
-cache: packages
 sudo: false
+cache: packages 
 warnings_are_errors: false
 r_binary_packages: 
 - data.table
