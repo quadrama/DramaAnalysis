@@ -123,6 +123,8 @@ extractTopTerms <- function(mat, top=10) {
 #' @description generates a report for a specific dramatic text
 #' @param id The id of the text or a list of ids
 #' @param of The output file
+#' @param type The type of the report. "Single" gives a report about a single play, 
+#' while "Compare" can be used to compare multiple editions of a play
 #' @param colors A list of colors to be used for plots
 #' @importFrom rmarkdown render
 #' @importFrom igraph graph_from_adjacency_matrix plot.igraph layout_ on_grid

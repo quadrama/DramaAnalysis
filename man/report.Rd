@@ -6,12 +6,15 @@
 \usage{
 report(id = "test:rksp.0", of = file.path(getwd(),
   paste0(unlist(strsplit(id, ":", fixed = TRUE))[2], ".html")),
-  colors = qd.colors)
+  type = c("Single", "Compare"), ...)
 }
 \arguments{
-\item{id}{The id of the text}
+\item{id}{The id of the text or a list of ids}
 
 \item{of}{The output file}
+
+\item{type}{The type of the report. "Single" gives a report about a single play, 
+while "Compare" can be used to compare multiple editions of a play}
 
 \item{colors}{A list of colors to be used for plots}
 }
