@@ -89,9 +89,11 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @seealso \code{\link{loadFields}}
 #' @rdname dictionaryStatistics
 #' @examples
+#' \dontrun{
 #' # Check multiple dictionary entries
 #' data(rksp.0)
 #' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
+#' }
 #' @export
 dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                  fieldnames=c("Liebe"),
