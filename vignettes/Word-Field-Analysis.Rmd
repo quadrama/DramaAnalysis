@@ -110,11 +110,50 @@ wf <- list(Liebe=c("Liebe","Herz","Schmerz"), Hass=c("Hass","hassen"))
 
 This dictionary contains the two entries `Liebe` (love) and `Hass` (hate), with 3 respective 2 entries. Dictionaries can be created in code, like shown above. In addition, the function `loadFields()` can be used to download dictionary content from a URL or a directory. By default, the function loads [this dictionary](https://github.com/quadrama/metadata/tree/master/fields/) from GitHub (that we used in publications), for the keywords `Liebe` and `Familie` (family).
 
-
-```{r}
+```{r, eval=FALSE}
 wf <- loadFields()
 names(wf)
 ```
+
+
+```{r, echo=FALSE}
+wf <- structure(list(Liebe = c("adorieren", "anbeten", "Angebetete", 
+"aufrichtig", "Aufrichtigkeit", "begehren", "Begierde", "begieren", 
+"beweinen", "Beziehung", "brennen", "Ceremonie", "Copulation", 
+"copulieren", "ehrlich", "empfinden", "Empfindsamkeit", "Engel", 
+"Entzücken", "fühlen", "Funke", "Gefühl", "geliebt", "Geliebte", 
+"Geliebter", "Gemahl", "Gemahlin", "Glück", "Heirat", "Heirath", 
+"Herz", "Herzen", "Hochzeit", "huldigen", "kuscheln", "Kuss", 
+"Kuß", "küssen", "Leidenschaft", "Liebe", "lieben", "liebenswürdig", 
+"Liebenswürdigkeit", "Liebhaber", "Liebhaberin", "liebkosen", 
+"Liebkosung", "Lippe", "Lust", "lüstern", "Rose", "Schönheit", 
+"Seele", "sehnen", "Sehnsucht", "Sinn ", "sinnlich", "Sinnlichkeit", 
+"streicheln", "Trauung", "treu", "Umarmung", "Unschuld", "verehren", 
+"Verehrung", "vergöttern", "Vergötterung", "Verlangen", "verlangen", 
+"vermählen", "Vermählung", "verzehren", "zärtlich", "Zärtlichkeit", 
+"Zeremonie", "Abschiedskuß", "Brust", "Busen", "geliebt", "Geliebte", 
+"Geliebteste", "Jüngling", "Liebchen", "liebeglühend", "Liebende", 
+"Liebesfest", "Liebliche", "Liebste", "Liebster", "Liebstes", 
+"Treue", "vergöttern", "Verlieben", "Wollust"), Familie = c("Ahnen", 
+"Ahnherr", "Anverwandte", "Anverwandter", "aufwachsen", "aufziehen", 
+"Braut ", "Bräutigam", "Bruder", "Bund ", "Cousin", "Ehe", "Ehefrau", 
+"ehelichen", "Ehemann", "Ehre", "Eltern", "Enkel", "Erbe", "Erbschaft", 
+"erziehen", "Erziehung", "Familie", "Gatte", "geboren", "Geburt", 
+"Gemahl", "Gemahlin", "Geschlecht", "Großeltern", "Güter", 
+"Haus", "Heirat", "Herd", "Heyrath", "Hochzeit", "Junggeselle", 
+"Kind", "Mitgift", "Mutter", "Nichte", "Reichtum", "Schwager", 
+"Schwägerin", "Schwester", "Sippe", "Sippschaft", "Sohn", "Stamm", 
+"Stand", "Stiefeltern", "Stiefmutter", "Stiefschwester", "Stiefvater", 
+"Tante", "Tochter", "Tradition", "Vater", "verheiraten", "verlobt", 
+"versprochen", "Versprochene", "Verwandte", "Vetter", "Vormund", 
+"Weib", "Witwe", "verbrüdern", "Taufe", "Sohne", "Vaterhaus", 
+"Brautbett", "Blutsverwandtschaft")), .Names = c("Liebe", "Familie"
+))
+names(wf)
+```
+
+
+
 
 The function `loadFields()` offers parameters to load from different URLs via http or to load from plain text files that are stored locally. The latter can be achieved by specifying the directory as `baseurl`. Entries for each keyword should then be stored in a file named like the keyword, and ending with `txt` (by default, can be overwritten). See `?loadFields` for details. Some of the options can also be specified through `dictionaryStatistics()`, as exemplified below.
 
