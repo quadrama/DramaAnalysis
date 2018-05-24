@@ -2,8 +2,6 @@ language: r
 sudo: false
 cache: packages 
 warnings_are_errors: false
-r_packages:
-  - data.table 
 addons:
   apt:
     update: true
