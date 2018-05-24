@@ -131,7 +131,7 @@ extractTopTerms <- function(mat, top=10) {
 #' @export
 report <- function(id="test:rksp.0", 
                    of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), 
-                   type=c("Single", "Compare"),
+                   type=c("Single"),
                    ...) {
   force(of)
   type <- match.arg(type)
