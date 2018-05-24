@@ -6,7 +6,7 @@
 \usage{
 report(id = "test:rksp.0", of = file.path(getwd(),
   paste0(unlist(strsplit(id, ":", fixed = TRUE))[2], ".html")),
-  type = c("Single", "Compare"), ...)
+  type = c("Single"), ...)
 }
 \arguments{
 \item{id}{The id of the text or a list of ids}
