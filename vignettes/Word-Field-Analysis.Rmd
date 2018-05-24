@@ -345,7 +345,7 @@ Since version 2.0 of this package, we can also count word fields by segment, i.e
 
 ```{r}
 dsl <- dictionaryStatistics(rksp.0$mtext, 
-                            fieldnames = c("Liebe","Krieg","Familie","Religion"),
+                            fields = wfields,
                             normalizeByFigure=TRUE,
                             asList=TRUE,
                             segment="Scene")
