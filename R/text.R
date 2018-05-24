@@ -125,7 +125,7 @@ extractTopTerms <- function(mat, top=10) {
 #' @param of The output file
 #' @param type The type of the report. "Single" gives a report about a single play, 
 #' while "Compare" can be used to compare multiple editions of a play
-#' @param colors A list of colors to be used for plots
+#' @param ... Arguments passed through to the rmarkdown document
 #' @importFrom rmarkdown render
 #' @importFrom igraph graph_from_adjacency_matrix plot.igraph layout_ on_grid
 #' @export

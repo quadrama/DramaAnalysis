@@ -16,7 +16,7 @@ report(id = "test:rksp.0", of = file.path(getwd(),
 \item{type}{The type of the report. "Single" gives a report about a single play, 
 while "Compare" can be used to compare multiple editions of a play}
 
-\item{colors}{A list of colors to be used for plots}
+\item{...}{Arguments passed through to the rmarkdown document}
 }
 \description{
 generates a report for a specific dramatic text
