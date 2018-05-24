@@ -6,7 +6,6 @@ r_packages:
   - data.table 
 addons:
   apt:
-    packages:
-      ed
+    update: true
 notifications:
   slack: quadrama:0jGO6p0xkb5l0vSK00tQSJMr
