@@ -110,7 +110,7 @@ wf <- list(Liebe=c("Liebe","Herz","Schmerz"), Hass=c("Hass","hassen"))
 
 This dictionary contains the two entries `Liebe` (love) and `Hass` (hate), with 3 respective 2 entries. Dictionaries can be created in code, like shown above. In addition, the function `loadFields()` can be used to download dictionary content from a URL or a directory. By default, the function loads [this dictionary](https://github.com/quadrama/metadata/tree/master/fields/) from GitHub (that we used in publications), for the keywords `Liebe` and `Familie` (family).
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 wf <- loadFields()
 names(wf)
 ```
