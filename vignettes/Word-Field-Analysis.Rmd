@@ -302,14 +302,14 @@ You typically want to assign rownames to this matrix. If you're studying individ
 
 ```{r}
 dsl <- dictionaryStatistics(rksp.0$mtext, 
-                            fieldnames = c("Liebe","Krieg","Familie","Religion"),
+                            fields = wfields,
                             normalizeByFigure=TRUE,
                             asList=TRUE)
 dsl$mat
 ```
 
 
-Every character is now represent with four numbers, which can be interpreted as a vector in four-dimensional space. This means, we can easily apply distance metrics supplied by the function `dist()` (from the default package `stats`). By default, `dist()` calculates [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance). The data structure here is now similar to the one in the weighted configuration matrix, which means everything from [this vignette](Configuration-Matrices) can be applied here.
+Every character is now represent with five numbers, which can be interpreted as a vector in five-dimensional space. This means, we can easily apply distance metrics supplied by the function `dist()` (from the default package `stats`). By default, `dist()` calculates [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance). The data structure here is now similar to the one in the weighted configuration matrix, which means everything from [this vignette](Configuration-Matrices) can be applied here.
 
 ```{r}
 cdist <- dist(dsl$mat)
