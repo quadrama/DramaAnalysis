@@ -11,6 +11,7 @@
 #' if necessary.
 #' @param names If set to true, the table will contains figure names instead of ids
 #' @param normalize Normalising the individual columns
+#' @param segment "Drama", "Act", or "Scene". Allows calculating statistics on segments of the play
 #' @importFrom stats sd
 #' @importFrom stats aggregate
 #' @importFrom data.table as.data.table

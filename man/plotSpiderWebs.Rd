@@ -48,9 +48,11 @@ they can easily become misleading. They are in this package
 for historic reasons, but should not be used anymore.
 }
 \examples{
+\dontrun{
 data(rksp.0)
 fnames <- c("Krieg", "Liebe", "Familie", "Ratio","Religion")
 ds <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
                               fieldnames=fnames, asList=TRUE)
 plotSpiderWebs(dstat=ds,max=50)
+}
 }
