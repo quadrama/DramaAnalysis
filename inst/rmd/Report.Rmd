@@ -100,7 +100,7 @@ fstat <- figureStatistics(mtext, names=FALSE, normalize=FALSE)
 table <- merge(fstat, characters, 
                by.x=c("corpus","drama","figure"),
                by.y=c("corpus","drama","figure_id"))
-knitr::kable(table,format="html")
+knitr::kable(table,format="pandoc")
 ```
 
 # Presence and Utterances {.tabset}
