@@ -211,7 +211,7 @@ plot.igraph(g,
 The "gossip network" represents character that talk about other characters. The colors don't follow a particular pattern and are just added for readability. Edge thickness represent how often (number of scenes) this happens, and is scaled logarithmically.
 Currently, this includes scenes in which both characters are present. This will be changed later.
 
-```{r, echo=FALSE}
+```{r}
 m <- as.matrix(
   as.data.frame.matrix(
     xtabs( ~ Speaker.figure_id + Mentioned.figure_id,
@@ -224,6 +224,15 @@ g <- graph_from_adjacency_matrix(m,
                                  diag=FALSE         # no looping edges
                                 )
 coords <- layout_(g, on_grid())
+
+plotGossipNetwork <- TRUE
+if (length(igraph::E(g)) == 0) {
+  plotGossipNetwork <- FALSE
+}
+```
+
+```{r, eval=plotGossipNetwork}
+
 plot.igraph(g,
             layout=coords,                # how to lay out the graph
             vertex.label.cex=0.6,         # label size
