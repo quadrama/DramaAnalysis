@@ -75,7 +75,7 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE, segment=c("Dra
     fcol <- 4
   }
   
-  #colnames(r)[fcol] <- "figure"
+  colnames(r)[fcol] <- "figure"
   if (normalize == TRUE) {
     r$tokens <- r$tokens / r$length
     r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
