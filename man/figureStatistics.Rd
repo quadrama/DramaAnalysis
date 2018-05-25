@@ -4,7 +4,8 @@
 \alias{figureStatistics}
 \title{Basic Character Statistics}
 \usage{
-figureStatistics(t, names = FALSE, normalize = FALSE)
+figureStatistics(t, names = FALSE, normalize = FALSE, segment = c("Drama",
+  "Act", "Scene"))
 }
 \arguments{
 \item{t}{A data.table containing the text. Will be coerced into a data.table,
@@ -13,6 +14,8 @@ if necessary.}
 \item{names}{If set to true, the table will contains figure names instead of ids}
 
 \item{normalize}{Normalising the individual columns}
+
+\item{segment}{"Drama", "Act", or "Scene". Allows calculating statistics on segments of the play}
 }
 \value{
 A data frame with the following columns and one row for each figure:
