@@ -11,6 +11,8 @@ params:
   id: "test:rksp.0"
   col: NULL
   dynamic: TRUE
+  topN: 10
+  minTokens: 1000
 ---
 
 ```{r,echo=FALSE}
@@ -93,28 +95,52 @@ text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
 ## Table
 
 ```{r,echo=FALSE, results="asis"}
-fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
+fstat <- figureStatistics(mtext, names=FALSE, normalize=FALSE)
 
 table <- merge(fstat, characters, 
                by.x=c("corpus","drama","figure"),
                by.y=c("corpus","drama","figure_id"))
-knitr::kable(table,format="html")
+knitr::kable(table,format="pandoc")
 ```
 
 # Presence and Utterances {.tabset}
 
-```{r,echo=FALSE}
-ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
-ustat$figure <- tools::toTitleCase(tolower(ustat$figure))
+## Top `r params$topN` Characters {.tabset}
+
+This segment shows the top `r params$topN` characters. This number can be adjusted by supplying the parameter `topN` with a different value to the `report()` function.
+
+```{r}
+mtextl <- limitFigures(mtext, other=TRUE, threshold = params$topN);
+ustatl <- utteranceStatistics(mtextl, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
 ```
 
-## All Utterances
+### All Utterances
+```{r}
+ustatl$figure <- toFigureName(ustatl$figure)
+par(mar=c(1,9,1,0),xpd=FALSE)
+plotUtterancePositions(ustatl,mtextl,xlab="")
+```
+
+### Utterance Length Variation
+
+```{r,echo=FALSE}
+par(mar=c(2,9,0,0))
+boxplot(utteranceLength ~ figure, data=ustatl, horizontal=TRUE,las=1,frame=FALSE)
+```
+
+## All Characters {.tabset}
+```{r}
+ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
+ustat$figure <- toFigureName(ustat$figure)
+```
+
+### All Utterances
 ```{r,echo=FALSE}
 par(mar=c(1,9,1,0),xpd=FALSE)
 plotUtterancePositions(ustat,mtext,xlab="")
 ```
 
-## Utterance Length Variation
+### Utterance Length Variation
 
 ```{r,echo=FALSE}
 par(mar=c(2,9,0,0))
@@ -122,6 +148,13 @@ boxplot(utteranceLength ~ figure, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
 ```
 
 # Configuration and Copresence {.tabset}
+
+```{r}
+actLimit <- 0.1
+sceneLimit <- 0.3
+```
+
+This visualisation displays the relative amount of tokens uttered by a character. The plot includes names of characters only when they speak more than `r actLimit*100`% of the tokens in an act and more than  `r sceneLimit*100`% of the tokens in a scene.
 
 ## By Act 
 ```{r, echo=FALSE}
@@ -135,7 +168,7 @@ b <- barplot(c$matrix,
 
 
 
-yPositions <- as.vector(getYPositions(c$matrix,b,limit=0.1))
+yPositions <- as.vector(getYPositions(c$matrix,b,limit=actLimit))
 xPositions <- rep(b,each=nrow(c$matrix))
 lab <- rep(as.character(c$figure),ncol(c$matrix))
 
@@ -160,7 +193,7 @@ b <- barplot(c$matrix,
 
 
 
-yPositions <- as.vector(getYPositions(c$matrix,b,limit=0.3))
+yPositions <- as.vector(getYPositions(c$matrix,b,limit=sceneLimit))
 xPositions <- rep(b,each=nrow(c$matrix))
 lab <- rep(as.character(c$figure),ncol(c$matrix))
 
@@ -249,6 +282,8 @@ plot.igraph(g,
 
 # Word Fields  {.tabset}
 
+This analysis shows word fields only for characters that speak more than `r params$minTokens` tokens. This value can be adjusted by supplying the argument `minTokens` to the `report()` function. Z-Sore analysis is only shown if more than one character remains after this filtering.
+
 ## Bar Chart
 
 ```{r, echo=FALSE}
@@ -259,7 +294,7 @@ baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71b
 fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
 fields <- loadFields(fieldNames,baseurl = baseUrl)
 
-text2 <- limitFigures(mtext, by="tokens")
+text2 <- limitFigures(mtext, by="tokens", threshold=params$minTokens)
 dstat <- dictionaryStatistics(
   text2,  # the text
   fields=fields,
@@ -399,7 +434,7 @@ sceneLabels <- paste(as.roman(mtext[,.N,.(Number.Act, Number.Scene)]$Number.Act)
     s <- actBoundaries[i]
   }
   
-  b <- barplot(Reduce(rbind, df), beside=TRUE,col = colors)
+  b <- barplot(Reduce(rbind, df), beside=TRUE,col = colors, border=FALSE)
   axis(1, at=seq(0.5,max(b[3,])+1,4),labels=sceneLabels, cex=0.1)
   
 
@@ -432,3 +467,5 @@ highchart() %>%
 # About
 
 This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io). Please report errors [here](https://github.com/quadrama/DramaAnalysis/issues), or contact [me](mailto:nils.reiter@ims.uni-stuttgart.de).
+
+## Options
