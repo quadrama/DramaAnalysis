@@ -106,6 +106,8 @@ knitr::kable(table,format="html")
 
 ## Top `r params$topN` Characters {.tabset}
 
+This segment shows the top `r params$topN` characters. This number can be adjusted by supplying the parameter `topN` with a different value to the `report()` function.
+
 ```{r}
 mtextl <- limitFigures(mtext, other=TRUE, threshold = params$topN);
 ustatl <- utteranceStatistics(mtextl, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
@@ -146,6 +148,13 @@ boxplot(utteranceLength ~ figure, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
 
 # Configuration and Copresence {.tabset}
 
+```{r}
+actLimit <- 0.1
+sceneLimit <- 0.3
+```
+
+This visualisation displays the relative amount of tokens uttered by a character. The plot includes names of characters only when they speak more than `r actLimit*100`% of the tokens in an act and more than  `r sceneLimit*100`% of the tokens in a scene.
+
 ## By Act 
 ```{r, echo=FALSE}
 c <- configuration(mtext)
@@ -158,7 +167,7 @@ b <- barplot(c$matrix,
 
 
 
-yPositions <- as.vector(getYPositions(c$matrix,b,limit=0.1))
+yPositions <- as.vector(getYPositions(c$matrix,b,limit=actLimit))
 xPositions <- rep(b,each=nrow(c$matrix))
 lab <- rep(as.character(c$figure),ncol(c$matrix))
 
@@ -183,7 +192,7 @@ b <- barplot(c$matrix,
 
 
 
-yPositions <- as.vector(getYPositions(c$matrix,b,limit=0.3))
+yPositions <- as.vector(getYPositions(c$matrix,b,limit=sceneLimit))
 xPositions <- rep(b,each=nrow(c$matrix))
 lab <- rep(as.character(c$figure),ncol(c$matrix))
 
