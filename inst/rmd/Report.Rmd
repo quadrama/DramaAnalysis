@@ -19,7 +19,7 @@ pver <- packageVersion("DramaAnalysis")
 
 
 ```{r setup, include=FALSE, echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 
 if (is.null(.Options$qd.datadir)) { 
   setup()
@@ -143,7 +143,9 @@ xPositions <- xPositions[which(!is.na(yPositions))]
 lab <- lab[which(!is.na(yPositions))]
 yPositions <- yPositions[which(!is.na(yPositions))]
 
-text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.6)
+if (length(yPositions > 0)) {
+  text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.6)
+} 
 ```
 
 ## By Scene
@@ -165,8 +167,9 @@ lab <- rep(as.character(c$figure),ncol(c$matrix))
 xPositions <- xPositions[which(!is.na(yPositions))]
 lab <- lab[which(!is.na(yPositions))]
 yPositions <- yPositions[which(!is.na(yPositions))]
-
-text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.4,srt=90)
+if (length(yPositions > 0)) {
+  text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.4,srt=90)
+}
 ```
 
 
@@ -208,7 +211,7 @@ plot.igraph(g,
 The "gossip network" represents character that talk about other characters. The colors don't follow a particular pattern and are just added for readability. Edge thickness represent how often (number of scenes) this happens, and is scaled logarithmically.
 Currently, this includes scenes in which both characters are present. This will be changed later.
 
-```{r, echo=FALSE}
+```{r}
 m <- as.matrix(
   as.data.frame.matrix(
     xtabs( ~ Speaker.figure_id + Mentioned.figure_id,
@@ -221,6 +224,15 @@ g <- graph_from_adjacency_matrix(m,
                                  diag=FALSE         # no looping edges
                                 )
 coords <- layout_(g, on_grid())
+
+plotGossipNetwork <- TRUE
+if (length(igraph::E(g)) == 0) {
+  plotGossipNetwork <- FALSE
+}
+```
+
+```{r, eval=plotGossipNetwork}
+
 plot.igraph(g,
             layout=coords,                # how to lay out the graph
             vertex.label.cex=0.6,         # label size
@@ -240,6 +252,8 @@ plot.igraph(g,
 ## Bar Chart
 
 ```{r, echo=FALSE}
+showZScores <- TRUE
+
 baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/"
 
 fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
@@ -272,9 +286,17 @@ legend(x=max(b)+1,y=max(dstat$mat),
 
 ## Bar chart (z-scores)
 
+
+```{r, results="asis"}
+if (length(dstat$figure) < 2) {
+  message("*Less than two characters remain, skipping Z-Score analysis.*")
+  showZScores <- FALSE
+}
+```
+
 [Z-scores in wikipedia](https://en.wikipedia.org/wiki/Standard_score)
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=showZScores}
 zmat <- scale(dstat$mat)
 
 
@@ -332,15 +354,25 @@ print("*Not applicable for this file.*")
 ```
 
 ```{r, echo=FALSE, eval=showPersonnelExchange}
-
 df <- list()
 df$ham <- hamming(mtext, variant="NormalizedHamming")
 df$trilcke <- hamming(mtext, variant="Trilcke")
 df$sd <- scenicDifference(mtext)
 
 if (length(df$ham)+1 != length(unique(mtext$begin.Scene))) {
-  warning("Something is seriously wrong here. Please report this issue.")
+  message("Something is seriously wrong here. Please report this issue.")
+  showPersonnelExchange <- FALSE
 }
+```
+
+```{r, echo=FALSE, eval=showPersonnelExchange}
+
+df <- list()
+df$ham <- hamming(mtext, variant="NormalizedHamming")
+df$trilcke <- hamming(mtext, variant="Trilcke")
+df$sd <- scenicDifference(mtext)
+
+
 
 if (is.null(params$col)) {
   colors <- gray.colors(3)
