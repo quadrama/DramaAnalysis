@@ -143,7 +143,9 @@ xPositions <- xPositions[which(!is.na(yPositions))]
 lab <- lab[which(!is.na(yPositions))]
 yPositions <- yPositions[which(!is.na(yPositions))]
 
-text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.6)
+if (length(yPositions > 0)) {
+  text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.6)
+} 
 ```
 
 ## By Scene
@@ -165,8 +167,9 @@ lab <- rep(as.character(c$figure),ncol(c$matrix))
 xPositions <- xPositions[which(!is.na(yPositions))]
 lab <- lab[which(!is.na(yPositions))]
 yPositions <- yPositions[which(!is.na(yPositions))]
-
-text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.4,srt=90)
+if (length(yPositions > 0)) {
+  text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.4,srt=90)
+}
 ```
 
 
