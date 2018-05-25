@@ -2,8 +2,3 @@ language: r
 sudo: false
 cache: packages 
 warnings_are_errors: false
-addons:
-  apt:
-    update: true
-notifications:
-  slack: quadrama:0jGO6p0xkb5l0vSK00tQSJMr
