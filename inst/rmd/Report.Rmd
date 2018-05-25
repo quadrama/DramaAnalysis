@@ -11,6 +11,7 @@ params:
   id: "test:rksp.0"
   col: NULL
   dynamic: TRUE
+  topN: 10
 ---
 
 ```{r,echo=FALSE}
@@ -103,18 +104,40 @@ knitr::kable(table,format="html")
 
 # Presence and Utterances {.tabset}
 
-```{r,echo=FALSE}
-ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
-ustat$figure <- tools::toTitleCase(tolower(ustat$figure))
+## Top `r params$topN` Characters {.tabset}
+
+```{r}
+mtextl <- limitFigures(mtext, other=TRUE, threshold = params$topN);
+ustatl <- utteranceStatistics(mtextl, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
 ```
 
-## All Utterances
+### All Utterances
+```{r}
+ustatl$figure <- toFigureName(ustatl$figure)
+par(mar=c(1,9,1,0),xpd=FALSE)
+plotUtterancePositions(ustatl,mtextl,xlab="")
+```
+
+### Utterance Length Variation
+
+```{r,echo=FALSE}
+par(mar=c(2,9,0,0))
+boxplot(utteranceLength ~ figure, data=ustatl, horizontal=TRUE,las=1,frame=FALSE)
+```
+
+## All Characters {.tabset}
+```{r}
+ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
+ustat$figure <- toFigureName(ustat$figure)
+```
+
+### All Utterances
 ```{r,echo=FALSE}
 par(mar=c(1,9,1,0),xpd=FALSE)
 plotUtterancePositions(ustat,mtext,xlab="")
 ```
 
-## Utterance Length Variation
+### Utterance Length Variation
 
 ```{r,echo=FALSE}
 par(mar=c(2,9,0,0))
