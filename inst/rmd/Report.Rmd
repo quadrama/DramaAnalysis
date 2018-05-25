@@ -94,7 +94,7 @@ text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
 ## Table
 
 ```{r,echo=FALSE, results="asis"}
-fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
+fstat <- figureStatistics(mtext, names=FALSE, normalize=FALSE)
 
 table <- merge(fstat, characters, 
                by.x=c("corpus","drama","figure"),
