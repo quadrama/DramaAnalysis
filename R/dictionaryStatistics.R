@@ -372,8 +372,8 @@ regroup <- function(dstat, by=c("Character","Field")) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' filteredFt <- filterFtByDict(frequencytable(rksp.0$mtext, byFigure = TRUE), fieldnames=c("Krieg", "Familie"))
-filterFtByDict <- function(ft, 
+#' filtered <- filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE), fieldnames=c("Krieg", "Familie"))
+filterByDictionary <- function(ft, 
                            fields=loadFields(fieldnames, baseurl),
                            fieldnames=c("Liebe"),
                            baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/") {
