@@ -18,7 +18,7 @@
 #' data(rksp.0)
 #' stat <- figureStatistics(rksp.0$mtext, names = FALSE)
 #' @export
-figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
+figureStatistics <- function(t, names = FALSE, normalize = FALSE, segment=c("Drama","Act","Scene")) {
   
   # prevent notes in R CMD check
   . <- NULL
@@ -35,18 +35,46 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE) {
   if (names == TRUE) {
     b <- quote(Speaker.figure_surface)
   }
+  segment <- match.arg(segment)
+
   setkey(t, "corpus", "drama")
-  r <- t[,list(tokens=length(Token.surface),
-       types=data.table::uniqueN(Token.surface),
-       utterances=data.table::uniqueN(begin),
-       utteranceLengthMean=mean(rle(begin)$lengths),
-       utteranceLengthSd=sd(rle(begin)$lengths),
-       firstBegin=min(begin),
-       lastEnd=max(end)
-       ),by=.(corpus,drama,length,eval(b))]
+  if (segment == "Scene") {
+    r <- t[,list(tokens=length(Token.surface),
+         types=data.table::uniqueN(Token.surface),
+         utterances=data.table::uniqueN(begin),
+         utteranceLengthMean=mean(rle(begin)$lengths),
+         utteranceLengthSd=sd(rle(begin)$lengths),
+         firstBegin=min(begin),
+         lastEnd=max(end)
+         ),by=.(corpus,drama,begin.Act,begin.Scene,length,eval(b))][,begin.Scene:=as.integer(as.factor(begin.Scene)),begin.Act]
+    r$begin.Act <- as.roman(as.integer(as.factor(r$begin.Act)))
+    colnames(r)[3:4] <- c("Act","Scene")
+    fcol <- 6
+  } else if (segment == "Act") {
+    r <- t[,list(tokens=length(Token.surface),
+                 types=data.table::uniqueN(Token.surface),
+                 utterances=data.table::uniqueN(begin),
+                 utteranceLengthMean=mean(rle(begin)$lengths),
+                 utteranceLengthSd=sd(rle(begin)$lengths),
+                 firstBegin=min(begin),
+                 lastEnd=max(end)
+    ),by=.(corpus,drama,begin.Act,length,eval(b))]
+    r$begin.Act <- as.roman(as.integer(as.factor(r$begin.Act)))
+    colnames(r)[3] <- "Act"
+    fcol <- 5
+  } else {
+    r <- t[,list(tokens=length(Token.surface),
+                 types=data.table::uniqueN(Token.surface),
+                 utterances=data.table::uniqueN(begin),
+                 utteranceLengthMean=mean(rle(begin)$lengths),
+                 utteranceLengthSd=sd(rle(begin)$lengths),
+                 firstBegin=min(begin),
+                 lastEnd=max(end)
+    ),by=.(corpus,drama,length,eval(b))]
+    fcol <- 4
+  }
   
-  
-  colnames(r)[4] <- "figure"
+  #colnames(r)[fcol] <- "figure"
   if (normalize == TRUE) {
     r$tokens <- r$tokens / r$length
     r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
