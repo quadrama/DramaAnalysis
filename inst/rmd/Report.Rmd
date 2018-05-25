@@ -12,7 +12,7 @@ params:
   col: NULL
   dynamic: TRUE
   topN: 10
-  minTokens: 1000
+  minTokens: 500
 ---
 
 ```{r,echo=FALSE}
@@ -282,7 +282,7 @@ plot.igraph(g,
 
 # Word Fields  {.tabset}
 
-This analysis shows word fields only for characters that speak more than `r params$minTokens` tokens. This value can be adjusted by supplying the argument `minTokens` to the `report()` function. Z-Sore analysis is only shown if more than one character remains after this filtering.
+This analysis shows word fields only for characters that speak more than `r params$minTokens` tokens. This value can be adjusted by supplying the argument `minTokens` to the `report()` function. Z-Sore analysis is only shown if more than one character remains after this filtering, other plots only if at least one character remains.
 
 ## Bar Chart
 
