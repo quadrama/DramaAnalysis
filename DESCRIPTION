@@ -1,8 +1,8 @@
 Package: DramaAnalysis
 Type: Package
 Title: Scripts to support analysis of dramatic texts
-Version: 2.0.2
-Date: 2018-03-20
+Version: 2.1.0
+Date: 2018-05-25
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>, Tim Strohmayer <st151528@stud.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Description: This package can be used to import and analyse pre-processed dramatic texts.
@@ -25,7 +25,8 @@ Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.0.1
 Suggests: testthat,
-    knitr
+    knitr,
+    highcharter
 Encoding: UTF-8
 VignetteBuilder: knitr
 Remotes: bmschmidt/wordVectors@2.0

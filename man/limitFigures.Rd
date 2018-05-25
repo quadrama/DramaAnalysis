@@ -5,7 +5,7 @@
 \title{Filtering figures}
 \usage{
 limitFigures(text, by = c("rank", "tokens"), threshold = ifelse(by ==
-  "tokens", 500, 10))
+  "tokens", 500, 10), other = FALSE)
 }
 \arguments{
 \item{text}{The dramatic text in table form}
@@ -13,6 +13,8 @@ limitFigures(text, by = c("rank", "tokens"), threshold = ifelse(by ==
 \item{by}{A character vector, either "rank" or "tokens" (or unambigious sub string)}
 
 \item{threshold}{A number specifying the limit}
+
+\item{other}{Whether to summarize filtered figures as 'OTHER' instead of removing their speech}
 }
 \description{
 This function can be used to remove speech content of certain figures. 

@@ -89,9 +89,11 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @seealso \code{\link{loadFields}}
 #' @rdname dictionaryStatistics
 #' @examples
+#' \dontrun{
 #' # Check multiple dictionary entries
 #' data(rksp.0)
 #' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
+#' }
 #' @export
 dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                  fieldnames=c("Liebe"),
@@ -132,6 +134,14 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                         names=names, column=column)
     colnames(dss)[ncol(dss)] <- x
     if (x == names(fields)[[1]]) {
+      if (segment=="Scene") {
+        u <- unique(t[,c("begin.Scene","Number.Act", "Number.Scene")])
+        dss <- merge(dss, u, 
+                     by.x="begin.Scene",
+                     by.y="begin.Scene")
+        dss$begin.Scene <- NULL
+        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","figure",x))
+      }
       dss
     } else {
       dss[,x,with=FALSE]
@@ -163,7 +173,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
     rownames(l$mat) <- switch(segment, 
                               Drama=as.character(l$figure),
                               Act=paste(l$figure,utils::as.roman(l$Number.Act)),
-                              Scene=paste(l$figure,utils::as.roman(l$Number.Act),l$Number.Scene))
+                              Scene=paste(l$figure,l$begin.Scene))
     l
   } else {
     r
@@ -209,7 +219,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
                  switch(segment,
                         Drama=c("drama"),
                         Act=c("drama","Number.Act"),
-                        Scene=c("drama","Number.Act","Number.Scene"))
+                        Scene=c("drama","begin.Scene"))
                  )
   if (byFigure == TRUE) {
     bycolumns <- c(bycolumns, ifelse(names==TRUE,

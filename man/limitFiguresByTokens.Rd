@@ -4,12 +4,14 @@
 \alias{limitFiguresByTokens}
 \title{This method removes the spoken tokens by all figures that speak infrequently.}
 \usage{
-limitFiguresByTokens(t, minTokens = 100)
+limitFiguresByTokens(t, minTokens = 100, other = FALSE)
 }
 \arguments{
 \item{t}{The text, a data frame listing each token for each figure}
 
 \item{minTokens}{The minimal amount of tokens a figure has to speak}
+
+\item{other}{Whether to summarize filtered figures as 'OTHER' instead of removing their speech}
 }
 \description{
 This method removes the spoken tokens by all figures that speak infrequently.

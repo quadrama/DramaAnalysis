@@ -1,0 +1,281 @@
+---
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: 2
+params:
+  id:
+  - "turm:1"
+  - "turm:2"
+  - "turm:3"
+  col: NULL
+  dynamic: TRUE
+  charAlignment: NULL
+  topn: 10
+---
+
+
+```{r,echo=FALSE}
+pver <- packageVersion("DramaAnalysis")
+```
+
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+if (is.null(.Options$qd.datadir)) { 
+  DramaAnalysis::setup()
+}
+
+getYPositions <- function(x,b,limit=100) {
+  rl <- apply(x, 2, function(xx) {
+    xx <- as.double(xx)
+    cs <- c(0,head(cumsum(xx),-1))
+    r <- cs + xx/2
+    r[xx<=limit] <- NA
+    r  
+  })
+  rl
+}
+
+toFigureName <- function(x) {
+  tools::toTitleCase(tolower(x))
+}
+library(data.table)
+library(DramaAnalysis)
+library(magrittr)
+library(highcharter)
+library(stringdist)
+
+#print(class(params$id))
+#print(params$id[[2]])
+text <- loadSegmentedText(params$id)
+meta <- loadMeta(params$id)
+characters <- loadCharacters(params$id)
+#titles <- lapply(meta,function(x) { as.character(x[1,"documentTitle"]) })
+
+```
+
+
+```{r}
+if (is.null(params$charAlignment)) {
+  
+}
+```
+
+---
+title: "QuaDramA Edition Comparison"
+
+---
+
+This report shows a number of quantitative properties extracted from several plays. 
+The report assumes the plays to be different variants *of the same text* (what ever
+that means).
+
+# Meta data
+
+```{r, results="asis"}
+
+
+knitr::kable(meta,
+             col.names = c("Corpus", "Text-Id", "Title", "Language", "Author name", "Author Id", "Translator name", "Translator Id", "Year written", "Year printed", "Year premiered", "Year translated"),
+             format = "markdown")
+
+```
+
+
+# Structure {.tabset}
+
+
+
+## Overview
+
+```{r}
+tbl <- text[,.(Acts=length(unique(begin.Act)),
+               Scenes=length(unique(begin.Scene))),
+            .(corpus,drama)]
+rownames(tbl) <- paste(tbl$corpus,tbl$drama,sep=":")
+tblm <- as.matrix(tbl[,3:ncol(tbl)])
+
+barplot(tblm,
+        beside=TRUE,
+        legend.text = rownames(tbl),
+        col=params$col)
+
+#knitr::kable(tbl)
+
+```
+
+## Differences
+
+# Characters {.tabset}
+
+## Number of Characters {.tabset}
+
+```{r}
+tbl <- text[,.(Characters=length(unique(Speaker.figure_surface))),
+            .(corpus,drama)]
+rownames(tbl) <- paste(tbl$corpus,tbl$drama,sep=":")
+tblm <- as.matrix(tbl[,3:ncol(tbl)])
+```
+
+### Overview
+
+```{r}
+tbl <- text[,.(Characters=length(unique(Speaker.figure_surface))),
+            .(corpus,drama)]
+rownames(tbl) <- paste(tbl$corpus,tbl$drama,sep=":")
+tblm <- as.matrix(tbl[,3:ncol(tbl)])
+rownames(tblm) <- rownames(tbl)
+barplot(tblm,
+        beside=TRUE,
+        legend.text = rownames(tbl),
+        col=params$col)
+
+#knitr::kable(tbl)
+
+```
+
+### Table
+
+#### Absolute numbers
+
+```{r, results="asis"}
+knitr::kable(tblm, format="markdown", row.names = TRUE)
+```
+
+#### Differences
+```{r}
+knitr::kable(as.matrix(dist(tblm)))
+```
+
+## Spoken words {.tabset}
+
+### Overview
+
+```{r}
+tl <- limitFigures(text, threshold = params$topn)
+
+fstat <- figureStatistics(tl, names=TRUE)
+
+xt <- xtabs(tokens ~  drama+figure,data=fstat)
+
+attr(xt, "class") <- NULL 
+attr(xt, "call") <- NULL 
+#barplot(xt, beside=TRUE,las=3)
+
+xt <- as.data.frame(t(xt))
+
+hc <- highchart()
+
+hc <- hc_yAxis(hc, max=max(xt))
+hc <- hc_xAxis(hc, categories=rownames(xt))
+
+for (i in 1:ncol(xt)) {
+  hc <- hc_add_series(hc, xt[,i], type="column", name=i)
+}
+
+hc
+
+```
+
+### Table
+
+```{r, results="asis"}
+fstat <- figureStatistics(text, names=TRUE)
+
+xt <- xtabs(tokens ~  drama+figure,data=fstat)
+
+
+knitr::kable(t(xt), format="markdown")
+
+
+```
+
+
+## Utterances {.tabset}
+
+### Lengths
+
+This plot shows the distribution of utterange lengths for the top *n* characters in each play. If two characters are aligned, their box is shown side by side. More on [box plots in Wikipedia](https://en.wikipedia.org/wiki/Box_plot). Dots outside of the box indicate potential outliers, color shows the play they belong to.
+
+```{r}
+#tl <- limitFigures(text, threshold = 15)
+ustat <- utteranceStatistics(text, numberOfFigures = params$topn)
+
+if (is.null(params$col)) {
+  col = "black"
+} else {
+  col = params$col[1:length(params$id)]
+}
+
+hcboxplot(x=ustat$utteranceLength, 
+          var=as.character(ustat$figure), 
+          var2=as.character(ustat$drama),
+          color=col
+          )
+
+
+```
+
+### Table
+
+```{r, results="asis"}
+
+#b <- boxplot(utteranceLength~drama+figure, data=ustat, plot=FALSE)
+
+#knitr::kable(ustat,format="markdown")
+```
+
+
+```{r, eval=FALSE}
+
+
+
+utteranceDistances <- function(t) {
+  tagg <- t[,.(text=paste0(Token.surface, collapse=" ")),.(corpus,drama,begin, Speaker.figure_surface)]
+  pairs <- t(combn(nrow(tagg),2))
+  for(i in 1:nrow(pairs)) {
+    row_a <- pairs[i,1]
+    row_b <- pairs[i,2]
+    
+  }
+  
+}
+
+text[,
+     mcp:=max(end),
+     .(corpus,drama)][,
+                      .(utteranceLength=.N,rbegin=begin/mcp),
+                      .(corpus,drama,begin,Speaker.figure_surface)][]
+
+```
+
+# Presence and Utterances {.tabset}
+
+```{r,echo=FALSE}
+ustat <- utteranceStatistics(text, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
+ustat$figure <- tools::toTitleCase(tolower(ustat$figure))
+```
+
+## All Utterances
+```{r,echo=FALSE}
+par(mar=c(1,9,1,0),xpd=FALSE)
+
+for (id in params$ids) {
+  plotUtterancePositions(ustat[paste(ustat$corpus,ustat$drama,sep=":") == id,],
+                         text[paste(text$corpus,text$drama,sep=":") == id,],
+                         xlab="")
+}
+```
+
+
+# Configuration and Copresence {.tabset}
+
+```{r}
+
+```

@@ -87,9 +87,11 @@ The returned list has three named elements:
 }
 
 \examples{
+\dontrun{
 # Check multiple dictionary entries
 data(rksp.0)
 dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
+}
 # Check a single dictionary entries
 data(rksp.0)
 fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
