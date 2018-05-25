@@ -240,6 +240,8 @@ plot.igraph(g,
 ## Bar Chart
 
 ```{r, echo=FALSE}
+showZScores <- TRUE
+
 baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/"
 
 fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
@@ -272,9 +274,17 @@ legend(x=max(b)+1,y=max(dstat$mat),
 
 ## Bar chart (z-scores)
 
+
+```{r, results="asis"}
+if (length(dstat$figure) < 2) {
+  message("*Less than two characters remain, skipping Z-Score analysis.*")
+  showZScores <- FALSE
+}
+```
+
 [Z-scores in wikipedia](https://en.wikipedia.org/wiki/Standard_score)
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=showZScores}
 zmat <- scale(dstat$mat)
 
 
