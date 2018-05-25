@@ -12,6 +12,7 @@ params:
   col: NULL
   dynamic: TRUE
   topN: 10
+  minTokens: 1000
 ---
 
 ```{r,echo=FALSE}
@@ -281,6 +282,8 @@ plot.igraph(g,
 
 # Word Fields  {.tabset}
 
+This analysis shows word fields only for characters that speak more than `r params$minTokens` tokens. This value can be adjusted by supplying the argument `minTokens` to the `report()` function. Z-Sore analysis is only shown if more than one character remains after this filtering.
+
 ## Bar Chart
 
 ```{r, echo=FALSE}
@@ -291,7 +294,7 @@ baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71b
 fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
 fields <- loadFields(fieldNames,baseurl = baseUrl)
 
-text2 <- limitFigures(mtext, by="tokens")
+text2 <- limitFigures(mtext, by="tokens", threshold=params$minTokens)
 dstat <- dictionaryStatistics(
   text2,  # the text
   fields=fields,
@@ -464,3 +467,5 @@ highchart() %>%
 # About
 
 This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io). Please report errors [here](https://github.com/quadrama/DramaAnalysis/issues), or contact [me](mailto:nils.reiter@ims.uni-stuttgart.de).
+
+## Options
