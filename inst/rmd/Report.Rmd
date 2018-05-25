@@ -332,15 +332,25 @@ print("*Not applicable for this file.*")
 ```
 
 ```{r, echo=FALSE, eval=showPersonnelExchange}
-
 df <- list()
 df$ham <- hamming(mtext, variant="NormalizedHamming")
 df$trilcke <- hamming(mtext, variant="Trilcke")
 df$sd <- scenicDifference(mtext)
 
 if (length(df$ham)+1 != length(unique(mtext$begin.Scene))) {
-  warning("Something is seriously wrong here. Please report this issue.")
+  message("Something is seriously wrong here. Please report this issue.")
+  showPersonnelExchange <- FALSE
 }
+```
+
+```{r, echo=FALSE, eval=showPersonnelExchange}
+
+df <- list()
+df$ham <- hamming(mtext, variant="NormalizedHamming")
+df$trilcke <- hamming(mtext, variant="Trilcke")
+df$sd <- scenicDifference(mtext)
+
+
 
 if (is.null(params$col)) {
   colors <- gray.colors(3)
