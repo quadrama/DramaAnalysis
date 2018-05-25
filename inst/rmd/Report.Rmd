@@ -10,7 +10,6 @@ output:
 params:
   id: "test:rksp.0"
   col: NULL
-  dynamic: TRUE
   topN: 10
   minTokens: 500
 ---
@@ -380,13 +379,15 @@ fields
 showPersonnelExchange = length(unique(mtext$begin.Act)) > 1
 ```
 
-## Overview
-
-The following chart shows for each scene boundary the number of characters exchanged over the boundary. Different metrics have been proposed, the plot shows all of them in comparison.
-
 ```{r,echo=FALSE,eval=!showPersonnelExchange, results='asis'}
 print("*Not applicable for this file.*")
 ```
+
+
+## Static
+
+The following chart shows for each scene boundary the number of characters exchanged over the boundary. Different metrics have been proposed, the plot shows all of them in comparison.
+
 
 ```{r, echo=FALSE, eval=showPersonnelExchange}
 df <- list()
@@ -468,4 +469,19 @@ highchart() %>%
 
 This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io). Please report errors [here](https://github.com/quadrama/DramaAnalysis/issues), or contact [me](mailto:nils.reiter@ims.uni-stuttgart.de).
 
-## Options
+## Reproduction
+For the generation of this report, the following list of parameters was used:
+
+```{r}
+params
+```
+
+The following table describes these options
+
+| Name  | Meaning |
+| ----- | ------- |
+| `id`  | The id of the play we want to report on |
+| `topN` | If an analysis only takes the most talkative characters into account, it will use the number of characters given here. Default: `10` |
+| `minTokens` | If an analysis requires characters to speak at least a certain number of tokens, this value can be adjusted here. Default: `500` | 
+| `col` | A list of color codes in a form R can understand. Default: ```r qd.colors``` | 
+
