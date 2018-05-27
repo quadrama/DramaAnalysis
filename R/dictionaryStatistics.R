@@ -359,3 +359,23 @@ regroup <- function(dstat, by=c("Character","Field")) {
           return(l)
         });
 }
+
+#' @title Filtering Frequency Table by Dictionary/-ies
+#' @description This function can be used to filter a matrix as produced by 
+#' \code{frequencytable()} by the words in the given dictionary(/-ies).
+#' @param ft A matrix as produced by \code{frequencytable()}.
+#' @param fieldnames A list of names for the dictionaries.
+#' @param fields A list of lists that contains the actual field names. 
+#' By default, we try to load the dictionaries using \code{fieldnames} and 
+#' \code{baseurl} (as in \code{dictionaryStatistics()}).
+#' @param baseurl The base path delivering the dictionaries.
+#' @export
+#' @examples
+#' data(rksp.0)
+#' filtered <- filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE), fieldnames=c("Krieg", "Familie"))
+filterByDictionary <- function(ft, 
+                           fields=loadFields(fieldnames, baseurl),
+                           fieldnames=c("Liebe"),
+                           baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/") {
+  as.matrix(ft[,which(colnames(ft) %in% unlist(fields))])
+}
