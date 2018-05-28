@@ -363,16 +363,13 @@ regroup <- function(dstat, by=c("Character","Field")) {
 #' @param ft A matrix as produced by \code{frequencytable()}.
 #' @param fieldnames A list of names for the dictionaries.
 #' @param fields A list of lists that contains the actual field names. 
-#' By default, we try to load the dictionaries using \code{fieldnames} and 
-#' \code{baseurl} (as in \code{dictionaryStatistics()}).
-#' @param baseurl The base path delivering the dictionaries.
+#' By default, we load the base_dictionary (as in \code{dictionaryStatistics()}).
 #' @export
 #' @examples
 #' data(rksp.0)
 #' filtered <- filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE), fieldnames=c("Krieg", "Familie"))
 filterByDictionary <- function(ft, 
-                           fields=loadFields(fieldnames, baseurl),
-                           fieldnames=c("Liebe"),
-                           baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/") {
+                           fields=base_dictionary[fieldnames],
+                           fieldnames=c("Liebe")) {
   as.matrix(ft[,which(colnames(ft) %in% unlist(fields))])
 }
