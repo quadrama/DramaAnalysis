@@ -6,12 +6,11 @@
 \alias{dictionaryStatisticsL}
 \title{Dictionary Use}
 \usage{
-dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
+dictionaryStatistics(t, fields = base_dictionary[fieldnames],
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
   normalizeByFigure = FALSE, normalizeByField = FALSE, byFigure = TRUE,
-  names = FALSE, boost = 1,
-  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-  column = "Token.surface", asList = FALSE, ci = TRUE)
+  names = FALSE, boost = 1, column = "Token.surface", asList = FALSE,
+  ci = TRUE)
 
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
   segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
@@ -25,7 +24,7 @@ dictionaryStatisticsL(...)
 \item{t}{A text (data.frame or data.table)}
 
 \item{fields}{A list of lists that contains the actual field names. 
-By default, we try to load the dictionaries using \code{fieldnames} and \code{baseurl}.}
+By default, we load the base_dictionary.}
 
 \item{fieldnames}{A list of names for the dictionaries.}
 
@@ -43,9 +42,6 @@ for the entire segment (play, act, or scene), and not for individual characters.
 \item{names}{Logical. Whether the resulting table contains figure ids or names.}
 
 \item{boost}{A scaling factor to generate nicer values.}
-
-\item{baseurl}{The base path delivering the dictionaries.
-Should end in a \code{/}.}
 
 \item{column}{The table column we apply the dictionary on. 
 Should be either "Token.surface" or "Token.lemma".}
