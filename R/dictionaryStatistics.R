@@ -72,13 +72,11 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param t A text (data.frame or data.table)
 #' @param fieldnames A list of names for the dictionaries. 
 #' @param fields A list of lists that contains the actual field names. 
-#' By default, we try to load the dictionaries using \code{fieldnames} and \code{baseurl}.
+#' By default, we load the base_dictionary.
 #' @param normalizeByFigure Logical. Whether to normalize by figure speech length
 #' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
 #' @param names Logical. Whether the resulting table contains figure ids or names.
 #' @param boost A scaling factor to generate nicer values.
-#' @param baseurl The base path delivering the dictionaries.
-#' Should end in a \code{/}.
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
@@ -95,7 +93,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
 #' }
 #' @export
-dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
+dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
                                  fieldnames=c("Liebe"),
                                  segment=c("Drama","Act","Scene"),
                                  normalizeByFigure = FALSE, 
@@ -103,7 +101,6 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                                  byFigure = TRUE,
                                  names = FALSE, 
                                  boost = 1,
-                                 baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
                                  column="Token.surface", 
                                  asList = FALSE,
                                  ci = TRUE) {
