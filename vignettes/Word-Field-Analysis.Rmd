@@ -108,155 +108,23 @@ New dictionaries can be easily like this:
 wf <- list(Liebe=c("Liebe","Herz","Schmerz"), Hass=c("Hass","hassen"))
 ```
 
-This dictionary contains the two entries `Liebe` (love) and `Hass` (hate), with 3 respective 2 entries. Dictionaries can be created in code, like shown above. In addition, the function `loadFields()` can be used to download dictionary content from a URL or a directory. By default, the function loads [this dictionary](https://github.com/quadrama/metadata/tree/master/fields/) from GitHub (that we used in publications), for the keywords `Liebe` and `Familie` (family).
+This dictionary contains the two entries `Liebe` (love) and `Hass` (hate), with 3 respective 2 entries. Dictionaries can be created in code, like shown above. In addition, the function `loadFields()` can be used to download dictionary content from a URL or a directory. By default, the function loads [this dictionary](https://github.com/quadrama/metadata/tree/master/fields/) from GitHub (that we used in publications), for the keywords `Liebe` and `Familie` (family). Since version 2.3.0, this dictionary is included in the package as `base_dictionary` and can be used right away. It is also the default dictionary used by `dictionaryStatistics()`.
 
-```{r, eval=FALSE}
-wf <- loadFields()
-names(wf)
+```{r, eval=TRUE}
+names(base_dictionary)
 ```
-
-
-```{r, echo=FALSE}
-wf <- structure(list(Liebe = c("adorieren", "anbeten", "Angebetete", 
-"aufrichtig", "Aufrichtigkeit", "begehren", "Begierde", "begieren", 
-"beweinen", "Beziehung", "brennen", "Ceremonie", "Copulation", 
-"copulieren", "ehrlich", "empfinden", "Empfindsamkeit", "Engel", 
-"Entzücken", "fühlen", "Funke", "Gefühl", "geliebt", "Geliebte", 
-"Geliebter", "Gemahl", "Gemahlin", "Glück", "Heirat", "Heirath", 
-"Herz", "Herzen", "Hochzeit", "huldigen", "kuscheln", "Kuss", 
-"Kuß", "küssen", "Leidenschaft", "Liebe", "lieben", "liebenswürdig", 
-"Liebenswürdigkeit", "Liebhaber", "Liebhaberin", "liebkosen", 
-"Liebkosung", "Lippe", "Lust", "lüstern", "Rose", "Schönheit", 
-"Seele", "sehnen", "Sehnsucht", "Sinn ", "sinnlich", "Sinnlichkeit", 
-"streicheln", "Trauung", "treu", "Umarmung", "Unschuld", "verehren", 
-"Verehrung", "vergöttern", "Vergötterung", "Verlangen", "verlangen", 
-"vermählen", "Vermählung", "verzehren", "zärtlich", "Zärtlichkeit", 
-"Zeremonie", "Abschiedskuß", "Brust", "Busen", "geliebt", "Geliebte", 
-"Geliebteste", "Jüngling", "Liebchen", "liebeglühend", "Liebende", 
-"Liebesfest", "Liebliche", "Liebste", "Liebster", "Liebstes", 
-"Treue", "vergöttern", "Verlieben", "Wollust"), Familie = c("Ahnen", 
-"Ahnherr", "Anverwandte", "Anverwandter", "aufwachsen", "aufziehen", 
-"Braut ", "Bräutigam", "Bruder", "Bund ", "Cousin", "Ehe", "Ehefrau", 
-"ehelichen", "Ehemann", "Ehre", "Eltern", "Enkel", "Erbe", "Erbschaft", 
-"erziehen", "Erziehung", "Familie", "Gatte", "geboren", "Geburt", 
-"Gemahl", "Gemahlin", "Geschlecht", "Großeltern", "Güter", 
-"Haus", "Heirat", "Herd", "Heyrath", "Hochzeit", "Junggeselle", 
-"Kind", "Mitgift", "Mutter", "Nichte", "Reichtum", "Schwager", 
-"Schwägerin", "Schwester", "Sippe", "Sippschaft", "Sohn", "Stamm", 
-"Stand", "Stiefeltern", "Stiefmutter", "Stiefschwester", "Stiefvater", 
-"Tante", "Tochter", "Tradition", "Vater", "verheiraten", "verlobt", 
-"versprochen", "Versprochene", "Verwandte", "Vetter", "Vormund", 
-"Weib", "Witwe", "verbrüdern", "Taufe", "Sohne", "Vaterhaus", 
-"Brautbett", "Blutsverwandtschaft")), .Names = c("Liebe", "Familie"
-))
-names(wf)
-```
-
-
-
 
 The function `loadFields()` offers parameters to load from different URLs via http or to load from plain text files that are stored locally. The latter can be achieved by specifying the directory as `baseurl`. Entries for each keyword should then be stored in a file named like the keyword, and ending with `txt` (by default, can be overwritten). See `?loadFields` for details. Some of the options can also be specified through `dictionaryStatistics()`, as exemplified below.
 
-The following examples use the baseurl `https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/`, i.e., a specific version of the fields we have been using in QuaDramA. 
-
-```{r, echo=FALSE}
-wfields <- structure(list(Liebe = c("adorieren", "anbeten", "Angebetete", 
-"aufrichtig", "Aufrichtigkeit", "begehren", "Begierde", "begieren", 
-"beweinen", "Beziehung", "brennen", "Ceremonie", "Copulation", 
-"copulieren", "ehrlich", "empfinden", "Empfindsamkeit", "Engel", 
-"Entzücken", "fühlen", "Funke", "Gefühl", "geliebt", "Geliebte", 
-"Geliebter", "Gemahl", "Gemahlin", "Glück", "Heirat", "Heirath", 
-"Herz", "Herzen", "Hochzeit", "huldigen", "kuscheln", "Kuss", 
-"Kuß", "küssen", "Leidenschaft", "Liebe", "lieben", "liebenswürdig", 
-"Liebenswürdigkeit", "Liebhaber", "Liebhaberin", "liebkosen", 
-"Liebkosung", "Lippe", "Lust", "lüstern", "Rose", "Schönheit", 
-"Seele", "sehnen", "Sehnsucht", "Sinn ", "sinnlich", "Sinnlichkeit", 
-"streicheln", "Trauung", "treu", "Umarmung", "Unschuld", "verehren", 
-"Verehrung", "vergöttern", "Vergötterung", "Verlangen", "verlangen", 
-"vermählen", "Vermählung", "verzehren", "zärtlich", "Zärtlichkeit", 
-"Zeremonie", "Abschiedskuß", "Brust", "Busen", "geliebt", "Geliebte", 
-"Geliebteste", "Jüngling", "Liebchen", "liebeglühend", "Liebende", 
-"Liebesfest", "Liebliche", "Liebste", "Liebster", "Liebstes", 
-"Treue", "vergöttern", "Verlieben", "Wollust"), Krieg = c("Angriff", 
-"bedrohen", "Befehl", "befehlen", "bekämpfen", "besiegen", "Besiegte", 
-"Bewaffnet", "Blutig", "Blutrache", "Bogen", "Bürgerkrieg", 
-"Degen", "Dolch", "drohen", "Drohung", "Duell", "duellieren", 
-"Ehre", "Erbe", "Erbfolge", "Erbvertrag", "ermordet", "erpressen", 
-"Fehde", "Feind", "feindlich", "Feindschaft", "Feldherr", "Feldherrn", 
-"Flucht", "Frieden", "gefangen", "Gefangener", "Gefängnis", 
-"Gefecht", "Gegner", "gemordet", "geschlagen", "Geschlecht", 
-"Gewalt", "Gewehr", "grausam", "Händel", "Hass", "Heer", "Heereszug", 
-"Heldenmut", "Helm", "herrschen", "Herrscher", "Hinterhalt", 
-"Hinterlistig", "Hundertschaft", "Kampf", "Kämpfen", "Kampfplatz", 
-"Kanone", "Kerker", "Krieg", "kriegerisch", "Kriegsbeil", "Kriegsführung", 
-"Kriegsgott", "Kühnheit", "Legion", "List", "Listig", "Messer", 
-"Militär", "Mord", "Mörder", "Mut", "Niederlage", "Pfeil", 
-"Pistole", "Rache", "rächen", "Rächer", "Revolver", "Ritter", 
-"Ritterehre", "Rivale", "Rückzug", "Rüstung", "Rüstungen", 
-"Satisfaktion", "Schlacht", "schlagen", "Schuss", "Schütze", 
-"Schwert", "Sieg", "Siegen", "Sieger", "Soldat", "tapfer", "Tapferkeit", 
-"Teufelskerl", "Thron", "Todfeind", "Totschlag", "Truppen", "verfeindet", 
-"Verräter", "Waffe", "Waffengewalt", "Waffenstillstand", "Wettstreit", 
-"Widerstand", "Zelle", "Zerwürfnis"), Familie = c("Ahnen", "Ahnherr", 
-"Anverwandte", "Anverwandter", "aufwachsen", "aufziehen", "Braut ", 
-"Bräutigam", "Bruder", "Bund ", "Cousin", "Ehe", "Ehefrau", 
-"ehelichen", "Ehemann", "Ehre", "Eltern", "Enkel", "Erbe", "Erbschaft", 
-"erziehen", "Erziehung", "Familie", "Gatte", "geboren", "Geburt", 
-"Gemahl", "Gemahlin", "Geschlecht", "Großeltern", "Güter", 
-"Haus", "Heirat", "Herd", "Heyrath", "Hochzeit", "Junggeselle", 
-"Kind", "Mitgift", "Mutter", "Nichte", "Reichtum", "Schwager", 
-"Schwägerin", "Schwester", "Sippe", "Sippschaft", "Sohn", "Stamm", 
-"Stand", "Stiefeltern", "Stiefmutter", "Stiefschwester", "Stiefvater", 
-"Tante", "Tochter", "Tradition", "Vater", "verheiraten", "verlobt", 
-"versprochen", "Versprochene", "Verwandte", "Vetter", "Vormund", 
-"Weib", "Witwe", "verbrüdern", "Taufe", "Sohne", "Vaterhaus", 
-"Brautbett", "Blutsverwandtschaft"), Ratio = c("Ansehen", "Aufklärung", 
-"ausschweifend", "Ausschweifung", "Begierde", "bereuen", "beschämen", 
-"Buhler", "Buhlerin", "Ehre", "Fieber", "Folgerung", "Gehorsam", 
-"gescheit", "Gesetz", "Gespielin", "Großmut", "großmütig", 
-"Gründe", "Güte", "gutherzig", "Hetäre", "Hirn", "hitzig", 
-"irrational", "Irrsinn", "irrsinnig", "Irrthum", "Irrwitz", "Klug", 
-"Kluger", "Kopf", "Kopf", "Kuppler", "Kurtisane", "Laster", "lasterhaft", 
-"Leidenschaft", "Liebhaberin", "Mätresse", "melancholisch", 
-"Menschenliebe", "Menschenverstand", "närrisch", "Notwendigkeit", 
-"Pflicht", "rasend", "Raserei", "Raserey", "Räson", "räsonieren", 
-"Recht", "Regel", "Reue", "reuen", "schamhaft", "Schande", "schandhaft", 
-"schwärmen", "Schwärmer", "Schwärmerin", "Schwermut", "sinnvoll", 
-"Stolz", "Sühne", "sühnen", "Sünde ", "sündigen", "Sündenfall", 
-"Sünder", "Sünderin", "Temperament", "toll", "Trieb", "Tugend", 
-"Unrecht ", "unsinnig", "Urteil", "verdorben", "verführen", 
-"Verführer", "Verführte", "Verführung", "vergeben", "Vergebung", 
-"Vernunft", "vernünftig", "Verstand", "verständig", "Verzeihung", 
-"Witz", "Wollust", "Träumer", "Denkart", "Gericht", "Zeugnis", 
-"Verwirrung", "verwirrt", "Plan", "planen", "Ritterehre", "gereuen", 
-"Richtigkeit", "Milde", "Irrtum", "Irr", "irre", "Ehrenwort"), 
-    Religion = c("Allmächtiger", "Amen", "Apostel", "beten ", 
-    "Bibel", "Dom", "Dreieinigkeit", "Dreifaltigkeit", "Evangelien", 
-    "evangelisch", "Fürbitte", "Gebet", "geheiligt", "Glaube", 
-    "Gott", "Gottes", "Gottesdienst", "Gottesglauben", "Gotteslästerung", 
-    "Gottheit", "gottlob", "heilig", "Heilige", "Herrgott", "Kaplan", 
-    "Kathedrale", "katholisch", "Kirche", "Konfession", "Litanei", 
-    "Mess", "Messdiener", "Messe", "Pastor", "Pfaff", "Pfaffe", 
-    "Pfarrer", "Prediger", "Predigt", "Priester", "protestantisch", 
-    "Psalm", "Religion", "Schöpfer", "Synagoge", "Theologie", 
-    "Vogt", "Segen", "Demut", "vergeben ", "Vergebung", "Himmel", 
-    "Götter", "göttlich", "gottlos", "Gotteswillen", "Herrgott"
-    )), .Names = c("Liebe", "Krieg", "Familie", "Ratio", "Religion"
-))
-```
-
-```{r, eval=FALSE}
-baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/"
-wfields <- loadFields(fieldnames = c("Liebe", "Krieg", "Familie", "Ratio", "Religion"), 
-                      baseurl = baseUrl)
-```
+The following examples use the `base_dictionary`, i.e., a specific version of the fields we have been using in QuaDramA. 
 
 
-```{r}
+```{r, eval=TRUE}
 
 dstat <- dictionaryStatistics(
   rksp.0$mtext,  # the text
-  fields = wfields,
+  fieldnames = # fields we want to measure (from base_dictionary)
+    c("Liebe", "Familie", "Ratio", "Krieg", "Religion"),
   names = TRUE,                 # use figure names (instead of ids)
   normalizeByFigure = TRUE,   # normalization by figure
   normalizeByField = TRUE,    # normalization by field
@@ -302,7 +170,7 @@ You typically want to assign rownames to this matrix. If you're studying individ
 
 ```{r}
 dsl <- dictionaryStatistics(rksp.0$mtext, 
-                            fields = wfields,
+                            fieldnames=c("Liebe", "Familie", "Ratio", "Krieg", "Religion"),
                             normalizeByFigure=TRUE,
                             asList=TRUE)
 dsl$mat
@@ -345,7 +213,7 @@ Since version 2.0 of this package, we can also count word fields by segment, i.e
 
 ```{r}
 dsl <- dictionaryStatistics(rksp.0$mtext, 
-                            fields = wfields,
+                            fieldnames=c("Liebe", "Familie", "Ratio", "Krieg", "Religion"),
                             normalizeByFigure=TRUE,
                             asList=TRUE,
                             segment="Scene")
@@ -374,8 +242,3 @@ abline(v=cumsum(al$lengths[-1]))
 legend(x="topleft",legend=colnames(mat),lty=1:5)
 
 ```
-
-
-
-
-
