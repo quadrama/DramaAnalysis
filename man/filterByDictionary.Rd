@@ -4,20 +4,16 @@
 \alias{filterByDictionary}
 \title{Filtering Frequency Table by Dictionary/-ies}
 \usage{
-filterByDictionary(ft, fields = loadFields(fieldnames, baseurl),
-  fieldnames = c("Liebe"),
-  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/")
+filterByDictionary(ft, fields = base_dictionary[fieldnames],
+  fieldnames = c("Liebe"))
 }
 \arguments{
 \item{ft}{A matrix as produced by \code{frequencytable()}.}
 
 \item{fields}{A list of lists that contains the actual field names. 
-By default, we try to load the dictionaries using \code{fieldnames} and 
-\code{baseurl} (as in \code{dictionaryStatistics()}).}
+By default, we load the base_dictionary (as in \code{dictionaryStatistics()}).}
 
 \item{fieldnames}{A list of names for the dictionaries.}
-
-\item{baseurl}{The base path delivering the dictionaries.}
 }
 \description{
 This function can be used to filter a matrix as produced by 
