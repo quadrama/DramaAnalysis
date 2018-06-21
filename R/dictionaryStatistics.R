@@ -9,7 +9,7 @@
 #' Useful to retrieve enriched word fields from metadata repo.
 #' @param fileSep The file separator used to construct the URL
 #' Can be overwritten to load local dictionaries.
-#' @importFrom utils read.csv
+#' @importFrom readr read_csv locale col_character
 #' @section File Format:
 #' Dictionary files should contain one word per line, with no comments or any other meta information. 
 #' The entry name for the dictionary is given as the file name. It's therefore best if it does not contain
@@ -25,7 +25,10 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
   r <- list()
   for (field in fieldnames) {
     url <- paste(baseurl, field, fileSuffix, sep="")
-    r[[field]] <- as.character((read.csv(url, header=F, fileEncoding = "UTF-8"))$V1)
+    r[[field]] <- as.character((readr::read_csv(url, 
+                                                col_names = FALSE, 
+                                                locale = readr::locale(),
+                                                col_types = c(readr::col_character())))$X1)
   }
   r
 }
@@ -37,7 +40,6 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' @param top A maximal number of words that we consider 
 #' @param minimalSimilarity The minimal similarity for a word in order 
 #' to be added
-#' @importFrom wordVectors closest_to
 #' @rdname dictionaryHandling
 #' @export
 #' @examples 

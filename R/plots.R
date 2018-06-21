@@ -41,7 +41,6 @@ plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors
 #' @param legend.pos.y Y position of legend
 #' @param legend.horizontal Whether to print legend horizontally or vertically
 #' @param ... Miscellaneous arguments to be given for radarchart().
-#' @importFrom fmsb radarchart
 #' @export
 #' @examples 
 #' data(rksp.0)
