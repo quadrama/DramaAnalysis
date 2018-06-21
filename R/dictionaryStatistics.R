@@ -37,7 +37,6 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' @param top A maximal number of words that we consider 
 #' @param minimalSimilarity The minimal similarity for a word in order 
 #' to be added
-#' @importFrom wordVectors closest_to
 #' @rdname dictionaryHandling
 #' @export
 #' @examples 
