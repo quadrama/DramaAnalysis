@@ -25,13 +25,13 @@ install.packages("devtools")
 library(devtools)
 
 # Install newest stable version
-install_github("quadrama/DramaAnalysis", build_vignettes = TRUE) 
+install_github("quadrama/DramaAnalysis") 
 
 # Install newest development version
-install_github("quadrama/DramaAnalysis", ref="develop/2.x", build_vignettes = TRUE)
+install_github("quadrama/DramaAnalysis", ref="develop/2.x")
 
 # Install specific version (2.0.1)
-install_github("quadrama/DramaAnalysis", ref="v2.0.1", build_vignettes = TRUE) 
+install_github("quadrama/DramaAnalysis", ref="v2.0.1") 
 ```
 
 # Usage and Howto
