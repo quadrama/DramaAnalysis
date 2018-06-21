@@ -177,8 +177,6 @@ extractTopTerms <- function(mat, top=10) {
 #' @param type The type of the report. "Single" gives a report about a single play, 
 #' while "Compare" can be used to compare multiple editions of a play
 #' @param ... Arguments passed through to the rmarkdown document
-#' @importFrom rmarkdown render
-#' @importFrom igraph graph_from_adjacency_matrix plot.igraph layout_ on_grid
 #' @export
 report <- function(id="test:rksp.0", 
                    of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), 
