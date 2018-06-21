@@ -11,7 +11,8 @@ limitFiguresByRank(t, maxRank = 10, other = FALSE)
 
 \item{maxRank}{Up to maxRank figures remain in the data set}
 
-\item{other}{Whether to summarize filtered figures as 'OTHER' instead of removing their speech}
+\item{other}{Whether to summarize filtered figures as 'OTHER' instead of 
+removing their speech. If it's of type character, it will be used as a name}
 }
 \description{
 This method removes the spoken tokens of all but the most frequent n figures

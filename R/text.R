@@ -23,7 +23,8 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @param text The dramatic text in table form
 #' @param by A character vector, either "rank" or "tokens" (or unambigious sub string)
 #' @param threshold A number specifying the limit
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing their speech
+#' @param other Whether to summarize filtered figures as 'OTHER' instead of 
+#' removing their speech. If it's of type character, it will be used as a name
 #' @export
 #' @examples 
 #' data(rksp.0)
@@ -39,21 +40,23 @@ limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="toke
 #' This method removes the spoken tokens of all but the most frequent n figures
 #' @param t The text, a data frame listing each token for each figure
 #' @param maxRank Up to maxRank figures remain in the data set
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing their speech
+#' @param other Whether to summarize filtered figures as 'OTHER' instead of 
+#' removing their speech. If it's of type character, it will be used as a name
 #' @keywords internal
 #' @importFrom utils head
 limitFiguresByRank <- function(t, maxRank=10, other=FALSE) {
   if (other == FALSE) {
     r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n%in%maxN(unique(n),maxRank)], by=.(corpus,drama)][,n:=NULL,][]
   } else {
+    otherString <- ifelse(is.character(other),other,"OTHER")
     counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id, t$Speaker.figure_surface), length)
     counts <- counts[order(counts$x, decreasing = TRUE),]
     rcounts <- Reduce(rbind, by(counts, counts["Group.1"], head, n=maxRank))
     r <- t
-    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),"OTHER")
-    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),"OTHER")
-    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- "OTHER"
-    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- "OTHER"
+    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),otherString)
+    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),otherString)
+    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- otherString
+    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- otherString
   }
   r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
   r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
@@ -63,19 +66,22 @@ limitFiguresByRank <- function(t, maxRank=10, other=FALSE) {
 #' This method removes the spoken tokens by all figures that speak infrequently.
 #' @param t The text, a data frame listing each token for each figure
 #' @param minTokens The minimal amount of tokens a figure has to speak
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing their speech
+#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing 
+#' their speech. If it's of type character, it will be used as a name
 #' @keywords internal
 limitFiguresByTokens <- function(t, minTokens=100, other=FALSE) {
   if (other == FALSE) {
     r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n>=minTokens],by=.(corpus,drama)][,n:=NULL][]
   } else {
+    otherString <- ifelse(is.character(other),other,"OTHER")
+    
     counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id, t$Speaker.figure_surface), length)
     rcounts <- counts[(counts$x > minTokens),]
     r <- t
-    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),"OTHER")
-    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),"OTHER")
-    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- "OTHER"
-    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- "OTHER"
+    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),otherString)
+    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),otherString)
+    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- otherString
+    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- otherString
   }
   r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
   r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
