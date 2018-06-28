@@ -5,7 +5,7 @@
 \title{Basic Character Statistics}
 \usage{
 figureStatistics(t, names = FALSE, normalize = FALSE, segment = c("Drama",
-  "Act", "Scene"))
+  "Act", "Scene"), filter_punctuation = FALSE)
 }
 \arguments{
 \item{t}{A data.table containing the text. Will be coerced into a data.table,
@@ -16,6 +16,8 @@ if necessary.}
 \item{normalize}{Normalising the individual columns}
 
 \item{segment}{"Drama", "Act", or "Scene". Allows calculating statistics on segments of the play}
+
+\item{filter_punctuation}{Whether to exclude all punctuation from token counts}
 }
 \value{
 A data frame with the following columns and one row for each figure:

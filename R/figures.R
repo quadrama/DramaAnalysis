@@ -12,6 +12,7 @@
 #' @param names If set to true, the table will contains figure names instead of ids
 #' @param normalize Normalising the individual columns
 #' @param segment "Drama", "Act", or "Scene". Allows calculating statistics on segments of the play
+#' @param filter_punctuation Whether to exclude all punctuation from token counts
 #' @importFrom stats sd
 #' @importFrom stats aggregate
 #' @importFrom data.table as.data.table
@@ -19,7 +20,7 @@
 #' data(rksp.0)
 #' stat <- figureStatistics(rksp.0$mtext, names = FALSE)
 #' @export
-figureStatistics <- function(t, names = FALSE, normalize = FALSE, segment=c("Drama","Act","Scene")) {
+figureStatistics <- function(t, names = FALSE, normalize = FALSE, segment=c("Drama","Act","Scene"), filter_punctuation = FALSE) {
   
   # prevent notes in R CMD check
   . <- NULL
@@ -29,6 +30,10 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE, segment=c("Dra
   drama <- NULL
   `:=` <- NULL
   corpus <- NULL
+  
+  if (filter_punctuation == TRUE) {
+    t <- t[!grep(pattern="[[:punct:]]", x=t$Token.surface)]
+  }
   
   t <- as.data.table(t)
   
