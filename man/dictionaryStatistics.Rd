@@ -9,8 +9,8 @@
 dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
   normalizeByFigure = FALSE, normalizeByField = FALSE, byFigure = TRUE,
-names = FALSE, figureColumn = ifelse(names, "Speaker.figure_surface",
-"Speaker.figure_id"), boost = 1,
+  names = FALSE, figureColumn = ifelse(names, "Speaker.figure_surface",
+  "Speaker.figure_id"), boost = 1,
   baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
   column = "Token.surface", asList = FALSE, ci = TRUE)
 

@@ -144,6 +144,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
         dss$begin.Scene <- NULL
         if (byFigure) {
           data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene",figureColumn,x))
+          colnames(dss)[5] <- "figure"
         } else {
           data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene",x))
         }
