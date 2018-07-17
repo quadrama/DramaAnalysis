@@ -43,6 +43,24 @@ test_that("dictionaryStatistics(rksp.0$mtext)
   expect_equal(colnames(dstat[,4]), "Liebe")
 })
 
+dstat <- dictionaryStatistics(rksp.0$mtext, segment="Act")
+test_that("dictionaryStatistics(rksp.0$mtext, segment='Act') 
+          has correct dimensions and produces correct output", {
+    expect_length(dstat, 5)          
+    expect_equal(as.integer(dstat[6,5]), 10)
+    expect_equal(colnames(dstat[,3]), "Number.Act")
+})
+
+dstat <- dictionaryStatistics(rksp.0$mtext, segment="Scene")
+test_that("dictionaryStatistics(rksp.0$mtext, segment='Scene') 
+          has correct dimensions and produces correct output", {
+    expect_length(dstat, 6)          
+    expect_equal(as.integer(dstat[6,6]), 0)
+    expect_equal(colnames(dstat[,3]), "Number.Act")
+    expect_equal(colnames(dstat[,4]), "Number.Scene")
+})
+
+
 dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Ratio", "Religion"), normalizeByFigure = TRUE)
 test_that("dictionaryStatistics(rksp.0$mtext, fieldnames=c('Ratio', 'Religion'), normalizeByFigure = TRUE) 
           has correct dimensions and produces correct output" ,{
@@ -52,14 +70,6 @@ test_that("dictionaryStatistics(rksp.0$mtext, fieldnames=c('Ratio', 'Religion'),
   expect_equal(as.numeric(dstat[5,4]), 0.004211511)
   expect_equal(as.numeric(dstat[5,5]), 0.0028076743)
 })
-
-# TODO: add test for boost-option when implemented
-# dstat <- dictionaryStatistics(rksp.0$mtext, normalizeByField = TRUE, boost = 2)
-# test_that("dictionaryStatistics(rksp.0$mtext, normalizeByField = TRUE, boost = 2) 
-#           produces correct output", {
-#
-# })
-
 
 # filterByDictionary()
 
@@ -80,6 +90,31 @@ test_that("filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE, fiel
 })
 
 
-# TODO: add tests for regroup()
+# regroup()
 
-# TODO: add tests for enricht_Dictionary()
+# TODO: add more tests for regroup(by = "Field") without segment = "Scene" after fix #109
+
+dslr <- regroup(dictionaryStatistics(rksp.0$mtext, fieldnames = c("Liebe", "Familie"), segment = "Scene", normalizeByFigure = TRUE, asList = TRUE), 
+                by = "Field")
+test_that("regroup(dictionaryStatistics(rksp.0$mtext, fieldnames = c('Liebe', 'Familie'), segment = 'Scene', normalizeByFigure = TRUE, asList = TRUE), 
+                by = 'Field') 
+          has correct dimensions and produces correct output", {
+  expect_length(dslr, 2)
+  expect_length(dslr$Liebe, 43)
+  expect_length(dslr$Familie, 43)
+  expect_equal(dslr$Liebe[1][8,], 0.005882353) # Act 1, Scene 1, der_prinz
+  expect_equal(dslr$Familie[1][8,], 0) # Act 1, Scene 1, der_prinz
+})
+
+dslr <- regroup(dictionaryStatistics(rksp.0$mtext, fieldnames = c("Krieg"), normalizeByFigure = TRUE, asList = TRUE), 
+                by = "Character")
+test_that("regroup(dictionaryStatistics(rksp.0$mtext, fieldnames = c('Krieg'), normalizeByFigure = TRUE, asList = TRUE), 
+                by = 'Character') 
+          has correct dimensions and produces correct output", {
+  expect_length(dslr, 13)
+  expect_length(dslr$der_prinz, 1)
+  expect_equal(dslr$der_prinz$mat, 0.002881325)
+})
+
+
+# TODO: enrichDictionary()?
