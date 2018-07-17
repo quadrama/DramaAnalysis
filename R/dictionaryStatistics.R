@@ -78,7 +78,6 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param normalizeByFigure Logical. Whether to normalize by figure speech length
 #' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
 #' @param names Logical. Whether the resulting table contains figure ids or names.
-#' @param boost A scaling factor to generate nicer values.
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
@@ -102,7 +101,6 @@ dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
                                  normalizeByField = FALSE, 
                                  byFigure = TRUE,
                                  names = FALSE, 
-                                 boost = 1,
                                  column="Token.surface", 
                                  asList = FALSE,
                                  ci = TRUE) {
