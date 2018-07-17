@@ -1,29 +1,51 @@
+context("dramaHead()")
+
 data(rksp.0)
 
 t <- dramaHead(rksp.0$mtext, n=1)
-expect_length(unique(t$begin.Act), 1)
+test_that("dramaHead(rksp.0$mtext, n=1) subsets one act", {
+  expect_length(unique(t$begin.Act), 1)
+})
 
 t <- dramaHead(rksp.0$mtext, n=3)
-expect_length(unique(t$begin.Act), 1)
+test_that("dramaHead(rksp.0$mtext, n=3) subsets one act", {
+  expect_length(unique(t$begin.Act), 1)
+})
 
-t <- dramaHead(rksp.0$mtext, n=6)
-expect_length(unique(t$begin.Act), 0)
-expect_that(nrow(t), equals(0))
+suppressWarnings(t <- dramaHead(rksp.0$mtext, n=6))
+test_that("dramaHead(rksp.0$mtext, n=6) throws a warning and returns an empty table because the play only has 5 acts", {
+  expect_warning(dramaHead(rksp.0$mtext, n=6), "Play has only 5 acts.")
+  expect_length(unique(t$begin.Act), 0)
+  expect_that(nrow(t), equals(0))
+})
 
 t <- dramaHead(rksp.0$mtext, n=1, op="<=")
-expect_length(unique(t$begin.Act), 1)
+test_that("dramaHead(rksp.0$mtext, n=1, op='<=') subsets one act", {
+  expect_length(unique(t$begin.Act), 1)
+})
 
 t <- dramaHead(rksp.0$mtext, n=3, op="<=")
-expect_length(unique(t$begin.Act), 3)
+test_that("dramaHead(rksp.0$mtext, n=3, op='<=') subsets three acts", {
+  expect_length(unique(t$begin.Act), 3)
+})
 
-t <- dramaHead(rksp.0$mtext, n=6, op="<=")
-expect_length(unique(t$begin.Act), 0)
+suppressWarnings(t <- dramaHead(rksp.0$mtext, n=6, op="<="))
+test_that("dramaHead(rksp.0$mtext, n=6, op='<=') throws a warning and returns an empty table because the play only has 5 acts", {
+  expect_warning(dramaHead(rksp.0$mtext, n=6, op="<="), "Play has only 5 acts.")
+  expect_length(unique(t$begin.Act), 0)
+})
 
 t <- dramaHead(rksp.0$mtext, by="Scene", n=1)
-expect_length(unique(t$begin.Scene), 1)
+test_that("dramaHead(rksp.0$mtext, by='Scene', n=1) subsets one scene", {
+  expect_length(unique(t$begin.Scene), 1)
+})
 
 t <- dramaHead(rksp.0$mtext, by="Scene", n=12)
-expect_length(unique(t$begin.Scene), 1)
+test_that("dramaHead(rksp.0$mtext, by='Scene', n=12) subsets one scene", {
+  expect_length(unique(t$begin.Scene), 1)
+})
 
 t <- dramaHead(rksp.0$mtext, by="Scene", n=30)
-expect_length(unique(t$begin.Scene), 1)
+test_that("dramaHead(rksp.0$mtext, by='Scene', n=30) subsets one scene", {
+  expect_length(unique(t$begin.Scene), 1)
+})
