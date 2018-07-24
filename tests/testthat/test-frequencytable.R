@@ -38,16 +38,32 @@ test_that("frequencytable(rksp.0$mtext, byFigure=TRUE, by='Act')
 })
 
 ft <- frequencytable(rksp.0$mtext, by="Scene", normalize=TRUE)
-test_that("", {
-  
+test_that("frequencytable(rksp.0$mtext, by='Scene', normalize=TRUE) 
+          has correct dimensions and produces correct output", {
+  expect_length(colnames(ft), 3474)
+  expect_length(rownames(ft), 43)
+  expect_equal(colnames(ft)[4], "ab")
+  expect_equal(rownames(ft)[1], "rksp.0|1|1")
+  expect_equal(ft[4,4], 0.0008354219, tolerance=toler)
+  expect_equal(ft[30,2000], 0)
 })
 
 ft <- frequencytable(rksp.0$mtext, byFigure=TRUE, by="Scene", sep=";")
-test_that("", {
-  
+test_that("frequencytable(rksp.0$mtext, byFigure=TRUE, by='Scene', sep=';') 
+          has correct dimensions and produces correct output", {
+  expect_length(colnames(ft), 3474)
+  expect_length(rownames(ft), 94)
+  expect_equal(colnames(ft)[4], "ab")
+  expect_equal(rownames(ft)[1], "rksp.0;1;1;der_kammerdiener")
+  expect_equal(ft[4,4], 0)
 })
 
 ft <- frequencytable(rksp.0$mtext, byFigure=TRUE, sortResult=TRUE, names=TRUE)
-test_that("", {
-  
+test_that("frequencytable(rksp.0$mtext, byFigure=TRUE, sortResult=TRUE, names=TRUE) 
+          has correct dimensions and produces correct output", {
+  expect_length(colnames(ft), 3474)
+  expect_length(rownames(ft), 13)
+  expect_equal(colnames(ft)[4], "nicht")
+  expect_equal(rownames(ft)[1], "rksp.0|ANGELO")
+  expect_equal(ft[1,1], 30)
 })
