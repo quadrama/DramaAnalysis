@@ -49,8 +49,21 @@ test_that("figurematrix(figureStatistics(rksp.0$mtext))
   expect_length(fm, 3)
   expect_length(fm$labels, 13)
   expect_length(fm$values, 14)
-  expect_length(fm$cs, 14) #
+  expect_length(fm$cs, 14) # 
+  expect_equal(fm$values[1], 5660)
   expect_equal(fm$values[1] > fm$values[2], TRUE)
+})
+
+fm <- figurematrix(figureStatistics(rksp.0$mtext), column="utterances", order=1)
+test_that("figurematrix(figureStatistics(rksp.0$mtext), column='utterances', order=1) 
+          has correct dimensions and produces correct output", {
+  expect_length(fm, 3)
+  expect_length(fm$labels, 13)
+  expect_length(fm$values, 14)
+  expect_length(fm$cs, 14) #
+  expect_equal(fm$values[1], 6)
+  expect_equal(fm$values[2] < fm$values[3], TRUE)
+  expect_equal(fm$values[1], fm$values[2])
 })
 
 # TODO: add tests for rankFiguresByDramatisPersonae() ?
