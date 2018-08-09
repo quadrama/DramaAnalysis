@@ -3,6 +3,9 @@ context("Figures")
 data(rksp.0)
 toler <- 1e-4
 
+
+# figureStatistics()
+
 fstat <- figureStatistics(rksp.0$mtext, names = FALSE)
 test_that("figureStatistics(rksp.0$mtext, names = FALSE) 
           has correct dimensions and produces correct output", {
@@ -25,7 +28,6 @@ test_that("figureStatistics(rksp.0$mtext, names = TRUE, normalize = TRUE)
   expect_equal(as.character(fstat[1,4]$figure), "DER PRINZ")
 })
 
-# TODO: fix #114
 fstat <- figureStatistics(rksp.0$mtext, segment="Act", filter_punctuation = TRUE, normalize=TRUE)
 test_that("figureStatistics(rksp.0$mtext, segment='Act') 
           has correct dimensions and produces correct output", {
@@ -42,7 +44,9 @@ test_that("figureStatistics(rksp.0$mtext, segment='Scene', normalize=TRUE)
   expect_equal(sum(fstat$tokens), 1, tolerance=toler)
 })
 
-# TODO: figurematrix()
+
+# figurematrix()
+
 fm <- figurematrix(figureStatistics(rksp.0$mtext))
 test_that("figurematrix(figureStatistics(rksp.0$mtext)) 
           has correct dimensions and produces correct output", {
@@ -66,6 +70,16 @@ test_that("figurematrix(figureStatistics(rksp.0$mtext), column='utterances', ord
   expect_equal(fm$values[1], fm$values[2])
 })
 
-# TODO: add tests for rankFiguresByDramatisPersonae() ?
+
+# rankFiguresByDramatisPersonae()
+
+fstat_ranked <- rankFiguresByDramatisPersonae(figureStatistics(rksp.0$mtext))
+test_that("rankFiguresByDramatisPersonae(figureStatistics(rksp.0$mtext)) 
+          has correct dimensions and produces correct output", {
+  expect_equal(ncol(fstat_ranked), 12)
+  expect_equal(colnames(fstat_ranked)[12], "Rank (dramatis personae)")
+  expect_equal(as.integer(fstat_ranked[1,12]), 1)
+})
+
 
 # TODO: add tests for rankFiguresByAppearance() ?
