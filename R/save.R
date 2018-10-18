@@ -6,6 +6,7 @@
 #' @param min_token_count The minimal token count for a speech to be saved in a file (default = 0)
 #' @param count_punctuation Whether to include punctuation in min_token_count
 #' @param dir The directory into which the files will be written (default: current working directory)
+#' @param write_drama_name TODO!
 #' @export
 #' @examples
 #' \dontrun{
@@ -16,7 +17,8 @@ saveFigureSpeech <- function(t,
                              segment=c("Drama", "Act", "Scene"),
                              min_token_count=0,
                              count_punctuation=TRUE,
-                             dir=getwd()) {
+                             dir=getwd(),
+                             write_drama_name=TRUE) {
   segment = match.arg(segment)
   switch(segment,
          Drama = {r <- split(t[, Token.surface, by=.(drama, Speaker.figure_id)], by=c("drama", "Speaker.figure_id"), keep.by = FALSE, drop=TRUE)},
