@@ -5,7 +5,7 @@
 #' @param segment "Drama", "Act", or "Scene". Determines on what segment-level the speech is isolated.
 #' @param min_token_count The minimal token count for a speech to be saved in a file (default = 0)
 #' @param count_punctuation Whether to include punctuation in min_token_count
-#' @param dir The directory into which the files will be written (default: current working directory)
+#' @param dir The directory into which the files will be written (default: qd.datadir)
 #' @export
 #' @examples
 #' \dontrun{
@@ -16,7 +16,7 @@ saveFigureSpeech <- function(t,
                              segment=c("Drama", "Act", "Scene"),
                              min_token_count=0,
                              count_punctuation=TRUE,
-                             dir=getwd()) {
+                             dir=getOption("qd.datadir")) {
   t <- t[, Token.surface, by=.(drama, Speaker.figure_id, Number.Act, Number.Scene)]
   t$drama <- gsub("_", ".", t[,drama])
   t$Speaker.figure_id <- gsub("_", ".", t[,Speaker.figure_id])
@@ -41,7 +41,7 @@ saveFigureSpeech <- function(t,
          },
          stop("Please enter valid string-value for argument 'segment' (default = 'Drama', 'Act' or 'Scene').")
   )
-  r <- split(t[, c("Speaker.figure_id", "Number.Act", "Number.Scene"):=NULL], by="fn", keep.by=FALSE, drop=TRUE)
+  r <- split(t[, c("drama", "Speaker.figure_id", "Number.Act", "Number.Scene"):=NULL], by="fn", keep.by=FALSE, drop=TRUE)
   if (count_punctuation) {
     o <- capture.output(lapply(names(r), function(x) {
       if (length(r[[x]]$Token.surface) >= min_token_count){
