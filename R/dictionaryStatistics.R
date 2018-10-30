@@ -344,6 +344,10 @@ regroup <- function(dstat, by=c("Character","Field")) {
             }
             if ("Number.Act" %in% names(dstat) && "Number.Scene" %in% names(dstat)) {
               df$Segment <- paste(as.roman(df$Number.Act), df$Number.Scene)
+            } else if ("Number.Act" %in% names(dstat)) {
+              df$Segment <- paste(as.roman(df$Number.Act))
+            } else {
+              df$Segment <- dstat$drama
             }
             
             df2 <- reshape(df, direction="wide", timevar=c("Segment"), idvar=c("figure"),drop=c("Number.Act","Number.Scene"))

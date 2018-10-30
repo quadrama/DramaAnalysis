@@ -33,6 +33,7 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE, segment=c("Dra
   
   if (filter_punctuation == TRUE) {
     t <- t[!grep(pattern="[[:punct:]]", x=t$Token.surface)]
+    t$length <- nrow(t)
   }
   
   t <- as.data.table(t)
