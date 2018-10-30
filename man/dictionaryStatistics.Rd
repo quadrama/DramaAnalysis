@@ -9,8 +9,7 @@
 dictionaryStatistics(t, fields = base_dictionary[fieldnames],
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
   normalizeByFigure = FALSE, normalizeByField = FALSE, byFigure = TRUE,
-  names = FALSE, boost = 1, column = "Token.surface", asList = FALSE,
-  ci = TRUE)
+  names = FALSE, column = "Token.surface", asList = FALSE, ci = TRUE)
 
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
   segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
@@ -40,8 +39,6 @@ the entire play will be used. Possible values are "Drama" (default),
 for the entire segment (play, act, or scene), and not for individual characters.}
 
 \item{names}{Logical. Whether the resulting table contains figure ids or names.}
-
-\item{boost}{A scaling factor to generate nicer values.}
 
 \item{column}{The table column we apply the dictionary on. 
 Should be either "Token.surface" or "Token.lemma".}
