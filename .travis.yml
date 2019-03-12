@@ -11,3 +11,8 @@ r_binary_packages:
 - knitr
 - rmarkdown
 - igraph
+- dplyr
+- xts
+- tidyselect
+- testthat
+- XML
