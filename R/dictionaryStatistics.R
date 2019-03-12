@@ -78,8 +78,6 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param normalizeByFigure Logical. Whether to normalize by figure speech length
 #' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
 #' @param names Logical. Whether the resulting table contains figure ids or names.
-#' @param figureColumn Character. The column name to use for characters. Depends on the names parameter.
-#' @param boost A scaling factor to generate nicer values.
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
@@ -103,8 +101,6 @@ dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
                                  normalizeByField = FALSE, 
                                  byFigure = TRUE,
                                  names = FALSE, 
-                                 figureColumn=ifelse(names,"Speaker.figure_surface","Speaker.figure_id"),
-                                 boost = 1,
                                  column="Token.surface", 
                                  asList = FALSE,
                                  ci = TRUE) {
@@ -141,12 +137,7 @@ dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
                      by.x="begin.Scene",
                      by.y="begin.Scene")
         dss$begin.Scene <- NULL
-        if (byFigure) {
-          data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene",figureColumn,x))
-          colnames(dss)[5] <- "figure"
-        } else {
-          data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene",x))
-        }
+        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","figure",x))
       }
       dss
     } else {
@@ -167,7 +158,7 @@ dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
     }
     r <- merge(r,tokens,
                by.x=c("corpus","drama","figure"),
-               by.y=c("corpus","drama",figureColumn),
+               by.y=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),
                allow.cartesian = TRUE)
     r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
     r$N <- NULL
@@ -257,7 +248,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   }
   
   colnames(r)[ncol(r)] <- "x"
-
+  colnames(r)[ncol(r)-1] <- "figure"
   if (! is.null(colnames)) {
     colnames(r) <- colnames
   }

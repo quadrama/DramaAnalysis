@@ -19,7 +19,7 @@ Imports:
    git2r (>= 0.24.0)
 Depends:
   R (>= 3.0.0)
-RoxygenNote: 6.1.1
+RoxygenNote: 6.1.0
 Suggests: testthat,
     fmsb (>= 0.6.0),
     knitr,
