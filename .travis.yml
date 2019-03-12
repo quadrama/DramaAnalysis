@@ -9,3 +9,5 @@ r_binary_packages:
 - httr
 - igraph
 - knitr
+- rmarkdown
+- igraph
