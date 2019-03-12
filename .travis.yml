@@ -16,3 +16,4 @@ r_binary_packages:
 - tidyselect
 - testthat
 - XML
+- ggplot2
