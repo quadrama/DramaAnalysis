@@ -5,10 +5,7 @@ warnings_are_errors: false
 r_binary_packages:
 - data.table
 - git2r
-- stats
-- utils
 - readr
 - httr
-- fmsb
 - igraph
 - knitr
