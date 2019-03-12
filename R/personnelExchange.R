@@ -15,7 +15,7 @@
 #' dist_hamming  <- hamming(rksp.0$mtext, variant = "Hamming")
 #' dist_nhamming <- hamming(rksp.0$mtext, variant = "NormalizedHamming")
 hamming <- function(mtext, variant=c("Trilcke","Hamming","NormalizedHamming")) {
-  mtext <- na.omit(mtext)
+  mtext <- na.omit(mtext[,-c("Mentioned.figure_surface", "Mentioned.figure_id")])
   numberOfFigures <- length(unique(mtext$Speaker.figure_surface))
   scenes <- length(unique(mtext$begin.Scene))
   pm <- configuration(mtext, by="Scene", onlyPresence = TRUE)
@@ -35,7 +35,7 @@ hamming <- function(mtext, variant=c("Trilcke","Hamming","NormalizedHamming")) {
 #' @rdname personnelExchange
 #' @export
 scenicDifference <- function(mtext, norm=length(unique(mtext$Speaker.figure_surface))) {
-  mtext <- na.omit(mtext)
+  mtext <- na.omit(mtext[,-c("Mentioned.figure_surface", "Mentioned.figure_id")])
   numberOfFigures <- length(unique(mtext$Speaker.figure_surface))
   scenes <- length(unique(mtext$begin.Scene))
   
