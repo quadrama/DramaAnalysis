@@ -96,6 +96,7 @@ scene.act.table <- function(ids, defaultCollection="tg") {
 #' mtext <- loadSegmentedText("test:rksp.0")
 #' }
 loadSegmentedText <- function(ids,defaultCollection="tg") {
+  .Deprecated("segment(loadText(ids), loadSegments(ids))")
   t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
   sat <- scene.act.table(ids=ids, defaultCollection=defaultCollection)
 
