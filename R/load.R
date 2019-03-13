@@ -1,7 +1,3 @@
-HasUtteranceBE <- "QD.HasUtteranceBE"
-HasSegments    <- "QD.HasSegments"
-Drama          <- "QD.Drama"
-
 #' This function initialises the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
 #' "~/QuaDramA/Data2" by default.
