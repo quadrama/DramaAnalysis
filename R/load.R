@@ -116,6 +116,7 @@ loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable <- loadCSV(ids, 
                            defaultCollection = defaultCollection, 
                            variant = "Mentions")
+  class(mentionsTable) <- append(class(mentionsTable),"QD.HasUtteranceBE")
   mentionsTable
 }
 
