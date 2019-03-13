@@ -15,8 +15,7 @@ presenceCore <- function(activeM,passiveM,N) {
 #' @examples 
 #' data(rksp.0)
 #' presence(rksp.0$mtext)
-presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
-  
+presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   # prevent notes in R CMD check
   corpus <- NULL
   actives <- NULL
@@ -28,16 +27,15 @@ presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   .N <- NULL
   . <- NULL
   
+  stopifnot(inherits(drama, Drama))
+  mtext <- segment(drama$text, drama$segments)
 
   conf.active <- configuration(mtext, by="Scene", 
                                onlyPresence = TRUE, 
-                               useCharacterId = TRUE, 
-                               asList = FALSE)
-  conf.passive <- configuration(mtext, by="Scene", 
-                                mode="Passive", 
-                                onlyPresence=TRUE, 
-                                useCharacterId = TRUE, 
-                                asList = FALSE)
+                               useCharacterId = TRUE)
+  conf.passive <- passiveConfiguration(drama, by="Scene", 
+                                       onlyPresence = TRUE)
+  
   meta <- conf.active[,1:3]
   
   conf.passive <- merge(meta, conf.passive, all.x=TRUE)
@@ -55,15 +53,15 @@ presence <- function(mtext, passiveOnlyWhenNotActive=TRUE) {
   # passive
   conf.passive$passives <- rowSums(conf.passive[,4:ncol(conf.passive)])
 
-  conf.active <- conf.active[order(conf.active$figure)]
-  conf.passive <- conf.passive[order(conf.passive$figure)]  
+  conf.active <- conf.active[order(conf.active$character)]
+  conf.passive <- conf.passive[order(conf.passive$character)]  
   
   r <- merge(r, 
-             conf.active[,.(corpus,drama,figure,actives)],
-             by=c("corpus","drama","figure"), all.x = TRUE)
+             conf.active[,.(corpus,drama,character,actives)],
+             by=c("corpus","drama","character"), all.x = TRUE)
   r <- merge(r, 
-             conf.passive[,.(corpus,drama,figure,passives)],
-             by=c("corpus","drama","figure"), all.x = TRUE)
+             conf.passive[,.(corpus,drama,character,passives)],
+             by=c("corpus","drama","character"), all.x = TRUE)
   
   
   if (passiveOnlyWhenNotActive) {
