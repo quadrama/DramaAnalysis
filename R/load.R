@@ -1,3 +1,5 @@
+HasUtteranceBE <- "QD.HasUtteranceBE"
+HasSegments    <- "QD.HasSegments"
 
 #' This function initialises the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
@@ -111,6 +113,23 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
   mtext
 }
 
+#' @export
+loadMentions <- function(ids, defaultCollection="qd") {
+  mentionsTable <- loadCSV(ids, 
+                           defaultCollection = defaultCollection, 
+                           variant = "Mentions")
+  class(mentionsTable) <- append(class(mentionsTable), HasUtteranceBE)
+  mentionsTable
+}
+
+#' @export
+loadSegments <- function(ids, defaultCollection="qd") {
+  sat <- scene.act.table(ids, defaultCollection = defaultCollection)
+  class(sat) <- append(class(sat), HasSegments)
+  sat
+}
+
+
 
 ## @param ids A vector containing drama ids to be downloaded
 ## @param includeTokens This argument has no meaning anymore. Tokens are always included.
@@ -135,6 +154,7 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
     t$Speaker.figure_surface <- factor(t$Speaker.figure_surface, levels=allids)
     t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface, levels=allids)
   }
+  class(t) <- append(class(t),"QD.HasUtteranceBE")
   t
 }
 
@@ -176,7 +196,7 @@ loadCharacters <- function(ids,
 }
 
 loadCSV <- function(ids, 
-                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters"), 
+                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters", "Mentions"), 
                     defaultCollection="tg",
                     dataDirectory=getOption("qd.datadir")) {
   
