@@ -7,8 +7,8 @@
 \usage{
 loadFields(fieldnames = c("Liebe", "Familie"),
   baseurl = paste("https://raw.githubusercontent.com/quadrama/metadata/master",
-  ensureSuffix(directory, fileSep), sep = fileSep), directory = "fields/",
-  fileSuffix = ".txt", fileSep = "/")
+  ensureSuffix(directory, fileSep), sep = fileSep),
+  directory = "fields/", fileSuffix = ".txt", fileSep = "/")
 
 enrichDictionary(dictionary, model, top = 100, minimalSimilarity = 0.4)
 }

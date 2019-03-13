@@ -4,8 +4,8 @@
 \alias{figureStatistics}
 \title{Basic Character Statistics}
 \usage{
-figureStatistics(t, names = FALSE, normalize = FALSE, segment = c("Drama",
-  "Act", "Scene"), filter_punctuation = FALSE)
+figureStatistics(t, names = FALSE, normalize = FALSE,
+  segment = c("Drama", "Act", "Scene"), filter_punctuation = FALSE)
 }
 \arguments{
 \item{t}{A data.table containing the text. Will be coerced into a data.table,

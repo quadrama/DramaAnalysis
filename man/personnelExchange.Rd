@@ -8,7 +8,8 @@
 \usage{
 hamming(mtext, variant = c("Trilcke", "Hamming", "NormalizedHamming"))
 
-scenicDifference(mtext, norm = length(unique(mtext$Speaker.figure_surface)))
+scenicDifference(mtext,
+  norm = length(unique(mtext$Speaker.figure_surface)))
 }
 \arguments{
 \item{mtext}{The segmented drama text}

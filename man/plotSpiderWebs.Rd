@@ -5,9 +5,9 @@
 \title{Spider-Webs}
 \usage{
 plotSpiderWebs(dstat = NULL, mat = dstat$mat, names = dstat$figure,
-  symbols = c(17, 16, 15, 4, 8), maxValue = max(mat), minValue = min(mat),
-  cglcol = "black", legend = TRUE, legend.cex = 0.7,
-  legend.pos.x = "bottomright", legend.pos.y = NA,
+  symbols = c(17, 16, 15, 4, 8), maxValue = max(mat),
+  minValue = min(mat), cglcol = "black", legend = TRUE,
+  legend.cex = 0.7, legend.pos.x = "bottomright", legend.pos.y = NA,
   legend.horizontal = FALSE, pcol = qd.colors, ...)
 }
 \arguments{

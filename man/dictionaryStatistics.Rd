@@ -8,8 +8,9 @@
 \usage{
 dictionaryStatistics(t, fields = base_dictionary[fieldnames],
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
-  normalizeByFigure = FALSE, normalizeByField = FALSE, byFigure = TRUE,
-  names = FALSE, column = "Token.surface", asList = FALSE, ci = TRUE)
+  normalizeByFigure = FALSE, normalizeByField = FALSE,
+  byFigure = TRUE, names = FALSE, column = "Token.surface",
+  asList = FALSE, ci = TRUE)
 
 dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
   segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
