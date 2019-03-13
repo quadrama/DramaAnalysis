@@ -132,14 +132,15 @@ loadSegments <- function(ids, defaultCollection="qd") {
 
 
 
-## @param ids A vector containing drama ids to be downloaded
-## @param includeTokens This argument has no meaning anymore. Tokens are always included.
-## @param defaultCollection The collection prefix is added if no prefix is found
-## @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
-## representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
-## @keywords internal
+#' @param ids A vector containing drama ids to be downloaded
+#' @param includeTokens This argument has no meaning anymore. Tokens are always included.
+#' @param defaultCollection The collection prefix is added if no prefix is found
+#' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
+#' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
+#' @export
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyCharacterFactors=TRUE) {
   t <- loadCSV(ids, defaultCollection = defaultCollection)
+  colnames(t)[3:4] <- c("utteranceBegin", "utteranceEnd") 
   t$Token.pos <- factor(t$Token.pos)
 
   if (unifyCharacterFactors) {

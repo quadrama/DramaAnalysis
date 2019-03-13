@@ -211,11 +211,11 @@ segment <- function(hasUtteranceBE, segmentTable) {
   segmentTable[is.na(end.Scene),    `:=`(end.Scene    = end.Act),]
   segmentTable[is.na(Number.Scene), `:=`(Number.Scene = 0),]
   
-  data.table::setkey(hasUtteranceBE, "corpus", "drama", "begin", "end")
+  data.table::setkey(hasUtteranceBE, "corpus", "drama", "utteranceBegin", "utteranceEnd")
   data.table::setkey(segmentTable, "corpus", "drama", "begin.Scene", "end.Scene")
   
   mtext <- data.table::foverlaps(hasUtteranceBE, segmentTable, type="any",
-                                 by.x=c("corpus", "drama", "begin", "end"), 
+                                 by.x=c("corpus", "drama", "utteranceBegin", "utteranceEnd"), 
                                  by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
   mtext
 }
