@@ -6,3 +6,11 @@
 
 #' @rdname data
 "rjmw.0"
+
+#' @title Base dictionary
+#' @description A list of word fields, i.e., collections of German lemmas associated 
+#' with the five concepts Familie (family), Krieg (war), Liebe (love), Ratio 
+#' (reason) and Religion (religion).
+#' @format A list with five entries, each of them being a character vector.
+"base_dictionary"
+
