@@ -238,6 +238,15 @@ plot.igraph(g,
             )  
 ```
 
+## Independent Vertex Sets
+
+Independent vertex sets are sets of characters that do not have edges between any two characters. I.e., there is not a single scene in the play in which the characters shown in the vertex sets below are co-present. This is based on the function [`largest_ivs()`](https://igraph.org/r/doc/ivs.html) from the igraph package.
+
+```{r}
+largest_ivs(g)
+```
+
+
 ## Gossip Network
 
 The "gossip network" represents character that talk about other characters. The colors don't follow a particular pattern and are just added for readability. Edge thickness represent how often (number of scenes) this happens, and is scaled logarithmically.
