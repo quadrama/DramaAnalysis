@@ -1,8 +1,8 @@
 Package: DramaAnalysis
 Type: Package
 Title: Scripts to support analysis of dramatic texts
-Version: 2.1.0
-Date: 2018-05-25
+Version: 2.2
+Date: 2018-12-31
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>, Tim Strohmayer <st151528@stud.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Description: This package can be used to import and analyse pre-processed dramatic texts.
@@ -13,20 +13,20 @@ Imports:
    stats (>= 3.3.1), 
    utils (>= 3.3.1), 
    reshape2 (>= 1.4.2), 
-   fmsb (>= 0.6.0),
-   rmarkdown (>= 1.8),
    readr (>= 1.1.1),
    data.table (>= 1.10.4),
    httr (>= 1.2.1),
-   wordVectors (>= 2.0),
-   git2r (>= 0.19.0),
-   igraph (>= 1.1.2)
+   git2r (>= 0.24.0)
 Depends:
   R (>= 3.0.0)
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Suggests: testthat,
+    fmsb (>= 0.6.0),
     knitr,
-    highcharter
+    highcharter,
+    rmarkdown (>= 1.8),
+    igraph (>= 1.1.2),
+    wordVectors (>= 2.0)
 Encoding: UTF-8
 VignetteBuilder: knitr
 Remotes: bmschmidt/wordVectors@2.0

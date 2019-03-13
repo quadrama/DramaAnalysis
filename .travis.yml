@@ -1,4 +1,19 @@
 language: r
-sudo: false
+sudo: true
 cache: packages 
 warnings_are_errors: false
+r_binary_packages:
+- data.table
+- git2r
+- readr
+- httr
+- igraph
+- knitr
+- rmarkdown
+- igraph
+- dplyr
+- xts
+- tidyselect
+- testthat
+- XML
+- ggplot2

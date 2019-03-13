@@ -53,6 +53,8 @@ First, we calculate figure statistics.
 fstat <- figureStatistics(text, names=TRUE, normalize=FALSE)
 summary(fstat)
 ```
+By default, all punctuation marks are counted as tokens. Since version 2.2.0, punctuation can be excluded with the argument `filter_punctuation = TRUE`.
+
 This figure statistics table already contains all the information we need and can be inspected and analysed directly. The remaining steps are only needed if you want to plot this information as a stacked bar chart.
 
 ```{r}

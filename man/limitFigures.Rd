@@ -14,7 +14,8 @@ limitFigures(text, by = c("rank", "tokens"), threshold = ifelse(by ==
 
 \item{threshold}{A number specifying the limit}
 
-\item{other}{Whether to summarize filtered figures as 'OTHER' instead of removing their speech}
+\item{other}{Whether to summarize filtered figures as 'OTHER' instead of 
+removing their speech. If it's of type character, it will be used as a name}
 }
 \description{
 This function can be used to remove speech content of certain figures. 

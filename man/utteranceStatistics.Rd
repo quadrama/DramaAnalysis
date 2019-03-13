@@ -4,7 +4,8 @@
 \alias{utteranceStatistics}
 \title{Utterance Statistics}
 \usage{
-utteranceStatistics(t, numberOfFigures = 10, normalizeByDramaLength = TRUE)
+utteranceStatistics(t, numberOfFigures = 10,
+  normalizeByDramaLength = TRUE)
 }
 \arguments{
 \item{t}{The dramatic text(s)}

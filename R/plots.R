@@ -41,16 +41,13 @@ plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors
 #' @param legend.pos.y Y position of legend
 #' @param legend.horizontal Whether to print legend horizontally or vertically
 #' @param ... Miscellaneous arguments to be given for radarchart().
-#' @importFrom fmsb radarchart
 #' @export
 #' @examples 
-#' \dontrun{
 #' data(rksp.0)
 #' fnames <- c("Krieg", "Liebe", "Familie", "Ratio","Religion")
 #' ds <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
 #'                               fieldnames=fnames, asList=TRUE)
 #' plotSpiderWebs(dstat=ds,max=50)
-#' }
 plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure, 
                            symbols=c(17,16,15,4,8),
                            maxValue=max(mat),minValue=min(mat), cglcol="black", 

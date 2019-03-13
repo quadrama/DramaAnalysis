@@ -132,14 +132,14 @@ require(igraph)
 Technically, the matrix we created before is an [adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix). It is therefore simple to convert it to a graph, and igraph offers the function `graph_from_adjacency_matrix()` for this.
 
 ```{r}
-g <- graph_from_adjacency_matrix(rksp.0.co, 
+g <- igraph::graph_from_adjacency_matrix(rksp.0.co, 
                                  weighted=TRUE,     # weighted graph
                                  mode="undirected", # no direction
                                  diag=FALSE         # no looping edges
                                 )
 
 # Now we plot
-plot.igraph(g, 
+igraph::plot.igraph(g, 
             layout=layout_with_gem,       # how to lay out the graph
             main="Co-Occurrence Network: Emilia Galotti",  # title
             vertex.label.cex=0.6,         # label size
@@ -154,7 +154,7 @@ plot.igraph(g,
 
 As a final step, one might want to further work on the graph using [Gephi](https://gephi.org), or other tools. In order to do so, one can export the graph into an appropriate file:
 ```{r eval=FALSE}
-write_graph(g, 
+igraph::write_graph(g, 
             "rksp.0.graphml",
             format="graphml")
 ```

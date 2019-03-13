@@ -9,7 +9,7 @@
 #' Useful to retrieve enriched word fields from metadata repo.
 #' @param fileSep The file separator used to construct the URL
 #' Can be overwritten to load local dictionaries.
-#' @importFrom utils read.csv
+#' @importFrom readr read_csv locale col_character
 #' @section File Format:
 #' Dictionary files should contain one word per line, with no comments or any other meta information. 
 #' The entry name for the dictionary is given as the file name. It's therefore best if it does not contain
@@ -25,7 +25,10 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
   r <- list()
   for (field in fieldnames) {
     url <- paste(baseurl, field, fileSuffix, sep="")
-    r[[field]] <- as.character((read.csv(url, header=F, fileEncoding = "UTF-8"))$V1)
+    r[[field]] <- as.character((readr::read_csv(url, 
+                                                col_names = FALSE, 
+                                                locale = readr::locale(),
+                                                col_types = c(readr::col_character())))$X1)
   }
   r
 }
@@ -37,7 +40,6 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' @param top A maximal number of words that we consider 
 #' @param minimalSimilarity The minimal similarity for a word in order 
 #' to be added
-#' @importFrom wordVectors closest_to
 #' @rdname dictionaryHandling
 #' @export
 #' @examples 
@@ -72,14 +74,10 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param t A text (data.frame or data.table)
 #' @param fieldnames A list of names for the dictionaries. 
 #' @param fields A list of lists that contains the actual field names. 
-#' By default, we try to load the dictionaries using \code{fieldnames} and \code{baseurl}.
+#' By default, we load the base_dictionary.
 #' @param normalizeByFigure Logical. Whether to normalize by figure speech length
 #' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
 #' @param names Logical. Whether the resulting table contains figure ids or names.
-#' @param figureColumn Character. The column name to use for characters. Depends on the names parameter.
-#' @param boost A scaling factor to generate nicer values.
-#' @param baseurl The base path delivering the dictionaries.
-#' Should end in a \code{/}.
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
@@ -96,16 +94,13 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
 #' }
 #' @export
-dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
+dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
                                  fieldnames=c("Liebe"),
                                  segment=c("Drama","Act","Scene"),
                                  normalizeByFigure = FALSE, 
                                  normalizeByField = FALSE, 
                                  byFigure = TRUE,
                                  names = FALSE, 
-                                 figureColumn=ifelse(names,"Speaker.figure_surface","Speaker.figure_id"),
-                                 boost = 1,
-                                 baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
                                  column="Token.surface", 
                                  asList = FALSE,
                                  ci = TRUE) {
@@ -142,12 +137,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
                      by.x="begin.Scene",
                      by.y="begin.Scene")
         dss$begin.Scene <- NULL
-        if (byFigure) {
-          data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene",figureColumn,x))
-          colnames(dss)[5] <- "figure"
-        } else {
-          data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene",x))
-        }
+        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","figure",x))
       }
       dss
     } else {
@@ -168,7 +158,7 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
     }
     r <- merge(r,tokens,
                by.x=c("corpus","drama","figure"),
-               by.y=c("corpus","drama",figureColumn),
+               by.y=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),
                allow.cartesian = TRUE)
     r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
     r$N <- NULL
@@ -258,7 +248,7 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   }
   
   colnames(r)[ncol(r)] <- "x"
-
+  colnames(r)[ncol(r)-1] <- "figure"
   if (! is.null(colnames)) {
     colnames(r) <- colnames
   }
@@ -354,6 +344,10 @@ regroup <- function(dstat, by=c("Character","Field")) {
             }
             if ("Number.Act" %in% names(dstat) && "Number.Scene" %in% names(dstat)) {
               df$Segment <- paste(as.roman(df$Number.Act), df$Number.Scene)
+            } else if ("Number.Act" %in% names(dstat)) {
+              df$Segment <- paste(as.roman(df$Number.Act))
+            } else {
+              df$Segment <- dstat$drama
             }
             
             df2 <- reshape(df, direction="wide", timevar=c("Segment"), idvar=c("figure"),drop=c("Number.Act","Number.Scene"))
@@ -365,4 +359,21 @@ regroup <- function(dstat, by=c("Character","Field")) {
           names(l) <- colnames(dstat$mat)
           return(l)
         });
+}
+
+#' @title Filtering Frequency Table by Dictionary/-ies
+#' @description This function can be used to filter a matrix as produced by 
+#' \code{frequencytable()} by the words in the given dictionary(/-ies).
+#' @param ft A matrix as produced by \code{frequencytable()}.
+#' @param fieldnames A list of names for the dictionaries.
+#' @param fields A list of lists that contains the actual field names. 
+#' By default, we load the base_dictionary (as in \code{dictionaryStatistics()}).
+#' @export
+#' @examples
+#' data(rksp.0)
+#' filtered <- filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE), fieldnames=c("Krieg", "Familie"))
+filterByDictionary <- function(ft, 
+                           fields=base_dictionary[fieldnames],
+                           fieldnames=c("Liebe")) {
+  as.matrix(ft[,which(colnames(ft) %in% unlist(fields))])
 }

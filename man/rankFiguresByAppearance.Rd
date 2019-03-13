@@ -4,7 +4,8 @@
 \alias{rankFiguresByAppearance}
 \title{Rank figures by their 1st appearance}
 \usage{
-rankFiguresByAppearance(figures, text, columnTitle = "Rank (1st appearance)")
+rankFiguresByAppearance(figures, text,
+  columnTitle = "Rank (1st appearance)")
 }
 \arguments{
 \item{figures}{A data frame containing the figures}

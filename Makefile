@@ -1,6 +1,6 @@
 TDIR=../DramaAnalysis.wiki
 VIG=vignettes
-VERSION=$(shell grep -o -e 'Version:.*' DESCRIPTION | egrep -o '\d+\.\d+\.\d+')
+VERSION=$(shell grep -o -e 'Version:.*' DESCRIPTION | egrep -o '\d+\.\d+(\.\d+)?')
 
 check:
 	cd .. && R CMD build DramaAnalysis && R CMD check DramaAnalysis_${VERSION}.tar.gz

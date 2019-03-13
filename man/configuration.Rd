@@ -4,8 +4,9 @@
 \alias{configuration}
 \title{Character Configuration}
 \usage{
-configuration(mtext, by = c("Act", "Scene"), mode = c("Active", "Passive"),
-  onlyPresence = FALSE, useCharacterId = FALSE, asList = TRUE)
+configuration(mtext, by = c("Act", "Scene"), mode = c("Active",
+  "Passive"), onlyPresence = FALSE, useCharacterId = FALSE,
+  asList = TRUE)
 }
 \arguments{
 \item{mtext}{The text including Act and Scene markings}

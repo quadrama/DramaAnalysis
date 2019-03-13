@@ -11,7 +11,8 @@ limitFiguresByTokens(t, minTokens = 100, other = FALSE)
 
 \item{minTokens}{The minimal amount of tokens a figure has to speak}
 
-\item{other}{Whether to summarize filtered figures as 'OTHER' instead of removing their speech}
+\item{other}{Whether to summarize filtered figures as 'OTHER' instead of removing 
+their speech. If it's of type character, it will be used as a name}
 }
 \description{
 This method removes the spoken tokens by all figures that speak infrequently.
