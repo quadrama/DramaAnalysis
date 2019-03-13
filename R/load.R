@@ -155,7 +155,7 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
     t$Speaker.figure_surface <- factor(t$Speaker.figure_surface, levels=allids)
     t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface, levels=allids)
   }
-  class(t) <- append(class(t),"QD.HasUtteranceBE")
+  class(t) <- append(class(t), HasUtteranceBE)
   t
 }
 
