@@ -1,5 +1,6 @@
 HasUtteranceBE <- "QD.HasUtteranceBE"
 HasSegments    <- "QD.HasSegments"
+Drama          <- "QD.Drama"
 
 #' This function initialises the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
@@ -24,6 +25,16 @@ setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDram
 #' @rdname setup
 setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd.datadir"), "collections")) {
   options(qd.collectionDirectory=collectionDirectory)
+}
+
+loadDrama <- function(ids, defaultCollection="qd") {
+  drama <- list()
+  drama$text     <- loadText(ids, defaultCollection = defaultCollection)
+  drama$meta     <- loadMeta(ids)
+  drama$segments <- loadSegments(ids, defaultCollection = defaultCollection)
+  drama$mentions <- loadMentions(ids, defaultCollection = defaultCollection)
+  class(drama) <- append(class(drama), Drama)
+  drama
 }
 
 #' @importFrom utils read.table
