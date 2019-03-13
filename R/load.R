@@ -1,3 +1,4 @@
+HasUtteranceBE <- "QD.HasUtteranceBE"
 
 #' This function initialises the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
@@ -116,7 +117,7 @@ loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable <- loadCSV(ids, 
                            defaultCollection = defaultCollection, 
                            variant = "Mentions")
-  class(mentionsTable) <- append(class(mentionsTable),"QD.HasUtteranceBE")
+  class(mentionsTable) <- append(class(mentionsTable), HasUtteranceBE)
   mentionsTable
 }
 
