@@ -1,4 +1,5 @@
 HasUtteranceBE <- "QD.HasUtteranceBE"
+HasSegments    <- "QD.HasSegments"
 
 #' This function initialises the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
@@ -120,6 +121,15 @@ loadMentions <- function(ids, defaultCollection="qd") {
   class(mentionsTable) <- append(class(mentionsTable), HasUtteranceBE)
   mentionsTable
 }
+
+#' @export
+loadSegments <- function(ids, defaultCollection="qd") {
+  sat <- scene.act.table(ids, defaultCollection = defaultCollection)
+  class(sat) <- append(class(sat), HasSegments)
+  sat
+}
+
+
 
 ## @param ids A vector containing drama ids to be downloaded
 ## @param includeTokens This argument has no meaning anymore. Tokens are always included.
