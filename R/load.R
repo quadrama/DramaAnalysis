@@ -111,6 +111,13 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
   mtext
 }
 
+#' @export
+loadMentions <- function(ids, defaultCollection="qd") {
+  mentionsTable <- loadCSV(ids, 
+                           defaultCollection = defaultCollection, 
+                           variant = "Mentions")
+  mentionsTable
+}
 
 ## @param ids A vector containing drama ids to be downloaded
 ## @param includeTokens This argument has no meaning anymore. Tokens are always included.
@@ -176,7 +183,7 @@ loadCharacters <- function(ids,
 }
 
 loadCSV <- function(ids, 
-                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters"), 
+                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters", "Mentions"), 
                     defaultCollection="tg",
                     dataDirectory=getOption("qd.datadir")) {
   
