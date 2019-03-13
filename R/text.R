@@ -200,6 +200,26 @@ report <- function(id="test:rksp.0",
                     output_file = of)
 }
 
+#' @export
+segment <- function(hasUtteranceBE, segmentTable) {
+  stopifnot(inherits(hasUtteranceBE, HasUtteranceBE))
+  stopifnot(inherits(segmentTable,   HasSegments))
+  
+  # if scene begin/end field is NA, we replace it with the act begin/end
+  # therefore, we don't loose any text
+  segmentTable[is.na(begin.Scene),  `:=`(begin.Scene  = begin.Act),]
+  segmentTable[is.na(end.Scene),    `:=`(end.Scene    = end.Act),]
+  segmentTable[is.na(Number.Scene), `:=`(Number.Scene = 0),]
+  
+  data.table::setkey(hasUtteranceBE, "corpus", "drama", "begin", "end")
+  data.table::setkey(segmentTable, "corpus", "drama", "begin.Scene", "end.Scene")
+  
+  mtext <- data.table::foverlaps(hasUtteranceBE, segmentTable, type="any",
+                                 by.x=c("corpus", "drama", "begin", "end"), 
+                                 by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
+  mtext
+}
+
 #' @title Extract section
 #' @description Extracts a sub segment of the text(s).
 #' The result is an empty table if more scenes or acts
