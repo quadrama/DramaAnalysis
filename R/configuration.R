@@ -7,8 +7,7 @@
 #' logical values for stage presence
 #' @param useCharacterId Logical. If true, characters are represented 
 #' by their id instead of their surface form.
-#' @param asList Logical, defaults to TRUE. Whether to return as a list 
-#' instead of a data frame.
+#' @param asList No longer supported.
 #' @param mode Character vector, should be either "Active" or "Passive".
 #' Passive configurations express when characters are mentioned, active
 #' ones when they speak themselves.
@@ -71,7 +70,7 @@ configuration <- function(mtext,
                         timevar = "segmentColumn")
   # replace NA values with zero
   for (col in 4:ncol(cfg)) data.table::set(cfg, which(is.na(cfg[[col]])), col, 0)
-  colnames(cfg)[3:(ncol(cfg))] <- c("figure",seq(1,ncol(cfg)-3))
+  colnames(cfg)[3:(ncol(cfg))] <- c("character",seq(1,ncol(cfg)-3))
   
   if (onlyPresence) {
     for (col in 4:ncol(cfg)) {
@@ -79,12 +78,46 @@ configuration <- function(mtext,
     }
   }
   
-  if (asList) {
-    return(list(matrix=as.matrix(cfg[,4:ncol(cfg)]),drama=cfg[,1:2],figure=cfg[[3]]))
-  } else {
-    #cfg <- data.table::data.table(cfg)
-    #data.table::setkey(cfg, "corpus","drama","figure")
-    return(cfg)
-  }
+  class(cfg) <- c(Configuration, "data.table", "data.frame")
+  
+  cfg  
 }
 
+passiveConfiguration <- function(drama, 
+                                 onlyPresence=FALSE, 
+                                 by=c("Act", "Scene")) {
+  stopifnot(inherits(drama, Drama))
+  by <- match.arg(by)
+  
+  segmented <- segment(drama$mentions, drama$segments)
+  
+  segmentColumn <- switch(by,
+                          Act=quote(Number.Act),
+                          Scene=quote(begin.Scene))
+  speaker2entity <- segmented[,.N,.(corpus,drama,eval(segmentColumn),utteranceSpeakerId,entityId)]
+  # print(speaker2entity)
+  cfg <- stats::reshape(speaker2entity[,-"utteranceSpeakerId"], 
+                        direction = "wide", 
+                        idvar=c("corpus","drama", "entityId"), 
+                        timevar = "segmentColumn")
+  for (col in 4:ncol(cfg)) data.table::set(cfg, which(is.na(cfg[[col]])), col, 0)
+  colnames(cfg)[3:(ncol(cfg))] <- c("character",seq(1,ncol(cfg)-3))
+  
+  if (onlyPresence) {
+    for (col in 4:ncol(cfg)) {
+      cfg[[col]] <- as.logical(cfg[[col]])
+    }
+  }
+  
+  class(cfg) <- c(Configuration, "data.frame")
+  cfg
+}
+
+as.list.QD.Configuration <- function(configuration) {
+  stopifnot(inherits(configuration, Configuration))
+  ret <- list()
+  ret$matrix <- as.matrix(configuration[,4:ncol(configuration)])
+  ret$drama <- configuration[,1:2]
+  ret$character <- configuration[[3]]
+  ret
+}
