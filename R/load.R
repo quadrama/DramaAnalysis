@@ -29,7 +29,7 @@ loadDrama <- function(ids, defaultCollection="qd") {
   drama$meta     <- loadMeta(ids)
   drama$segments <- loadSegments(ids, defaultCollection = defaultCollection)
   drama$mentions <- loadMentions(ids, defaultCollection = defaultCollection)
-  class(drama) <- append(class(drama), Drama)
+  class(drama) <- append(Drama, class(drama))
   drama
 }
 
@@ -113,10 +113,10 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
   sat[is.na(end.Scene),    `:=`(end.Scene    = end.Act),]
   sat[is.na(Number.Scene), `:=`(Number.Scene = 0),]
   
-  data.table::setkey(t, "corpus", "drama", "begin", "end")
+  data.table::setkey(t, "corpus", "drama", "utteranceBegin", "utteranceEnd")
   data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
   mtext <- data.table::foverlaps(t, sat, type="any",
-                                 by.x=c("corpus", "drama", "begin", "end"), 
+                                 by.x=c("corpus", "drama", "utteranceBegin", "utteranceEnd"), 
                                  by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
   mtext
 }
@@ -126,14 +126,14 @@ loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable <- loadCSV(ids, 
                            defaultCollection = defaultCollection, 
                            variant = "Mentions")
-  class(mentionsTable) <- append(class(mentionsTable), HasUtteranceBE)
+  class(mentionsTable) <- append(HasUtteranceBE, class(mentionsTable), )
   mentionsTable
 }
 
 #' @export
 loadSegments <- function(ids, defaultCollection="qd") {
   sat <- scene.act.table(ids, defaultCollection = defaultCollection)
-  class(sat) <- append(class(sat), HasSegments)
+  class(sat) <- append(HasSegments, class(sat))
   sat
 }
 
@@ -163,7 +163,7 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
     t$Speaker.figure_surface <- factor(t$Speaker.figure_surface, levels=allids)
     t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface, levels=allids)
   }
-  class(t) <- append(class(t), HasUtteranceBE)
+  class(t) <- append(HasUtteranceBE, class(t))
   t
 }
 
