@@ -23,6 +23,8 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
   options(qd.collectionDirectory=collectionDirectory)
 }
 
+#' @export
+#' @exportClass QD.Drama
 loadDrama <- function(ids, defaultCollection="qd") {
   drama <- list()
   drama$text     <- loadText(ids, defaultCollection = defaultCollection)
@@ -122,11 +124,12 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
 }
 
 #' @export
+#' @exportClass QD.HasUtteranceBE
 loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable <- loadCSV(ids, 
                            defaultCollection = defaultCollection, 
                            variant = "Mentions")
-  class(mentionsTable) <- append(HasUtteranceBE, class(mentionsTable), )
+  class(mentionsTable) <- append(HasUtteranceBE, class(mentionsTable))
   mentionsTable
 }
 
