@@ -4,13 +4,10 @@
 \alias{configuration}
 \title{Character Configuration}
 \usage{
-configuration(mtext, by = c("Act", "Scene"), mode = c("Active",
-  "Passive"), onlyPresence = FALSE, useCharacterId = FALSE,
-  asList = TRUE)
+configuration(drama, by = c("Act", "Scene"), mode = c("Active",
+  "Passive"), onlyPresence = FALSE)
 }
 \arguments{
-\item{mtext}{The text including Act and Scene markings}
-
 \item{by}{A string, either "Act" or "Scene". Partial matching allowed.}
 
 \item{mode}{Character vector, should be either "Active" or "Passive".
@@ -20,10 +17,10 @@ ones when they speak themselves.}
 \item{onlyPresence}{If TRUE, the resulting matrix only contains 
 logical values for stage presence}
 
+\item{mtext}{The text including Act and Scene markings}
+
 \item{useCharacterId}{Logical. If true, characters are represented 
 by their id instead of their surface form.}
-
-\item{asList}{No longer supported.}
 }
 \description{
 Creates classic drama configuration matrix. Returns either a list with 

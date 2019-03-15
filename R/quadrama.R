@@ -1,4 +1,4 @@
-HasUtteranceBE <- "QD.HasUtteranceBE"
-HasSegments    <- "QD.HasSegments"
-Drama          <- "QD.Drama"
-Configuration  <- "QD.Configuration"
+HasUtteranceBE <- "QDHasUtteranceBE"
+HasSegments    <- "QDHasSegments"
+Drama          <- "QDDrama"
+Configuration  <- "QDConfiguration"

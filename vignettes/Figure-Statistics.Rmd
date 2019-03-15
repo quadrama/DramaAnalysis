@@ -41,7 +41,7 @@ data(rksp.0)
 # Load Miß Sara Sampson
 data(rjmw.0)
 
-text <- rbind(rksp.0$mtext, rjmw.0$mtext)
+text <- combine(rksp.0, rjmw.0)
 
 ```
 
@@ -50,8 +50,8 @@ text <- rbind(rksp.0$mtext, rjmw.0$mtext)
 
 First, we calculate figure statistics. 
 ```{r}
-fstat <- figureStatistics(text, names=TRUE, normalize=FALSE)
-summary(fstat)
+charStats <- characterStatistics(text, names=TRUE, normalize=FALSE)
+summary(charStats)
 ```
 By default, all punctuation marks are counted as tokens. Since version 2.2.0, punctuation can be excluded with the argument `filter_punctuation = TRUE`.
 
@@ -59,7 +59,7 @@ This figure statistics table already contains all the information we need and ca
 
 ```{r}
 # Create a matrix
-mat <- figurematrix(fstat)
+mat <- characterMatrix(charStats)
 summary(mat)
 head(mat$values,5)
 ```
@@ -92,11 +92,9 @@ text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
 We will now combine this information with additional meta data about characters, i.e., gender. 
 
 ```{r}
-# we first create a single table containing data from both plays
-characterdata <- rbind(rksp.0$char, rjmw.0$char)
 
 # Proportion of male / female characters
-barplot(table(characterdata$Gender),col=qd.colors)
+barplot(table(text$characters$Gender),col=qd.colors)
 ```
 
 
@@ -106,8 +104,7 @@ So far, we have counted words. Now we will turn to utterances, and their propert
 
 First, we will use the function `utteranceStatistics()` to extract numbers about utterances
 ```{r}
-ustat <- utteranceStatistics(rksp.0$mtext, 
-                              numberOfFigures = 10, # include 10 figures per drama
+ustat <- utteranceStatistics(rksp.0, 
                               normalizeByDramaLength = FALSE # use absolute values
                             )
 colnames(ustat)
@@ -117,7 +114,7 @@ This creates a table with a single row for each utterance. We can now inspect th
 
 ```{r}
 par(mar=c(10,2,2,2))
-boxplot(utteranceLength ~ figure, # what do we want to correlate 
+boxplot(utteranceLength ~ character, # what do we want to correlate 
         data=ustat, 
         las = 3 # rotate axis labels
       )
@@ -128,16 +125,15 @@ boxplot(utteranceLength ~ figure, # what do we want to correlate
 Next, we want to make the same analysis not for individual characters, but for character groups, based on categories such as gender.
 
 ```{r}
-ustat <- utteranceStatistics(rksp.0$mtext, 
-                              numberOfFigures = 10, # include 10 figures per drama
+ustat <- utteranceStatistics(rjmw.0, 
                               normalizeByDramaLength = FALSE # use absolute values
                             )
 
-characterdata <- rksp.0$char
+characterdata <- rjmw.0$characters
 
 ustat <- merge(ustat, characterdata, 
-               by.x = c("corpus","drama", "figure"),
-               by.y = c("corpus","drama", "figure_surface"))
+               by.x = c("corpus","drama", "character"),
+               by.y = c("corpus","drama", "figure_id"))
 
 par(mar=c(2,2,2,2))
 boxplot(utteranceLength ~ Gender, # what do we want to correlate 
@@ -155,7 +151,7 @@ While the above displays the *length* of utterances, we can also display the pos
 
 ```{r}
 par(mar=c(2,10,2,2))
-stripchart(begin ~ figure, data=ustat, 
+stripchart(utteranceBegin ~ character, data=ustat, 
            las=1, # horizontal labels
            pch=20, # use a small bullet as symbol
            col=qd.colors # get nice colors
@@ -168,12 +164,11 @@ Now it would be useful to include information on act/scene boundaries in this pl
 
 ```{r}
 
-ustat <- utteranceStatistics(rksp.0$mtext, 
-                              numberOfFigures = 10, # include 10 figures per drama
+ustat <- utteranceStatistics(rksp.0, 
                               normalizeByDramaLength = FALSE # use absolute values
                             )
 par(mar=c(2,10,2,2))
-stripchart(begin ~ figure, data=ustat, 
+stripchart(utteranceBegin ~ character, data=ustat, 
            las=1, # horizontal labels
            pch=20, # use a small bullet as symbol
            col=qd.colors, # get nice colors
@@ -181,7 +176,7 @@ stripchart(begin ~ figure, data=ustat,
            )
 
 # add vertical lines for act beginning
-abline(v=unique(rksp.0$mtext$begin.Act)[-1])
+abline(v=unique(rksp.0$segments$begin.Act)[-1])
 ```
 
 Please note that the information contained in this plot is very similar to the information in the [visual and relative configuration matrices](Configuration-Matrices).
@@ -190,7 +185,7 @@ Please note that the information contained in this plot is very similar to the i
 
 When characters are speaking on stage, they are actively present. But they can also be passively present, if other characters refer to them. Both levels of presence can be extracted with the `presence()` function:
 ```{r}
-pres <- presence(rksp.0$mtext)
+pres <- presence(rksp.0)
 pres
 ```
 
@@ -206,9 +201,9 @@ plot(x=pres$active/pres$scenes,
      xlab="Active", 
      ylab="Passive",
      main="Character Presence")
-text(x=pres$active/pres$scenes, 
-     y=pres$passive/pres$scenes, 
-     labels=substr(pres$figure,0,20), 
+text(x=pres$actives/pres$scenes, 
+     y=pres$passives/pres$scenes, 
+     labels=substr(pres$character,0,20), 
      pos=3)
 ```
 

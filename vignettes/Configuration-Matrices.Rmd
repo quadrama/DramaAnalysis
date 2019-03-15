@@ -35,15 +35,14 @@ As configuration matrices [@Pfister:1988aa] are dependent on information about a
 require(DramaAnalysis)
 data(rksp.0)
 
-colnames(rksp.0$mtext)
+colnames(rksp.0$text)
 ```
 
 In addition to the regular text and speakers, this table also contains informatio about the scenes and acts in which each token is spoken.
 
 ```{r}
-c <- configuration(rksp.0$mtext)
-c$matrix
-c$figure
+c <- configuration(rksp.0)
+c
 ```
 
 This creates a basic configuration matrix, but instead of just containing the presence or absence of a figure, it contains the number of spoken tokens for each act for each figure. 
@@ -51,12 +50,14 @@ This creates a basic configuration matrix, but instead of just containing the pr
 We can use this easily to create a stacked bar chart, showing the distribution visually (you probably need a color palette with more than ten colors ... )
 
 ```{r}
+cList <- as.list(c)
+
 par(mar=c(2,2,2,10))
-barplot(c$matrix, 
-        legend.text = c$figure, # legend text
+barplot(cList$matrix, 
+        legend.text = cList$figure, # legend text
         args.legend = list(cex=0.5, # legend font size
                            x=7.5, # legend x position
-                           y=max(colSums(c$matrix)) # legend y pos
+                           y=max(colSums(cList$matrix)) # legend y pos
                         ), 
         col=qd.colors)
 ```
@@ -64,14 +65,14 @@ barplot(c$matrix,
 Since each act has a different length, it would be useful to normalize each block, according to the total number of spoken tokens. This way, we can display the relative active presence of each figure in each act. We normalize by dividing by the sum of each column.
 
 ```{r}
-c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
-c$matrix
+cList$matrix <- scale(cList$matrix, center=FALSE, scale=colSums(cList$matrix))
+cList$matrix
 par(mar=c(2,2,2,10))
-barplot(c$matrix, 
-        legend.text=c$figure, # set legend text
+barplot(cList$matrix, 
+        legend.text=cList$figure, # set legend text
         args.legend = list(cex=0.5, # legend font size
                            x=7.5, # legend x position
-                           y=max(colSums(c$matrix)) # legend y pos
+                           y=max(colSums(cList$matrix)) # legend y pos
                         ),
         col=qd.colors)
 ```
@@ -80,20 +81,22 @@ barplot(c$matrix,
 
 Configuration matrices are also often used to get an overview of who is copresent on stage. First, we create a configuration matrix that only represents presence or absence of a figure (and we switch to scenes). Obviously, the resulting matrix has many more columns.
 ```{r}
-c <- configuration(rksp.0$mtext, onlyPresence = TRUE, by="Scene")
+c <- configuration(rksp.0, onlyPresence = TRUE, by="Scene")
 
 # to see the matrix (not shown here):
-# c$matrix 
+# as.list(c)$matrix 
 ``` 
 
 Creating a co-occurrence matrix is a simple matter of matrix multiplication:
 ```{r}
-rksp.0.co <- c$matrix %*% t(c$matrix)
-rksp.0.co
+cList <- as.list(c)
+
+copresence <- cList$matrix %*% t(cList$matrix)
+copresence
 
 # add figure names
-rownames(rksp.0.co) <- c$figure
-colnames(rksp.0.co) <- c$figure
+rownames(copresence) <- cList$figure
+colnames(copresence) <- cList$figure
 ```
 
 ### As Heatmap
@@ -102,10 +105,10 @@ This can be visualised in a simple heat map:
 ```{r}
 # since it's a square matrix, we don't need the bottom right triangle
 # and diagonales.
-rksp.0.co[lower.tri(rksp.0.co,diag=TRUE)] <- NA
+copresence[lower.tri(copresence,diag=TRUE)] <- NA
 
 par(mar=c(10,10,1,1)) # plot margins
-image(rksp.0.co, 
+image(copresence, 
       col = rgb(64,111,184, alpha=(seq(0,255)),
                 maxColorValue = 256),
       xaxt= "n",  # no x axis
@@ -113,9 +116,9 @@ image(rksp.0.co,
       frame=TRUE  # print a frame around the heatmap
       )
 # add the x axis
-axis(1, at = seq(0,1,length.out = length(c$figure)), labels = c$figure, las=3)
+axis(1, at = seq(0,1,length.out = length(cList$figure)), labels = cList$figure, las=3)
 # add the y axis
-axis(2, at = seq(0,1,length.out = length(c$figure)), labels = c$figure, las=1)
+axis(2, at = seq(0,1,length.out = length(cList$figure)), labels = cList$figure, las=1)
 ```
 
 Apparently, Marinelli and Der Prinz have the most shared scenes. Marinelli also shares a scene with most other figures (vertical bar).
@@ -132,7 +135,7 @@ require(igraph)
 Technically, the matrix we created before is an [adjacency matrix](https://en.wikipedia.org/wiki/Adjacency_matrix). It is therefore simple to convert it to a graph, and igraph offers the function `graph_from_adjacency_matrix()` for this.
 
 ```{r}
-g <- igraph::graph_from_adjacency_matrix(rksp.0.co, 
+g <- igraph::graph_from_adjacency_matrix(copresence, 
                                  weighted=TRUE,     # weighted graph
                                  mode="undirected", # no direction
                                  diag=FALSE         # no looping edges

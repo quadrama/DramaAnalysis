@@ -24,13 +24,16 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
 }
 
 #' @export
-#' @exportClass QD.Drama
+#' @exportClass QDDrama
 loadDrama <- function(ids, defaultCollection="qd") {
   drama <- list()
   drama$text     <- loadText(ids, defaultCollection = defaultCollection)
   drama$meta     <- loadMeta(ids)
   drama$segments <- loadSegments(ids, defaultCollection = defaultCollection)
   drama$mentions <- loadMentions(ids, defaultCollection = defaultCollection)
+  drama$characters <- loadCSV(ids, 
+                              variant="Characters", 
+                              defaultCollection = defaultCollection)
   class(drama) <- append(Drama, class(drama))
   drama
 }

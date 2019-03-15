@@ -12,6 +12,7 @@ presenceCore <- function(activeM,passiveM,N) {
 #' @param passiveOnlyWhenNotActive Logical. If true (default), passive presence is only 
 #' counted if a character is not actively present in the scene.
 #' @export
+#' @exportClass QDDrama
 #' @examples 
 #' data(rksp.0)
 #' presence(rksp.0$mtext)
@@ -21,20 +22,20 @@ presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   actives <- NULL
   passives <- NULL
   figure <- NULL
-  drama <- NULL
   fref <- NULL
   begin.Scene <- NULL
   .N <- NULL
   . <- NULL
   
-  stopifnot(inherits(drama, Drama))
+  stopifnot(inherits(drama, "QDDrama"))
   mtext <- segment(drama$text, drama$segments)
 
-  conf.active <- configuration(mtext, by="Scene", 
-                               onlyPresence = TRUE, 
-                               useCharacterId = TRUE)
-  conf.passive <- passiveConfiguration(drama, by="Scene", 
-                                       onlyPresence = TRUE)
+  conf.active <- configuration(drama, by="Scene", 
+                               mode="Active",
+                               onlyPresence = TRUE)
+  conf.passive <- configuration(drama, by="Scene", 
+                                mode="Passive",
+                                onlyPresence = TRUE)
   
   meta <- conf.active[,1:3]
   
@@ -42,25 +43,24 @@ presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   for (j in seq_len(ncol(conf.passive)))
     data.table::set(conf.passive, which(is.na(conf.passive[[j]])),j,FALSE)
   
-  rownames(conf.active) <- conf.active$figure
-  rownames(conf.passive) <- conf.passive$figure
-  agg.scenes <- mtext[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)]
-  r <- merge(meta, agg.scenes, by=c("corpus","drama"))
-  
+  rownames(conf.active) <- conf.active$character
+  rownames(conf.passive) <- conf.passive$character
+  #agg.scenes <- mtext[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)]
+  r <- merge(meta, drama$segments[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)], by=c("corpus","drama"))
+
 
   # active
   conf.active$actives <- rowSums(conf.active[,4:ncol(conf.active)])
   # passive
   conf.passive$passives <- rowSums(conf.passive[,4:ncol(conf.passive)])
 
-  conf.active <- conf.active[order(conf.active$character)]
-  conf.passive <- conf.passive[order(conf.passive$character)]  
-  
+  #conf.active <- conf.active[order(conf.active$character)]
+  #conf.passive <- conf.passive[order(conf.passive$character)]  
   r <- merge(r, 
-             conf.active[,.(corpus,drama,character,actives)],
+             conf.active[,c("corpus","drama","character","actives")],
              by=c("corpus","drama","character"), all.x = TRUE)
   r <- merge(r, 
-             conf.passive[,.(corpus,drama,character,passives)],
+             conf.passive[,c("corpus","drama","character","passives")],
              by=c("corpus","drama","character"), all.x = TRUE)
   
   
@@ -79,7 +79,6 @@ presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   }
   
   #r <- merge( r, data.frame(figure=names(passives), passive=passives), by="figure")
-  
   r$presence <- ( (r$actives - r$passives) / r$scenes )
   r
 }

@@ -7,7 +7,6 @@
 #' logical values for stage presence
 #' @param useCharacterId Logical. If true, characters are represented 
 #' by their id instead of their surface form.
-#' @param asList No longer supported.
 #' @param mode Character vector, should be either "Active" or "Passive".
 #' Passive configurations express when characters are mentioned, active
 #' ones when they speak themselves.
@@ -20,6 +19,7 @@
 #' configuration matrices. They look very similar, but are based
 #' on who's mentioned in a scene or an act. 
 #' @export
+#' @exportClass QDConfiguration
 #' @examples
 #' # Active configuration matrix
 #' data(rksp.0)
@@ -27,12 +27,12 @@
 #' # Passive configuration matrix
 #' cfg <- configuration(rksp.0$mtext, asList=FALSE, mode="Passive")
 #' 
-configuration <- function(mtext, 
+configuration <- function(d, 
                           by=c("Act", "Scene"), 
                           mode=c("Active", "Passive"),
-                          onlyPresence=FALSE, 
-                          useCharacterId=FALSE, 
-                          asList=TRUE) {
+                          onlyPresence=FALSE) {
+  stopifnot(inherits(d, "QDDrama"))
+  
   by <- match.arg(by)
   mode <- match.arg(mode)
   
@@ -40,34 +40,29 @@ configuration <- function(mtext,
   . <- NULL
   .N <- NULL
   corpus <- NULL
-  drama <- NULL
   Speaker.figure_surface <- NULL
   Number.Act <- NULL
   
-  t <- mtext
-
+  
+  segmented <- switch(mode,
+                      Active=segment(d$text, d$segments),
+                      Passive=segment(d$mentions, d$segments))
   segmentColumn <- switch(by,
                           Act=quote(Number.Act),
                           Scene=quote(begin.Scene))
-  
-  
   characterColumn <- switch(mode,
-                            Active=quote(Speaker.figure_surface),
-                            Passive=quote(Mentioned.figure_surface))
-  if (useCharacterId) {
-    characterColumn <- switch(mode,
-                              Active=quote(Speaker.figure_id),
-                              Passive=quote(Mentioned.figure_id))
-  }
+                            Active=quote(Speaker.figure_id),
+                            Passive=quote(entityId))
   
-  
-  words.per.segment <- t[,.N,.(corpus,drama, eval(characterColumn), eval(segmentColumn))]
-  if (mode == "Passive") {
-    words.per.segment <- na.omit(words.per.segment)
-  }
+  words.per.segment <- segmented[,.N,
+                                 .(corpus,drama, eval(characterColumn), eval(segmentColumn))]
+  #if (mode == "Passive") {
+  #  words.per.segment <- na.omit(words.per.segment)
+  #}
   cfg <- stats::reshape(words.per.segment, direction="wide", 
                         idvar = c("corpus","drama","characterColumn"), 
                         timevar = "segmentColumn")
+  
   # replace NA values with zero
   for (col in 4:ncol(cfg)) data.table::set(cfg, which(is.na(cfg[[col]])), col, 0)
   colnames(cfg)[3:(ncol(cfg))] <- c("character",seq(1,ncol(cfg)-3))
@@ -78,43 +73,15 @@ configuration <- function(mtext,
     }
   }
   
-  class(cfg) <- c(Configuration, "data.table", "data.frame")
+  class(cfg) <- c(Configuration, "data.frame")
   
   cfg  
 }
 
-passiveConfiguration <- function(drama, 
-                                 onlyPresence=FALSE, 
-                                 by=c("Act", "Scene")) {
-  stopifnot(inherits(drama, Drama))
-  by <- match.arg(by)
-  
-  segmented <- segment(drama$mentions, drama$segments)
-  
-  segmentColumn <- switch(by,
-                          Act=quote(Number.Act),
-                          Scene=quote(begin.Scene))
-  speaker2entity <- segmented[,.N,.(corpus,drama,eval(segmentColumn),utteranceSpeakerId,entityId)]
-  # print(speaker2entity)
-  cfg <- stats::reshape(speaker2entity[,-"utteranceSpeakerId"], 
-                        direction = "wide", 
-                        idvar=c("corpus","drama", "entityId"), 
-                        timevar = "segmentColumn")
-  for (col in 4:ncol(cfg)) data.table::set(cfg, which(is.na(cfg[[col]])), col, 0)
-  colnames(cfg)[3:(ncol(cfg))] <- c("character",seq(1,ncol(cfg)-3))
-  
-  if (onlyPresence) {
-    for (col in 4:ncol(cfg)) {
-      cfg[[col]] <- as.logical(cfg[[col]])
-    }
-  }
-  
-  class(cfg) <- c(Configuration, "data.frame")
-  cfg
-}
+
 
 #' @export
-as.list.QD.Configuration <- function(configuration) {
+as.list.QDConfiguration <- function(configuration) {
   stopifnot(inherits(configuration, Configuration))
   ret <- list()
   ret$matrix <- as.matrix(configuration[,4:ncol(configuration)])

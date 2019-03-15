@@ -4,15 +4,12 @@
 \alias{utteranceStatistics}
 \title{Utterance Statistics}
 \usage{
-utteranceStatistics(t, numberOfFigures = 10,
-  normalizeByDramaLength = TRUE)
+utteranceStatistics(drama, normalizeByDramaLength = TRUE)
 }
 \arguments{
-\item{t}{The dramatic text(s)}
-
-\item{numberOfFigures}{The maximal number of figures per drama to include. Default: 10. Set to FALSE to include all figures.}
-
 \item{normalizeByDramaLength}{Logical value. If true, the resulting values will be normalized by the length of the drama.}
+
+\item{t}{The dramatic text(s)}
 }
 \description{
 This method calculates the length of each utterance, organised by figure and drama.
