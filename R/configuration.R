@@ -113,6 +113,7 @@ passiveConfiguration <- function(drama,
   cfg
 }
 
+#' @export
 as.list.QD.Configuration <- function(configuration) {
   stopifnot(inherits(configuration, Configuration))
   ret <- list()

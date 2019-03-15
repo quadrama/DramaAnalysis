@@ -4,13 +4,13 @@
 \alias{presence}
 \title{Active and Passive Presence}
 \usage{
-presence(mtext, passiveOnlyWhenNotActive = TRUE)
+presence(drama, passiveOnlyWhenNotActive = TRUE)
 }
 \arguments{
-\item{mtext}{A single segmented text}
-
 \item{passiveOnlyWhenNotActive}{Logical. If true (default), passive presence is only 
 counted if a character is not actively present in the scene.}
+
+\item{mtext}{A single segmented text}
 }
 \description{
 This function should be called for a single text. It returns 

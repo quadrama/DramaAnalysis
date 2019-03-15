@@ -23,8 +23,7 @@ logical values for stage presence}
 \item{useCharacterId}{Logical. If true, characters are represented 
 by their id instead of their surface form.}
 
-\item{asList}{Logical, defaults to TRUE. Whether to return as a list 
-instead of a data frame.}
+\item{asList}{No longer supported.}
 }
 \description{
 Creates classic drama configuration matrix. Returns either a list with 
