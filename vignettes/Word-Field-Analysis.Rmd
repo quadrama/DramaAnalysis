@@ -59,7 +59,7 @@ dstat <- dictionaryStatisticsSingle(
   column="Token.lemma" # we count lemmas instead of surface forms
 )
 
-summary(dstat)
+#summary(dstat)
 ```
 
 We can visualise these counts in a simple bar chart:
