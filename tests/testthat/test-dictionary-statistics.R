@@ -68,7 +68,7 @@ test_that("dictionaryStatistics(rksp.0$mtext, fieldnames=c('Ratio', 'Religion'),
   expect_equal(colnames(dstat[,4]), "Ratio")  
   expect_equal(colnames(dstat[,5]), "Religion")
   expect_equal(as.numeric(dstat[5,4]), 0.004211511)
-  expect_equal(as.numeric(dstat[5,5]), 0.0028076743)
+  expect_equal(as.numeric(dstat[8,5]), 0.002160994)
 })
 
 
@@ -77,7 +77,7 @@ test_that("dictionaryStatistics(rksp.0$mtext, fieldnames=c('Ratio', 'Religion'),
 filtered <- filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE))
 test_that("filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE)  
           has correct dimensions and produces correct output", {
-  expect_length(filtered, 403)
+  expect_length(filtered, 416)
   expect_length(filtered[,1], 13)
   expect_equal(FALSE %in% (colnames(filtered) %in% base_dictionary$Liebe), FALSE)
 })
