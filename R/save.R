@@ -19,6 +19,17 @@ isolateFigureSpeech <- function(t,
                              count_punctuation=TRUE,
                              write_to_files=TRUE,
                              dir=getOption("qd.datadir")) {
+  
+  # prevent notes in R CMD check
+  Token.surface <- NULL
+  . <- NULL
+  drama <- NULL
+  Speaker.figure_id <- NULL
+  Number.Act <- NULL
+  Number.Scene <- NULL
+  `:=` <- NULL
+  fn <- NULL
+  
   t <- t[, Token.surface, by=.(drama, Speaker.figure_id, Number.Act, Number.Scene)]
   t$drama <- gsub("_", ".", t[,drama])
   t$Speaker.figure_id <- gsub("_", ".", t[,Speaker.figure_id])
@@ -61,7 +72,7 @@ isolateFigureSpeech <- function(t,
   r <- unlist(r, recursive=FALSE)
   
   if (write_to_files) {
-    o <- capture.output(lapply(names(r), function(x) {
+    o <- utils::capture.output(lapply(names(r), function(x) {
       fn <- paste(dir, "/", x, sep="")
       if (file.exists(fn)) {file.remove(fn)}
       lapply(r[[x]], cat, sep="\n", file=fn, append=TRUE)

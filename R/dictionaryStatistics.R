@@ -1,4 +1,5 @@
-
+# add global variable base_dictionary to prevent notes in R CMD check 
+globalVariables("base_dictionary")
 
 #' @title Dictionary Handling
 #' @description \code{loadFields()} loads dictionaries that are available on the web as plain text files.
@@ -371,7 +372,8 @@ regroup <- function(dstat, by=c("Character","Field")) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' filtered <- filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE), fieldnames=c("Krieg", "Familie"))
+#' ft <- frequencytable(rksp.0$mtext, byFigure = TRUE)
+#' filtered <- filterByDictionary(ft, fieldnames=c("Krieg", "Familie"))
 filterByDictionary <- function(ft, 
                            fields=base_dictionary[fieldnames],
                            fieldnames=c("Liebe")) {

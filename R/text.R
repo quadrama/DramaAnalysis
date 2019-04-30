@@ -45,6 +45,17 @@ limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="toke
 #' @keywords internal
 #' @importFrom utils head
 limitFiguresByRank <- function(t, maxRank=10, other=FALSE) {
+  
+  # prevent notes in R CMD check
+  `:=` <- NULL
+  n <- NULL
+  .N <- NULL
+  . <- NULL
+  corpus <- NULL
+  drama <- NULL
+  Speaker.figure_surface <- NULL
+  .SD <- NULL
+  
   if (other == FALSE) {
     r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n%in%maxN(unique(n),maxRank)], by=.(corpus,drama)][,n:=NULL,][]
   } else {
@@ -70,6 +81,17 @@ limitFiguresByRank <- function(t, maxRank=10, other=FALSE) {
 #' their speech. If it's of type character, it will be used as a name
 #' @keywords internal
 limitFiguresByTokens <- function(t, minTokens=100, other=FALSE) {
+  
+  # prevent notes in R CMD check
+  `:=` <- NULL
+  n <- NULL
+  .N <- NULL
+  . <- NULL
+  corpus <- NULL
+  drama <- NULL
+  Speaker.figure_surface <- NULL
+  .SD <- NULL
+  
   if (other == FALSE) {
     r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n>=minTokens],by=.(corpus,drama)][,n:=NULL][]
   } else {

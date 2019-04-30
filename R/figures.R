@@ -30,6 +30,8 @@ figureStatistics <- function(t, names = FALSE, normalize = FALSE, segment=c("Dra
   drama <- NULL
   `:=` <- NULL
   corpus <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
   
   if (filter_punctuation == TRUE) {
     t <- t[!grep(pattern="[[:punct:]]", x=t$Token.surface)]
