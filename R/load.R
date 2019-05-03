@@ -28,7 +28,9 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
 loadDrama <- function(ids, defaultCollection="qd") {
   drama <- list()
   drama$text     <- loadText(ids, defaultCollection = defaultCollection)
-  drama$meta     <- loadMeta(ids)
+  drama$meta     <-   loadCSV(ids, 
+                              variant="Metadata", 
+                              defaultCollection = defaultCollection)
   drama$segments <- loadSegments(ids, defaultCollection = defaultCollection)
   drama$mentions <- loadMentions(ids, defaultCollection = defaultCollection)
   drama$characters <- loadCSV(ids, 
