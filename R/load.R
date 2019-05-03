@@ -153,11 +153,14 @@ loadSegments <- function(ids, defaultCollection="qd") {
 #' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
 #' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
 #' @export
-loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyCharacterFactors=TRUE) {
+loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", 
+                     unifyCharacterFactors=FALSE) {
   t <- loadCSV(ids, defaultCollection = defaultCollection)
   colnames(t)[3:4] <- c("utteranceBegin", "utteranceEnd") 
   t$Token.pos <- factor(t$Token.pos)
 
+  
+  
   if (unifyCharacterFactors) {
     # Handling character factors
     # ids
@@ -170,6 +173,11 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", unifyChar
                     levels(factor(t$Mentioned.figure_surface)))
     t$Speaker.figure_surface <- factor(t$Speaker.figure_surface, levels=allids)
     t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface, levels=allids)
+  } else {
+    t$Speaker.figure_id <- factor(t$Speaker.figure_id)
+    t$Mentioned.figure_id <- factor(t$Mentioned.figure_id)
+    t$Speaker.figure_surface <- factor(t$Speaker.figure_surface)
+    t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface)
   }
   class(t) <- append(HasUtteranceBE, class(t))
   t

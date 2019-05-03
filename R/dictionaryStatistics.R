@@ -81,7 +81,6 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @param column The table column we apply the dictionary on. 
 #' Should be either "Token.surface" or "Token.lemma".
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
-#' @param asList Logical. Whether to return a list with separated components or a single data.frame.
 #' @importFrom stats aggregate
 #' @importFrom stats ave
 #' @importFrom utils as.roman
@@ -94,50 +93,54 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
 #' }
 #' @export
-dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
+dictionaryStatistics <- function(drama, fields=base_dictionary[fieldnames],
                                  fieldnames=c("Liebe"),
                                  segment=c("Drama","Act","Scene"),
                                  normalizeByFigure = FALSE, 
                                  normalizeByField = FALSE, 
                                  byFigure = TRUE,
-                                 names = FALSE, 
-                                 column="Token.surface", 
-                                 asList = FALSE,
+                                 column="Token.lemma", 
                                  ci = TRUE) {
+  stopifnot(inherits(drama, "QDDrama"))
+  
   
   # we need this to prevent notes in R CMD check
   .N <- NULL
   . <- NULL
   corpus <- NULL
-  drama <- NULL
   Speaker.figure_surface <- NULL
   Speaker.figure_id <- NULL
   
   
   segment <- match.arg(segment)
   
-  bylist <- list(t$corpus, t$drama, t$Speaker.figure_id)
-  if (names == TRUE)
-    bylist <- list(t$corpus, t$drama, t$Speaker.figure_surface)
-  r <- aggregate(t, by=bylist, length)[,1:3]
+  text <- switch(segment,
+                 Drama=drama$text,
+                 Act=segment(drama$text, drama$segments),
+                 Scene=segment(drama$text, drama$segments))
   
+  
+  bylist <- list(text$corpus, text$drama, text$Speaker.figure_id)
+  r <- aggregate(text, by=bylist, length)[,1:3]
+
   first <- TRUE
   singles <- lapply(names(fields),function(x) {
-    dss <- dictionaryStatisticsSingle(t, fields[[x]], ci=ci,
-                                        segment=segment,
+    dss <- dictionaryStatisticsSingle(drama, fields[[x]], ci=ci,
+                                        segment = segment,
                                         byFigure = byFigure,
                                         normalizeByFigure = normalizeByFigure, 
                                         normalizeByField = normalizeByField, 
-                                        names=names, column=column)
+                                        column=column)
     colnames(dss)[ncol(dss)] <- x
     if (x == names(fields)[[1]]) {
       if (segment=="Scene") {
-        u <- unique(t[,c("begin.Scene","Number.Act", "Number.Scene")])
+        u <- unique(text[,c("begin.Scene","Number.Act", "Number.Scene")])
+        
         dss <- merge(dss, u, 
-                     by.x="begin.Scene",
-                     by.y="begin.Scene")
+                     by.x=c("Number.Act", "Number.Scene"),
+                     by.y=c("Number.Act", "Number.Scene"))
         dss$begin.Scene <- NULL
-        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","figure",x))
+        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","character",x))
       }
       dss
     } else {
@@ -145,36 +148,14 @@ dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
     }
   })
   r <- Reduce(cbind,singles)
-
+  class(r) <- c("QDDictionaryStatistics", switch(segment, 
+                                                Drama = "QDByDrama",
+                                                Act   = "QDByAct",
+                                                Scene ="QDByScene"), "data.frame")
+  if (byFigure) 
+    class(r) <- append(class(r), "QDByCharacter")
   
-  
-  if (FALSE==TRUE && normalizeByFigure == TRUE) {
-    if (names == TRUE) {
-      tokens <- t[,.N,
-                  .(corpus,drama,Speaker.figure_surface)]
-    } else {
-      tokens <- t[,.N,
-                  .(corpus,drama,Speaker.figure_id)]
-    }
-    r <- merge(r,tokens,
-               by.x=c("corpus","drama","figure"),
-               by.y=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),
-               allow.cartesian = TRUE)
-    r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
-    r$N <- NULL
-  }
-  
-  if (asList == TRUE) {
-    l <- as.list(r[,1:switch(segment,Drama=3,Act=4,Scene=5)])
-    l$mat <- as.matrix(r[,(ncol(r)-length(fields)+1):ncol(r)])
-    rownames(l$mat) <- switch(segment, 
-                              Drama=as.character(l$figure),
-                              Act=paste(l$figure,utils::as.roman(l$Number.Act)),
-                              Scene=paste(l$figure,l$begin.Scene))
-    l
-  } else {
-    r
-  }
+  r
 }
 
 #' @param wordfield A character vector containing the words or lemmas 
@@ -196,8 +177,7 @@ dictionaryStatistics <- function(t, fields=base_dictionary[fieldnames],
 #' @importFrom stats as.formula
 #' @rdname dictionaryStatistics
 #' @export
-dictionaryStatisticsSingle <- function(t, wordfield=c(), 
-                                       names = FALSE, 
+dictionaryStatisticsSingle <- function(drama, wordfield=c(), 
                                        segment=c("Drama","Act","Scene"),
                                        normalizeByFigure = FALSE, 
                                        normalizeByField = FALSE, 
@@ -206,26 +186,31 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
                                        column="Token.surface", ci=TRUE,
                                        colnames=NULL)
   {
+  stopifnot(inherits(drama, "QDDrama"))
+  
   # we need this to prevent notes in R CMD check
   .N <- NULL
   . <- NULL
   .SD <- NULL
-  
   segment <- match.arg(segment)
+  
+  text <- switch(segment,
+                 Drama=drama$text,
+                 Act=segment(drama$text, drama$segments),
+                 Scene=segment(drama$text, drama$segments))
+  
   bycolumns <- c("corpus",
                  switch(segment,
                         Drama=c("drama"),
                         Act=c("drama","Number.Act"),
-                        Scene=c("drama","begin.Scene"))
+                        Scene=c("drama","Number.Act","Number.Scene"))
                  )
   if (byFigure == TRUE) {
-    bycolumns <- c(bycolumns, ifelse(names==TRUE,
-                                     "Speaker.figure_surface",
-                                     "Speaker.figure_id"))
+    bycolumns <- c(bycolumns, "Speaker.figure_id")
   }
   
   bylist <- paste(bycolumns,collapse=",")
-  dt <- as.data.table(t)
+  dt <- as.data.table(text)
   if (ci) {
     wordfield <- tolower(wordfield)
     casing <- tolower
@@ -248,7 +233,9 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
   }
   
   colnames(r)[ncol(r)] <- "x"
-  colnames(r)[ncol(r)-1] <- "figure"
+  if (byFigure) {
+    colnames(r)[ncol(r)-1] <- "character"
+  }
   if (! is.null(colnames)) {
     colnames(r) <- colnames
   }
@@ -313,6 +300,7 @@ dictionary.statistics <- function(...) {
 #' legend(x="topleft", legend=rownames(dslr$Liebe),lty=1:5,col=rainbow(14), cex = 0.4)
 #' }
 regroup <- function(dstat, by=c("Character","Field")) {
+  .Deprecated("this function is no longer needed.")
   by = match.arg(by)
   switch(by,
          Character={
@@ -377,3 +365,33 @@ filterByDictionary <- function(ft,
                            fieldnames=c("Liebe")) {
   as.matrix(ft[,which(colnames(ft) %in% unlist(fields))])
 }
+
+#' @export
+#' @title as.matrix
+#' @description Extract the number part from a \code{QDDictionaryStatistics} table as a matrix 
+#' @param dstat A 
+as.matrix.QDDictionaryStatistics <- function (dstat) {
+  stopifnot(inherits(dstat, "QDDictionaryStatistics"))
+  
+  # check if there is a column for the character
+  if (inherits(dstat, "QDByCharacter")) {
+    byCharacter <- TRUE
+  } else {
+    byCharacter <- FALSE
+  }
+  
+  # check how many segment columns there are
+  if (inherits(dstat, "QDByDrama")) {
+    segment <- "Drama"
+    metaCols <- 1:(3+byCharacter)
+  } else if (inherits(dstat, "QDByAct")) {
+    segment <- "Act"
+    metaCols <- 1:(4+byCharacter)
+  } else if (inherits(dstat, "QDByScene")) {
+    segment <- "Scene"
+    metaCols <- 1:(5+byCharacter)
+  }
+  
+  as.matrix.data.frame(dstat[,max(metaCols):ncol(dstat)])
+}
+

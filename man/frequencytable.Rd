@@ -4,17 +4,13 @@
 \alias{frequencytable}
 \title{Word frequencies}
 \usage{
-frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
+frequencytable(drama, acceptedPOS = postags$de$words,
   column = "Token.surface", byFigure = FALSE, sep = "|",
-  normalize = FALSE, sortResult = FALSE, by = c("Drama", "Act",
+  normalize = FALSE, sortResult = FALSE, segment = c("Drama", "Act",
   "Scene"))
 }
 \arguments{
-\item{t}{The text table, potentially covering multiple texts}
-
 \item{acceptedPOS}{A list of accepted pos tags}
-
-\item{names}{Whether to use figure names or ids}
 
 \item{column}{The column name we should use (should be either Token.surface or Token.lemma)}
 
@@ -26,7 +22,9 @@ frequencytable(t, acceptedPOS = postags$de$words, names = FALSE,
 
 \item{sortResult}{Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)}
 
-\item{by}{Whether the count is by drama (default), act or scene}
+\item{segment}{Whether the count is by drama (default), act or scene}
+
+\item{t}{The text table, potentially covering multiple texts}
 }
 \description{
 This function generates a matrix of word frequencies 

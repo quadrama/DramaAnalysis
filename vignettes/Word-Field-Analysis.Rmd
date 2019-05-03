@@ -54,7 +54,7 @@ The core of the word field analysis collecting statistics about a dictionary. Th
 
 ```{r}
 dstat <- dictionaryStatisticsSingle(
-  rksp.0$mtext,         # the text we want to process
+  rksp.0,         # the text we want to process
   wordfield=wf_love,   # the word field
   column="Token.lemma" # we count lemmas instead of surface forms
 )
@@ -81,7 +81,7 @@ Apparently, the prince is mentioning these words a lot.
 Obviously we would want to **normalize** according to the total number of spoken words by a figure:
 ```{r}
 dstat <- dictionaryStatisticsSingle(
-  rksp.0$mtext,       # the text we want to process
+  rksp.0,       # the text we want to process
   wordfield=wf_love, # the word field
   normalizeByFigure = TRUE,   # apply normalization
   column = "Token.lemma"
@@ -122,10 +122,9 @@ The following examples use the `base_dictionary`, i.e., a specific version of th
 ```{r, eval=TRUE}
 
 dstat <- dictionaryStatistics(
-  rksp.0$mtext,  # the text
+  rksp.0,  # the text
   fieldnames = # fields we want to measure (from base_dictionary)
     c("Liebe", "Familie", "Ratio", "Krieg", "Religion"),
-  names = TRUE,                 # use figure names (instead of ids)
   normalizeByFigure = TRUE,   # normalization by figure
   normalizeByField = TRUE,    # normalization by field
   column = "Token.lemma"        # lemma-based stats
@@ -169,18 +168,19 @@ Technically, the output of `dictionaryStatistics()` is a  `data.frame`. This is 
 You typically want to assign rownames to this matrix. If you're studying individual characters, their name might be a good idea.
 
 ```{r}
-dsl <- dictionaryStatistics(rksp.0$mtext, 
+dsl <- dictionaryStatistics(rksp.0, 
                             fieldnames=c("Liebe", "Familie", "Ratio", "Krieg", "Religion"),
-                            normalizeByFigure=TRUE,
-                            asList=TRUE)
-dsl$mat
+                            normalizeByFigure=TRUE)
+m <- as.matrix(dsl)
+rownames(m) <- dsl$character
+m
 ```
 
 
 Every character is now represent with five numbers, which can be interpreted as a vector in five-dimensional space. This means, we can easily apply distance metrics supplied by the function `dist()` (from the default package `stats`). By default, `dist()` calculates [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance). The data structure here is now similar to the one in the weighted configuration matrix, which means everything from [this vignette](Configuration-Matrices) can be applied here.
 
 ```{r}
-cdist <- dist(dsl$mat)
+cdist <- dist(m)
 cdist
 ```
 
@@ -209,34 +209,30 @@ plot.igraph(g,
 
 ## Development over the course of the play
 
-Since version 2.0 of this package, we can also count word fields by segment, i.e., by act or scene in a play. To do that, we add the parameter `segment="Act"` when we call the function `dictionaryStatistics()`. With the function `individualize()`, we can then re-organize this output so that each character has its own list.
+Since version 2.0 of this package, we can also count word fields by segment, i.e., by act or scene in a play. To do that, we add the parameter `segment="Act"` when we call the function `dictionaryStatistics()`. We can now easily plot the theme progress over the course of the play:
+
 
 ```{r}
-dsl <- dictionaryStatistics(rksp.0$mtext, 
+dsl <- dictionaryStatistics(rksp.0, 
                             fieldnames=c("Liebe", "Familie", "Ratio", "Krieg", "Religion"),
                             normalizeByFigure=TRUE,
-                            asList=TRUE,
                             segment="Scene")
 
-dsl <- regroup(dsl)
+matplot(as.matrix(dsl[dsl$character=="marinelli",]), type="l", col="black")
+legend(x="topleft",legend=colnames(as.matrix(dsl)),lty=1:5)
 
 ```
 
-We can now easily plot the theme progress over the course of the play:
 
-```{r}
-matplot(dsl$marinelli$mat,type="l",col="black")
-legend(x="topleft",legend=colnames(dsl$marinelli$mat),lty=1:5)
-```
 
 Or cumulatively add up the numbers:
 
 ```{r}
-mat <- apply(dsl$marinelli$mat,2,cumsum)
+mat <- apply(as.matrix(dsl[dsl$character=="marinelli",]),2,cumsum)
 matplot(mat,type="l",col="black")
 
 # Add act lines
-al <- rle(dsl$marinelli$Number.Act)
+al <- rle(dsl[dsl$character=="marinelli",]$Number.Act)
 abline(v=cumsum(al$lengths[-1]))
 
 legend(x="topleft",legend=colnames(mat),lty=1:5)

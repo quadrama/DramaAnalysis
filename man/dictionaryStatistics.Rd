@@ -6,23 +6,19 @@
 \alias{dictionaryStatisticsL}
 \title{Dictionary Use}
 \usage{
-dictionaryStatistics(t, fields = base_dictionary[fieldnames],
+dictionaryStatistics(drama, fields = base_dictionary[fieldnames],
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
   normalizeByFigure = FALSE, normalizeByField = FALSE,
-  byFigure = TRUE, names = FALSE, column = "Token.surface",
-  asList = FALSE, ci = TRUE)
+  byFigure = TRUE, column = "Token.lemma", ci = TRUE)
 
-dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
-  segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
-  normalizeByField = FALSE, byFigure = TRUE,
-  fieldNormalizer = length(wordfield), column = "Token.surface",
-  ci = TRUE, colnames = NULL)
+dictionaryStatisticsSingle(drama, wordfield = c(), segment = c("Drama",
+  "Act", "Scene"), normalizeByFigure = FALSE, normalizeByField = FALSE,
+  byFigure = TRUE, fieldNormalizer = length(wordfield),
+  column = "Token.surface", ci = TRUE, colnames = NULL)
 
 dictionaryStatisticsL(...)
 }
 \arguments{
-\item{t}{A text (data.frame or data.table)}
-
 \item{fields}{A list of lists that contains the actual field names. 
 By default, we load the base_dictionary.}
 
@@ -39,12 +35,8 @@ the entire play will be used. Possible values are "Drama" (default),
 \item{byFigure}{Logical, defaults to TRUE. If false, values will be calculated
 for the entire segment (play, act, or scene), and not for individual characters.}
 
-\item{names}{Logical. Whether the resulting table contains figure ids or names.}
-
 \item{column}{The table column we apply the dictionary on. 
 Should be either "Token.surface" or "Token.lemma".}
-
-\item{asList}{Logical. Whether to return a list with separated components or a single data.frame.}
 
 \item{ci}{Whether to ignore case. Defaults to TRUE, i.e., case is ignored.}
 
@@ -56,6 +48,10 @@ to be counted (only for \code{*Single}-functions)}
 \item{colnames}{The column names to be used}
 
 \item{...}{All parameters are passed to \code{\link{dictionaryStatistics}}}
+
+\item{t}{A text (data.frame or data.table)}
+
+\item{names}{Logical. Whether the resulting table contains figure ids or names.}
 }
 \description{
 These methods retrieve 

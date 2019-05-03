@@ -3,9 +3,8 @@
 #' by drama, act or scene and/or by figure.
 #' @param t The text table, potentially covering multiple texts
 #' @param acceptedPOS A list of accepted pos tags
-#' @param names Whether to use figure names or ids
 #' @param byFigure Wether the count is by figure or by text
-#' @param by Whether the count is by drama (default), act or scene
+#' @param segment Whether the count is by drama (default), act or scene
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @param sep The separation character that goes between drama name and figure (if applicable)
 #' @param normalize Whether to normalize values or not
@@ -23,26 +22,31 @@
 #' stylo(gui=F, frequencies = stylo_table)
 #' }
 #' @export
-frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, column="Token.surface", byFigure=FALSE, sep="|", normalize=FALSE, sortResult=FALSE, by=c("Drama","Act","Scene")) {
-  ft <- t
-  if (length(acceptedPOS) > 0)
-    ft <- t[t$Token.pos %in% acceptedPOS,]
+frequencytable <- function(drama, acceptedPOS = postags$de$words,
+                           column="Token.surface", 
+                           byFigure=FALSE, 
+                           sep="|", 
+                           normalize=FALSE, 
+                           sortResult=FALSE, 
+                           segment=c("Drama","Act","Scene")) {
+  stopifnot(inherits(drama, "QDDrama"))
   
-  by <- match.arg(by)
-  switch(by,
+  ft <- drama$text
+  if (length(acceptedPOS) > 0)
+    ft <- ft[as.character(ft$Token.pos) %in% acceptedPOS,]
+  
+  segment <- match.arg(segment)
+  switch(segment,
          Drama = { 
            if (byFigure == FALSE) { xt <- stats::xtabs(~drama + ft[,get(column)], data=ft) }
-           else if (names == TRUE) { xt <- stats::xtabs(~ paste(drama,Speaker.figure_surface,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
          Act = {
            if (byFigure == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,sep=sep) + ~ft[,get(column)], data=ft) }
-           else if (names == TRUE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Speaker.figure_surface,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Number.Act,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
          Scene = {
            if (byFigure == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,sep=sep) + ~ft[,get(column)], data=ft) }
-           else if (names == TRUE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,Speaker.figure_surface,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
          stop("Please enter valid string-value for argument 'by' (default = 'Drama', 'Act' or 'Scene').")
@@ -57,6 +61,11 @@ frequencytable <- function(t, acceptedPOS = postags$de$words, names=FALSE, colum
   if (sortResult == TRUE) {
     r <- r[,order(colSums(r),decreasing = TRUE)]
   }
+  
+  class(r) <- append(class(r), switch(segment, 
+                                      Drama = "QDByDrama",
+                                      Act   = "QDByAct",
+                                      Scene ="QDByScene"))
   
   r
 }
