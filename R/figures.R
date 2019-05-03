@@ -9,7 +9,6 @@
 #' utteranceLengthSd: The standard deviation in utterance length
 #' @param t A data.table containing the text. Will be coerced into a data.table,
 #' if necessary.
-#' @param names If set to true, the table will contains figure names instead of ids
 #' @param normalize Normalising the individual columns
 #' @param segment "Drama", "Act", or "Scene". Allows calculating statistics on segments of the play
 #' @param filter_punctuation Whether to exclude all punctuation from token counts
@@ -18,12 +17,11 @@
 #' @importFrom data.table as.data.table
 #' @examples
 #' data(rksp.0)
-#' stat <- figureStatistics(rksp.0$mtext, names = FALSE)
+#' stat <- figureStatistics(rksp.0)
 #' @export
 characterStatistics <- function(drama, 
-                             names = FALSE, 
                              normalize = FALSE, 
-                             by=c("Drama","Act","Scene"), 
+                             segment=c("Drama","Act","Scene"), 
                              filter_punctuation = FALSE) {
   stopifnot(inherits(drama, "QDDrama"))
   
@@ -34,9 +32,9 @@ characterStatistics <- function(drama,
   end <- NULL
   `:=` <- NULL
   corpus <- NULL
-  by <- match.arg(by)
+  segment <- match.arg(segment)
   
-  text <- switch(by,
+  text <- switch(segment,
               Drama=drama$text,
               Act=segment(drama$text, drama$segments),
               Scene=segment(drama$text, drama$segments))
@@ -51,7 +49,7 @@ characterStatistics <- function(drama,
   b <- quote(Speaker.figure_id)
   data.table::setkey(text, corpus, drama)
   
-  if (by == "Scene") {
+  if (segment == "Scene") {
     r <- text[,list(tokens=length(Token.surface),
                   types=data.table::uniqueN(Token.surface),
                   utterances=data.table::uniqueN(utteranceBegin),
@@ -67,7 +65,7 @@ characterStatistics <- function(drama,
     r$begin.Act <- as.roman(as.integer(as.factor(r$begin.Act)))
     colnames(r)[3:4] <- c("Act","Scene")
     fcol <- 6
-  } else if (by == "Act") {
+  } else if (segment == "Act") {
     r <- text[,list(tokens=length(Token.surface),
                  types=data.table::uniqueN(Token.surface),
                  utterances=data.table::uniqueN(utteranceBegin),

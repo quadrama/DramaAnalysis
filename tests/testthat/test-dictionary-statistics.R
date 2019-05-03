@@ -83,7 +83,7 @@ test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE)
 filtered <- filterByDictionary(frequencytable(rksp.0, byFigure = TRUE), fieldnames = c("Krieg"))
 test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE, fieldnames = c('Krieg'))  
           has correct dimensions and produces correct output", {
-  expect_length(filtered, 338)
+  expect_length(filtered, 325)
   expect_length(filtered[,1], 13)
   expect_equal(FALSE %in% (colnames(filtered) %in% base_dictionary$Krieg), FALSE)
 })
