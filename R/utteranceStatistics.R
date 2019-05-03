@@ -26,7 +26,7 @@ utteranceStatistics <- function(drama, normalizeByDramaLength = TRUE) {
 
   # skip empty factor levels
   ulength <- droplevels(ulength)
-  class(ulength) <- append(class(ulength), c("QDUtteranceStatistics", "QDHasCharacter"))
+  class(ulength) <- c(c("QDUtteranceStatistics", "QDHasCharacter", "data.frame"))
   ulength
 }
 
