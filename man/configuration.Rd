@@ -4,8 +4,8 @@
 \alias{configuration}
 \title{Character Configuration}
 \usage{
-configuration(drama, by = c("Act", "Scene"), mode = c("Active",
-  "Passive"), onlyPresence = FALSE)
+configuration(d, by = c("Act", "Scene"), mode = c("Active", "Passive"),
+  onlyPresence = FALSE)
 }
 \arguments{
 \item{by}{A string, either "Act" or "Scene". Partial matching allowed.}
@@ -39,8 +39,8 @@ on who's mentioned in a scene or an act.
 \examples{
 # Active configuration matrix
 data(rksp.0)
-cfg <- configuration(rksp.0$mtext, asList=FALSE)
+cfg <- configuration(rksp.0)
 # Passive configuration matrix
-cfg <- configuration(rksp.0$mtext, asList=FALSE, mode="Passive")
+cfg <- configuration(rksp.0, mode="Passive")
 
 }

@@ -23,9 +23,9 @@
 #' @examples
 #' # Active configuration matrix
 #' data(rksp.0)
-#' cfg <- configuration(rksp.0$mtext, asList=FALSE)
+#' cfg <- configuration(rksp.0)
 #' # Passive configuration matrix
-#' cfg <- configuration(rksp.0$mtext, asList=FALSE, mode="Passive")
+#' cfg <- configuration(rksp.0, mode="Passive")
 #' 
 configuration <- function(d, 
                           by=c("Act", "Scene"), 
