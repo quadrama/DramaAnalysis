@@ -57,35 +57,10 @@ By default, all punctuation marks are counted as tokens. Since version 2.2.0, pu
 
 This figure statistics table already contains all the information we need and can be inspected and analysed directly. The remaining steps are only needed if you want to plot this information as a stacked bar chart.
 
-```{r}
-# Create a matrix
-mat <- characterMatrix(charStats)
-summary(mat)
-head(mat$values,5)
-```
-
-`mat` is a list containing three things: `values` is a matrix storing the number of tokens a figure speaks, `labels` contains the names of figures corresponding to the respective cell in `values` and `cs` contains summed token numbers, such that the entries can be stacked.
+Since we are using this quite often, version 3.0 makes plotting a stacked bar chart very simple (enter `?barplot.QDCharacterStatistics` for details):
 
 ```{r}
-# Plot a stacked bar plot
-b <- barplot(mat$values,col=qd.colors)
-
-# Add figure names (if needed/wanted)
-text(x=b,y=t(mat$cs+(mat$values/2)),
-     labels=t(substr(mat$labels,0,20)))
-```
-
-Since many of these labels are barely readable, we can restrict the number of displayed labels to, say, the top 5 figures (i.e., the five figures that speak the most). We do this by selecting only the top 5 rows in the matrices, using the function `head()`.
-
-```{r}
-# Plot a stacked bar plot
-b <- barplot(mat$values,col=qd.colors)
-
-top <- 5
-
-# Add figure names (if needed/wanted)
-text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
-     labels=t(substr(head(mat$labels,top),0,20)))
+barplot(charStats)
 ```
 ### Character meta data
 

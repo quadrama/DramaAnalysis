@@ -71,3 +71,45 @@ plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure,
   }  
   
 }
+
+#' @title Stacked Bar Plot
+#' @description This function expects an object of type QDCharacterStatistics and 
+#' plots the specified column as a stacked bar plot.
+#' @param column Which column of the character statistics should be used?
+#' @param labels Whether to add character labels into the plot
+#' @param order Sort the fields inversely
+#' @param top Limit the labels to the top 5 characters. Otherwise, 
+#' labels will become unreadable.
+#' @param col The colors to use
+#' @param ... All remainig options are passed to \code{barplot.default()}.
+#' @export
+#' @seealso barplot.default
+barplot.QDCharacterStatistics <- function(qdCharStat, 
+                                       col=qd.colors, 
+                                       column="tokens", 
+                                       order=-1, 
+                                       labels = TRUE,
+                                       top = 5,
+                                       ...) {
+  stopifnot(inherits(qdCharStat, "QDCharacterStatistics"))
+  
+  # prevent note in R CMD check
+  drama <- NULL
+  `:=` <- NULL
+  
+  fs <- as.data.table(qdCharStat)
+  fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
+  mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
+  mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="character")[,-1])
+  mat_cs <- apply(mat_values, 2,cumsum)
+  mat_cs <- rbind(matrix(0,ncol=ncol(mat_cs)),mat_cs)
+  mat_values <- rbind(mat_values,matrix(NA,ncol=ncol(mat_values)))
+  mat <- list(values=mat_values,labels=mat_labels,cs=mat_cs)
+  
+  b <- barplot.default(mat$values, col=col, ...)
+  if (labels) {
+    text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
+         labels=t(substr(head(mat$labels,top),0,20)))
+  }
+  b
+}

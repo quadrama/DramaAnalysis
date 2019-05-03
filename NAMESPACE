@@ -3,6 +3,7 @@
 S3method(as.list,QDConfiguration)
 S3method(as.matrix,QDConfiguration)
 S3method(as.matrix,QDDictionaryStatistics)
+S3method(barplot,QDCharacterStatistics)
 export(characterMatrix)
 export(characterStatistics)
 export(combine)
