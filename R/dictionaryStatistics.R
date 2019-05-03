@@ -148,7 +148,7 @@ dictionaryStatistics <- function(drama, fields=base_dictionary[fieldnames],
     }
   })
   r <- Reduce(cbind,singles)
-  class(r) <- c("QDDictionaryStatistics", switch(segment, 
+  class(r) <- c("QDDictionaryStatistics", "QDHasCharacter", switch(segment, 
                                                 Drama = "QDByDrama",
                                                 Act   = "QDByAct",
                                                 Scene ="QDByScene"), "data.frame")
