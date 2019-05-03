@@ -285,7 +285,6 @@ dictionary.statistics <- function(...) {
 #' or a list organized by field. If it's organised by character, it allows
 #' comparison of fields for a single character. If organised by field, 
 #' we can compare different characters for a single field.
-#' @export
 #' @examples
 #' data(rksp.0)
 #' field <- list(Liebe=c("liebe","lieben","herz"))
