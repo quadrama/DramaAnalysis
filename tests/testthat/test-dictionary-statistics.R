@@ -89,41 +89,5 @@ test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE, fieldnames
 })
 
 
-# regroup()
-
-dslr <- regroup(dictionaryStatistics(rksp.0, fieldnames = c("Liebe", "Familie"), segment = "Scene", normalizeByFigure = TRUE, asList = TRUE), 
-                by = "Field")
-test_that("regroup(dictionaryStatistics(rksp.0, fieldnames = c('Liebe', 'Familie'), segment = 'Scene', normalizeByFigure = TRUE, asList = TRUE), 
-                by = 'Field') 
-          has correct dimensions and produces correct output", {
-  expect_length(dslr, 2)
-  expect_length(dslr$Liebe, 43)
-  expect_length(dslr$Familie, 43)
-  expect_equal(dslr$Liebe[1][8,], 0.005882353) # Act 1, Scene 1, der_prinz
-  expect_equal(dslr$Familie[1][8,], 0) # Act 1, Scene 1, der_prinz
-})
-
-dslr <- regroup(dictionaryStatistics(rksp.0, fieldnames = c("Liebe", "Familie"), normalizeByFigure = TRUE, asList = TRUE), 
-                by = "Field")
-test_that("regroup(dictionaryStatistics(rksp.0, fieldnames = c('Liebe', 'Familie'), normalizeByFigure = TRUE, asList = TRUE), 
-                by = 'Field') 
-          has correct dimensions and produces correct output", {
-  expect_length(dslr, 2)
-  expect_length(dslr$Liebe, 1)
-  expect_length(dslr$Familie, 1)
-  expect_equal(dslr$Liebe[8,1], 0.005222402) # der_prinz
-  expect_equal(dslr$Familie[8,1], 0.005042319) # der_prinz
-})
-
-dslr <- regroup(dictionaryStatistics(rksp.0, fieldnames = c("Krieg"), normalizeByFigure = TRUE, asList = TRUE), 
-                by = "Character")
-test_that("regroup(dictionaryStatistics(rksp.0, fieldnames = c('Krieg'), normalizeByFigure = TRUE, asList = TRUE), 
-                by = 'Character') 
-          has correct dimensions and produces correct output", {
-  expect_length(dslr, 13)
-  expect_length(dslr$der_prinz, 1)
-  expect_equal(dslr$der_prinz$mat, 0.002881325)
-})
-
 
 # TODO: enrichDictionary()?
