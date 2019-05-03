@@ -100,6 +100,25 @@ limit.figures.by.tokens <- function(...) {
   limitFiguresByTokens(...)
 }
 
+filter <- function(object, drama, by=c("rank","tokens"), 
+                   threshold=ifelse(by=="tokens",500,10), 
+                   other=FALSE) {
+  stopifnot(inherits(object, "QDHasCharacter"))
+  stopifnot(inherits(drama, "QDDrama"))
+  by <- match.arg(by) 
+  
+  charStat <- characterStatistics(drama)
+  
+  keep <- charStat$character
+  if (by == "tokens") {
+    keep <- charStat[charStat$tokens >= threshold,]$character
+  } else if (by == "rank") {
+    keep <- charStat[order(charStat$tokens, decreasing = TRUE),]$character[1:threshold]
+  }
+  
+  object[object$character %in% keep, ]
+}
+
 #' @title Filtering Mentioned Figures
 #' @description This function can be used to remove the mentions of figures 
 #' that do not appear as speakers in the subsetted input text (after using 
