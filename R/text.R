@@ -100,8 +100,25 @@ limit.figures.by.tokens <- function(...) {
   limitFiguresByTokens(...)
 }
 
-filter <- function(object, drama, by=c("rank","tokens"), 
-                   threshold=ifelse(by=="tokens",500,10), 
+#' @export
+format.QDHasCharacter <- function(object, drama) {
+  stopifnot(inherits(object, "QDHasCharacter"))
+  stopifnot(inherits(drama, "QDDrama"))
+  
+  chars <- levels(drama$characters)
+
+  
+    
+  merged <- merge(object, drama$characters,
+                  by.x = c("corpus", "drama", "character"),
+                  by.y = c("corpus", "drama", "figure_id"),
+                  sort=FALSE)
+  
+}
+
+#' @export
+filter <- function(object, drama, by=c("rank", "tokens"), 
+                   threshold=ifelse(by=="tokens", 500, 10),
                    other=FALSE) {
   stopifnot(inherits(object, "QDHasCharacter"))
   stopifnot(inherits(drama, "QDDrama"))
