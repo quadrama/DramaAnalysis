@@ -18,9 +18,6 @@ ones when they speak themselves.}
 logical values for stage presence}
 
 \item{mtext}{The text including Act and Scene markings}
-
-\item{useCharacterId}{Logical. If true, characters are represented 
-by their id instead of their surface form.}
 }
 \description{
 Creates classic drama configuration matrix. Returns either a list with 

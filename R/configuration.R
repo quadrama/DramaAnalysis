@@ -5,8 +5,6 @@
 #' @param by A string, either "Act" or "Scene". Partial matching allowed.
 #' @param onlyPresence If TRUE, the resulting matrix only contains 
 #' logical values for stage presence
-#' @param useCharacterId Logical. If true, characters are represented 
-#' by their id instead of their surface form.
 #' @param mode Character vector, should be either "Active" or "Passive".
 #' Passive configurations express when characters are mentioned, active
 #' ones when they speak themselves.
@@ -73,18 +71,23 @@ configuration <- function(d,
     }
   }
   
-  class(cfg) <- c(Configuration, "data.frame")
+  class(cfg) <- c("QDConfiguration", "data.frame")
   
   cfg  
 }
 
-
+#' @export
+as.matrix.QDConfiguration <- function(configuration) {
+  stopifnot(inherits(configuration, "QDConfiguration"))
+  as.matrix.data.frame(configuration[,4:ncol(configuration)])
+}
 
 #' @export
 as.list.QDConfiguration <- function(configuration) {
-  stopifnot(inherits(configuration, Configuration))
+  .Deprecated("as.matrix(configuration)")
+  stopifnot(inherits(configuration, "QDConfiguration"))
   ret <- list()
-  ret$matrix <- as.matrix(configuration[,4:ncol(configuration)])
+  ret$matrix <- as.matrix.data.frame(configuration[,4:ncol(configuration)])
   ret$drama <- configuration[,1:2]
   ret$character <- configuration[[3]]
   ret
