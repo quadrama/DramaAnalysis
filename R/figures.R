@@ -50,18 +50,18 @@ characterStatistics <- function(drama,
   data.table::setkey(text, corpus, drama)
   
   if (segment == "Scene") {
-    r <- text[,list(tokens=length(Token.surface),
-                  types=data.table::uniqueN(Token.surface),
-                  utterances=data.table::uniqueN(utteranceBegin),
-                  utteranceLengthMean=mean(rle(utteranceBegin)$lengths),
-                  utteranceLengthSd=sd(rle(utteranceBegin)$lengths),
-                  firstBegin=min(utteranceBegin),
-                  lastEnd=max(utteranceEnd)),
+    r <- text[,list(tokens     = as.double(length(Token.surface)),
+                    types      = as.double(data.table::uniqueN(Token.surface)),
+                    utterances = as.double(data.table::uniqueN(utteranceBegin)),
+                    utteranceLengthMean = mean(rle(utteranceBegin)$lengths),
+                    utteranceLengthSd   = sd(rle(utteranceBegin)$lengths),
+                    firstBegin = as.double(min(utteranceBegin)),
+                    lastEnd    = as.double(max(utteranceEnd))),
            by=.(corpus,
                 drama,
                 begin.Act,
                 begin.Scene,
-                length,eval(b))][,begin.Scene:=as.integer(as.factor(begin.Scene)),begin.Act]
+                length,eval(b))][,begin.Scene:=as.double(as.factor(begin.Scene)),begin.Act]
     r$begin.Act <- as.roman(as.integer(as.factor(r$begin.Act)))
     colnames(r)[3:4] <- c("Act","Scene")
     fcol <- 6

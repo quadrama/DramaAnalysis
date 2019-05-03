@@ -48,13 +48,13 @@ test_that("characterStatistics(rksp.0, segment='Scene', normalize=TRUE)
 
 # rankFiguresByDramatisPersonae()
 
-fstat_ranked <- rankFiguresByDramatisPersonae(figureStatistics(rksp.0$mtext))
-test_that("rankFiguresByDramatisPersonae(figureStatistics(rksp.0$mtext)) 
-          has correct dimensions and produces correct output", {
-  expect_equal(ncol(fstat_ranked), 12)
-  expect_equal(colnames(fstat_ranked)[12], "Rank (dramatis personae)")
-  expect_equal(as.integer(fstat_ranked[1,12]), 1)
-})
+#fstat_ranked <- rankFiguresByDramatisPersonae(figureStatistics(rksp.0$mtext))
+# test_that("rankFiguresByDramatisPersonae(figureStatistics(rksp.0$mtext)) 
+#           has correct dimensions and produces correct output", {
+#   expect_equal(ncol(fstat_ranked), 12)
+#   expect_equal(colnames(fstat_ranked)[12], "Rank (dramatis personae)")
+#   expect_equal(as.integer(fstat_ranked[1,12]), 1)
+# })
 
 
 # TODO: add tests for rankFiguresByAppearance() ?

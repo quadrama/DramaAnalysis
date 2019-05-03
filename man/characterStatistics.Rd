@@ -4,20 +4,18 @@
 \alias{characterStatistics}
 \title{Basic Character Statistics}
 \usage{
-characterStatistics(drama, names = FALSE, normalize = FALSE,
-  by = c("Drama", "Act", "Scene"), filter_punctuation = FALSE)
+characterStatistics(drama, normalize = FALSE, segment = c("Drama",
+  "Act", "Scene"), filter_punctuation = FALSE)
 }
 \arguments{
-\item{names}{If set to true, the table will contains figure names instead of ids}
-
 \item{normalize}{Normalising the individual columns}
+
+\item{segment}{"Drama", "Act", or "Scene". Allows calculating statistics on segments of the play}
 
 \item{filter_punctuation}{Whether to exclude all punctuation from token counts}
 
 \item{t}{A data.table containing the text. Will be coerced into a data.table,
 if necessary.}
-
-\item{segment}{"Drama", "Act", or "Scene". Allows calculating statistics on segments of the play}
 }
 \value{
 A data frame with the following columns and one row for each figure:
@@ -32,5 +30,5 @@ This function extracts figure statistics from a drama text table.
 }
 \examples{
 data(rksp.0)
-stat <- figureStatistics(rksp.0$mtext, names = FALSE)
+stat <- figureStatistics(rksp.0)
 }
