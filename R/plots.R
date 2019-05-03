@@ -9,16 +9,27 @@
 #' @param ... Parameters passed to stripchart().
 #' @importFrom graphics stripchart abline
 #' @export
-plotUtterancePositions <- function(utteranceStatistics,segmentedText=NULL,colors=qd.colors,plotFrame=FALSE,...) {
-  graphics::stripchart(begin+(utteranceLength/2) ~ figure, data=utteranceStatistics, 
-             las=1, # horizontal labels
-             pch=20, # use a small bullet as symbol
-             col=colors, # get nice colors
-             xaxt="n", # suppress the x axis
-             frame=plotFrame,
-             ...)
-  if ( !is.null(segmentedText) ) {
-    graphics::abline(v=unique(segmentedText$begin.Act)[-1])
+#' @seealso stripchart
+plot.QDUtteranceStatistics <- function(utteranceStatistics,
+                                       drama=NULL,
+                                       colors=qd.colors,
+                                       frame=TRUE,
+                                       xlab="Time",
+                                       ...) {
+  stopifnot(inherits(utteranceStatistics, "QDUtteranceStatistics"))
+  
+  graphics::stripchart(utteranceBegin+(utteranceLength/2) ~ character, 
+                      data=utteranceStatistics, 
+                      las=1, # horizontal labels
+                      pch=20, # use a small bullet as symbol
+                      col=colors, # get nice colors
+                      xaxt="n", # suppress the x axis
+                      frame=frame,
+                      xlab=xlab,
+                      ...)
+  if ( !is.null(drama) ) {
+    stopifnot(inherits(drama, "QDDrama"))
+    graphics::abline(v=unique(drama$segments$begin.Act)[-1])
   }
 }
 
@@ -83,6 +94,7 @@ plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure,
 #' @param col The colors to use
 #' @param ... All remainig options are passed to \code{barplot.default()}.
 #' @export
+#' @importFrom graphics text barplot
 #' @seealso barplot.default
 barplot.QDCharacterStatistics <- function(qdCharStat, 
                                        col=qd.colors, 
@@ -106,9 +118,9 @@ barplot.QDCharacterStatistics <- function(qdCharStat,
   mat_values <- rbind(mat_values,matrix(NA,ncol=ncol(mat_values)))
   mat <- list(values=mat_values,labels=mat_labels,cs=mat_cs)
   
-  b <- barplot.default(mat$values, col=col, ...)
+  b <- graphics::barplot.default(mat$values, col=col, ...)
   if (labels) {
-    text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
+    graphics::text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
          labels=t(substr(head(mat$labels,top),0,20)))
   }
   b
