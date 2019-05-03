@@ -23,6 +23,8 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
   options(qd.collectionDirectory=collectionDirectory)
 }
 
+#' @title Load drama
+#' @description This function loads one or more of the installed dramas.
 #' @export
 #' @exportClass QDDrama
 loadDrama <- function(ids, defaultCollection="qd") {
@@ -103,7 +105,6 @@ scene.act.table <- function(ids, defaultCollection="tg") {
 #' @param ids The ids for which we want to get the text
 #' @importFrom data.table setkey foverlaps data.table
 #' @param defaultCollection The collection prefix is added if no prefix is found
-#' @export
 #' @examples 
 #' \dontrun{
 #' installData("test")
@@ -128,7 +129,6 @@ loadSegmentedText <- function(ids,defaultCollection="tg") {
   mtext
 }
 
-#' @export
 #' @exportClass QD.HasUtteranceBE
 loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable <- loadCSV(ids, 
@@ -138,7 +138,6 @@ loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable
 }
 
-#' @export
 loadSegments <- function(ids, defaultCollection="qd") {
   sat <- scene.act.table(ids, defaultCollection = defaultCollection)
   class(sat) <- append(HasSegments, class(sat))
@@ -152,7 +151,6 @@ loadSegments <- function(ids, defaultCollection="qd") {
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
 #' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
-#' @export
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", 
                      unifyCharacterFactors=FALSE) {
   t <- loadCSV(ids, defaultCollection = defaultCollection)
@@ -210,7 +208,6 @@ loadAnnotations <- function(ids,
 #' @param ids a list or vector of ids
 #' @param defaultCollection the default collection
 #' @param dataDirectory the data directory
-#' @export
 loadCharacters <- function(ids, 
                            defaultCollection="tg", 
                            dataDirectory=getOption("qd.datadir")) {
@@ -254,7 +251,6 @@ loadCSV <- function(ids,
 #' @description helper method to load meta data about dramatic texts (E.g., author, year)
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load. No longer used.
-#' @export
 loadMeta <- function(ids,type=NULL) {
   loadCSV(ids, variant="Metadata")
 }

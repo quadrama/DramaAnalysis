@@ -98,7 +98,7 @@ characterStatistics <- function(drama,
     r$firstBegin <- r$firstBegin / ave(r$lastEnd, r$drama, FUN=max)
     r$lastEnd <- ave(r$lastEnd, r$drama, FUN=function(x) {x/max(x)})
   }
-  class(r) <- append("QDCharacterStatistics", "data.frame")
+  class(r) <- c("QDCharacterStatistics", "QDHasCharacter", "data.frame")
   r
 }
 

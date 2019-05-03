@@ -27,6 +27,7 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 require(DramaAnalysis)
 require(data.table)
+require(magrittr)
 
 v <- packageVersion("DramaAnalysis")
 ```
@@ -60,7 +61,10 @@ This figure statistics table already contains all the information we need and ca
 Since we are using this quite often, version 3.0 makes plotting a stacked bar chart very simple (enter `?barplot.QDCharacterStatistics` for details):
 
 ```{r}
-barplot(charStats)
+characterStatistics(text, names=TRUE, normalize=FALSE) %>%
+  format(text) %>%
+  barplot(names.arg=c("Miss Sara Sampson", "Emilia Galotti"))
+
 ```
 ### Character meta data
 
@@ -81,7 +85,8 @@ First, we will use the function `utteranceStatistics()` to extract numbers about
 ```{r}
 ustat <- utteranceStatistics(rksp.0, 
                               normalizeByDramaLength = FALSE # use absolute values
-                            )
+                            ) %>%
+  format(rksp.0)
 colnames(ustat)
 ```
 
@@ -101,7 +106,7 @@ Next, we want to make the same analysis not for individual characters, but for c
 
 ```{r}
 ustat <- utteranceStatistics(rjmw.0, 
-                              normalizeByDramaLength = FALSE # use absolute values
+                             normalizeByDramaLength = FALSE # use absolute values
                             )
 
 characterdata <- rjmw.0$characters
@@ -125,12 +130,12 @@ According to this picture, female characters speak slightly longer utterances in
 While the above displays the *length* of utterances, we can also display the position of utterances, i.e., where in the text are they taking place?
 
 ```{r}
-par(mar=c(2,10,2,2))
-stripchart(utteranceBegin ~ character, data=ustat, 
-           las=1, # horizontal labels
-           pch=20, # use a small bullet as symbol
-           col=qd.colors # get nice colors
-           )
+par(mar=c(2,7,2,2))
+
+utteranceStatistics(rjmw.0, normalizeByDramaLength = FALSE) %>%
+  format(rjmw.0) %>%
+  plot()
+
 ```
 
 Each dot in this plot represents one utterance, the x-axis is measured in character positions. This is not really intuitive, but the flow from left to right represents the flow of the text.
@@ -138,20 +143,11 @@ Each dot in this plot represents one utterance, the x-axis is measured in charac
 Now it would be useful to include information on act/scene boundaries in this plot. This can be done by accessing the segmented text table. The first  commands work just as before, with the exception of being applied to the variable `rksp.0.mtext`.
 
 ```{r}
-
-ustat <- utteranceStatistics(rksp.0, 
-                              normalizeByDramaLength = FALSE # use absolute values
-                            )
-par(mar=c(2,10,2,2))
-stripchart(utteranceBegin ~ character, data=ustat, 
-           las=1, # horizontal labels
-           pch=20, # use a small bullet as symbol
-           col=qd.colors, # get nice colors
-           xaxt="n" # suppress the x axis
-           )
-
-# add vertical lines for act beginning
-abline(v=unique(rksp.0$segments$begin.Act)[-1])
+par(mar=c(2,8,2,2))
+utteranceStatistics(rksp.0, 
+                    normalizeByDramaLength = FALSE) %>%
+  format(rksp.0) %>%
+  plot(rksp.0)
 ```
 
 Please note that the information contained in this plot is very similar to the information in the [visual and relative configuration matrices](Configuration-Matrices).

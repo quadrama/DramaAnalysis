@@ -14,112 +14,44 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
                rgb(217, 33, 32, maxColorValue = 255)
               );
 
-#' @title Filtering figures
-#' @description This function can be used to remove speech content of certain figures. 
-#' Currently, it offers two ways of filtering: By rank or by spoken words. Filtering by 
-#' rank is an upper criterion, i.e., up to $threshold$ figures are included. Filtering 
-#' by tokens is a lower limit: Every figure that speaks more than $threshold$ figures is
-#' included.
-#' @param text The dramatic text in table form
-#' @param by A character vector, either "rank" or "tokens" (or unambigious sub string)
-#' @param threshold A number specifying the limit
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of 
-#' removing their speech. If it's of type character, it will be used as a name
+
 #' @export
+#' @title Format Character Names
+#' @description This function is applicable on all tables with a character table 
+#' (that are in the class QDHasCharacter). It can be used to reformated the character 
+#' names
+#' @param object The object in which we want to transform names
+#' @param drama The QDDrama object with all the information
+#' @param FUN A function applied to the strings
 #' @examples 
 #' data(rksp.0)
-#' text.top10 <- limitFigures(rksp.0$mtext)
-limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="tokens",500,10), other=FALSE) {
-  by <- match.arg(by)
-  switch(by,
-         tokens=limitFiguresByTokens(text, minTokens=threshold, other=other),
-         rank=limitFiguresByRank(text, maxRank = threshold, other=other),
-         stop("Invalid filtering criterion"))
-}
-
-#' This method removes the spoken tokens of all but the most frequent n figures
-#' @param t The text, a data frame listing each token for each figure
-#' @param maxRank Up to maxRank figures remain in the data set
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of 
-#' removing their speech. If it's of type character, it will be used as a name
-#' @keywords internal
-#' @importFrom utils head
-limitFiguresByRank <- function(t, maxRank=10, other=FALSE) {
-  if (other == FALSE) {
-    r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n%in%maxN(unique(n),maxRank)], by=.(corpus,drama)][,n:=NULL,][]
-  } else {
-    otherString <- ifelse(is.character(other),other,"OTHER")
-    counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id, t$Speaker.figure_surface), length)
-    counts <- counts[order(counts$x, decreasing = TRUE),]
-    rcounts <- Reduce(rbind, by(counts, counts["Group.1"], head, n=maxRank))
-    r <- t
-    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),otherString)
-    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),otherString)
-    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- otherString
-    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- otherString
-  }
-  r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
-  r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
-  r
-}
-
-#' This method removes the spoken tokens by all figures that speak infrequently.
-#' @param t The text, a data frame listing each token for each figure
-#' @param minTokens The minimal amount of tokens a figure has to speak
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing 
-#' their speech. If it's of type character, it will be used as a name
-#' @keywords internal
-limitFiguresByTokens <- function(t, minTokens=100, other=FALSE) {
-  if (other == FALSE) {
-    r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n>=minTokens],by=.(corpus,drama)][,n:=NULL][]
-  } else {
-    otherString <- ifelse(is.character(other),other,"OTHER")
-    
-    counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id, t$Speaker.figure_surface), length)
-    rcounts <- counts[(counts$x > minTokens),]
-    r <- t
-    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),otherString)
-    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),otherString)
-    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- otherString
-    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- otherString
-  }
-  r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
-  r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
-  r
-}
-
-
-limit.figures.by.rank <- function(...) {
-  .Deprecated("limitFigures(by=\"rank\"")
-  limitFiguresByRank(...)
-}
-
-
-limit.figures.by.tokens <- function(...) {
-  .Deprecated("limitFigures(by=\"tokens\"")
-  limitFiguresByTokens(...)
-}
-
-#' @export
-format.QDHasCharacter <- function(object, drama) {
+#' ustat <- utteranceStatistics(rksp.0)
+#' ustat <- format(ustat, rksp.0)
+format.QDHasCharacter <- function(object, drama, FUN=stringr::str_to_title) {
   stopifnot(inherits(object, "QDHasCharacter"))
   stopifnot(inherits(drama, "QDDrama"))
   
-  chars <- levels(drama$characters)
+  positions <- match(levels(object$character), drama$characters$figure_id)
+  levels(object$character) <- FUN(drama$characters$figure_surface[positions])
 
-  
-    
-  merged <- merge(object, drama$characters,
-                  by.x = c("corpus", "drama", "character"),
-                  by.y = c("corpus", "drama", "figure_id"),
-                  sort=FALSE)
-  
+  object    
+
 }
 
+#' @title Filter characters
+#' @description This function can be used to filter characters from all tables 
+#' that contain  a character column (and are of the class QDHasCharacter).
+#' @param object The object we want to filter
+#' @param drama The QDDrama object
+#' @param by Specifies the filter mechanism
+#' @param threshold The threshold
 #' @export
+#' @examples 
+#' data(rjmw.0)
+#' dstat <- dictionaryStatistics(rjmw.0)
+#' filter(dstat, rjmw.0, by="tokens", threshold=1000)
 filter <- function(object, drama, by=c("rank", "tokens"), 
-                   threshold=ifelse(by=="tokens", 500, 10),
-                   other=FALSE) {
+                   threshold=ifelse(by=="tokens", 500, 10)) {
   stopifnot(inherits(object, "QDHasCharacter"))
   stopifnot(inherits(drama, "QDDrama"))
   by <- match.arg(by) 

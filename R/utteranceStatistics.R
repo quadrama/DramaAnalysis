@@ -3,6 +3,8 @@
 #' @param t The dramatic text(s)
 #' @param normalizeByDramaLength Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
+#' @exportClass QDUtteranceStatistics
+#' @exportClass QDHasCharacter
 #' @examples
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 5)
@@ -28,10 +30,4 @@ utteranceStatistics <- function(drama, normalizeByDramaLength = TRUE) {
   ulength <- droplevels(ulength)
   class(ulength) <- c(c("QDUtteranceStatistics", "QDHasCharacter", "data.frame"))
   ulength
-}
-
-
-utterance_statistics <- function(...) {
-  .Deprecated("utteranceStatistics")
-  utteranceStatistics(...)
 }
