@@ -7,10 +7,10 @@
 presence(drama, passiveOnlyWhenNotActive = TRUE)
 }
 \arguments{
+\item{drama}{A single drama}
+
 \item{passiveOnlyWhenNotActive}{Logical. If true (default), passive presence is only 
 counted if a character is not actively present in the scene.}
-
-\item{mtext}{A single segmented text}
 }
 \description{
 This function should be called for a single text. It returns 
@@ -21,5 +21,5 @@ speaking or passively mentions.
 }
 \examples{
 data(rksp.0)
-presence(rksp.0$mtext)
+presence(rksp.0)
 }

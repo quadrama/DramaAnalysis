@@ -8,14 +8,13 @@ presenceCore <- function(activeM,passiveM,N) {
 #' data.frame contains 
 #' information about the number of scenes in which a character is actively 
 #' speaking or passively mentions.
-#' @param mtext A single segmented text
+#' @param drama A single drama
 #' @param passiveOnlyWhenNotActive Logical. If true (default), passive presence is only 
 #' counted if a character is not actively present in the scene.
 #' @export
-#' @exportClass QDDrama
 #' @examples 
 #' data(rksp.0)
-#' presence(rksp.0$mtext)
+#' presence(rksp.0)
 presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   # prevent notes in R CMD check
   corpus <- NULL
