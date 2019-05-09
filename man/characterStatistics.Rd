@@ -30,5 +30,5 @@ This function extracts figure statistics from a drama text table.
 }
 \examples{
 data(rksp.0)
-stat <- figureStatistics(rksp.0)
+stat <- characterStatistics(rksp.0)
 }

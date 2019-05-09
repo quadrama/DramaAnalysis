@@ -17,7 +17,7 @@
 #' @importFrom data.table as.data.table
 #' @examples
 #' data(rksp.0)
-#' stat <- figureStatistics(rksp.0)
+#' stat <- characterStatistics(rksp.0)
 #' @export
 characterStatistics <- function(drama, 
                              normalize = FALSE, 
