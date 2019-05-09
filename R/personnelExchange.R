@@ -4,29 +4,30 @@
 #' @aliases scenicDifference
 #' @description There are multiple ways to quantify the number of characters that are 
 #' exchanged over a scene or act boundary. 
-#' @param mtext The segmented drama text
+#' @param drama The QDDrama Object
 #' @param variant For hamming(), variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"
 #' @param norm For scenicDifference(), specifies the normalization constant
 #' @rdname personnelExchange
 #' @export
 #' @examples 
 #' data(rksp.0)
-#' dist_trilcke  <- hamming(rksp.0$mtext)
-#' dist_hamming  <- hamming(rksp.0$mtext, variant = "Hamming")
-#' dist_nhamming <- hamming(rksp.0$mtext, variant = "NormalizedHamming")
-hamming <- function(mtext, variant=c("Trilcke","Hamming","NormalizedHamming")) {
-  mtext <- na.omit(mtext[,-c("Mentioned.figure_surface", "Mentioned.figure_id")])
-  numberOfFigures <- length(unique(mtext$Speaker.figure_surface))
-  scenes <- length(unique(mtext$begin.Scene))
-  pm <- configuration(mtext, by="Scene", onlyPresence = TRUE)
+#' dist_trilcke  <- hamming(rksp.0)
+#' dist_hamming  <- hamming(rksp.0, variant = "Hamming")
+#' dist_nhamming <- hamming(rksp.0, variant = "NormalizedHamming")
+hamming <- function(drama, variant=c("Trilcke","Hamming","NormalizedHamming")) {
+  stopifnot(inherits(drama, "QDDrama"))
+  
+  numberOfFigures <- nrow(drama$characters)
+  scenes <- nrow(drama$segments)
+  pm <- as.matrix(configuration(drama, by="Scene", onlyPresence = TRUE))
   vec <- vector(mode="integer",length=scenes-1)
   variant <- match.arg(variant)
-  for (i in 1:(ncol(pm$matrix)-1)) {
+  for (i in 1:(ncol(pm)-1)) {
     allFigures <- switch(variant,
-                         Trilcke=sum(pm$matrix[,i] | pm$matrix[,i+1]),
+                         Trilcke=sum(pm[,i] | pm[,i+1]),
                          Hamming=1,
                          NormalizedHamming=numberOfFigures)
-    edits <- sum(xor(pm$matrix[,i],pm$matrix[,i+1]))
+    edits <- sum(xor(pm[,i],pm[,i+1]))
     vec[i] <- edits/allFigures
   }
   vec
@@ -35,14 +36,14 @@ hamming <- function(mtext, variant=c("Trilcke","Hamming","NormalizedHamming")) {
 #' @rdname personnelExchange
 #' @export
 scenicDifference <- function(drama, norm=length(unique(drama$text$Speaker.figure_surface))) {
+  stopifnot(inherits(drama, "QDDrama"))
   
-  numberOfFigures <- nrow(drama_df$characters)
+  numberOfFigures <- nrow(drama$characters)
   scenes <- nrow(drama$segments)
-  
-  pm <- configuration(drama, by="Scene", onlyPresence = TRUE)
+  pm <- as.matrix(configuration(drama, by="Scene", onlyPresence = TRUE))
   vec <- vector(mode="integer",length=scenes-1)
-  for (i in 1:(ncol(as.matrix(pm))-1)) {
-    same <- sum(as.matrix(pm)[,i] & as.matrix(pm)[,i+1])
+  for (i in 1:(ncol(pm)-1)) {
+    same <- sum(pm[,i] & pm[,i+1])
     vec[i] <- numberOfFigures - same
   }
   vec/norm
