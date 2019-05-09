@@ -117,16 +117,6 @@ figureStatistics <- function(...) {
 #' (i.e., figure with most spoken words first). If set to 1, 
 #' figures are ranked ascending.
 #' @importFrom reshape2 dcast
-#' @examples
-#' data(rksp.0,rjmw.0)
-#' text <- rbind(rksp.0$mtext,rjmw.0$mtext)
-#' stat <- figureStatistics(text, names = TRUE)
-#' mat <- figurematrix(stat)
-#' # Plot a stacked bar plot
-#' b <- barplot(mat$values,col=qd.colors)
-#' # Add figure names (if needed/wanted)
-#' text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
-#' @export
 characterMatrix <- function(fstat,column="tokens",order=-1) {
   stopifnot(inherits(fstat, "QDCharacterStatistics"))
   # prevent note in R CMD check

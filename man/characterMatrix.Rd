@@ -20,13 +20,3 @@ figures are ranked ascending.}
 This function takes a data frame describing various metrics of figures in dramas 
 and creates a matrix that can be used to create a stacked bar plot.
 }
-\examples{
-data(rksp.0,rjmw.0)
-text <- rbind(rksp.0$mtext,rjmw.0$mtext)
-stat <- figureStatistics(text, names = TRUE)
-mat <- figurematrix(stat)
-# Plot a stacked bar plot
-b <- barplot(mat$values,col=qd.colors)
-# Add figure names (if needed/wanted)
-text(x=b,y=t(mat$cs+(mat$values/2)),labels=t(substr(mat$labels,0,20)))
-}
