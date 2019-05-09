@@ -236,7 +236,7 @@ loadCSV <- function(ids,
     if (file.exists(filename)) {
       tab <- data.table::data.table(readr::read_csv(filename, 
                                                     locale = readr::locale(encoding = "UTF-8"),
-                                                    col_types = readr::cols()))
+                                                    col_types = readr::cols(drama = readr::col_character())))
       return(tab)
     } else {
       message(paste(filename, "could not be loaded and was skipped"))
