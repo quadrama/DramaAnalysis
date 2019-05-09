@@ -6,13 +6,13 @@
 \alias{scenicDifference}
 \title{Measuring Personnel Exchange over Boundaries}
 \usage{
-hamming(mtext, variant = c("Trilcke", "Hamming", "NormalizedHamming"))
+hamming(drama, variant = c("Trilcke", "Hamming", "NormalizedHamming"))
 
-scenicDifference(mtext,
-  norm = length(unique(mtext$Speaker.figure_surface)))
+scenicDifference(drama,
+  norm = length(unique(drama$text$Speaker.figure_surface)))
 }
 \arguments{
-\item{mtext}{The segmented drama text}
+\item{drama}{The QDDrama Object}
 
 \item{variant}{For hamming(), variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"}
 
@@ -24,7 +24,7 @@ exchanged over a scene or act boundary.
 }
 \examples{
 data(rksp.0)
-dist_trilcke  <- hamming(rksp.0$mtext)
-dist_hamming  <- hamming(rksp.0$mtext, variant = "Hamming")
-dist_nhamming <- hamming(rksp.0$mtext, variant = "NormalizedHamming")
+dist_trilcke  <- hamming(rksp.0)
+dist_hamming  <- hamming(rksp.0, variant = "Hamming")
+dist_nhamming <- hamming(rksp.0, variant = "NormalizedHamming")
 }
