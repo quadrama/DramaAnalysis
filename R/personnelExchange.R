@@ -34,15 +34,15 @@ hamming <- function(mtext, variant=c("Trilcke","Hamming","NormalizedHamming")) {
 
 #' @rdname personnelExchange
 #' @export
-scenicDifference <- function(mtext, norm=length(unique(mtext$Speaker.figure_surface))) {
-  mtext <- na.omit(mtext[,-c("Mentioned.figure_surface", "Mentioned.figure_id")])
-  numberOfFigures <- length(unique(mtext$Speaker.figure_surface))
-  scenes <- length(unique(mtext$begin.Scene))
+scenicDifference <- function(drama, norm=length(unique(drama$text$Speaker.figure_surface))) {
   
-  pm <- configuration(mtext, by="Scene", onlyPresence = TRUE)
+  numberOfFigures <- nrow(drama_df$characters)
+  scenes <- nrow(drama$segments)
+  
+  pm <- configuration(drama, by="Scene", onlyPresence = TRUE)
   vec <- vector(mode="integer",length=scenes-1)
-  for (i in 1:(ncol(pm$matrix)-1)) {
-    same <- sum(pm$matrix[,i] & pm$matrix[,i+1])
+  for (i in 1:(ncol(as.matrix(pm))-1)) {
+    same <- sum(as.matrix(pm)[,i] & as.matrix(pm)[,i+1])
     vec[i] <- numberOfFigures - same
   }
   vec/norm
