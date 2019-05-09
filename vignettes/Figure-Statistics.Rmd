@@ -51,7 +51,7 @@ text <- combine(rksp.0, rjmw.0)
 
 First, we calculate figure statistics. 
 ```{r}
-charStats <- characterStatistics(text, names=TRUE, normalize=FALSE)
+charStats <- characterStatistics(text, normalize=FALSE)
 summary(charStats)
 ```
 By default, all punctuation marks are counted as tokens. Since version 2.2.0, punctuation can be excluded with the argument `filter_punctuation = TRUE`.
@@ -61,7 +61,7 @@ This figure statistics table already contains all the information we need and ca
 Since we are using this quite often, version 3.0 makes plotting a stacked bar chart very simple (enter `?barplot.QDCharacterStatistics` for details):
 
 ```{r}
-characterStatistics(text, names=TRUE, normalize=FALSE) %>%
+characterStatistics(text, normalize=FALSE) %>%
   format(text) %>%
   barplot(names.arg=c("Miss Sara Sampson", "Emilia Galotti"))
 
