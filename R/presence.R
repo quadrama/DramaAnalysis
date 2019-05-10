@@ -27,7 +27,6 @@ presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   . <- NULL
   
   stopifnot(inherits(drama, "QDDrama"))
-  mtext <- segment(drama$text, drama$segments)
 
   conf.active <- configuration(drama, by="Scene", 
                                mode="Active",
@@ -44,7 +43,6 @@ presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   
   rownames(conf.active) <- conf.active$character
   rownames(conf.passive) <- conf.passive$character
-  #agg.scenes <- mtext[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)]
   r <- merge(meta, drama$segments[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)], by=c("corpus","drama"))
 
 
@@ -77,7 +75,6 @@ presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
     r$passives <- r$passives - overlaps.cnt
   }
   
-  #r <- merge( r, data.frame(figure=names(passives), passive=passives), by="figure")
   r$presence <- ( (r$actives - r$passives) / r$scenes )
   r
 }
