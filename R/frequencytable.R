@@ -12,26 +12,29 @@
 #' @importFrom stats xtabs ftable
 #' @examples
 #' data(rksp.0)
-#' st <- frequencytable(rksp.0$mtext)
-#' @examples
+#' st <- frequencytable(rksp.0)
 #' \dontrun{
-#' require(stylo)
-#' data(vndf.0.text)
-#' tl <- limitFigures(vndf.0.text, by="tokens", threshold=1000)
-#' stylo_table <- frequencytable(tl, names=TRUE, byFigure=TRUE)
-#' stylo(gui=F, frequencies = stylo_table)
+#' stylo(gui=F, frequencies = st)
 #' }
 #' @export
-frequencytable <- function(drama, acceptedPOS = postags$de$words,
-                           column="Token.surface", 
+frequencytable <- function(drama, 
+                           acceptedPOS = postags$de$words,
+                           column="Token.lemma", 
                            byFigure=FALSE, 
                            sep="|", 
                            normalize=FALSE, 
                            sortResult=FALSE, 
-                           segment=c("Drama","Act","Scene")) {
+                           segment=c("Drama", "Act", "Scene")) {
   stopifnot(inherits(drama, "QDDrama"))
   
-  ft <- drama$text
+  segment <- match.arg(segment)
+  
+  ft <- switch(segment,
+               Drama=drama$text,
+               Act=segment(drama$text, drama$segments),
+               Scene=segment(drama$text, drama$segments))
+  
+  
   if (length(acceptedPOS) > 0)
     ft <- ft[as.character(ft$Token.pos) %in% acceptedPOS,]
   
@@ -107,4 +110,77 @@ frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols
   r <- do.call(rbind, tapply(paste(ft[[cols[1]]], ft[[cols[2]]][-1]), index, function(x){prop.table(table(x))}))
   r[,order(colSums(r),decreasing=TRUE)]
   
+}
+
+
+# defunct, but new development
+frequencytable3 <- function(drama,
+                           acceptedPOS = postags$de$words,
+                           column="Token.lemma", 
+                           byFigure=FALSE, 
+                           sep="|", 
+                           threshold=10,
+                           normalize=FALSE, 
+                           sortResult=FALSE, 
+                           segment=c("Drama", "Act", "Scene")) {
+  stopifnot(inherits(drama, "QDDrama"))
+  
+  segment <- match.arg(segment)
+  
+  ft <- switch(segment,
+               Drama=drama$text,
+               Act=segment(drama$text, drama$segments),
+               Scene=segment(drama$text, drama$segments))
+  
+  
+  if (length(acceptedPOS) > 0)
+    ft <- ft[as.character(ft$Token.pos) %in% acceptedPOS,]
+  
+  segment <- match.arg(segment)
+  
+  fmla <- if(byFigure == TRUE){
+    switch(segment,
+           Drama=("drama + Speaker.figure_id"),
+           Act=("drama + Number.Act + Speaker.figure_id"),
+           Scene=("drama + Number.Act + Number.Scene + Speaker.figure_id"))
+  } else {
+    switch(segment,
+           Drama=("drama"),
+           Act=("drama + Number.Act"),
+           Scene=("drama + Number.Act + Number.Scene"))
+  }
+  
+  metaCols <- if(byFigure == TRUE)
+  { switch(segment,
+           Drama=2,
+           Act=3,
+           Scene=4)
+  } else {
+    switch(segment,
+           Drama=1,
+           Act=2,
+           Scene=3)
+  }
+  
+  xt <- stats::xtabs(as.formula(paste0("~", fmla, "+", column, collapse = "")), data=ft)
+  
+  
+  xt <- as.data.table(as.data.frame(ftable(xt)))
+  fmla.f <- as.formula(paste(fmla, "Token.lemma", sep = "~"))
+  xt <- data.table::dcast(xt, fmla.f, value.var="Freq")
+  
+  if (normalize == TRUE) {
+    xt[metaCols:ncol(xt),] <- t(apply(xt[metaCols:ncol(xt),],1,function(x) { xt / sum(xt)}))
+  } 
+  
+  if (sortResult == TRUE) {
+    xt <- xt[,order(colSums(xt),decreasing = TRUE)]
+  }
+  
+  class(xt) <- append(class(xt), switch(segment, 
+                                        Drama = "QDByDrama",
+                                        Act   = "QDByAct",
+                                        Scene ="QDByScene"))
+  
+  xt
 }

@@ -5,7 +5,7 @@
 \title{Word frequencies}
 \usage{
 frequencytable(drama, acceptedPOS = postags$de$words,
-  column = "Token.surface", byFigure = FALSE, sep = "|",
+  column = "Token.lemma", byFigure = FALSE, sep = "|",
   normalize = FALSE, sortResult = FALSE, segment = c("Drama", "Act",
   "Scene"))
 }
@@ -32,12 +32,8 @@ by drama, act or scene and/or by figure.
 }
 \examples{
 data(rksp.0)
-st <- frequencytable(rksp.0$mtext)
+st <- frequencytable(rksp.0)
 \dontrun{
-require(stylo)
-data(vndf.0.text)
-tl <- limitFigures(vndf.0.text, by="tokens", threshold=1000)
-stylo_table <- frequencytable(tl, names=TRUE, byFigure=TRUE)
-stylo(gui=F, frequencies = stylo_table)
+stylo(gui=F, frequencies = st)
 }
 }
