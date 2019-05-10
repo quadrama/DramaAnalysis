@@ -1,4 +1,4 @@
-context("Figures")
+context("characterStatistics()")
 
 data(rksp.0)
 toler <- 1e-4

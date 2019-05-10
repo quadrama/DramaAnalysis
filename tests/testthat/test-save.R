@@ -6,8 +6,8 @@ data(rjmw.0)
 
 # isolateFigureSpeech()
 
-l <- isolateFigureSpeech(rksp.0$mtext, write_to_files=FALSE)
-test_that("isolateFigureSpeech(rksp.0$mtext, write_to_files=FALSE)
+l <- isolateFigureSpeech(rksp.0, write_to_files=FALSE)
+test_that("isolateFigureSpeech(rksp.0, write_to_files=FALSE)
           produces correct output", {
   expect_length(l, 13)
   expect_equal(names(l[1]), "rksp.0_der.prinz")
@@ -16,8 +16,8 @@ test_that("isolateFigureSpeech(rksp.0$mtext, write_to_files=FALSE)
   expect_equal(l[[1]]$Token.surface[2], ",")
 })
 
-l <- isolateFigureSpeech(rksp.0$mtext, segment="Act", min_token_count=1000, write_to_files=FALSE)
-test_that("isolateFigureSpeech(rksp.0$mtext, segment='Act', min_token_count=1000, write_to_files=FALSE)
+l <- isolateFigureSpeech(rksp.0, segment="Act", min_token_count=1000, write_to_files=FALSE)
+test_that("isolateFigureSpeech(rksp.0, segment='Act', min_token_count=1000, write_to_files=FALSE)
           produces correct output", {
   expect_length(l, 9)
   expect_equal(names(l[3]), "claudia.galotti_2")
@@ -26,8 +26,8 @@ test_that("isolateFigureSpeech(rksp.0$mtext, segment='Act', min_token_count=1000
   expect_equal(l[[3]]$Token.surface[2], "sprengte")
 })
 
-l <- isolateFigureSpeech(rbind(rksp.0$mtext, rjmw.0$mtext), segment='Scene', min_token_count=700, count_punctuation=FALSE, write_to_files=FALSE)
-test_that("saveFigureSpeech(rbind(rksp.0$mtext, rjmw.0$mtext), segment='Scene', min_token_count=700, count_punctuation=FALSE, write_to_files=FALSE)
+l <- isolateFigureSpeech(rbind(rksp.0, rjmw.0), segment='Scene', min_token_count=700, count_punctuation=FALSE, write_to_files=FALSE)
+test_that("saveFigureSpeech(rbind(rksp.0, rjmw.0), segment='Scene', min_token_count=700, count_punctuation=FALSE, write_to_files=FALSE)
           produces correct output", {
   expect_length(l, 13)
   expect_equal(names(l[1]), "rksp.0_marinelli_1_6")
@@ -41,8 +41,8 @@ test_that("saveFigureSpeech(rbind(rksp.0$mtext, rjmw.0$mtext), segment='Scene', 
 
 # newCollection()
 
-l <- newCollection(rbind(rksp.0$mtext, rjmw.0$mtext), write_to_file=FALSE)
-test_that("newCollection(rbind(rksp.0$mtext, rjmw.0$mtext), write_to_file=FALSE)
+l <- newCollection(rbind(rksp.0, rjmw.0), write_to_file=FALSE)
+test_that("newCollection(rbind(rksp.0, rjmw.0), write_to_file=FALSE)
           produces correct output", {
   expect_length(l, 2)
   expect_equal(l[1], "rksp.0")
