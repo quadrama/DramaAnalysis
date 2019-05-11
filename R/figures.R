@@ -61,10 +61,10 @@ characterStatistics <- function(drama,
                 drama,
                 begin.Act,
                 begin.Scene,
-                length,eval(b))][,begin.Scene:=as.double(as.factor(begin.Scene)),begin.Act]
+                eval(b))][,begin.Scene:=as.double(as.factor(begin.Scene)),begin.Act]
     r$begin.Act <- as.roman(as.integer(as.factor(r$begin.Act)))
     colnames(r)[3:4] <- c("Act","Scene")
-    fcol <- 6
+    fcol <- 5
   } else if (segment == "Act") {
     r <- text[,list(tokens=length(Token.surface),
                  types=data.table::uniqueN(Token.surface),
@@ -73,10 +73,10 @@ characterStatistics <- function(drama,
                  utteranceLengthSd=sd(rle(utteranceBegin)$lengths),
                  firstBegin=min(utteranceBegin),
                  lastEnd=max(utteranceEnd)
-    ),by=.(corpus,drama,begin.Act,length,eval(b))]
+    ),by=.(corpus,drama,begin.Act,eval(b))]
     r$begin.Act <- as.roman(as.integer(as.factor(r$begin.Act)))
     colnames(r)[3] <- "Act"
-    fcol <- 5
+    fcol <- 4
   } else {
     r <- text[,list(tokens=length(Token.surface),
                  types=data.table::uniqueN(Token.surface),
@@ -85,13 +85,13 @@ characterStatistics <- function(drama,
                  utteranceLengthSd=sd(rle(utteranceBegin)$lengths),
                  firstBegin=min(utteranceBegin),
                  lastEnd=max(utteranceEnd)
-    ),by=.(corpus,drama,length,eval(b))]
-    fcol <- 4
+    ),by=.(corpus,drama,eval(b))]
+    fcol <- 3
   }
   
   colnames(r)[fcol] <- "character"
   if (normalize == TRUE) {
-    r$tokens <- r$tokens / r$length
+    r$tokens <-     ave(r$tokens, r$drama, FUN=function(x) {x/sum(x)})
     r$utterances <- ave(r$utterances, r$drama, FUN=function(x) {x/sum(x)})
     r$firstBegin <- r$firstBegin / ave(r$lastEnd, r$drama, FUN=max)
     r$lastEnd <- ave(r$lastEnd, r$drama, FUN=function(x) {x/max(x)})
