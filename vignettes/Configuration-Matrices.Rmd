@@ -81,7 +81,7 @@ barplot(cList$matrix,
 
 Configuration matrices are also often used to get an overview of who is copresent on stage. First, we create a configuration matrix that only represents presence or absence of a figure (and we switch to scenes). Obviously, the resulting matrix has many more columns.
 ```{r}
-c <- configuration(rksp.0, onlyPresence = TRUE, by="Scene")
+c <- configuration(rksp.0, onlyPresence = TRUE, segment="Scene")
 
 # to see the matrix (not shown here):
 # as.list(c)$matrix 
