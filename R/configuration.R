@@ -71,7 +71,7 @@ configuration <- function(d,
     }
   }
   
-  class(cfg) <- c("QDConfiguration", "data.frame")
+  class(cfg) <- c("QDConfiguration", "QDHasCharacter", "data.frame")
   
   cfg  
 }
