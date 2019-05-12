@@ -125,12 +125,12 @@ dictionaryStatistics <- function(drama, fields=base_dictionary[fieldnames],
 
   first <- TRUE
   singles <- lapply(names(fields),function(x) {
-    dss <- dictionaryStatisticsSingle(drama, fields[[x]], ci=ci,
+    dss <- as.data.table(dictionaryStatisticsSingle(drama, fields[[x]], ci=ci,
                                         segment = segment,
                                         byFigure = byFigure,
                                         normalizeByFigure = normalizeByFigure, 
                                         normalizeByField = normalizeByField, 
-                                        column=column)
+                                        column=column))
     colnames(dss)[ncol(dss)] <- x
     if (x == names(fields)[[1]]) {
       if (segment=="Scene") {
@@ -241,6 +241,13 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   }
   
   r[is.nan(r$x)]$x <- 0
+  class(r) <- c("QDDictionaryStatistics", "QDHasCharacter", switch(segment, 
+                                                                   Drama = "QDByDrama",
+                                                                   Act   = "QDByAct",
+                                                                   Scene ="QDByScene"), "data.frame", class(r))
+  if (byFigure) 
+    class(r) <- append(class(r), "QDByCharacter")
+  
   r
 }
 
