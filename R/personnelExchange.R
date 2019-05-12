@@ -19,7 +19,7 @@ hamming <- function(drama, variant=c("Trilcke","Hamming","NormalizedHamming")) {
   
   numberOfFigures <- nrow(drama$characters)
   scenes <- nrow(drama$segments)
-  pm <- as.matrix(configuration(drama, by="Scene", onlyPresence = TRUE))
+  pm <- as.matrix(configuration(drama, segment="Scene", onlyPresence = TRUE))
   vec <- vector(mode="integer",length=scenes-1)
   variant <- match.arg(variant)
   for (i in 1:(ncol(pm)-1)) {
@@ -40,7 +40,7 @@ scenicDifference <- function(drama, norm=length(unique(drama$text$Speaker.figure
   
   numberOfFigures <- nrow(drama$characters)
   scenes <- nrow(drama$segments)
-  pm <- as.matrix(configuration(drama, by="Scene", onlyPresence = TRUE))
+  pm <- as.matrix(configuration(drama, segment="Scene", onlyPresence = TRUE))
   vec <- vector(mode="integer",length=scenes-1)
   for (i in 1:(ncol(pm)-1)) {
     same <- sum(pm[,i] & pm[,i+1])

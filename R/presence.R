@@ -28,10 +28,10 @@ presence <- function(drama, passiveOnlyWhenNotActive=TRUE) {
   
   stopifnot(inherits(drama, "QDDrama"))
 
-  conf.active <- configuration(drama, by="Scene", 
+  conf.active <- configuration(drama, segment="Scene", 
                                mode="Active",
                                onlyPresence = TRUE)
-  conf.passive <- configuration(drama, by="Scene", 
+  conf.passive <- configuration(drama, segment="Scene", 
                                 mode="Passive",
                                 onlyPresence = TRUE)
   
