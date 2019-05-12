@@ -26,12 +26,12 @@
 #' cfg <- configuration(rksp.0, mode="Passive")
 #' 
 configuration <- function(d, 
-                          by=c("Act", "Scene"), 
+                          segment=c("Act", "Scene"), 
                           mode=c("Active", "Passive"),
                           onlyPresence=FALSE) {
   stopifnot(inherits(d, "QDDrama"))
   
-  by <- match.arg(by)
+  segment <- match.arg(segment)
   mode <- match.arg(mode)
   
   # prevent notes in R CMD check
@@ -45,7 +45,7 @@ configuration <- function(d,
   segmented <- switch(mode,
                       Active=segment(d$text, d$segments),
                       Passive=segment(d$mentions, d$segments))
-  segmentColumn <- switch(by,
+  segmentColumn <- switch(segment,
                           Act=quote(Number.Act),
                           Scene=quote(begin.Scene))
   characterColumn <- switch(mode,
