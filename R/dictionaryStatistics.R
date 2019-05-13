@@ -248,11 +248,12 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
           by.x = bycolumns,
           by.y = bycolumns)
     xt[,value:=((value/fieldNormalizer)/N), keyby=bylist]
+    xt <- xt[,-"N"]
   } else {
-    xt$value <- xt$value / fieldNormalizer
+    xt$value <- as.double(xt$value) / fieldNormalizer
   }
-  r <- xt[,-"N"]
   
+  r <- xt
   colnames(r)[ncol(r)] <- "x"
   if (byFigure) {
     colnames(r)[ncol(r)-1] <- "character"
