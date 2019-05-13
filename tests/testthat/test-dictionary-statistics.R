@@ -9,7 +9,7 @@ dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schön"))
 test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schön'))
           has correct dimensions and produces correct output", {
   expect_length(dstat, 4)
-  expect_equal(as.integer(dstat[6,4]), 1)
+  expect_equal(as.integer(dstat[6,4]), 2)
 })
 
 dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schön"), normalizeByFigure = TRUE)

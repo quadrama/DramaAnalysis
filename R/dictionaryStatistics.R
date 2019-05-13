@@ -183,7 +183,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
                                        normalizeByField = FALSE, 
                                        byFigure = TRUE,
                                        fieldNormalizer=length(wordfield), 
-                                       column="Token.surface", ci=TRUE,
+                                       column="Token.lemma", ci=TRUE,
                                        colnames=NULL)
   {
   stopifnot(inherits(drama, "QDDrama"))
@@ -205,12 +205,10 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
                         Act=c("drama","Number.Act"),
                         Scene=c("drama","Number.Act","Number.Scene"))
                  )
-  if (byFigure == TRUE) {
-    bycolumns <- c(bycolumns, "Speaker.figure_id")
-  }
-  
+  #if (byFigure == TRUE) {
+  #  bycolumns <- c(bycolumns, "Speaker.figure_id")
+  #}
   bylist <- paste(bycolumns,collapse=",")
-  dt <- data.table(text)
   if (ci) {
     wordfield <- tolower(wordfield)
     casing <- tolower
@@ -221,16 +219,39 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
     fieldNormalizer <- 1
   }
   
+  dt <- data.table(text)
   dt$match <- casing(dt[[column]]) %in% wordfield
-  form <- stats::as.formula(paste0("~ ", paste(c(bycolumns,"match"), collapse=" + ")))
-  xt <- data.table::data.table(reshape2::melt(xtabs(form, data=dt)))
-  if (normalizeByFigure == TRUE) {
-    r <- xt[,.((sum(.SD[match==TRUE]$value)/fieldNormalizer)/sum(.SD$value)),
-       keyby=bylist]
+  
+  # counting
+  # xt <- dt[,.(x=sum(match)),keyby=bylist]
+  if (byFigure == TRUE) {
+    xt <- dt[,melt(xtabs(~ Speaker.figure_id, data=.SD[match])), 
+             keyby=bylist]
   } else {
-    r <- xt[,.(sum(.SD[match==TRUE]$value)/fieldNormalizer),
-            keyby=bylist]
+    xt <- dt[,sum(match), keyby=bylist]
   }
+  
+  if(normalizeByField || normalizeByFigure) {
+    xt$value <- as.double(xt$value)
+  }
+  
+  # remove combinations of character and play that don't exist
+  xt <- unique(merge(xt, drama$characters, 
+              by.x = c("corpus","drama","Speaker.figure_id"), 
+              by.y = c("corpus","drama","figure_id"))[,names(xt), with=F])
+  # xt$match <- NULL
+  
+  if (normalizeByFigure == TRUE) {
+    bycolumns <- append(bycolumns,"Speaker.figure_id")
+    bylist <- paste(bycolumns, collapse=",")
+    xt <- merge(xt, dt[,.N,keyby=bylist], 
+          by.x = bycolumns,
+          by.y = bycolumns)
+    xt[,value:=((value/fieldNormalizer)/N), keyby=bylist]
+  } else {
+    xt$value <- xt$value / fieldNormalizer
+  }
+  r <- xt[,-"N"]
   
   colnames(r)[ncol(r)] <- "x"
   if (byFigure) {
