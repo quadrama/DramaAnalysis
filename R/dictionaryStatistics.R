@@ -210,7 +210,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   }
   
   bylist <- paste(bycolumns,collapse=",")
-  dt <- as.data.table(text)
+  dt <- data.table(text)
   if (ci) {
     wordfield <- tolower(wordfield)
     casing <- tolower
