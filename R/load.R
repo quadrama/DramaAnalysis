@@ -90,15 +90,6 @@ loadSets <- function() {
   data.frame(size=unlist(lapply(sets,length)))
 }
 
-scene.act.table <- function(ids, defaultCollection="tg") {
-  merged <- loadCSV(ids, "Segments", defaultCollection = defaultCollection)
-  merged$Number.Act <- as.numeric(as.factor(data.table::frank(merged$begin.Act, ties.method = "min")))
-  merged$Number.Scene <- stats::ave(merged$begin.Scene, 
-                                    merged$drama, merged$Number.Act, 
-                                    FUN=function(x) {as.numeric(as.factor(x))})
-  
-  merged
-}
 
 #' @title Text Loading
 #' @description Loads a text with its segmentation
@@ -139,8 +130,14 @@ loadMentions <- function(ids, defaultCollection="qd") {
 }
 
 loadSegments <- function(ids, defaultCollection="qd") {
-  sat <- scene.act.table(ids, defaultCollection = defaultCollection)
-  class(sat) <- append(HasSegments, class(sat))
+  merged <- loadCSV(ids, "Segments", defaultCollection = defaultCollection)
+  merged[,Number.Act:=as.numeric(as.factor(data.table::frank(begin.Act, ties.method = "min"))),
+         .(corpus,drama)]
+  merged[,Number.Scene:=as.numeric(as.factor(data.table::frank(begin.Scene, ties.method = "min"))),
+         .(corpus,drama,Number.Act)]
+  
+  sat <- merged
+  class(sat) <- append("QDHasSegments", class(sat))
   sat
 }
 
