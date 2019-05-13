@@ -35,7 +35,7 @@ hamming <- function(drama, variant=c("Trilcke","Hamming","NormalizedHamming")) {
 
 #' @rdname personnelExchange
 #' @export
-scenicDifference <- function(drama, norm=length(unique(drama$text$Speaker.figure_surface))) {
+scenicDifference <- function(drama, norm=length(unique(drama$text$Speaker.figure_id))) {
   stopifnot(inherits(drama, "QDDrama"))
   
   numberOfFigures <- nrow(drama$characters)
