@@ -13,7 +13,7 @@ test_that("configuration (onlyPresence = TRUE) has correct length and height", {
   expect_equal(nrow(cfg), 13) 
 })
 
-cfgl <- as.list(cfg)
+suppressWarnings(cfgl <- as.list(cfg))
 
 test_that("as.list() has correct types", {
   expect_true(inherits(cfgl, "list"))
@@ -42,7 +42,7 @@ test_that("configuration (onlyPresence = TRUE, segment = 'Scene') has correct le
   expect_equal(ncol(cfg), 46)
 })
 
-cfgl <- as.list(cfg)
+suppressWarnings(cfgl <- as.list(cfg))
 
 test_that("elements of configuration (onlyPresence = TRUE, segment = 'Scene') have correct type", {
   expect_equal(mode(cfgl$matrix), "logical")
