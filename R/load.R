@@ -95,7 +95,7 @@ scene.act.table <- function(ids, defaultCollection="tg") {
 #' }
 loadSegmentedText <- function(ids,defaultCollection="tg") {
   t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
-  sat <- scene.act.table(ids=unique(t$drama), defaultCollection=defaultCollection)
+  sat <- scene.act.table(ids=unique(paste(t$corpus, t$drama, sep = ":")), defaultCollection=defaultCollection)
 
   # if scene begin/end field is NA, we replace it with the act begin/end
   # therefore, we don't loose any text
