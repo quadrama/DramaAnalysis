@@ -11,14 +11,18 @@
 #' @examples
 #' \dontrun{
 #' data(rksp.0)
-#' isolateFigureSpeech(rksp.0$mtext, segment="Scene")
+#' isolateFigureSpeech(rksp.0, segment="Scene")
 #' }
-isolateFigureSpeech <- function(t,
+isolateFigureSpeech <- function(drama,
                              segment=c("Drama", "Act", "Scene"),
                              min_token_count=0,
                              count_punctuation=TRUE,
                              write_to_files=TRUE,
                              dir=getOption("qd.datadir")) {
+  stopifnot(inherits(drama, "QDDrama"))
+  
+  t <- segment(drama$text, drama$segments)
+  
   t <- t[, Token.surface, by=.(drama, Speaker.figure_id, Number.Act, Number.Scene)]
   t$drama <- gsub("_", ".", t[,drama])
   t$Speaker.figure_id <- gsub("_", ".", t[,Speaker.figure_id])
@@ -85,21 +89,27 @@ isolateFigureSpeech <- function(t,
 #' @export
 #' @examples
 #' \dontrun{
-#' data(rksp.0, rjmw.0)
-#' newCollection(rbind(rksp.0$mtext, rjmw.0$mtext))
+#' t <- combine(rksp.0, rjmw.0)
+#' newCollection(t)
 #' newCollection(c("rksp.0", "rjmw.0"), append=FALSE) # produces identical file
 #' newCollection(c("a", "b"), name="rksp.0_rjmw.0") # adds "a" and "b" to the file
 #' }
-newCollection <- function(t, 
-                          name=ifelse(typeof(t) == "character",
-                                     paste(t, collapse="_"),
-                                     paste(unique(t$drama), collapse="_")),
+newCollection <- function(drama, 
+                          name=ifelse(inherits(drama, "QDDrama"),
+                                      paste(unique(drama$meta$drama)),
+                                      paste(drama,collapse="_")),
                           write_to_file=TRUE,
                           dir=getOption("qd.collectionDirectory"), 
                           append=TRUE) {
-  fn <- paste0(dir, "/", name)
-  if (typeof(t) !="character") {t <- unique(t$drama)}
+  stopifnot(inherits(drama, "QDDrama") || is.character(drama))
   
+  fn <- paste0(dir, "/", name)
+  if (inherits(drama, "QDDrama")) {
+    t <- unique(drama$meta$drama)
+  } else {
+    t <- drama
+  }
+
   if (write_to_file) {
     if (append && file.exists(fn)) {
       t <- unique(c(readLines(fn), t))
