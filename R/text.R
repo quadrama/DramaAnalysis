@@ -193,12 +193,22 @@ combine <- function(d1, d2) {
   stopifnot(inherits(d1, "QDDrama"))
   stopifnot(inherits(d2, "QDDrama"))
   r <- list()
+  
+  # handle text
   r$text     <- rbind(d1$text, d2$text)
   r$meta     <- rbind(d1$meta, d2$meta)
   r$segments <- rbind(d1$segments, d2$segments)
   r$mentions <- rbind(d1$mentions, d2$mentions)
   r$characters <- rbind(d1$characters, d2$characters)
+
+  
   class(r) <- append("QDDrama", class(r))
+  class(r$text) <- class(d1$text)
+  class(r$meta) <- class(d1$meta)
+  class(r$segments) <- class(d1$segments)
+  class(r$mentions) <- class(d1$mentions)
+  
+  
   r
   
 }
