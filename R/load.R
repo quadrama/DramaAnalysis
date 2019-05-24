@@ -30,6 +30,7 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
 loadDrama <- function(ids, defaultCollection="qd") {
   drama <- list()
   drama$text     <- loadText(ids, defaultCollection = defaultCollection)
+  ids <- unique(paste(drama$text$corpus, drama$text$drama, sep = ":"))
   drama$meta     <-   loadCSV(ids, 
                               variant="Metadata", 
                               defaultCollection = defaultCollection)
@@ -234,7 +235,12 @@ loadCSV <- function(ids,
       tab <- data.table::data.table(readr::read_csv(filename, 
                                                     locale = readr::locale(encoding = "UTF-8"),
                                                     col_types = readr::cols(drama = readr::col_character())))
-      return(tab)
+      if (nrow(tab) == 0) {
+        message(paste(filename, "is empty and was skipped"))
+        return(NA)
+      } else {
+        return(tab) 
+      }
     } else {
       message(paste(filename, "could not be loaded and was skipped"))
       return(NA)
