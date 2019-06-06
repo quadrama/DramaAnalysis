@@ -4,15 +4,12 @@
 \alias{newCollection}
 \title{Create or Extend a Collection}
 \usage{
-newCollection(t, name = ifelse(typeof(t) == "character", paste(t,
-  collapse = "_"), paste(unique(t$drama), collapse = "_")),
+newCollection(drama, name = ifelse(inherits(drama, "QDDrama"),
+  paste(unique(drama$meta$drama)), paste(drama, collapse = "_")),
   write_to_file = TRUE, dir = getOption("qd.collectionDirectory"),
   append = TRUE)
 }
 \arguments{
-\item{t}{A text (or multiple texts, as data.frame or data.table), or a character 
-vector containing the drama IDs to be collected}
-
 \item{name}{The name of the collection and its filename (default = concatenated drama IDs)}
 
 \item{write_to_file}{= Whether to write the collection to a file (default = TRUE)}
@@ -21,6 +18,9 @@ vector containing the drama IDs to be collected}
 
 \item{append}{Whether to extend the collection file if it already exists. 
 If FALSE, the file will be overwritten. (default = TRUE)}
+
+\item{t}{A text (or multiple texts, as data.frame or data.table), or a character 
+vector containing the drama IDs to be collected}
 }
 \description{
 \code{newCollection()} can be used to create new collections 
@@ -28,8 +28,8 @@ or add dramas to existing collection files.
 }
 \examples{
 \dontrun{
-data(rksp.0, rjmw.0)
-newCollection(rbind(rksp.0$mtext, rjmw.0$mtext))
+t <- combine(rksp.0, rjmw.0)
+newCollection(t)
 newCollection(c("rksp.0", "rjmw.0"), append=FALSE) # produces identical file
 newCollection(c("a", "b"), name="rksp.0_rjmw.0") # adds "a" and "b" to the file
 }

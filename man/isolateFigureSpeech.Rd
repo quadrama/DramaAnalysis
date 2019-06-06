@@ -4,13 +4,11 @@
 \alias{isolateFigureSpeech}
 \title{Isolates Figure Speech}
 \usage{
-isolateFigureSpeech(t, segment = c("Drama", "Act", "Scene"),
+isolateFigureSpeech(drama, segment = c("Drama", "Act", "Scene"),
   min_token_count = 0, count_punctuation = TRUE,
   write_to_files = TRUE, dir = getOption("qd.datadir"))
 }
 \arguments{
-\item{t}{A text (or multiple texts, as data.frame or data.table)}
-
 \item{segment}{"Drama", "Act", or "Scene". Determines on what segment-level the speech is isolated.}
 
 \item{min_token_count}{The minimal token count for a speech to be considered (default = 0)}
@@ -20,6 +18,8 @@ isolateFigureSpeech(t, segment = c("Drama", "Act", "Scene"),
 \item{write_to_files}{Whether to write each isolated speech into a new text file (default = TRUE)}
 
 \item{dir}{The directory into which the files will be written (default = data directory)}
+
+\item{t}{A text (or multiple texts, as data.frame or data.table)}
 }
 \description{
 \code{isolateFigureSpeech()} isolates the speeches
@@ -28,6 +28,6 @@ of individual figures and optionally saves them in seperate text files.
 \examples{
 \dontrun{
 data(rksp.0)
-isolateFigureSpeech(rksp.0$mtext, segment="Scene")
+isolateFigureSpeech(rksp.0, segment="Scene")
 }
 }

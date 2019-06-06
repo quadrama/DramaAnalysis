@@ -14,7 +14,7 @@ dictionaryStatistics(drama, fields = base_dictionary[fieldnames],
 dictionaryStatisticsSingle(drama, wordfield = c(), segment = c("Drama",
   "Act", "Scene"), normalizeByFigure = FALSE, normalizeByField = FALSE,
   byFigure = TRUE, fieldNormalizer = length(wordfield),
-  column = "Token.surface", ci = TRUE, colnames = NULL)
+  column = "Token.lemma", ci = TRUE, colnames = NULL)
 
 dictionaryStatisticsL(...)
 }
