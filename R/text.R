@@ -238,9 +238,9 @@ combine <- function(x, y) {
 }
 
 #' @export
-#' @description This function expects an object of type \code{QDDrama} and can 
+#' @description The function \code{split(x)} expects an object of type \code{QDDrama} and can 
 #' be used to split a \code{QDDrama} object that consists of multiple dramas 
-#' into a list thereof. It is the counterpart to \code{combine()}.
+#' into a list thereof. It is the counterpart to \code{combine(x, y)}.
 #' @param x The object of class \code{QDDrama} (consisting of multiple dramas)
 #' @rdname loadDrama
 #' @examples 

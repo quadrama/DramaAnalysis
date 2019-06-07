@@ -37,9 +37,9 @@ returns them as a \code{QDDrama} object.
 The function \code{combine(x, y)} can be used to merge 
 multiple objects of the type \code{QDDrama} into one.
 
-This function expects an object of type \code{QDDrama} and can 
+The function \code{split(x)} expects an object of type \code{QDDrama} and can 
 be used to split a \code{QDDrama} object that consists of multiple dramas 
-into a list thereof. It is the counterpart to \code{combine()}.
+into a list thereof. It is the counterpart to \code{combine(x, y)}.
 }
 \examples{
 \dontrun{
