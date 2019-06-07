@@ -97,7 +97,7 @@ plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure,
 #' @export
 #' @importFrom graphics text barplot
 #' @seealso barplot.default
-barplot.QDCharacterStatistics <- function(x, 
+barplot.QDCharacterStatistics <- function(height, 
                                        col=qd.colors, 
                                        column="tokens", 
                                        order=-1, 
