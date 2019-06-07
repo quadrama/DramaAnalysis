@@ -28,7 +28,7 @@ test_that("characterStatistics(rksp.0, normalize = TRUE)
   expect_equal(as.character(fstat$character[1]), "der_prinz")
 })
 
-fstat <- characterStatistics(rksp.0, segment="Act", filter_punctuation = TRUE, normalize=TRUE)
+fstat <- characterStatistics(rksp.0, segment="Act", filterPunctuation = TRUE, normalize=TRUE)
 test_that("characterStatistics(rksp.0, segment='Act') 
           has correct dimensions and produces correct output", {
   expect_length(colnames(fstat), 11)
