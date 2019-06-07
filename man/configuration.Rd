@@ -11,20 +11,22 @@ configuration(d, segment = c("Act", "Scene"), mode = c("Active",
 \method{as.matrix}{QDConfiguration}(x, ...)
 }
 \arguments{
+\item{d}{A \code{QDDrama} object}
+
+\item{segment}{A character vector, either "Act" or "Scene". Partial matching allowed.}
+
 \item{mode}{Character vector, should be either "Active" or "Passive".
 Passive configurations express when characters are mentioned, active
-ones when they speak themselves.}
+ones when they speak themselves. Please note that extracting passive 
+configuration only makes sense if some form of coreference resolution 
+has taken place on the text, either manually or automatic. If not, 
+only very basic references (first person pronouns and proper names) are 
+represented, which usually gives a very wrong impression.}
 
-\item{onlyPresence}{If TRUE, the resulting matrix only contains 
-logical values for stage presence}
-
-\item{mtext}{The text including Act and Scene markings}
-
-\item{by}{A string, either "Act" or "Scene". Partial matching allowed.}
+\item{onlyPresence}{If TRUE, the function only records whether a character was presence. If FALSE (which is the default), the function counts the number of tokens spoken (active) or referenced (passive).}
 }
 \description{
-Creates classic drama configuration matrix. Returns either a list with 
-the three components matrix, drama, and figure, or a data.frame containing everything.
+The function \code{configuration(...)} Creates drama configuration matrix as a \code{QDConfiguration} object, which is also a data.frame. The S3 function \code{as.matrix()} can be used to extract a numeric or logical matrix containing the core.
 }
 \section{Active and Passive Configurations}{
 
@@ -40,6 +42,7 @@ on who's mentioned in a scene or an act.
 # Active configuration matrix
 data(rksp.0)
 cfg <- configuration(rksp.0)
+
 # Passive configuration matrix
 cfg <- configuration(rksp.0, mode="Passive")
 
