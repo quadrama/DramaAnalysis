@@ -46,32 +46,50 @@ format.QDHasCharacter <- function(x, drama, FUN=stringr::str_to_title, ...) {
 
 #' @title Filter characters
 #' @description This function can be used to filter characters from all tables 
-#' that contain  a character column (and are of the class QDHasCharacter).
-#' @param object The object we want to filter
-#' @param drama The QDDrama object
-#' @param by Specifies the filter mechanism
-#' @param threshold The threshold
+#' that contain  a character column (and are of the class QDHasCharacter). 
+#' @param hasCharacter The object we want to filter.
+#' @param drama The QDDrama object.
+#' @param by Character vector. Specifies the filter mechanism. 
+#' @param n The threshold or a list of character names/ids to keep.
+#' @details The function supports three filter mechanisms: The filter by 
+#' \code{rank} sorts the characters according to the number of tokens they speak
+#' and \emph{keeps} the top $n$ characters. The filter called \code{tokens} keeps 
+#' all characters that speak $n$ or more tokens. The filter called \code{name} 
+#' keeps the characters that are provided by name as a vector as \code{n}.
 #' @export
 #' @examples 
 #' data(rjmw.0)
 #' dstat <- dictionaryStatistics(rjmw.0)
-#' filter(dstat, rjmw.0, by="tokens", threshold=1000)
-filter <- function(object, drama, by=c("rank", "tokens"), 
-                   threshold=ifelse(by=="tokens", 500, 10)) {
-  stopifnot(inherits(object, "QDHasCharacter"))
+#' filter(dstat, rjmw.0, by="tokens", n=1000)
+#' 
+#' 
+filter <- function(hasCharacter, 
+                   drama, 
+                   by=c("rank", "tokens", "name"), 
+                   n=ifelse(by=="tokens", 500, ifelse(by=="rank", 10, c()))) {
+  
+  # verify that objects have the correct types
+  stopifnot(inherits(hasCharacter, "QDHasCharacter"))
   stopifnot(inherits(drama, "QDDrama"))
+  
+  # match argument
   by <- match.arg(by) 
   
+  # retrieve character statistics
   charStat <- characterStatistics(drama)
   
+  # by default, we keep everyone
   keep <- charStat$character
   if (by == "tokens") {
-    keep <- charStat[charStat$tokens >= threshold,]$character
+    keep <- charStat[charStat$tokens >= n,]$character
   } else if (by == "rank") {
-    keep <- charStat[order(charStat$tokens, decreasing = TRUE),]$character[1:threshold]
+    keep <- charStat[order(charStat$tokens, decreasing = TRUE),]$character[1:n]
+  } else if (by == "name") {
+    keep <- n
   }
   
-  object[object$character %in% keep, ]
+  # filter based on keep and return
+  hasCharacter[hasCharacter$character %in% keep, ]
 }
 
 #' @title Filtering Mentioned Figures

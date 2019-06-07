@@ -4,24 +4,33 @@
 \alias{filter}
 \title{Filter characters}
 \usage{
-filter(object, drama, by = c("rank", "tokens"), threshold = ifelse(by
-  == "tokens", 500, 10))
+filter(hasCharacter, drama, by = c("rank", "tokens", "name"),
+  n = ifelse(by == "tokens", 500, ifelse(by == "rank", 10, c())))
 }
 \arguments{
-\item{object}{The object we want to filter}
+\item{hasCharacter}{The object we want to filter.}
 
-\item{drama}{The QDDrama object}
+\item{drama}{The QDDrama object.}
 
-\item{by}{Specifies the filter mechanism}
+\item{by}{Character vector. Specifies the filter mechanism.}
 
-\item{threshold}{The threshold}
+\item{n}{The threshold or a list of character names/ids to keep.}
 }
 \description{
 This function can be used to filter characters from all tables 
 that contain  a character column (and are of the class QDHasCharacter).
 }
+\details{
+The function supports three filter mechanisms: The filter by 
+\code{rank} sorts the characters according to the number of tokens they speak
+and \emph{keeps} the top $n$ characters. The filter called \code{tokens} keeps 
+all characters that speak $n$ or more tokens. The filter called \code{name} 
+keeps the characters that are provided by name as a vector as \code{n}.
+}
 \examples{
 data(rjmw.0)
 dstat <- dictionaryStatistics(rjmw.0)
-filter(dstat, rjmw.0, by="tokens", threshold=1000)
+filter(dstat, rjmw.0, by="tokens", n=1000)
+
+
 }
