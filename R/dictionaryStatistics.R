@@ -278,6 +278,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
                        Scene ="QDByScene"), "data.frame", class(r))
   if (byFigure) {
     class(r) <- append(class(r), "QDByCharacter")
+    r$character <- as.factor(r$character)
   }
   r
 }

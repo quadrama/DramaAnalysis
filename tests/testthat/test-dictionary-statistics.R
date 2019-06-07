@@ -34,7 +34,7 @@ dstat <- dictionaryStatistics(rksp.0, fields=list(Familie=list("aber")))
 test_that("dictionaryStatistics(rksp.0, fields=list(Familie=list('aber'))) 
           produces correct output", {
   expect_equal(as.numeric(dstat[8,4]), 29)
-  expect_equal(dstat[8,3], "der_prinz")
+  expect_equal(as.character(dstat[8,3]), "der_prinz")
 })
 
 dstat <- dictionaryStatistics(rksp.0)
