@@ -50,14 +50,14 @@ This creates a basic configuration matrix, but instead of just containing the pr
 We can use this easily to create a stacked bar chart, showing the distribution visually (you probably need a color palette with more than ten colors ... )
 
 ```{r}
-cList <- as.list(c)
+mat <- as.matrix(c)
 
 par(mar=c(2,2,2,10))
-barplot(cList$matrix, 
-        legend.text = cList$figure, # legend text
+barplot(mat, 
+        legend.text = c$character, # legend text
         args.legend = list(cex=0.5, # legend font size
                            x=7.5, # legend x position
-                           y=max(colSums(cList$matrix)) # legend y pos
+                           y=max(colSums(mat)) # legend y pos
                         ), 
         col=qd.colors)
 ```
@@ -65,14 +65,16 @@ barplot(cList$matrix,
 Since each act has a different length, it would be useful to normalize each block, according to the total number of spoken tokens. This way, we can display the relative active presence of each figure in each act. We normalize by dividing by the sum of each column.
 
 ```{r}
-cList$matrix <- scale(cList$matrix, center=FALSE, scale=colSums(cList$matrix))
-cList$matrix
+mat <- scale(mat, center=FALSE, scale=colSums(mat))
+
+mat
+
 par(mar=c(2,2,2,10))
-barplot(cList$matrix, 
-        legend.text=cList$figure, # set legend text
+barplot(mat, 
+        legend.text=c$character, # set legend text
         args.legend = list(cex=0.5, # legend font size
                            x=7.5, # legend x position
-                           y=max(colSums(cList$matrix)) # legend y pos
+                           y=max(colSums(mat)) # legend y pos
                         ),
         col=qd.colors)
 ```
@@ -84,19 +86,19 @@ Configuration matrices are also often used to get an overview of who is copresen
 c <- configuration(rksp.0, onlyPresence = TRUE, segment="Scene")
 
 # to see the matrix (not shown here):
-# as.list(c)$matrix 
+# as.matrix(c)
 ``` 
 
 Creating a co-occurrence matrix is a simple matter of matrix multiplication:
 ```{r}
-cList <- as.list(c)
+mat <- as.matrix(c)
 
-copresence <- cList$matrix %*% t(cList$matrix)
+copresence <- mat %*% t(mat)
 copresence
 
 # add figure names
-rownames(copresence) <- cList$figure
-colnames(copresence) <- cList$figure
+rownames(copresence) <- c$character
+colnames(copresence) <- c$character
 ```
 
 ### As Heatmap
@@ -116,9 +118,9 @@ image(copresence,
       frame=TRUE  # print a frame around the heatmap
       )
 # add the x axis
-axis(1, at = seq(0,1,length.out = length(cList$figure)), labels = cList$figure, las=3)
+axis(1, at = seq(0,1,length.out = length(c$character)), labels = c$character, las=3)
 # add the y axis
-axis(2, at = seq(0,1,length.out = length(cList$figure)), labels = cList$figure, las=1)
+axis(2, at = seq(0,1,length.out = length(c$character)), labels = c$character, las=1)
 ```
 
 Apparently, Marinelli and Der Prinz have the most shared scenes. Marinelli also shares a scene with most other figures (vertical bar).
