@@ -38,8 +38,8 @@ test_that("filter(by=rank, n=2) produces correct results", {
 # configuration()
 
 hc <- configuration(rksp.0, segment = "Act")
-filtered <- filter(hc, rksp.0, by="rank", n = 3)
 
+filtered <- filter(hc, rksp.0, by="rank", n = 3)
 test_that("filter(by=rank, n=3) produces correct results", {
   expect_equal(nrow(filtered), 3)
   expect_equal(ncol(filtered), ncol(hc))
@@ -57,4 +57,10 @@ test_that("filter(by=tokens, n=c(emilia, der_prinz), ) produces correct results"
   expect_equal(ncol(filtered), ncol(hc))
 })
 
+hc <- dictionaryStatistics(combine(rksp.0, rjmw.0))
+filtered <- filter(hc, rksp.0, by="rank", n = 3)
+test_that("filter(by=rank, n=3) produces correct results", {
+  expect_equal(nrow(filtered), 3)
+  expect_equal(ncol(filtered), ncol(hc))
+})
 
