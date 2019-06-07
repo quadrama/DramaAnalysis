@@ -33,6 +33,7 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' ustat <- utteranceStatistics(rksp.0)
 #' ustat <- format(ustat, rksp.0)
 format.QDHasCharacter <- function(x, drama, FUN=stringr::str_to_title, ...) {
+  requireNamespace("stringr")
   stopifnot(inherits(x, "QDHasCharacter"))
   stopifnot(inherits(drama, "QDDrama"))
   
@@ -211,26 +212,28 @@ segment <- function(hasUtteranceBE, hasSegments) {
 }
 
 #' @export
-combine <- function(d1, d2) {
-  stopifnot(inherits(d1, "QDDrama"))
-  stopifnot(inherits(d2, "QDDrama"))
-  r <- list()
-  
-  # handle text
-  r$text     <- rbind(d1$text, d2$text)
-  r$meta     <- rbind(d1$meta, d2$meta)
-  r$segments <- rbind(d1$segments, d2$segments)
-  r$mentions <- rbind(d1$mentions, d2$mentions)
-  r$characters <- rbind(d1$characters, d2$characters)
+#' @description The function \code{combine(x, y)} can be used to merge 
+#' multiple objects of the type \code{QDDrama} into one.
+#' @param x A \code{QDDrama}
+#' @param y A \code{QDDrama}
+#' @rdname loadDrama
+#' @examples 
+#' 
+#' data(rksp.0)
+#' data(rjmw.0)
+#' d <- combine(rjmw.0, rksp.0)
+combine <- function(x, y) {
+  stopifnot(inherits(x, "QDDrama"))
+  stopifnot(inherits(y, "QDDrama"))
 
-  
+  r <- lapply(names(x), function(z) {
+    t <- rbind(x[[z]], y[[z]])
+    class(t) <- class(x[[z]])
+    t
+  })
+  names(r) <- names(x)
   class(r) <- append("QDDrama", class(r))
-  class(r$text) <- class(d1$text)
-  class(r$meta) <- class(d1$meta)
-  class(r$segments) <- class(d1$segments)
-  class(r$mentions) <- class(d1$mentions)
-  
-  
+
   r
   
 }

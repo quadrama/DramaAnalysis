@@ -24,9 +24,24 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
 }
 
 #' @title Load drama
-#' @description This function loads one or more of the installed dramas.
+#' @description This function loads one or more of the installed plays and 
+#' returns them as a \code{QDDrama} object.
+#' @return The function returns a \code{QDDrama} object. This is essentially a 
+#' list of \code{data.table}s, covering the different aspects (utterances, segments, 
+#' characters, ...). If multiple ids have been supplied as arguments, the tables 
+#' contain the information of multiple plays.
 #' @export
+#' @param ids A vector of ids.
+#' @param defaultCollection If the ids do not have a collection prefix, the 
+#' defaultCollection prefix is applied.
+#' @rdname loadDrama
 #' @exportClass QDDrama
+#' @examples 
+#' \dontrun{
+#' # both are equivalent
+#' d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
+#' d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
+#' }
 loadDrama <- function(ids, defaultCollection="qd") {
   drama <- list()
   drama$text     <- loadText(ids, defaultCollection = defaultCollection)
@@ -39,6 +54,9 @@ loadDrama <- function(ids, defaultCollection="qd") {
   drama$characters <- loadCSV(ids, 
                               variant="Characters", 
                               defaultCollection = defaultCollection)
+  drama$stageDirections <- loadCSV(ids,
+                                   variant="StageDirections",
+                                   defaultCollection = defaultCollection)
   class(drama) <- append(Drama, class(drama))
   drama
 }

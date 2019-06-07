@@ -18,7 +18,8 @@ Imports:
    httr (>= 1.2.1),
    git2r (>= 0.24.0),
    xml2 (>= 1.2.0),
-   tokenizers (>= 0.2.1)
+   tokenizers (>= 0.2.1),
+   stringr (>= 1.4.0)
 Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.1.1
@@ -28,8 +29,7 @@ Suggests: testthat,
     highcharter,
     rmarkdown (>= 1.8),
     igraph (>= 1.1.2),
-    wordVectors (>= 2.0),
-    stringr (>= 1.4.0)
+    wordVectors (>= 2.0)
 Encoding: UTF-8
 VignetteBuilder: knitr
 Remotes: bmschmidt/wordVectors@2.0
