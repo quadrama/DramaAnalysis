@@ -28,7 +28,8 @@ Suggests: testthat,
     highcharter,
     rmarkdown (>= 1.8),
     igraph (>= 1.1.2),
-    wordVectors (>= 2.0)
+    wordVectors (>= 2.0),
+    stringr (>= 1.4.0)
 Encoding: UTF-8
 VignetteBuilder: knitr
 Remotes: bmschmidt/wordVectors@2.0
