@@ -5,15 +5,24 @@
 \title{Format Character Names}
 \usage{
 \method{format}{QDHasCharacter}(x, drama, FUN = stringr::str_to_title,
-  ...)
+  sort = 0, ...)
 }
 \arguments{
 \item{x}{The object in which we want to transform names, needs to inherit the type \code{QDHasCharacter}.}
 
 \item{drama}{The QDDrama object with all the information.}
 
-\item{FUN}{A function applied to the strings. Defaults to \code{stringr::str_to_title}, which
+\item{FUN}{A function applied to the strings. 
+Defaults to \code{stringr::str_to_title}, which
 converts the strings to title case.}
+
+\item{sort}{Numberic. If set to a non-zero value, the resulting data.frame will be sorted 
+alphabetically
+according to the drama and character name. If the value is above 0, the 
+sorting will be ascending, if set to a negative value, the sorting is 
+descending. If sort is set to 0 (the default), the order is unchanged. 
+The ordering can also be specified explicitly, by passing an integer vector 
+with as many elements as \code{x} has rows.}
 }
 \description{
 This function is applicable on all tables with a character table 

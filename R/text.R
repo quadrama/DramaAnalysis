@@ -24,7 +24,15 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' the result values of \code{FUN}.
 #' @param x The object in which we want to transform names, needs to inherit the type \code{QDHasCharacter}.
 #' @param drama The QDDrama object with all the information.
-#' @param FUN A function applied to the strings. Defaults to \code{stringr::str_to_title}, which
+#' @param sort Numberic. If set to a non-zero value, the resulting data.frame will be sorted 
+#' alphabetically
+#' according to the drama and character name. If the value is above 0, the 
+#' sorting will be ascending, if set to a negative value, the sorting is 
+#' descending. If sort is set to 0 (the default), the order is unchanged. 
+#' The ordering can also be specified explicitly, by passing an integer vector 
+#' with as many elements as \code{x} has rows.
+#' @param FUN A function applied to the strings. 
+#' Defaults to \code{stringr::str_to_title}, which
 #' converts the strings to title case.
 #' @seealso \code{\link[stringr]{str_to_title}}
 #' @importFrom stringr str_to_title
@@ -32,7 +40,11 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0)
 #' ustat <- format(ustat, rksp.0)
-format.QDHasCharacter <- function(x, drama, FUN=stringr::str_to_title, ...) {
+format.QDHasCharacter <- function(x, 
+                                  drama, 
+                                  FUN=stringr::str_to_title, 
+                                  sort=0, 
+                                  ...) {
   requireNamespace("stringr")
   stopifnot(inherits(x, "QDHasCharacter"))
   stopifnot(inherits(drama, "QDDrama"))
@@ -40,6 +52,16 @@ format.QDHasCharacter <- function(x, drama, FUN=stringr::str_to_title, ...) {
   positions <- match(levels(x$character), drama$characters$figure_id)
   levels(x$character) <- FUN(drama$characters$figure_surface[positions])
 
+  if (length(sort) == nrow(x)) {
+    x <- x[sort,]
+  } else if (length(sort) == 1) {
+    if (length(sort) == 1 && sort > 0) {
+      x <- x[order(x$drama, x$character),]
+    } else if (length(sort) == 1 && sort < 0) {
+      x <- x[order(x$drama, x$character, decreasing=TRUE),]
+    }
+  }
+    
   x
 
 }
