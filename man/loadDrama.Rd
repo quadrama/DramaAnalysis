@@ -3,11 +3,14 @@
 \name{loadDrama}
 \alias{loadDrama}
 \alias{combine}
+\alias{split.QDDrama}
 \title{Load drama}
 \usage{
 loadDrama(ids, defaultCollection = "qd")
 
 combine(x, y)
+
+\method{split}{QDDrama}(x)
 }
 \arguments{
 \item{ids}{A vector of ids.}
@@ -18,6 +21,8 @@ defaultCollection prefix is applied.}
 \item{x}{A \code{QDDrama}}
 
 \item{y}{A \code{QDDrama}}
+
+\item{x}{The object of class \code{QDDrama} (consisting of multiple dramas)}
 }
 \value{
 The function returns a \code{QDDrama} object. This is essentially a 
@@ -31,6 +36,10 @@ returns them as a \code{QDDrama} object.
 
 The function \code{combine(x, y)} can be used to merge 
 multiple objects of the type \code{QDDrama} into one.
+
+The function \code{split(x)} expects an object of type \code{QDDrama} and can 
+be used to split a \code{QDDrama} object that consists of multiple dramas 
+into a list thereof. It is the counterpart to \code{combine(x, y)}.
 }
 \examples{
 \dontrun{
@@ -42,4 +51,8 @@ d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
 data(rksp.0)
 data(rjmw.0)
 d <- combine(rjmw.0, rksp.0)
+data(rksp.0)
+data(rjmw.0)
+d <- combine(rjmw.0, rksp.0)
+dlist <- split(d)
 }
