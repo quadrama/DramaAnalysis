@@ -1,8 +1,11 @@
 TDIR=../DramaAnalysis.wiki
 VIG=vignettes
-VERSION=$(shell grep -o -e 'Version:.*' DESCRIPTION | egrep -o '\d+\.\d+(\.\d+)?')
+VERSION=$(shell grep -o -e 'Version:.*' DESCRIPTION | egrep -o '\d+\.\d+(\.\d+)?(\.\d+)?')
 
-check:
+document:
+	Rscript -e "devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))"
+
+check: document
 	cd .. && R CMD build DramaAnalysis && R CMD check DramaAnalysis_${VERSION}.tar.gz
 
 build:
