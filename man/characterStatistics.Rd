@@ -5,30 +5,34 @@
 \title{Basic Character Statistics}
 \usage{
 characterStatistics(drama, normalize = FALSE, segment = c("Drama",
-  "Act", "Scene"), filter_punctuation = FALSE)
+  "Act", "Scene"), filterPunctuation = FALSE)
 }
 \arguments{
-\item{normalize}{Normalising the individual columns}
+\item{drama}{A \code{QDDrama} object}
+
+\item{normalize}{Normalizing the individual columns}
 
 \item{segment}{"Drama", "Act", or "Scene". Allows calculating statistics on segments of the play}
 
-\item{filter_punctuation}{Whether to exclude all punctuation from token counts}
-
-\item{t}{A data.table containing the text. Will be coerced into a data.table,
-if necessary.}
+\item{filterPunctuation}{Whether to exclude all punctuation from token counts}
 }
 \value{
-A data frame with the following columns and one row for each figure:
-tokens: The number of tokens spoken by that figure
-types : The number of different tokens (= types) spoken by each figure
+A data frame with the additional classes 
+\code{QDCharacterStatistics} and \code{QDHasCharacter}. It has following 
+columns and one row for each character:
+tokens: The number of tokens spoken by that character
+types : The number of different tokens (= types) spoken by each character
 utterances: The number of utterances
 utteranceLengthMean: The mean length of utterances
 utteranceLengthSd: The standard deviation in utterance length
 }
 \description{
-This function extracts figure statistics from a drama text table.
+This function extracts character statistics from a drama object.
 }
 \examples{
 data(rksp.0)
 stat <- characterStatistics(rksp.0)
+}
+\seealso{
+\code{\link{format.QDHasCharacter}}
 }

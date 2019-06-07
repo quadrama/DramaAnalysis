@@ -1,28 +1,29 @@
 
 #' @title Basic Character Statistics
-#' @description This function extracts figure statistics from a drama text table.
-#' @return A data frame with the following columns and one row for each figure:
-#' tokens: The number of tokens spoken by that figure
-#' types : The number of different tokens (= types) spoken by each figure
+#' @description This function extracts character statistics from a drama object.
+#' @return A data frame with the additional classes 
+#' \code{QDCharacterStatistics} and \code{QDHasCharacter}. It has following 
+#' columns and one row for each character:
+#' tokens: The number of tokens spoken by that character
+#' types : The number of different tokens (= types) spoken by each character
 #' utterances: The number of utterances
 #' utteranceLengthMean: The mean length of utterances
 #' utteranceLengthSd: The standard deviation in utterance length
-#' @param t A data.table containing the text. Will be coerced into a data.table,
-#' if necessary.
-#' @param normalize Normalising the individual columns
+#' @param drama A \code{QDDrama} object
+#' @param normalize Normalizing the individual columns
 #' @param segment "Drama", "Act", or "Scene". Allows calculating statistics on segments of the play
-#' @param filter_punctuation Whether to exclude all punctuation from token counts
+#' @param filterPunctuation Whether to exclude all punctuation from token counts
 #' @importFrom stats sd
-#' @importFrom stats aggregate
-#' @importFrom data.table as.data.table
+#' @importFrom data.table as.data.table uniqueN
 #' @examples
 #' data(rksp.0)
 #' stat <- characterStatistics(rksp.0)
+#' @seealso \code{\link{format.QDHasCharacter}}
 #' @export
 characterStatistics <- function(drama, 
                              normalize = FALSE, 
                              segment=c("Drama","Act","Scene"), 
-                             filter_punctuation = FALSE) {
+                             filterPunctuation = FALSE) {
   stopifnot(inherits(drama, "QDDrama"))
   
   # prevent notes in R CMD check
@@ -44,7 +45,7 @@ characterStatistics <- function(drama,
               Act=segment(drama$text, drama$segments),
               Scene=segment(drama$text, drama$segments))
 
-  if (filter_punctuation == TRUE) {
+  if (filterPunctuation == TRUE) {
     text <- text[!grep(pattern="[[:punct:]]", x=text$Token.surface)]
     text$length <- nrow(text)
   }
