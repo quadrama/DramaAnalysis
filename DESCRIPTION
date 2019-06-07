@@ -16,7 +16,9 @@ Imports:
    readr (>= 1.1.1),
    data.table (>= 1.10.4),
    httr (>= 1.2.1),
-   git2r (>= 0.24.0)
+   git2r (>= 0.24.0),
+   xml2 (>= 1.2.0),
+   tokenizers (>= 0.2.1)
 Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.1.1

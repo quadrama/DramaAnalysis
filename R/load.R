@@ -143,7 +143,7 @@ loadSegments <- function(ids, defaultCollection="qd") {
 }
 
 
-
+#' @title Load Text
 #' @param ids A vector containing drama ids to be downloaded
 #' @param includeTokens This argument has no meaning anymore. Tokens are always included.
 #' @param defaultCollection The collection prefix is added if no prefix is found
