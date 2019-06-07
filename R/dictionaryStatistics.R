@@ -33,8 +33,10 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
   r
 }
 
-#' @description \code{enrichDictionary()} enriches an existing dictionary by addition of similar words, as 
-#' measured in a word2vec model.
+#' @description \code{enrichDictionary()} enriches an existing dictionary by 
+#' addition of similar words, as 
+#' measured in a word2vec model. The model can, for instance, be trained with 
+#' the package \code{wordVectors}.
 #' @param dictionary The base dictionary, a named list of lists.
 #' @param model the loaded word2vec model
 #' @param top A maximal number of words that we consider 
@@ -47,7 +49,7 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' # Load base dictionary
 #' dict_base <- loadFields(fieldnames=c("Familie","Liebe"))
 #' # Load the word2vec model
-#' model = read.vectors("models/german-fiction_vectors.bin")
+#' model = wordVectors::read.vectors("models/german-fiction_vectors.bin")
 #' # Create a new dictionary with added words
 #' dict_enriched <- enrichDictionary(dict_base, model)
 #' }
@@ -69,21 +71,21 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' across different speakers and/or segments.
 #' The function \code{dictionaryStatistics()} calculates statistics for 
 #' dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
-#' for a single word list. Functions ending on \code{L} return a list with 
-#' multiple components.
-#' @param t A text (data.frame or data.table)
+#' for a single word list. 
+#' @param drama A QDDrama object.
 #' @param fieldnames A list of names for the dictionaries. 
 #' @param fields A list of lists that contains the actual field names. 
-#' By default, we load the base_dictionary.
-#' @param normalizeByFigure Logical. Whether to normalize by figure speech length
-#' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
-#' @param names Logical. Whether the resulting table contains figure ids or names.
+#' By default, we load the \code{base_dictionary}.
+#' @param normalizeByFigure Logical. Whether to normalize by character 
+#' speech length.
+#' @param normalizeByField Logical. Whether to normalize by dictionary 
+#' size. You usually want this.
 #' @param column The table column we apply the dictionary on. 
-#' Should be either "Token.surface" or "Token.lemma".
+#' Should be either "Token.surface" or "Token.lemma", the latter is the default.
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
-#' @importFrom stats aggregate
-#' @importFrom stats ave
+#' @importFrom stats aggregate ave
 #' @importFrom utils as.roman
+#' @importFrom data.table as.data.table setcolorder
 #' @seealso \code{\link{loadFields}} \code{\link{format.QDHasCharacter}}
 #' @rdname dictionaryStatistics
 #' @examples
@@ -156,13 +158,16 @@ dictionaryStatistics <- function(drama, fields=base_dictionary[fieldnames],
   r
 }
 
+
 #' @param wordfield A character vector containing the words or lemmas 
 #' to be counted (only for \code{*Single}-functions)
-#' @param fieldNormalizer defaults to the length of the wordfield
+#' @param fieldNormalizer Defaults to the length of the wordfield. 
+#' If normalizeByField is given, the absolute numbers are divided 
+#' by this number.
 #' @param segment The segment level that should be used. By default, 
 #' the entire play will be used. Possible values are "Drama" (default), 
-#' "Act" or "Scene"
-#' @param colnames The column names to be used
+#' "Act" or "Scene".
+#' @param colnames The column names to be used in the output table.
 #' @param byFigure Logical, defaults to TRUE. If false, values will be calculated
 #' for the entire segment (play, act, or scene), and not for individual characters.
 #' @examples
@@ -180,8 +185,9 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
                                        normalizeByFigure = FALSE, 
                                        normalizeByField = FALSE, 
                                        byFigure = TRUE,
-                                       fieldNormalizer=length(wordfield), 
-                                       column="Token.lemma", ci=TRUE,
+                                       fieldNormalizer = length(wordfield), 
+                                       column="Token.lemma", 
+                                       ci=TRUE,
                                        colnames=NULL)
   {
   stopifnot(inherits(drama, "QDDrama"))
@@ -194,7 +200,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   N <- NULL
   value <- NULL
 
-    segment <- match.arg(segment)
+  segment <- match.arg(segment)
   
   text <- switch(segment,
                  Drama=drama$text,
@@ -265,13 +271,14 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   }
   
   r[is.nan(r$x)]$x <- 0
-  class(r) <- c("QDDictionaryStatistics", "QDHasCharacter", switch(segment, 
-                                                                   Drama = "QDByDrama",
-                                                                   Act   = "QDByAct",
-                                                                   Scene ="QDByScene"), "data.frame", class(r))
-  if (byFigure) 
+  class(r) <- c("QDDictionaryStatistics", "QDHasCharacter", 
+                switch(segment, 
+                       Drama = "QDByDrama",
+                       Act   = "QDByAct",
+                       Scene ="QDByScene"), "data.frame", class(r))
+  if (byFigure) {
     class(r) <- append(class(r), "QDByCharacter")
-  
+  }
   r
 }
 
@@ -301,10 +308,12 @@ filterByDictionary <- function(ft,
 
 #' @export
 #' @rdname dictionaryStatistics
-#' @title as.matrix
-#' @description Extract the number part from a \code{QDDictionaryStatistics} table as a matrix 
-#' @param x An object of the type \code{QDDictionaryStatistics}, e.g., the output of \code{dictionaryStatistics}.
-#' @return A numeric matrix that contains the frequency with which a dictionary is present in a subset of tokens
+#' @description Extract the number part from a 
+#' \code{QDDictionaryStatistics} table as a matrix 
+#' @param x An object of the type \code{QDDictionaryStatistics}, 
+#' e.g., the output of \code{dictionaryStatistics}.
+#' @return A numeric matrix that contains the frequency with which 
+#' a dictionary is present in a subset of tokens
 #' @examples
 #' mat <- as.matrix(dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie")))
 as.matrix.QDDictionaryStatistics <- function (x, ...) {

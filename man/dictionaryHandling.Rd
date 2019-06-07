@@ -37,8 +37,10 @@ to be added}
 \description{
 \code{loadFields()} loads dictionaries that are available on the web as plain text files.
 
-\code{enrichDictionary()} enriches an existing dictionary by addition of similar words, as 
-measured in a word2vec model.
+\code{enrichDictionary()} enriches an existing dictionary by 
+addition of similar words, as 
+measured in a word2vec model. The model can, for instance, be trained with 
+the package \code{wordVectors}.
 }
 \section{File Format}{
 
@@ -52,7 +54,7 @@ special characters. The dictionary must be in UTF-8 encoding, and the file needs
 # Load base dictionary
 dict_base <- loadFields(fieldnames=c("Familie","Liebe"))
 # Load the word2vec model
-model = read.vectors("models/german-fiction_vectors.bin")
+model = wordVectors::read.vectors("models/german-fiction_vectors.bin")
 # Create a new dictionary with added words
 dict_enriched <- enrichDictionary(dict_base, model)
 }

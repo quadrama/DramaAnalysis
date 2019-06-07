@@ -19,42 +19,46 @@ dictionaryStatisticsSingle(drama, wordfield = c(), segment = c("Drama",
 \method{as.matrix}{QDDictionaryStatistics}(x, ...)
 }
 \arguments{
+\item{drama}{A QDDrama object.}
+
 \item{fields}{A list of lists that contains the actual field names. 
-By default, we load the base_dictionary.}
+By default, we load the \code{base_dictionary}.}
 
 \item{fieldnames}{A list of names for the dictionaries.}
 
 \item{segment}{The segment level that should be used. By default, 
 the entire play will be used. Possible values are "Drama" (default), 
-"Act" or "Scene"}
+"Act" or "Scene".}
 
-\item{normalizeByFigure}{Logical. Whether to normalize by figure speech length}
+\item{normalizeByFigure}{Logical. Whether to normalize by character 
+speech length.}
 
-\item{normalizeByField}{Logical. Whether to normalize by dictionary size. You usually want this.}
+\item{normalizeByField}{Logical. Whether to normalize by dictionary 
+size. You usually want this.}
 
 \item{byFigure}{Logical, defaults to TRUE. If false, values will be calculated
 for the entire segment (play, act, or scene), and not for individual characters.}
 
 \item{column}{The table column we apply the dictionary on. 
-Should be either "Token.surface" or "Token.lemma".}
+Should be either "Token.surface" or "Token.lemma", the latter is the default.}
 
 \item{ci}{Whether to ignore case. Defaults to TRUE, i.e., case is ignored.}
 
 \item{wordfield}{A character vector containing the words or lemmas 
 to be counted (only for \code{*Single}-functions)}
 
-\item{fieldNormalizer}{defaults to the length of the wordfield}
+\item{fieldNormalizer}{Defaults to the length of the wordfield. 
+If normalizeByField is given, the absolute numbers are divided 
+by this number.}
 
-\item{colnames}{The column names to be used}
+\item{colnames}{The column names to be used in the output table.}
 
-\item{x}{An object of the type \code{QDDictionaryStatistics}, e.g., the output of \code{dictionaryStatistics}.}
-
-\item{t}{A text (data.frame or data.table)}
-
-\item{names}{Logical. Whether the resulting table contains figure ids or names.}
+\item{x}{An object of the type \code{QDDictionaryStatistics}, 
+e.g., the output of \code{dictionaryStatistics}.}
 }
 \value{
-A numeric matrix that contains the frequency with which a dictionary is present in a subset of tokens
+A numeric matrix that contains the frequency with which 
+a dictionary is present in a subset of tokens
 }
 \description{
 These methods retrieve 
@@ -62,10 +66,10 @@ count the number of occurrences of the words in the dictionaries,
 across different speakers and/or segments.
 The function \code{dictionaryStatistics()} calculates statistics for 
 dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
-for a single word list. Functions ending on \code{L} return a list with 
-multiple components.
+for a single word list.
 
-Extract the number part from a \code{QDDictionaryStatistics} table as a matrix
+Extract the number part from a 
+\code{QDDictionaryStatistics} table as a matrix
 }
 \examples{
 # Check multiple dictionary entries
