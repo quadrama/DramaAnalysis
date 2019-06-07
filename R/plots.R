@@ -2,7 +2,7 @@
 #' @description Uses `stripchart` to  plot each utterance at their position,
 #' in a line representing the figure. The dot is marked in the middle of each utterance.
 #' Might look weird if very long utterances are present.
-#' @param utteranceStatistics A table generated from the function
+#' @param x A table generated from the function
 #' @param segmentedText If supplied, act boundaries will be marked
 #' @param colors The colors to be used
 #' @param plotFrame Whether to draw a frame around the plot
@@ -10,16 +10,16 @@
 #' @importFrom graphics stripchart abline
 #' @export
 #' @seealso stripchart
-plot.QDUtteranceStatistics <- function(utteranceStatistics,
+plot.QDUtteranceStatistics <- function(x,
                                        drama=NULL,
                                        colors=qd.colors,
                                        frame=TRUE,
                                        xlab="Time",
                                        ...) {
-  stopifnot(inherits(utteranceStatistics, "QDUtteranceStatistics"))
+  stopifnot(inherits(x, "QDUtteranceStatistics"))
   
   graphics::stripchart(utteranceBegin+(utteranceLength/2) ~ character, 
-                      data=utteranceStatistics, 
+                      data=x, 
                       las=1, # horizontal labels
                       pch=20, # use a small bullet as symbol
                       col=colors, # get nice colors
@@ -86,6 +86,7 @@ plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure,
 #' @title Stacked Bar Plot
 #' @description This function expects an object of type QDCharacterStatistics and 
 #' plots the specified column as a stacked bar plot.
+#' @paran x The object of class QDCharacterStatistics that is to be plotted
 #' @param column Which column of the character statistics should be used?
 #' @param labels Whether to add character labels into the plot
 #' @param order Sort the fields inversely
@@ -96,20 +97,20 @@ plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure,
 #' @export
 #' @importFrom graphics text barplot
 #' @seealso barplot.default
-barplot.QDCharacterStatistics <- function(qdCharStat, 
+barplot.QDCharacterStatistics <- function(x, 
                                        col=qd.colors, 
                                        column="tokens", 
                                        order=-1, 
                                        labels = TRUE,
                                        top = 5,
                                        ...) {
-  stopifnot(inherits(qdCharStat, "QDCharacterStatistics"))
+  stopifnot(inherits(x, "QDCharacterStatistics"))
   
   # prevent note in R CMD check
   drama <- NULL
   `:=` <- NULL
   
-  fs <- as.data.table(qdCharStat)
+  fs <- as.data.table(x)
   fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
   mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="character")[,-1])

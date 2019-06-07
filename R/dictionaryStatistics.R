@@ -398,28 +398,28 @@ filterByDictionary <- function(ft,
 #' @title as.matrix
 #' @description Extract the number part from a \code{QDDictionaryStatistics} table as a matrix 
 #' @param dstat A 
-as.matrix.QDDictionaryStatistics <- function (dstat) {
-  stopifnot(inherits(dstat, "QDDictionaryStatistics"))
+as.matrix.QDDictionaryStatistics <- function (x, ...) {
+  stopifnot(inherits(x, "QDDictionaryStatistics"))
   
   # check if there is a column for the character
-  if (inherits(dstat, "QDByCharacter")) {
+  if (inherits(x, "QDByCharacter")) {
     byCharacter <- TRUE
   } else {
     byCharacter <- FALSE
   }
   
   # check how many segment columns there are
-  if (inherits(dstat, "QDByDrama")) {
+  if (inherits(x, "QDByDrama")) {
     segment <- "Drama"
     metaCols <- 1:(3+byCharacter)
-  } else if (inherits(dstat, "QDByAct")) {
+  } else if (inherits(x, "QDByAct")) {
     segment <- "Act"
     metaCols <- 1:(4+byCharacter)
-  } else if (inherits(dstat, "QDByScene")) {
+  } else if (inherits(x, "QDByScene")) {
     segment <- "Scene"
     metaCols <- 1:(5+byCharacter)
   }
   
-  as.matrix.data.frame(dstat[,max(metaCols):ncol(dstat)])
+  as.matrix.data.frame(x[,max(metaCols):ncol(x)])
 }
 

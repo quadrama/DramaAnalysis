@@ -4,11 +4,11 @@
 \alias{format.QDHasCharacter}
 \title{Format Character Names}
 \usage{
-\method{format}{QDHasCharacter}(object, drama,
-  FUN = stringr::str_to_title)
+\method{format}{QDHasCharacter}(x, drama, FUN = stringr::str_to_title,
+  ...)
 }
 \arguments{
-\item{object}{The object in which we want to transform names}
+\item{x}{The object in which we want to transform names}
 
 \item{drama}{The QDDrama object with all the information}
 

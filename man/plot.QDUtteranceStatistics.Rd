@@ -4,11 +4,11 @@
 \alias{plot.QDUtteranceStatistics}
 \title{Utterance positions}
 \usage{
-\method{plot}{QDUtteranceStatistics}(utteranceStatistics, drama = NULL,
+\method{plot}{QDUtteranceStatistics}(x, drama = NULL,
   colors = qd.colors, frame = TRUE, xlab = "Time", ...)
 }
 \arguments{
-\item{utteranceStatistics}{A table generated from the function}
+\item{x}{A table generated from the function}
 
 \item{colors}{The colors to be used}
 

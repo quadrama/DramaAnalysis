@@ -4,7 +4,7 @@
 \alias{as.matrix.QDDictionaryStatistics}
 \title{as.matrix}
 \usage{
-\method{as.matrix}{QDDictionaryStatistics}(dstat)
+\method{as.matrix}{QDDictionaryStatistics}(x, ...)
 }
 \arguments{
 \item{dstat}{A}

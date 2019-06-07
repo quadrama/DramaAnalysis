@@ -77,18 +77,18 @@ configuration <- function(d,
 }
 
 #' @export
-as.matrix.QDConfiguration <- function(configuration) {
-  stopifnot(inherits(configuration, "QDConfiguration"))
-  as.matrix.data.frame(configuration[,4:ncol(configuration)])
+as.matrix.QDConfiguration <- function(x, ...) {
+  stopifnot(inherits(x, "QDConfiguration"))
+  as.matrix.data.frame(x[,4:ncol(x)])
 }
 
 #' @export
-as.list.QDConfiguration <- function(configuration) {
+as.list.QDConfiguration <- function(x, ...) {
   .Deprecated("as.matrix(configuration)")
-  stopifnot(inherits(configuration, "QDConfiguration"))
+  stopifnot(inherits(x, "QDConfiguration"))
   ret <- list()
-  ret$matrix <- as.matrix.data.frame(configuration[,4:ncol(configuration)])
-  ret$drama <- configuration[,1:2]
-  ret$character <- configuration[[3]]
+  ret$matrix <- as.matrix.data.frame(x[,4:ncol(x)])
+  ret$drama <- x[,1:2]
+  ret$character <- x[[3]]
   ret
 }

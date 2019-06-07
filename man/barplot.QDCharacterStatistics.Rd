@@ -4,7 +4,7 @@
 \alias{barplot.QDCharacterStatistics}
 \title{Stacked Bar Plot}
 \usage{
-\method{barplot}{QDCharacterStatistics}(qdCharStat, col = qd.colors,
+\method{barplot}{QDCharacterStatistics}(x, col = qd.colors,
   column = "tokens", order = -1, labels = TRUE, top = 5, ...)
 }
 \arguments{

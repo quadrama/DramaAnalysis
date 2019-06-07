@@ -20,21 +20,21 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @description This function is applicable on all tables with a character table 
 #' (that are in the class QDHasCharacter). It can be used to reformated the character 
 #' names
-#' @param object The object in which we want to transform names
+#' @param x The object in which we want to transform names
 #' @param drama The QDDrama object with all the information
 #' @param FUN A function applied to the strings
 #' @examples 
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0)
 #' ustat <- format(ustat, rksp.0)
-format.QDHasCharacter <- function(object, drama, FUN=stringr::str_to_title) {
-  stopifnot(inherits(object, "QDHasCharacter"))
+format.QDHasCharacter <- function(x, drama, FUN=stringr::str_to_title, ...) {
+  stopifnot(inherits(x, "QDHasCharacter"))
   stopifnot(inherits(drama, "QDDrama"))
   
-  positions <- match(levels(object$character), drama$characters$figure_id)
-  levels(object$character) <- FUN(drama$characters$figure_surface[positions])
+  positions <- match(levels(x$character), drama$characters$figure_id)
+  levels(x$character) <- FUN(drama$characters$figure_surface[positions])
 
-  object    
+  x
 
 }
 
