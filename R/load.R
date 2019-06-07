@@ -229,7 +229,7 @@ loadCharacters <- function(ids,
 }
 
 loadCSV <- function(ids, 
-                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters", "Mentions"), 
+                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters", "Mentions", "StageDirections"), 
                     defaultCollection="tg",
                     dataDirectory=getOption("qd.datadir")) {
   
