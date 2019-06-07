@@ -12,6 +12,9 @@ presence(drama, passiveOnlyWhenNotActive = TRUE)
 \item{passiveOnlyWhenNotActive}{Logical. If true (default), passive presence is only 
 counted if a character is not actively present in the scene.}
 }
+\value{
+QDHasCharacter, data.frame
+}
 \description{
 This function should be called for a single text. It returns 
 a data.frame with one row for each character in the play. The 
