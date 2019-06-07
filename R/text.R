@@ -222,11 +222,10 @@ combine <- function(d1, d2) {
 #' @param op Whether to extract exactly one or more than one
 #' @param by Act or Scene, or matching substring
 #' @param n The number of segments to extract
-#' @export
 #' @examples 
 #' data(rksp.0)
 #' # Extract the second last scene
-#' dramaTail(rksp.0$mtext, by="Scene", op="==", n=2)
+#' dramaTail(rksp.0, by="Scene", op="==", n=2)
 dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
   
   # prevent notes in R CMD check
@@ -254,7 +253,6 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 }
 
 #' @title Extract section
-#' @export
 #' @description Extracts a sub segment of the text(s). 
 #' The result is an empty table if more scenes or acts
 #' are given than exist in the play. In this case, a
@@ -266,7 +264,7 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 #' @examples 
 #' data(rksp.0)
 #' # Extract everything before the 4th scene
-#' dramaHead(rksp.0$mtext, by="Scene", op="<", n=4)
+#' dramaHead(rksp.0$text, by="Scene", op="<", n=4)
 dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
   
   # prevent notes in R CMD check
