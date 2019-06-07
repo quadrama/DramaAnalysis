@@ -235,7 +235,33 @@ combine <- function(x, y) {
   class(r) <- append("QDDrama", class(r))
 
   r
-  
+}
+
+#' @export
+#' @description This function expects an object of type \code{QDDrama} and can 
+#' be used to split a \code{QDDrama} object that consists of multiple dramas 
+#' into a list thereof. It is the counterpart to \code{combine()}.
+#' @param x The object of class \code{QDDrama} (consisting of multiple dramas)
+#' @rdname loadDrama
+#' @examples 
+#' data(rksp.0)
+#' data(rjmw.0)
+#' d <- combine(rjmw.0, rksp.0)
+#' dlist <- split(d)
+split.QDDrama <- function(x) {
+  stopifnot(inherits(x, "QDDrama"))
+  r <- lapply(unique(x$characters$drama), function(y) {
+    d <- lapply(x, function(z) {
+      t <- z[z$drama == y]
+      class(t) <- class(z)
+      t
+    })
+    class(d) <- append("QDDrama", class(d))
+    d
+  })
+  names(r) <- unique(x$characters$drama)
+
+  r
 }
 
 #' @title Extract section
