@@ -2,7 +2,7 @@
 % Please edit documentation in R/text.R
 \name{format.QDHasCharacter}
 \alias{format.QDHasCharacter}
-\title{Format Character Names}
+\title{Format Names}
 \usage{
 \method{format}{QDHasCharacter}(x, drama, FUN = stringr::str_to_title,
   sort = 0, ...)
@@ -25,7 +25,8 @@ The ordering can also be specified explicitly, by passing an integer vector
 with as many elements as \code{x} has rows.}
 }
 \description{
-This function is applicable on all tables with a character table 
+The S3 function \code{format.QDHasCharacter()} is applicable on 
+all tables with a character table 
 (that are of the class \code{QDHasCharacter}). It can be used to reformat the character 
 names. The function \code{FUN} is applied to the character \emph{name} entries within 
 the \code{QDDrama} object. The factor levels in the character column of \code{x} are replaced by 

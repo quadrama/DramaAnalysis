@@ -16,8 +16,9 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 
 
 #' @export
-#' @title Format Character Names
-#' @description This function is applicable on all tables with a character table 
+#' @title Format Names
+#' @description The S3 function \code{format.QDHasCharacter()} is applicable on 
+#' all tables with a character table 
 #' (that are of the class \code{QDHasCharacter}). It can be used to reformat the character 
 #' names. The function \code{FUN} is applied to the character \emph{name} entries within 
 #' the \code{QDDrama} object. The factor levels in the character column of \code{x} are replaced by 
