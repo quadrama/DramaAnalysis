@@ -112,25 +112,23 @@ figureStatistics <- function(...) {
 }
 
 
-#' @title Rank figures by the dramatis personae
-#' @description Adds a column to the figures data frame, containing the rank in the dramatis personae.
-#' @param figures The figures to rank
-#' @param columnTitle The title for the rank column
-#' @export
+# @title Rank figures by the dramatis personae
+# @description Adds a column to the figures data frame, containing the rank in the dramatis personae.
+# @param figures The figures to rank
+# @param columnTitle The title for the rank column
 rankFiguresByDramatisPersonae <- function(figures, columnTitle="Rank (dramatis personae)") {
   figures[[columnTitle]] <- ave(seq(1:nrow(figures)),figures$drama, FUN=rank)
   figures
 }
 
-#' @title Rank figures by their 1st appearance
-#' @description
-#' Given a dramatic text and a table of figures, ranks the figures by 
-#' their first appearance. The lower the rank number, the earlier the figure appears.
-#' "appears": speaks for the first time.
-#' @param figures A data frame containing the figures
-#' @param text A text data frame
-#' @param columnTitle The title for the rank column
-#' @export
+# @title Rank figures by their 1st appearance
+# @description
+# Given a dramatic text and a table of figures, ranks the figures by 
+# their first appearance. The lower the rank number, the earlier the figure appears.
+# "appears": speaks for the first time.
+# @param figures A data frame containing the figures
+# @param text A text data frame
+# @param columnTitle The title for the rank column
 rankFiguresByAppearance <- function(figures, text, columnTitle="Rank (1st appearance)") {
   minimal.utterance.begin <- aggregate(text$begin, by=list(text$drama,
                                                            text$Speaker.figure_surface),
