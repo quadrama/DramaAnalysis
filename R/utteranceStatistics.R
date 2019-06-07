@@ -16,6 +16,15 @@
 utteranceStatistics <- function(drama, normalizeByDramaLength = TRUE) {
   stopifnot(inherits(drama, "QDDrama"))
   
+  # prevent note in check
+  `:=` <- NULL
+  dl <- NULL
+  .N <- NULL
+  . <- NULL
+  corpus <- NULL
+  Speaker.figure_id <- NULL
+  utteranceBegin <- NULL
+  
   text <- drama$text
 
   # normalize by drama length

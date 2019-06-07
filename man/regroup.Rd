@@ -23,6 +23,7 @@ to the output of `dictionaryStatistics()`, but only containing
 the table for one character.
 }
 \examples{
+\dontrun{
 data(rksp.0)
 field <- list(Liebe=c("liebe","lieben","herz"))
 dsl <- dictionaryStatistics(rksp.0$mtext, 
@@ -31,7 +32,6 @@ dsl <- dictionaryStatistics(rksp.0$mtext,
    asList=TRUE,
    segment="Scene")
 dslr <- regroup(dsl, by="Field")
-\dontrun{
 matplot(apply(dslr$Liebe, 1, cumsum),type="l", main="Liebe", col=rainbow(14))
 legend(x="topleft", legend=rownames(dslr$Liebe),lty=1:5,col=rainbow(14), cex = 0.4)
 }

@@ -1,7 +1,7 @@
 #' @title Word frequencies 
-#' @description This function generates a matrix of word frequencies 
+#' @description The function \code{frequencytable()} generates a matrix of word frequencies 
 #' by drama, act or scene and/or by figure.
-#' @param t The text table, potentially covering multiple texts
+#' @param drama A \code{QDDrama}. May be covering multiple texts
 #' @param acceptedPOS A list of accepted pos tags
 #' @param byFigure Wether the count is by figure or by text
 #' @param segment Whether the count is by drama (default), act or scene
@@ -9,6 +9,7 @@
 #' @param sep The separation character that goes between drama name and figure (if applicable)
 #' @param normalize Whether to normalize values or not
 #' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)
+#' @rdname frequencyTable
 #' @importFrom stats xtabs ftable
 #' @examples
 #' data(rksp.0)

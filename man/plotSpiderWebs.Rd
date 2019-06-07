@@ -50,7 +50,7 @@ for historic reasons, but should not be used anymore.
 \examples{
 data(rksp.0)
 fnames <- c("Krieg", "Liebe", "Familie", "Ratio","Religion")
-ds <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
-                              fieldnames=fnames, asList=TRUE)
+ds <- dictionaryStatistics(rksp.0, normalizeByField=TRUE, 
+                           fieldnames=fnames, asList=TRUE)
 plotSpiderWebs(dstat=ds,max=50)
 }

@@ -77,7 +77,7 @@ filter <- function(object, drama, by=c("rank", "tokens"),
 #' @export
 #' @examples 
 #' data(rksp.0)
-#' text.top10.filtered <- filterMentioned(limitFigures(rksp.0$mtext))
+#' text.top10.filtered <- filterMentioned(limitFigures(rksp.0$text))
 filterMentioned <- function(t, other=FALSE) {
   figure_id.set <- unique(t$Speaker.figure_id)
   figure_surface.set <- unique(t$Speaker.figure_surface)
@@ -117,7 +117,7 @@ tfidf1 <- function(word) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE,normalize=TRUE)
+#' rksp.0.ftable <- frequencytable(rksp.0, byFigure=TRUE, normalize=TRUE)
 #' rksp.0.tfidf <- tfidf(rksp.0.ftable)
 #' @examples
 #' mat <- matrix(c(0.10,0.2, 0,
@@ -168,21 +168,38 @@ report <- function(id="test:rksp.0",
                     output_file = of)
 }
 
+#' @title Segment
+#' @description This function takes two tables and combines them. The first table is of the 
+#' class QDHasUtteranceBE and contains text spans that are designated with begin and end character positions.
+#' The second table of class QDHasSegments contains information about acts and scenes in the play.
+#' @param hasUtteranceBE Table with utterances
+#' @param hasSegments Table with segment info
+#' @examples
+#' data(rksp.0)
+#' segmentedText <- segment(rksp.0$text, rksp.0$segments)
 #' @export
-segment <- function(hasUtteranceBE, segmentTable) {
+segment <- function(hasUtteranceBE, hasSegments) {
   stopifnot(inherits(hasUtteranceBE, "QDHasUtteranceBE"))
-  stopifnot(inherits(segmentTable,   "QDHasSegments"))
+  stopifnot(inherits(hasSegments,   "QDHasSegments"))
+  
+  # prevent notes in check
+  begin.Scene <- NULL
+  begin.Act <- NULL
+  . <- NULL
+  `:=` <- NULL
+  end.Act <- NULL
+  end.Scene <- NULL
   
   # if scene begin/end field is NA, we replace it with the act begin/end
   # therefore, we don't loose any text
-  segmentTable[is.na(begin.Scene),  `:=`(begin.Scene  = begin.Act),]
-  segmentTable[is.na(end.Scene),    `:=`(end.Scene    = end.Act),]
-  segmentTable[is.na(Number.Scene), `:=`(Number.Scene = 0),]
+  hasSegments[is.na(begin.Scene),  `:=`(begin.Scene  = begin.Act),]
+  hasSegments[is.na(end.Scene),    `:=`(end.Scene    = end.Act),]
+  hasSegments[is.na(Number.Scene), `:=`(Number.Scene = 0),]
   
   data.table::setkey(hasUtteranceBE, "corpus", "drama", "utteranceBegin", "utteranceEnd")
-  data.table::setkey(segmentTable, "corpus", "drama", "begin.Scene", "end.Scene")
+  data.table::setkey(hasSegments, "corpus", "drama", "begin.Scene", "end.Scene")
   
-  mtext <- data.table::foverlaps(hasUtteranceBE, segmentTable, type="any",
+  mtext <- data.table::foverlaps(hasUtteranceBE, hasSegments, type="any",
                                  by.x=c("corpus", "drama", "utteranceBegin", "utteranceEnd"), 
                                  by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
   mtext
@@ -223,9 +240,11 @@ combine <- function(d1, d2) {
 #' @param by Act or Scene, or matching substring
 #' @param n The number of segments to extract
 #' @examples 
+#' \dontrun{
 #' data(rksp.0)
 #' # Extract the second last scene
-#' dramaTail(rksp.0, by="Scene", op="==", n=2)
+#' dramaTail(rksp.0$text, by="Scene", op="==", n=2)
+#' }
 dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
   
   # prevent notes in R CMD check
@@ -262,9 +281,11 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 #' @param by Act or Scene, or matching substring
 #' @param n The number of segments to extract
 #' @examples 
+#' \dontrun{
 #' data(rksp.0)
 #' # Extract everything before the 4th scene
 #' dramaHead(rksp.0$text, by="Scene", op="<", n=4)
+#' }
 dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
   
   # prevent notes in R CMD check

@@ -190,7 +190,11 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   .N <- NULL
   . <- NULL
   .SD <- NULL
-  segment <- match.arg(segment)
+  `:=` <- NULL
+  N <- NULL
+  value <- NULL
+
+    segment <- match.arg(segment)
   
   text <- switch(segment,
                  Drama=drama$text,
@@ -271,34 +275,6 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   r
 }
 
-dictionaryStatisticsSingleL <- function(...) {
-  dstat <- dictionaryStatisticsSingle(...)
-  as.list(dstat)
-}
-
-#' @description \code{dictionaryStatisticsL()} should not be used 
-#' anymore. Please use \code{dictionaryStatistics()} with the parameter
-#' \code{asList=TRUE}
-#' @param ... All parameters are passed to \code{\link{dictionaryStatistics}}
-#' @section Returned Lists:
-#' The returned list has three named elements:
-#' \describe{
-#' \item{drama}{The drama in which these counts have been counted}
-#' \item{figure}{the figure these values has spoken}
-#' \item{mat}{A matrix containing the actual values}
-#' }
-#' @rdname dictionaryStatistics
-#' @export
-dictionaryStatisticsL <- function(...) {
-  .Deprecated("dictionaryStatistics")
-  dictionaryStatistics(..., asList=TRUE)
-}
-
-
-dictionary.statistics <- function(...) {
-  .Deprecated("dictionaryStatistics")
-  dictionaryStatistics(...)
-}
 
 #' @title regroup
 #' @description This function isolates the dictionary statistics for
@@ -313,6 +289,7 @@ dictionary.statistics <- function(...) {
 #' comparison of fields for a single character. If organised by field, 
 #' we can compare different characters for a single field.
 #' @examples
+#' \dontrun{
 #' data(rksp.0)
 #' field <- list(Liebe=c("liebe","lieben","herz"))
 #' dsl <- dictionaryStatistics(rksp.0$mtext, 
@@ -321,7 +298,6 @@ dictionary.statistics <- function(...) {
 #'    asList=TRUE,
 #'    segment="Scene")
 #' dslr <- regroup(dsl, by="Field")
-#' \dontrun{
 #' matplot(apply(dslr$Liebe, 1, cumsum),type="l", main="Liebe", col=rainbow(14))
 #' legend(x="topleft", legend=rownames(dslr$Liebe),lty=1:5,col=rainbow(14), cex = 0.4)
 #' }
@@ -375,17 +351,21 @@ regroup <- function(dstat, by=c("Character","Field")) {
         });
 }
 
-#' @title Filtering Frequency Table by Dictionary/-ies
-#' @description This function can be used to filter a matrix as produced by 
+#' @description The function \code{filterByDictionary()} can be used to filter a matrix as produced by 
 #' \code{frequencytable()} by the words in the given dictionary(/-ies).
 #' @param ft A matrix as produced by \code{frequencytable()}.
 #' @param fieldnames A list of names for the dictionaries.
 #' @param fields A list of lists that contains the actual field names. 
 #' By default, we load the base_dictionary (as in \code{dictionaryStatistics()}).
 #' @export
+#' @rdname frequencyTable
 #' @examples
 #' data(rksp.0)
-#' filtered <- filterByDictionary(frequencytable(rksp.0$mtext, byFigure = TRUE), fieldnames=c("Krieg", "Familie"))
+#' filtered <- filterByDictionary(frequencytable(rksp.0, 
+#'                                               byFigure = TRUE), 
+#'                                               fieldnames=c("Krieg", "Familie"))
+#' 
+
 filterByDictionary <- function(ft, 
                            fields=base_dictionary[fieldnames],
                            fieldnames=c("Liebe")) {
@@ -393,9 +373,13 @@ filterByDictionary <- function(ft,
 }
 
 #' @export
+#' @rdname dictionaryStatistics
 #' @title as.matrix
 #' @description Extract the number part from a \code{QDDictionaryStatistics} table as a matrix 
-#' @param dstat A 
+#' @param x An object of the type \code{QDDictionaryStatistics}, e.g., the output of \code{dictionaryStatistics}.
+#' @return A numeric matrix that contains the frequency with which a dictionary is present in a subset of tokens
+#' @examples
+#' mat <- as.matrix(dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie")))
 as.matrix.QDDictionaryStatistics <- function (x, ...) {
   stopifnot(inherits(x, "QDDictionaryStatistics"))
   

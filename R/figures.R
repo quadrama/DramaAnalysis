@@ -32,6 +32,11 @@ characterStatistics <- function(drama,
   end <- NULL
   `:=` <- NULL
   corpus <- NULL
+  utteranceBegin <- NULL
+  utteranceEnd <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL 
+  
   segment <- match.arg(segment)
   
   text <- switch(segment,

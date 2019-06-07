@@ -103,22 +103,7 @@ loadSets <- function() {
 #' mtext <- loadSegmentedText("test:rksp.0")
 #' }
 loadSegmentedText <- function(ids,defaultCollection="tg") {
-  .Deprecated("segment(loadText(ids), loadSegments(ids))")
-  t <- loadText(ids, includeTokens=TRUE, defaultCollection=defaultCollection)
-  sat <- scene.act.table(ids=ids, defaultCollection=defaultCollection)
-
-  # if scene begin/end field is NA, we replace it with the act begin/end
-  # therefore, we don't loose any text
-  sat[is.na(begin.Scene),  `:=`(begin.Scene  = begin.Act),]
-  sat[is.na(end.Scene),    `:=`(end.Scene    = end.Act),]
-  sat[is.na(Number.Scene), `:=`(Number.Scene = 0),]
-  
-  data.table::setkey(t, "corpus", "drama", "utteranceBegin", "utteranceEnd")
-  data.table::setkey(sat, "corpus", "drama", "begin.Scene", "end.Scene")
-  mtext <- data.table::foverlaps(t, sat, type="any",
-                                 by.x=c("corpus", "drama", "utteranceBegin", "utteranceEnd"), 
-                                 by.y=c("corpus", "drama", "begin.Scene", "end.Scene"))
-  mtext
+  .Defunct("segment(loadText(ids), loadSegments(ids))")
 }
 
 #' @exportClass QD.HasUtteranceBE
@@ -131,6 +116,16 @@ loadMentions <- function(ids, defaultCollection="qd") {
 }
 
 loadSegments <- function(ids, defaultCollection="qd") {
+  # prevent notes in check
+  Number.Act <- NULL
+  corpus <- NULL
+  drama <- NULL
+  Number.Scene <- NULL
+  begin.Act <- NULL
+  begin.Scene <- NULL
+  . <- NULL
+  `:=` <- NULL
+  
   merged <- loadCSV(ids, "Segments", defaultCollection = defaultCollection)
   merged[,Number.Act:=as.numeric(as.factor(data.table::frank(begin.Act, ties.method = "min"))),
          .(corpus,drama)]

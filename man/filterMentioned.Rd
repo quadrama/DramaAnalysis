@@ -18,5 +18,5 @@ limitFigures(), for example), or to summarize them as 'OTHER'.
 }
 \examples{
 data(rksp.0)
-text.top10.filtered <- filterMentioned(limitFigures(rksp.0$mtext))
+text.top10.filtered <- filterMentioned(limitFigures(rksp.0$text))
 }

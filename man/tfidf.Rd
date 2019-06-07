@@ -20,7 +20,7 @@ in every document to become 0.
 }
 \examples{
 data(rksp.0)
-rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE,normalize=TRUE)
+rksp.0.ftable <- frequencytable(rksp.0, byFigure=TRUE, normalize=TRUE)
 rksp.0.tfidf <- tfidf(rksp.0.ftable)
 mat <- matrix(c(0.10,0.2, 0,
                 0,   0.2, 0,

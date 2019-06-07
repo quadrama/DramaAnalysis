@@ -3,7 +3,7 @@
 \name{dictionaryStatistics}
 \alias{dictionaryStatistics}
 \alias{dictionaryStatisticsSingle}
-\alias{dictionaryStatisticsL}
+\alias{as.matrix.QDDictionaryStatistics}
 \title{Dictionary Use}
 \usage{
 dictionaryStatistics(drama, fields = base_dictionary[fieldnames],
@@ -16,7 +16,7 @@ dictionaryStatisticsSingle(drama, wordfield = c(), segment = c("Drama",
   byFigure = TRUE, fieldNormalizer = length(wordfield),
   column = "Token.lemma", ci = TRUE, colnames = NULL)
 
-dictionaryStatisticsL(...)
+\method{as.matrix}{QDDictionaryStatistics}(x, ...)
 }
 \arguments{
 \item{fields}{A list of lists that contains the actual field names. 
@@ -47,11 +47,14 @@ to be counted (only for \code{*Single}-functions)}
 
 \item{colnames}{The column names to be used}
 
-\item{...}{All parameters are passed to \code{\link{dictionaryStatistics}}}
+\item{x}{An object of the type \code{QDDictionaryStatistics}, e.g., the output of \code{dictionaryStatistics}.}
 
 \item{t}{A text (data.frame or data.table)}
 
 \item{names}{Logical. Whether the resulting table contains figure ids or names.}
+}
+\value{
+A numeric matrix that contains the frequency with which a dictionary is present in a subset of tokens
 }
 \description{
 These methods retrieve 
@@ -62,20 +65,8 @@ dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
 for a single word list. Functions ending on \code{L} return a list with 
 multiple components.
 
-\code{dictionaryStatisticsL()} should not be used 
-anymore. Please use \code{dictionaryStatistics()} with the parameter
-\code{asList=TRUE}
+Extract the number part from a \code{QDDictionaryStatistics} table as a matrix
 }
-\section{Returned Lists}{
-
-The returned list has three named elements:
-\describe{
-\item{drama}{The drama in which these counts have been counted}
-\item{figure}{the figure these values has spoken}
-\item{mat}{A matrix containing the actual values}
-}
-}
-
 \examples{
 # Check multiple dictionary entries
 data(rksp.0)
@@ -83,6 +74,7 @@ dstat <- dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie"))
 # Check a single dictionary entries
 data(rksp.0)
 fstat <- dictionaryStatisticsSingle(rksp.0, wordfield=c("der"))
+mat <- as.matrix(dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie")))
 }
 \seealso{
 \code{\link{loadFields}}

@@ -56,8 +56,8 @@ plot.QDUtteranceStatistics <- function(x,
 #' @examples 
 #' data(rksp.0)
 #' fnames <- c("Krieg", "Liebe", "Familie", "Ratio","Religion")
-#' ds <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
-#'                               fieldnames=fnames, asList=TRUE)
+#' ds <- dictionaryStatistics(rksp.0, normalizeByField=TRUE, 
+#'                            fieldnames=fnames, asList=TRUE)
 #' plotSpiderWebs(dstat=ds,max=50)
 plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure, 
                            symbols=c(17,16,15,4,8),
@@ -68,6 +68,7 @@ plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure,
                            legend.pos.y=NA,
                            legend.horizontal = FALSE,
                            pcol=qd.colors,... ) {
+
   data <- data.frame(rbind(rep(maxValue,ncol(mat)),rep(minValue,ncol(mat)),mat))
   fmsb::radarchart(data, maxmin=TRUE, 
              plwd=1,pcol=pcol,
@@ -109,6 +110,7 @@ barplot.QDCharacterStatistics <- function(height,
   # prevent note in R CMD check
   drama <- NULL
   `:=` <- NULL
+  head <- NULL
   
   fs <- as.data.table(height)
   fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]

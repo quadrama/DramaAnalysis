@@ -13,7 +13,7 @@
 #' @importFrom stats pchisq chisq.test
 #' @examples 
 #' data("rksp.0")
-#' ft <- frequencytable(rksp.0$mtext,byFigure = TRUE,names=TRUE,normalize = FALSE)
+#' ft <- frequencytable(rksp.0, byFigure = TRUE, normalize = FALSE)
 #' # Calculate log ratio for all words
 #' keywords <- keyness(ft, method="logratio", row=7, minimalFrequency = 5)
 #' # Remove words that are not significantly different

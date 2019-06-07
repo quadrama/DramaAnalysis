@@ -17,6 +17,7 @@
 #' configuration matrices. They look very similar, but are based
 #' on who's mentioned in a scene or an act. 
 #' @export
+#' @rdname configuration
 #' @exportClass QDConfiguration
 #' @examples
 #' # Active configuration matrix
@@ -40,6 +41,7 @@ configuration <- function(d,
   corpus <- NULL
   Speaker.figure_surface <- NULL
   Number.Act <- NULL
+  drama <- NULL
   
   
   segmented <- switch(mode,
@@ -77,18 +79,8 @@ configuration <- function(d,
 }
 
 #' @export
+#' @rdname configuration
 as.matrix.QDConfiguration <- function(x, ...) {
   stopifnot(inherits(x, "QDConfiguration"))
   as.matrix.data.frame(x[,4:ncol(x)])
-}
-
-#' @export
-as.list.QDConfiguration <- function(x, ...) {
-  .Deprecated("as.matrix(configuration)")
-  stopifnot(inherits(x, "QDConfiguration"))
-  ret <- list()
-  ret$matrix <- as.matrix.data.frame(x[,4:ncol(x)])
-  ret$drama <- x[,1:2]
-  ret$character <- x[[3]]
-  ret
 }

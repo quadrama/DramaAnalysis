@@ -21,6 +21,15 @@ isolateFigureSpeech <- function(drama,
                              dir=getOption("qd.datadir")) {
   stopifnot(inherits(drama, "QDDrama"))
   
+  # we need this to prevent notes in R CMD check
+  . <- NULL
+  Token.surface <- NULL
+  Speaker.figure_id <- NULL
+  Number.Act <- NULL
+  Number.Scene <- NULL
+  `:=` <- NULL
+  fn <- NULL
+  
   t <- segment(drama$text, drama$segments)
   
   t <- t[, Token.surface, by=.(drama, Speaker.figure_id, Number.Act, Number.Scene)]

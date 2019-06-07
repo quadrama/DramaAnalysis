@@ -2,10 +2,13 @@
 % Please edit documentation in R/configuration.R
 \name{configuration}
 \alias{configuration}
+\alias{as.matrix.QDConfiguration}
 \title{Character Configuration}
 \usage{
 configuration(d, segment = c("Act", "Scene"), mode = c("Active",
   "Passive"), onlyPresence = FALSE)
+
+\method{as.matrix}{QDConfiguration}(x, ...)
 }
 \arguments{
 \item{mode}{Character vector, should be either "Active" or "Passive".
