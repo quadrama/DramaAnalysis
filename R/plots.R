@@ -86,7 +86,7 @@ plotSpiderWebs <- function(dstat=NULL, mat=dstat$mat, names=dstat$figure,
 #' @title Stacked Bar Plot
 #' @description This function expects an object of type QDCharacterStatistics and 
 #' plots the specified column as a stacked bar plot.
-#' @paran x The object of class QDCharacterStatistics that is to be plotted
+#' @param height The object of class QDCharacterStatistics that is to be plotted
 #' @param column Which column of the character statistics should be used?
 #' @param labels Whether to add character labels into the plot
 #' @param order Sort the fields inversely
@@ -104,13 +104,13 @@ barplot.QDCharacterStatistics <- function(height,
                                        labels = TRUE,
                                        top = 5,
                                        ...) {
-  stopifnot(inherits(x, "QDCharacterStatistics"))
+  stopifnot(inherits(height, "QDCharacterStatistics"))
   
   # prevent note in R CMD check
   drama <- NULL
   `:=` <- NULL
   
-  fs <- as.data.table(x)
+  fs <- as.data.table(height)
   fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
   mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
   mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="character")[,-1])

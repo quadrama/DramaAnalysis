@@ -8,6 +8,8 @@
   column = "tokens", order = -1, labels = TRUE, top = 5, ...)
 }
 \arguments{
+\item{height}{The object of class QDCharacterStatistics that is to be plotted}
+
 \item{col}{The colors to use}
 
 \item{column}{Which column of the character statistics should be used?}
