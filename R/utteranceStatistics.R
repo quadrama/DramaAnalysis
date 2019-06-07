@@ -5,6 +5,7 @@
 #' @export
 #' @exportClass QDUtteranceStatistics
 #' @exportClass QDHasCharacter
+#' @seealso \code{\link{format.QDHasCharacter}}
 #' @examples
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0)

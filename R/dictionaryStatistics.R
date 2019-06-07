@@ -84,7 +84,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @importFrom stats aggregate
 #' @importFrom stats ave
 #' @importFrom utils as.roman
-#' @seealso \code{\link{loadFields}}
+#' @seealso \code{\link{loadFields}} \code{\link{format.QDHasCharacter}}
 #' @rdname dictionaryStatistics
 #' @examples
 #' # Check multiple dictionary entries

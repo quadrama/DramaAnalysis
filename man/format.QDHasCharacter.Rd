@@ -8,19 +8,25 @@
   ...)
 }
 \arguments{
-\item{x}{The object in which we want to transform names}
+\item{x}{The object in which we want to transform names, needs to inherit the type \code{QDHasCharacter}.}
 
-\item{drama}{The QDDrama object with all the information}
+\item{drama}{The QDDrama object with all the information.}
 
-\item{FUN}{A function applied to the strings}
+\item{FUN}{A function applied to the strings. Defaults to \code{stringr::str_to_title}, which
+converts the strings to title case.}
 }
 \description{
 This function is applicable on all tables with a character table 
-(that are in the class QDHasCharacter). It can be used to reformated the character 
-names
+(that are of the class \code{QDHasCharacter}). It can be used to reformat the character 
+names. The function \code{FUN} is applied to the character \emph{name} entries within 
+the \code{QDDrama} object. The factor levels in the character column of \code{x} are replaced by 
+the result values of \code{FUN}.
 }
 \examples{
 data(rksp.0)
 ustat <- utteranceStatistics(rksp.0)
 ustat <- format(ustat, rksp.0)
+}
+\seealso{
+\code{\link[stringr]{str_to_title}}
 }

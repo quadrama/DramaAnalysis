@@ -77,5 +77,5 @@ fstat <- dictionaryStatisticsSingle(rksp.0, wordfield=c("der"))
 mat <- as.matrix(dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie")))
 }
 \seealso{
-\code{\link{loadFields}}
+\code{\link{loadFields}} \code{\link{format.QDHasCharacter}}
 }

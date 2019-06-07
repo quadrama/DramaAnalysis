@@ -44,3 +44,6 @@ cfg <- configuration(rksp.0)
 cfg <- configuration(rksp.0, mode="Passive")
 
 }
+\seealso{
+\code{\link{format.QDHasCharacter}}
+}

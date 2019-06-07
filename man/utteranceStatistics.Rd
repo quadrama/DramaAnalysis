@@ -23,3 +23,6 @@ boxplot(ustat$utteranceLength ~ ustat$character,
    las=2, frame=FALSE)
 }
 }
+\seealso{
+\code{\link{format.QDHasCharacter}}
+}

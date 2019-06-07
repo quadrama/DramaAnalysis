@@ -18,11 +18,16 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @export
 #' @title Format Character Names
 #' @description This function is applicable on all tables with a character table 
-#' (that are in the class QDHasCharacter). It can be used to reformated the character 
-#' names
-#' @param x The object in which we want to transform names
-#' @param drama The QDDrama object with all the information
-#' @param FUN A function applied to the strings
+#' (that are of the class \code{QDHasCharacter}). It can be used to reformat the character 
+#' names. The function \code{FUN} is applied to the character \emph{name} entries within 
+#' the \code{QDDrama} object. The factor levels in the character column of \code{x} are replaced by 
+#' the result values of \code{FUN}.
+#' @param x The object in which we want to transform names, needs to inherit the type \code{QDHasCharacter}.
+#' @param drama The QDDrama object with all the information.
+#' @param FUN A function applied to the strings. Defaults to \code{stringr::str_to_title}, which
+#' converts the strings to title case.
+#' @seealso \code{\link[stringr]{str_to_title}}
+#' @importFrom stringr str_to_title
 #' @examples 
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0)
