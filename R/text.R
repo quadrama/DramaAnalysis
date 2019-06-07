@@ -248,7 +248,7 @@ combine <- function(x, y) {
 #' data(rjmw.0)
 #' d <- combine(rjmw.0, rksp.0)
 #' dlist <- split(d)
-split.QDDrama <- function(x) {
+split.QDDrama <- function(x, ...) {
   stopifnot(inherits(x, "QDDrama"))
   r <- lapply(unique(x$characters$drama), function(y) {
     d <- lapply(x, function(z) {
