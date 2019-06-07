@@ -10,7 +10,7 @@ loadDrama(ids, defaultCollection = "qd")
 
 combine(x, y)
 
-\method{split}{QDDrama}(x)
+\method{split}{QDDrama}(x, ...)
 }
 \arguments{
 \item{ids}{A vector of ids.}
