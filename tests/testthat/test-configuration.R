@@ -13,22 +13,6 @@ test_that("configuration (onlyPresence = TRUE) has correct length and height", {
   expect_equal(nrow(cfg), 13) 
 })
 
-suppressWarnings(cfgl <- as.list(cfg))
-
-test_that("as.list() has correct types", {
-  expect_true(inherits(cfgl, "list"))
-})
-
-test_that("elements of configuration (onlyPresence = TRUE) have correct type", {
-  expect_equal(mode(cfgl$matrix), "logical")
-  expect_equal(class(cfgl$character), "factor")
-  expect_true("data.frame" %in% class(cfgl$drama))
-})
-
-test_that("configuration$matrix (onlyPresence = TRUE) has correct dimensions", {
-  expect_equal(ncol(cfgl$matrix),5)
-  expect_equal(nrow(cfgl$matrix),13)
-})
 
 cfg <- configuration(rksp.0, onlyPresence = TRUE, segment="Scene")
 
@@ -40,20 +24,6 @@ test_that("configuration() has correct types", {
 test_that("configuration (onlyPresence = TRUE, segment = 'Scene') has correct length 3", {
   expect_equal(nrow(cfg), 13)
   expect_equal(ncol(cfg), 46)
-})
-
-suppressWarnings(cfgl <- as.list(cfg))
-
-test_that("elements of configuration (onlyPresence = TRUE, segment = 'Scene') have correct type", {
-  expect_equal(mode(cfgl$matrix), "logical")
-  expect_equal(class(cfgl$character), "factor")
-  expect_true("data.frame" %in% class(cfgl$drama))
-  
-})
-
-test_that("configuration$matrix (onlyPresence = TRUE, segment = 'Scene') has correct dimensions", {
-  expect_equal(ncol(cfgl$matrix),43)
-  expect_equal(nrow(cfgl$matrix),13)
 })
 
 
