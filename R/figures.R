@@ -112,33 +112,6 @@ figureStatistics <- function(...) {
 }
 
 
-
-#' @title Stacked matrix
-#' @description This function takes a data frame describing various metrics of figures in dramas 
-#' and creates a matrix that can be used to create a stacked bar plot.
-#' @param fstat The figure statistics table, i.e., the output of figureStatistics(). Coerced to a data.table if needed.
-#' @param column A column name found in the statistics table. This count is used 
-#' as a basis for the plot.
-#' @param order If set to -1 (default), figures are ranked descending 
-#' (i.e., figure with most spoken words first). If set to 1, 
-#' figures are ranked ascending.
-#' @importFrom reshape2 dcast
-characterMatrix <- function(fstat,column="tokens",order=-1) {
-  stopifnot(inherits(fstat, "QDCharacterStatistics"))
-  # prevent note in R CMD check
-  drama <- NULL
-  `:=` <- NULL
-
-  fs <- as.data.table(fstat)
-  fs[,rank:=as.double(rank( get(column) *order,ties.method = "first")),drama]
-  mat_values <- as.matrix(dcast(data=fs,rank ~ drama, value.var=column)[,-1])
-  mat_labels <- as.matrix(dcast(data=fs,rank ~ drama, value.var="character")[,-1])
-  mat_cs <- apply(mat_values, 2,cumsum)
-  mat_cs <- rbind(matrix(0,ncol=ncol(mat_cs)),mat_cs)
-  mat_values <- rbind(mat_values,matrix(NA,ncol=ncol(mat_values)))
-  list(values=mat_values,labels=mat_labels,cs=mat_cs)
-}
-
 #' @title Rank figures by the dramatis personae
 #' @description Adds a column to the figures data frame, containing the rank in the dramatis personae.
 #' @param figures The figures to rank
