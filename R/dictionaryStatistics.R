@@ -87,11 +87,9 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' @seealso \code{\link{loadFields}}
 #' @rdname dictionaryStatistics
 #' @examples
-#' \dontrun{
 #' # Check multiple dictionary entries
 #' data(rksp.0)
-#' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
-#' }
+#' dstat <- dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie"))
 #' @export
 dictionaryStatistics <- function(drama, fields=base_dictionary[fieldnames],
                                  fieldnames=c("Liebe"),
@@ -170,7 +168,7 @@ dictionaryStatistics <- function(drama, fields=base_dictionary[fieldnames],
 #' @examples
 #' # Check a single dictionary entries
 #' data(rksp.0)
-#' fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
+#' fstat <- dictionaryStatisticsSingle(rksp.0, wordfield=c("der"))
 #' @importFrom stats aggregate
 #' @importFrom stats na.omit
 #' @importFrom reshape2 melt
