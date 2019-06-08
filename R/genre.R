@@ -1,6 +1,10 @@
 
 #' @title Correlation analysis
-#' @description Calculates correlation of a frequency table with an outcome list according to given method. The function currently only works for pairwise correlation, i.e., two categories.
+#' @description Calculates correlation of a frequency table with an outcome 
+#' list according to given method. The function currently only works for 
+#' pairwise correlation, i.e., two categories. Note that the function 
+#' \code{\link{keyness}()} is actually better to do the same thing, and this function
+#' should not be used anymore in this fashion.
 #' @param text.ft A matrix, containing words in columns and figures (or plays) in rows. 
 #' This can be the result of the \code{\link{frequencytable}()} function.
 #' @param categories A factor or numeric vector that represents a list of categories. 

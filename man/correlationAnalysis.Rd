@@ -26,7 +26,11 @@ it's correlation score, and the category it is correlated to. The latter is
 mainly for an easier use of the results.
 }
 \description{
-Calculates correlation of a frequency table with an outcome list according to given method. The function currently only works for pairwise correlation, i.e., two categories.
+Calculates correlation of a frequency table with an outcome 
+list according to given method. The function currently only works for 
+pairwise correlation, i.e., two categories. Note that the function 
+\code{\link{keyness}()} is actually better to do the same thing, and this function
+should not be used anymore in this fashion.
 }
 \examples{
 data(rksp.0)
