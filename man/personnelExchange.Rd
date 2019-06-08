@@ -14,9 +14,9 @@ scenicDifference(drama,
 \arguments{
 \item{drama}{The QDDrama Object}
 
-\item{variant}{For hamming(), variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"}
+\item{variant}{For \code{hamming()}, variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"}
 
-\item{norm}{For scenicDifference(), specifies the normalization constant}
+\item{norm}{For \code{scenicDifference()}, specifies the normalization constant}
 }
 \description{
 There are multiple ways to quantify the number of characters that are 

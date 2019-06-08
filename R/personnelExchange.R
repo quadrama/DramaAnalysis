@@ -5,8 +5,8 @@
 #' @description There are multiple ways to quantify the number of characters that are 
 #' exchanged over a scene or act boundary. 
 #' @param drama The QDDrama Object
-#' @param variant For hamming(), variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"
-#' @param norm For scenicDifference(), specifies the normalization constant
+#' @param variant For \code{hamming()}, variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"
+#' @param norm For \code{scenicDifference()}, specifies the normalization constant
 #' @rdname personnelExchange
 #' @export
 #' @examples 
