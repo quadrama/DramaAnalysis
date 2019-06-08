@@ -8,7 +8,8 @@ correlationAnalysis(text.ft, outcomes, method = "spearman",
   minimalFrequency = 10)
 }
 \arguments{
-\item{text.ft}{A matrix, containing words in columns and figures (or plays) in rows}
+\item{text.ft}{A matrix, containing words in columns and figures (or plays) in rows. 
+This can be the result of the \code{\link{frequencytable}} function.}
 
 \item{outcomes}{A list of outcomes, will be cast as numeric}
 
@@ -22,6 +23,6 @@ Calculates correlation of a frequency table with an outcome list according to gi
 \examples{
 data(rksp.0)
 rksp.0.ft <- frequencytable(rksp.0, byFigure=TRUE)
-g <- factor(c("m","m","m","m","f","m","m","m","f","m","m","f","m"))
-rksp.0.cor <- correlationAnalysis(rksp.0.ft,g)
+g <- c("m","m","m","m","f","m","m","m","f","m","m","f","m")
+rksp.0.cor <- correlationAnalysis(rksp.0.ft, g)
 }
