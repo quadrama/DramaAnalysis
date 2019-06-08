@@ -1,36 +1,70 @@
 #' @title Keywords
 #' @description  Given a frequency table (with texts as rows and words as columns),
 #' this function calculates log-likelihood and log ratio of one set of rows against the other rows. 
-#' The return value is a list containing scores for each word
+#' The return value is a list containing scores for each word. If the method 
+#' is \code{loglikelihood}, the returned scores are unsigned G2 values. To estimate the 
+#' \emph{direction} of the keyness, the \code{log ratio} is more informative. A nice introduction 
+#' into log ratio can be found here: 
+#' \link{http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/}.
 #' @param ft The frequency table
-#' @param row The row number we want to compare to the others, can be a vector of row numbers
+#' @param categories A factor or numeric vector that represents an assignment of categories. 
 #' @param epsilon null values are replaced by this value, in order to avoid division by zero
 #' @param siglevel Return only the keywords above the significance level. Set to 1 to get all words
 #' @param method Either "logratio" or "loglikelihood" (default)
 #' @param minimalFrequency Words less frequent than this value are not considered at all
-#' @return A list of keywords, sorted by their log-likelihood value, calculated according to http://ucrel.lancs.ac.uk/llwizard.html
+#' @return A list of keywords, sorted by their log-likelihood or log ratio value, calculated according to \link{http://ucrel.lancs.ac.uk/llwizard.html}
 #' @export
 #' @importFrom stats pchisq chisq.test
 #' @examples 
 #' data("rksp.0")
 #' ft <- frequencytable(rksp.0, byFigure = TRUE, normalize = FALSE)
 #' # Calculate log ratio for all words
-#' keywords <- keyness(ft, method="logratio", row=7, minimalFrequency = 5)
+#' keywords <- keyness(ft, method = "logratio", row = 7, minimalFrequency = 5)
 #' # Remove words that are not significantly different
-#' keywords <- keywords[names(keywords) %in% names(keyness(ft, row=1,siglevel=0.01))]
+#' keywords <- keywords[names(keywords) %in% names(keyness(ft, row = 1, siglevel = 0.01))]
 #' 
-keyness <- function(ft, row=1, epsilon=1e-100,siglevel=0.05,method=c("loglikelihood","logratio"),minimalFrequency=10) {
-  f1 <- colSums(matrix(ft[row,],nrow=length(row),dimnames=list(NULL,colnames(ft))))
-  f2 <- colSums(matrix(ft[-1*row,],nrow=nrow(ft)-length(row),dimnames=list(NULL,colnames(ft))))
+keyness <- function(ft, 
+                    categories = c(1, rep(2, nrow(ft)-1)),
+                    epsilon = 1e-100,
+                    siglevel = 0.05,
+                    method = c("loglikelihood", "logratio"),
+                    minimalFrequency = 10) {
 
-  type <- match.arg(method)
-  switch(type,
-         loglikelihood=keyness.ll(f1, f2, minimalFrequency, epsilon, siglevel),
-         logratio=keyness.logratio(f1,f2,minimalFrequency))
+  # match method agument
+  method <- match.arg(method)
+  
+  # check that categories is a good factor
+  if (is.factor(categories)) {
+    if (length(levels(categories)) != 2) {
+      stop("You need to supply a factor with two levels.")
+    }
+  } else if (is.numeric(categories)) {
+    if (length(unique(categories)) != 2) {
+      stop("You need to supply a categories vector with two categories.")
+    }
+  }
+  
+  nCat <- as.numeric(categories)
+  
+  f <- lapply(unique(nCat), function(x) {
+    wh <- which(nCat == x)
+    colSums(matrix(ft[wh,], nrow=length(wh),dimnames=list(NULL, colnames(ft))))
+  })
+  
+  switch(method,
+         loglikelihood=keyness.ll(f[[1]], f[[2]], 
+                                  minimalFrequency, 
+                                  epsilon, 
+                                  siglevel),
+         logratio=keyness.logratio(f[[1]], f[[2]], 
+                                   minimalFrequency))
   
 }
 
-keyness.ll <- function(f1, f2, minimalFrequency, epsilon,siglevel) {
+keyness.ll <- function(f1, f2, 
+                       minimalFrequency, 
+                       epsilon,
+                       siglevel) {
   
   total1 <- sum(f1)
   total2 <- sum(f2)
@@ -39,9 +73,7 @@ keyness.ll <- function(f1, f2, minimalFrequency, epsilon,siglevel) {
   f2[f2==0] <- epsilon
   other1 <- total1 - f1
   other2 <- total2 - f2
-  #print(paste("total1",total1))
-  #print(paste("total2",total2))
-  
+
   rf <- (f1 + f2) / ( total1 + total2 )
   
   e1 <- total1 * rf
@@ -50,8 +82,8 @@ keyness.ll <- function(f1, f2, minimalFrequency, epsilon,siglevel) {
   l <- 2 * ( ( f1 * log(f1/e1)  ) + (f2 * log(f2/e2)  ))
   
   
-  l <- sort(l,decreasing = TRUE)
-  pvalues <- 1-stats::pchisq(l, df=1)
+  l <- sort(l, decreasing = TRUE)
+  pvalues <- 1 - stats::pchisq(l, df=1)
   
   l[pvalues<siglevel]
 }
@@ -86,7 +118,7 @@ loglikelihood.test = function(O)
       if (O[i,j] == 0 || E[i,j] == 0)
         next
       sum = sum + (O[i,j] * log(O[i,j]/E[i,j]))
-    }
+    } 
   }
   STAT = sum * 2;
   
