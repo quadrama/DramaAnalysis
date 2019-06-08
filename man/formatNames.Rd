@@ -23,6 +23,8 @@ sorting will be ascending, if set to a negative value, the sorting is
 descending. If sort is set to 0 (the default), the order is unchanged. 
 The ordering can also be specified explicitly, by passing an integer vector 
 with as many elements as \code{x} has rows.}
+
+\item{...}{All other arguments are ignored.}
 }
 \description{
 The S3 function \code{format.QDHasCharacter()} is applicable on 

@@ -55,6 +55,8 @@ by this number.}
 
 \item{x}{An object of the type \code{QDDictionaryStatistics}, 
 e.g., the output of \code{dictionaryStatistics}.}
+
+\item{...}{All other parameters are passed to \code{as.matrix.data.frame()}.}
 }
 \value{
 A numeric matrix that contains the frequency with which 

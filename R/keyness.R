@@ -4,24 +4,26 @@
 #' The return value is a list containing scores for each word. If the method 
 #' is \code{loglikelihood}, the returned scores are unsigned G2 values. To estimate the 
 #' \emph{direction} of the keyness, the \code{log ratio} is more informative. A nice introduction 
-#' into log ratio can be found here: 
-#' \link{http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/}.
+#' into log ratio can be found \href{http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/}{here}.
 #' @param ft The frequency table
 #' @param categories A factor or numeric vector that represents an assignment of categories. 
 #' @param epsilon null values are replaced by this value, in order to avoid division by zero
 #' @param siglevel Return only the keywords above the significance level. Set to 1 to get all words
 #' @param method Either "logratio" or "loglikelihood" (default)
 #' @param minimalFrequency Words less frequent than this value are not considered at all
-#' @return A list of keywords, sorted by their log-likelihood or log ratio value, calculated according to \link{http://ucrel.lancs.ac.uk/llwizard.html}
+#' @return A list of keywords, sorted by their log-likelihood or log ratio value, calculated according to \href{http://ucrel.lancs.ac.uk/llwizard.html}{http://ucrel.lancs.ac.uk/llwizard.html}.
 #' @export
 #' @importFrom stats pchisq chisq.test
 #' @examples 
 #' data("rksp.0")
 #' ft <- frequencytable(rksp.0, byFigure = TRUE, normalize = FALSE)
 #' # Calculate log ratio for all words
-#' keywords <- keyness(ft, method = "logratio", row = 7, minimalFrequency = 5)
+#' genders <- factor(c("m", "m", "m", "m", "f", "m", "m", "m", "f", "m", "m", "f", "m"))
+#' keywords <- keyness(ft, method = "logratio", 
+#'                     categories = genders, 
+#'                     minimalFrequency = 5)
 #' # Remove words that are not significantly different
-#' keywords <- keywords[names(keywords) %in% names(keyness(ft, row = 1, siglevel = 0.01))]
+#' keywords <- keywords[names(keywords) %in% names(keyness(ft, siglevel = 0.01))]
 #' 
 keyness <- function(ft, 
                     categories = c(1, rep(2, nrow(ft)-1)),

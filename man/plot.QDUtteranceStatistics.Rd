@@ -5,18 +5,20 @@
 \title{Utterance positions}
 \usage{
 \method{plot}{QDUtteranceStatistics}(x, drama = NULL,
-  colors = qd.colors, frame = TRUE, xlab = "Time", ...)
+  colors = qd.colors, xlab = "Time", ...)
 }
 \arguments{
 \item{x}{A table generated from the function}
 
+\item{drama}{A QDDrama object. If specified, segment boundaries
+are extracted from it and included in the plot.}
+
 \item{colors}{The colors to be used}
 
+\item{xlab}{A character vector that is used as x axis label. Defaults to
+"Time".}
+
 \item{...}{Parameters passed to stripchart().}
-
-\item{segmentedText}{If supplied, act boundaries will be marked}
-
-\item{plotFrame}{Whether to draw a frame around the plot}
 }
 \description{
 Uses `stripchart` to  plot each utterance at their position,

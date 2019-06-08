@@ -94,7 +94,9 @@ configuration <- function(d,
 
 #' @export
 #' @rdname configuration
+#' @param x An object of class QDConfiguration
+#' @param ... All other arguments are passwd to \code{as.matrix.data.frame}.
 as.matrix.QDConfiguration <- function(x, ...) {
   stopifnot(inherits(x, "QDConfiguration"))
-  as.matrix.data.frame(x[,4:ncol(x)])
+  as.matrix.data.frame(x[,4:ncol(x)], ...)
 }

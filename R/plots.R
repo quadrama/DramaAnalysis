@@ -3,9 +3,11 @@
 #' in a line representing the figure. The dot is marked in the middle of each utterance.
 #' Might look weird if very long utterances are present.
 #' @param x A table generated from the function
-#' @param segmentedText If supplied, act boundaries will be marked
 #' @param colors The colors to be used
-#' @param plotFrame Whether to draw a frame around the plot
+#' @param drama A QDDrama object. If specified, segment boundaries
+#' are extracted from it and included in the plot.
+#' @param xlab A character vector that is used as x axis label. Defaults to
+#' "Time".
 #' @param ... Parameters passed to stripchart().
 #' @importFrom graphics stripchart abline
 #' @export
@@ -13,7 +15,6 @@
 plot.QDUtteranceStatistics <- function(x,
                                        drama=NULL,
                                        colors=qd.colors,
-                                       frame=TRUE,
                                        xlab="Time",
                                        ...) {
   stopifnot(inherits(x, "QDUtteranceStatistics"))
@@ -24,7 +25,6 @@ plot.QDUtteranceStatistics <- function(x,
                       pch=20, # use a small bullet as symbol
                       col=colors, # get nice colors
                       xaxt="n", # suppress the x axis
-                      frame=frame,
                       xlab=xlab,
                       ...)
   if ( !is.null(drama) ) {
@@ -42,8 +42,6 @@ plot.QDUtteranceStatistics <- function(x,
 #' they can easily become misleading. They are in this package 
 #' for historic reasons, but should not be used anymore.
 #' @param dstat A data frame containing data, e.g., output from dictionaryStatistics()
-#' @param mat A data frame that only contains data assignments. Defaults to all columns except for the first three from dstat.
-#' @param names A list of names for the legend
 #' @param symbols Symbols to be used in the plot
 #' @param cglcol The color for the spider net
 #' @param pcol The line color(s)

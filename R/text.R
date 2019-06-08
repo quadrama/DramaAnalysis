@@ -35,6 +35,7 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @param FUN A function applied to the strings. 
 #' Defaults to \code{stringr::str_to_title}, which
 #' converts the strings to title case.
+#' @param ... All other arguments are ignored.
 #' @seealso \code{\link[stringr]{str_to_title}}
 #' @importFrom stringr str_to_title
 #' @rdname formatNames
@@ -258,7 +259,6 @@ segment <- function(hasUtteranceBE, hasSegments) {
 #' @export
 #' @description The function \code{combine(x, y)} can be used to merge 
 #' multiple objects of the type \code{QDDrama} into one.
-#' @param x A \code{QDDrama}
 #' @param y A \code{QDDrama}
 #' @rdname loadDrama
 #' @examples 
@@ -285,7 +285,10 @@ combine <- function(x, y) {
 #' @description The function \code{split(x)} expects an object of type \code{QDDrama} and can 
 #' be used to split a \code{QDDrama} object that consists of multiple dramas 
 #' into a list thereof. It is the counterpart to \code{combine(x, y)}.
-#' @param x The object of class \code{QDDrama} (consisting of multiple dramas)
+#' @param x The object of class \code{QDDrama} (consisting of multiple dramas). 
+#' For \code{split()} it should consistof multiple plays. For \code{combine()} it 
+#' can but doesn't have to.
+#' @param ... All other arguments are ignored.
 #' @rdname loadDrama
 #' @examples 
 #' data(rksp.0)

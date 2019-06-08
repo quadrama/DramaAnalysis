@@ -313,6 +313,7 @@ filterByDictionary <- function(ft,
 #' \code{QDDictionaryStatistics} table as a matrix 
 #' @param x An object of the type \code{QDDictionaryStatistics}, 
 #' e.g., the output of \code{dictionaryStatistics}.
+#' @param ... All other parameters are passed to \code{as.matrix.data.frame()}.
 #' @return A numeric matrix that contains the frequency with which 
 #' a dictionary is present in a subset of tokens
 #' @examples

@@ -24,6 +24,10 @@ only very basic references (first person pronouns and proper names) are
 represented, which usually gives a very wrong impression.}
 
 \item{onlyPresence}{If TRUE, the function only records whether a character was presence. If FALSE (which is the default), the function counts the number of tokens spoken (active) or referenced (passive).}
+
+\item{x}{An object of class QDConfiguration}
+
+\item{...}{All other arguments are passwd to \code{as.matrix.data.frame}.}
 }
 \description{
 The function \code{configuration(...)} Creates drama configuration matrix as a \code{QDConfiguration} object, which is also a data.frame. The S3 function \code{as.matrix()} can be used to extract a numeric or logical matrix containing the core.

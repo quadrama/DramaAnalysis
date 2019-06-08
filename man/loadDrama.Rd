@@ -18,11 +18,13 @@ combine(x, y)
 \item{defaultCollection}{If the ids do not have a collection prefix, the 
 defaultCollection prefix is applied.}
 
-\item{x}{A \code{QDDrama}}
+\item{x}{The object of class \code{QDDrama} (consisting of multiple dramas). 
+For \code{split()} it should consistof multiple plays. For \code{combine()} it 
+can but doesn't have to.}
 
 \item{y}{A \code{QDDrama}}
 
-\item{x}{The object of class \code{QDDrama} (consisting of multiple dramas)}
+\item{...}{All other arguments are ignored.}
 }
 \value{
 The function returns a \code{QDDrama} object. This is essentially a 

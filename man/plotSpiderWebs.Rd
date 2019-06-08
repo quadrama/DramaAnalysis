@@ -29,10 +29,6 @@ plotSpiderWebs(dstat, symbols = c(17, 16, 15, 4, 8), cglcol = "black",
 \item{pcol}{The line color(s)}
 
 \item{...}{Miscellaneous arguments to be given for radarchart().}
-
-\item{mat}{A data frame that only contains data assignments. Defaults to all columns except for the first three from dstat.}
-
-\item{names}{A list of names for the legend}
 }
 \description{
 Generates spider-web like plot. 
