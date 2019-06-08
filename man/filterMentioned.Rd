@@ -17,6 +17,8 @@ that do not appear as speakers in the subsetted input text (after using
 limitFigures(), for example), or to summarize them as 'OTHER'.
 }
 \examples{
+\dontrun{
 data(rksp.0)
 text.top10.filtered <- filterMentioned(limitFigures(rksp.0$text))
+}
 }

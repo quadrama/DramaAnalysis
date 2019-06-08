@@ -124,8 +124,10 @@ filter <- function(hasCharacter,
 #' @param other Whether to summarize mentioned figures as 'OTHER'
 #' @export
 #' @examples 
+#' \dontrun{
 #' data(rksp.0)
 #' text.top10.filtered <- filterMentioned(limitFigures(rksp.0$text))
+#' }
 filterMentioned <- function(t, other=FALSE) {
   figure_id.set <- unique(t$Speaker.figure_id)
   figure_surface.set <- unique(t$Speaker.figure_surface)
