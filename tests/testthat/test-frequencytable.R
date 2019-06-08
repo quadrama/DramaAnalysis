@@ -55,3 +55,10 @@ test_that("frequencytable(rksp.0, byFigure=TRUE, sortResult=TRUE)
   expect_equal(rownames(ft)[1], "rksp.0|angelo")
   expect_equal(ft[1,1], 30)
 })
+
+ft <- frequencytable(rksp.0, byFigure = TRUE, acceptedPOS = postags$de$n)
+test_that("frequencytable(..., byFigure=TRUE, acceptedPOS = postags$de$n) has correct dimensions and produces correct output", {
+  expect_equal(ncol(ft), 887)
+  expect_equal(nrow(ft), 13)
+  expect_equal(colnames(ft)[c(785, 525, 353)], c("vertraulichkeit", "politik", "hexerei"))
+})
