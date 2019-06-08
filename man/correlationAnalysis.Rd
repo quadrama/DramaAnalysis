@@ -4,25 +4,38 @@
 \alias{correlationAnalysis}
 \title{Correlation analysis}
 \usage{
-correlationAnalysis(text.ft, outcomes, method = "spearman",
-  minimalFrequency = 10)
+correlationAnalysis(text.ft, categories, method = "spearman",
+  culling = 0, ...)
 }
 \arguments{
 \item{text.ft}{A matrix, containing words in columns and figures (or plays) in rows. 
-This can be the result of the \code{\link{frequencytable}} function.}
+This can be the result of the \code{\link{frequencytable}()} function.}
 
-\item{outcomes}{A list of outcomes, will be cast as numeric}
+\item{categories}{A factor or numeric vector that represents a list of categories.}
 
 \item{method}{The correlation method, passed on to cor()}
 
-\item{minimalFrequency}{An integer. Words that appear less than x times can be filtered in advance}
+\item{culling}{An integer. Words that appear in less items are removed. 
+Defaults to 0 which doesn't remove anything.}
+
+\item{...}{Arguments passed to \code{\link{cor}()}}
+}
+\value{
+The function returns a data.frame with three columns: The word, 
+it's correlation score, and the category it is correlated to. The latter is 
+mainly for an easier use of the results.
 }
 \description{
-Calculates correlation of a frequency table with an outcome list according to given method
+Calculates correlation of a frequency table with an outcome list according to given method. The function currently only works for pairwise correlation, i.e., two categories.
 }
 \examples{
 data(rksp.0)
-rksp.0.ft <- frequencytable(rksp.0, byFigure=TRUE)
-g <- c("m","m","m","m","f","m","m","m","f","m","m","f","m")
-rksp.0.cor <- correlationAnalysis(rksp.0.ft, g)
+ft <- frequencytable(rksp.0, byFigure=TRUE)
+g <- factor(c("m","m","m","m","f","m","m","m","f","m","m","f","m"))
+rksp.0.cor <- correlationAnalysis(ft, g)
+
+# to pre-filter by the total frequency of a word
+ft <- frequencytable(rksp.0, byFigure=TRUE)
+ft <- ft[,colSums(ft) > 5]
+correlationAnalysis(ft, g)
 }
