@@ -252,7 +252,9 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   # xt$match <- NULL
   
   if (normalizeByFigure == TRUE) {
-    bycolumns <- append(bycolumns,"Speaker.figure_id")
+    if (byFigure == TRUE) {
+      bycolumns <- append(bycolumns,"Speaker.figure_id")
+    }
     bylist <- paste(bycolumns, collapse=",")
     xt <- merge(xt, dt[,.N,keyby=bylist], 
           by.x = bycolumns,
