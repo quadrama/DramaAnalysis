@@ -28,6 +28,20 @@ test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schön','gut'), nor
 })
 
 
+test_that("dictionaryStatisticsSingle(..., wordfield = c('schön','gut'), byFigure=FALSE) has correct dimensions and produces correct output", {
+  dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schön","gut"), 
+                                      byFigure = FALSE)
+  expect_length(dstat, 3)
+  expect_equal(as.numeric(dstat[1,3]), 98)
+
+  dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schön","gut"), 
+                                      byFigure = FALSE, normalizeByField = TRUE)
+  expect_length(dstat, 3)
+  expect_equal(as.numeric(dstat[1,3]), 49)
+  
+})
+
+
 # dictionaryStatistics()
 
 dstat <- dictionaryStatistics(rksp.0, fields=list(Familie=list("aber")))

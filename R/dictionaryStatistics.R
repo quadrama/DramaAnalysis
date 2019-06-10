@@ -236,7 +236,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
     xt <- dt[,melt(xtabs(~ Speaker.figure_id, data=.SD[match])), 
              keyby=bylist]
   } else {
-    xt <- dt[,sum(match), keyby=bylist]
+    xt <- dt[,.(value=sum(match)), keyby=bylist]
   }
   
   if(normalizeByField || normalizeByFigure) {
@@ -244,9 +244,11 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   }
   
   # remove combinations of character and play that don't exist
-  xt <- unique(merge(xt, drama$characters, 
-              by.x = c("corpus","drama","Speaker.figure_id"), 
-              by.y = c("corpus","drama","figure_id"))[,names(xt), with=F])
+  if (byFigure == TRUE) {
+    xt <- unique(merge(xt, drama$characters, 
+                by.x = c("corpus","drama","Speaker.figure_id"), 
+                by.y = c("corpus","drama","figure_id"))[,names(xt), with=F])
+  }
   # xt$match <- NULL
   
   if (normalizeByFigure == TRUE) {
