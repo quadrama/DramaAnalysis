@@ -54,6 +54,9 @@ loadDrama <- function(ids, defaultCollection="qd") {
   drama$meta$Date.Written <-  ifelse(drama$meta$Date.Written == 0, NA, drama$meta$Date.Written)
   drama$meta$Date.Printed <-  ifelse(drama$meta$Date.Printed == 0, NA, drama$meta$Date.Printed)
   drama$meta$Date.Premiere <- ifelse(drama$meta$Date.Premiere == 0, NA, drama$meta$Date.Premiere)
+  drama$meta$Date.Translation <- ifelse(drama$meta$Date.Translation == 0, NA, 
+                                        drama$meta$Date.Translation)
+  
   drama$segments <- loadSegments(ids, defaultCollection = defaultCollection)
   drama$mentions <- loadMentions(ids, defaultCollection = defaultCollection)
   drama$characters <- loadCSV(ids, 
