@@ -26,6 +26,10 @@ test_that("configuration (onlyPresence = TRUE, segment = 'Scene') has correct le
   expect_equal(ncol(cfg), 46)
 })
 
+test_that("configuration() stops if called with multiple plays", {
+  expect_error(configuration(combine(rksp.0, rjmw.0)))
+})
+
 
 cfg <- configuration(rksp.0, onlyPresence = TRUE, mode = "Passive")
 cfgm <- as.matrix(cfg)

@@ -34,8 +34,10 @@ configuration <- function(d,
                           segment=c("Act", "Scene"), 
                           mode=c("Active", "Passive"),
                           onlyPresence=FALSE) {
+
   # check incoming object type
   stopifnot(inherits(d, "QDDrama"))
+  stopifnot(numberOfPlays(d) == 1)
   
   # match arguments
   segment <- match.arg(segment)

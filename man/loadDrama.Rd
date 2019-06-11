@@ -4,6 +4,7 @@
 \alias{loadDrama}
 \alias{combine}
 \alias{split.QDDrama}
+\alias{numberOfPlays}
 \title{Load drama}
 \usage{
 loadDrama(ids, defaultCollection = "qd")
@@ -11,6 +12,8 @@ loadDrama(ids, defaultCollection = "qd")
 combine(x, y)
 
 \method{split}{QDDrama}(x, ...)
+
+numberOfPlays(x)
 }
 \arguments{
 \item{ids}{A vector of ids.}
@@ -42,6 +45,9 @@ multiple objects of the type \code{QDDrama} into one.
 The function \code{split(x)} expects an object of type \code{QDDrama} and can 
 be used to split a \code{QDDrama} object that consists of multiple dramas 
 into a list thereof. It is the counterpart to \code{combine(x, y)}.
+
+The function \code{numberOfPlays()} determines how many
+different plays are contained in a single QDDrama object.
 }
 \examples{
 \dontrun{
@@ -57,4 +63,9 @@ data(rksp.0)
 data(rjmw.0)
 d <- combine(rjmw.0, rksp.0)
 dlist <- split(d)
+# returns 1
+numberOfPlays(rksp.0)
+
+# returns 2
+numberOfPlays(combine(rksp.0, rjmw.0))
 }

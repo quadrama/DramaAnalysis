@@ -311,6 +311,26 @@ split.QDDrama <- function(x, ...) {
   r
 }
 
+#' @description The function \code{numberOfPlays()} determines how many
+#' different plays are contained in a single QDDrama object.
+#' @rdname loadDrama
+#' @export
+#' @examples 
+#' # returns 1
+#' numberOfPlays(rksp.0)
+#' 
+#' # returns 2
+#' numberOfPlays(combine(rksp.0, rjmw.0))
+numberOfPlays <- function(x) {
+  stopifnot(inherits(x, "QDDrama"))
+  
+  if ("meta" %in% names(x) && "drama" %in% names(x$meta)) {
+    length(unique(x$meta$drama))
+  } else if ("text" %in% names(x) && "drama" %in% names(x$text)) {
+    length(unique(x$text$drama))
+  }
+}
+
 #' @title Extract section
 #' @description Extracts a sub segment of the text(s).
 #' The result is an empty table if more scenes or acts

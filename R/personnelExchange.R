@@ -16,6 +16,7 @@
 #' dist_nhamming <- hamming(rksp.0, variant = "NormalizedHamming")
 hamming <- function(drama, variant=c("Trilcke","Hamming","NormalizedHamming")) {
   stopifnot(inherits(drama, "QDDrama"))
+  stopifnot(numberOfPlays(drama) == 1)
   
   numberOfFigures <- nrow(drama$characters)
   scenes <- nrow(drama$segments)
