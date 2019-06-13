@@ -21,13 +21,13 @@ rksp.0.ft <- frequencytable(rksp.0, byFigure = TRUE)
 
 test_that("correlationAnalysis(...) produces correct results", {
   ca <- correlationAnalysis(rksp.0.ft, g, culling = 10)
-  expect_equal(nrow(ca), 38)
+  expect_equal(nrow(ca), 40)
   expect_equal(ncol(ca), 3)
   expect_equal(ca[1,1], -0.4403665)
   expect_equal(ca[1,2], "mein")
   expect_equal(ca[1,3], "f")
   expect_equal(ca[5,1], -0.393069)
-  expect_equal(ca[5,2], "ihn")
+  expect_equal(ca[5,2], "von")
   expect_equal(ca[5,3], "f")
 })
 
