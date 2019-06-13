@@ -8,8 +8,16 @@ removeSpecialCharacters <- function(x) {
   x$text$Token.surface <- stringi::stri_trans_general(x$text$Token.surface, "latin-ascii")
   x$text$Token.lemma <- stringi::stri_trans_general(x$text$Token.lemma, "latin-ascii")
   
-  x$stageDirections$Token.surface <- stringi::stri_trans_general(x$stageDirections$Token.surface, "latin-ascii")
-  x$stageDirections$Token.lemma <- stringi::stri_trans_general(x$stageDirections$Token.lemma, "latin-ascii")
+  x$stageDirections$Token.surface <- stringi::stri_trans_general(x$stageDirections$Token.surface, 
+                                                                 "latin-ascii")
+  x$stageDirections$Token.lemma <- stringi::stri_trans_general(x$stageDirections$Token.lemma, 
+                                                               "latin-ascii")
+  
+  x$mentions$mentionSurface <-stringi::stri_trans_general(x$mentions$mentionSurface, 
+                                                          "latin-ascii")
+  
+  x$meta$documentTitle <- stringi::stri_trans_general(x$meta$documentTitle, 
+                                                      "latin-ascii")
   
   x
 }
