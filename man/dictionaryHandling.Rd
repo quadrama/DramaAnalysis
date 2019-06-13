@@ -44,12 +44,25 @@ the package \code{wordVectors}.
 }
 \section{File Format}{
 
-Dictionary files should contain one word per line, with no comments or any other meta information. 
-The entry name for the dictionary is given as the file name. It's therefore best if it does not contain
-special characters. The dictionary must be in UTF-8 encoding, and the file needs to end on .txt.
+Dictionary files should contain one word per line, with no comments 
+or any other meta information. 
+The entry name for the dictionary is given as the file name. 
+It's therefore best if it does not contain
+special characters. The dictionary must be in UTF-8 encoding, and the 
+file needs to end on .txt.
 }
 
 \examples{
+\dontrun{
+# retrieves word fields from github
+fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
+
+
+# retrieves word fields from local directory (under windows)
+fields <- loadFields(filednames=c("Health", "Death"),
+                     baseurl="c:\\\\path\\\\to\\\\local\\\\directory",
+                     fileSep="\\\\")
+}
 \dontrun{
 # Load base dictionary
 dict_base <- loadFields(fieldnames=c("Familie","Liebe"))

@@ -11,17 +11,31 @@
 #' Can be overwritten to load local dictionaries.
 #' @importFrom readr read_csv locale col_character
 #' @section File Format:
-#' Dictionary files should contain one word per line, with no comments or any other meta information. 
-#' The entry name for the dictionary is given as the file name. It's therefore best if it does not contain
-#' special characters. The dictionary must be in UTF-8 encoding, and the file needs to end on .txt.
+#' Dictionary files should contain one word per line, with no comments 
+#' or any other meta information. 
+#' The entry name for the dictionary is given as the file name. 
+#' It's therefore best if it does not contain
+#' special characters. The dictionary must be in UTF-8 encoding, and the 
+#' file needs to end on .txt.
 #' @rdname dictionaryHandling
 #' @export
+#' @examples 
+#' \dontrun{
+#' # retrieves word fields from github
+#' fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
+#' 
+#' 
+#' # retrieves word fields from local directory (under windows)
+#' fields <- loadFields(filednames=c("Health", "Death"),
+#'                      baseurl="c:\\path\\to\\local\\directory",
+#'                      fileSep="\\")
+#' }
 loadFields <- function(fieldnames=c("Liebe","Familie"),
-                      baseurl=paste("https://raw.githubusercontent.com/quadrama/metadata/master",
-                                    ensureSuffix(directory,fileSep),sep=fileSep),
-                      directory="fields/",
-                      fileSuffix=".txt",
-                      fileSep = "/") {
+                       baseurl=paste("https://raw.githubusercontent.com/quadrama/metadata/master",
+                                     ensureSuffix(directory,fileSep), sep=fileSep),
+                       directory="fields/",
+                       fileSuffix=".txt",
+                       fileSep = "/") {
   r <- list()
   for (field in fieldnames) {
     url <- paste(baseurl, field, fileSuffix, sep="")
