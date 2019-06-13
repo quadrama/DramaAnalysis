@@ -8,6 +8,7 @@
 #' @param writeToFiles Whether to write each isolated speech into a new text file (default = TRUE)
 #' @param dir The directory into which the files will be written (default = data directory)
 #' @export
+#' @importFrom utils capture.output head
 #' @examples
 #' data(rksp.0)
 #' isolateCharacterSpeech(rksp.0, segment="Scene", writeToFiles=FALSE)

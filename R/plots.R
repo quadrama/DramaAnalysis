@@ -107,6 +107,7 @@ plotSpiderWebs <- function(dstat,
 #' @param ... All remainig options are passed to \code{barplot.default()}.
 #' @export
 #' @importFrom graphics text barplot
+#' @importFrom data.table dcast
 #' @seealso barplot.default
 barplot.QDCharacterStatistics <- function(height, 
                                        col=qd.colors, 
