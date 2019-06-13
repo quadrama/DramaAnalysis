@@ -83,3 +83,25 @@ loadSets <- function() {
   sets <- loadSetsInternally()
   data.frame(size=unlist(lapply(sets,length)))
 }
+
+#' @title Replace corpus prefix
+#' @description This function can be used to replace corpus prefixes.
+#' If a list of play ids contains textgrid prefixes, for instance, this 
+#' function can be used to map them onto GerDraCor prefixes. Please note
+#' that the function does \emph{not} check whether the play actually exists 
+#' in the corpus.
+#' @param idList The list of ids in which we want to replace.
+#' @param map A list containing the old prefix as name and the new one as
+#' values.
+#' @examples
+#' 
+#' # returns c("corpus2:play1", "corpus2:play2")
+#' mapPrefix(c("corpus1:play1", corpus1:play2), list(corpus1="corpus2"))
+#' 
+mapPrefix <- function(idList, map) {
+  r <- idList
+  for (x in names(map)) {
+    r <- sub(paste0(x, ":"), paste0(map[[x]], ":"), r, fixed=TRUE)
+  }
+  r
+}
