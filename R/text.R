@@ -69,6 +69,58 @@ format.QDHasCharacter <- function(x,
 
 }
 
+#' @title Format drama titles
+#' @description Given a QDDrama object, this function generates a list of nicely 
+#' formatted names, following the format string.
+#' @param x The QDDrama object
+#' @param formatString A character vector. Contains special symbols that
+#' are replaced by meta data entries about the plays. The following symbols can
+#' be used:
+#' - %T: title of the play
+#' - %A: Author name 
+#' - %P: GND entry of the author (if known)
+#' - %DR, %DP, %DW: Date of premiere, print or written
+#' - %DM: The minimal date 
+#' - %L: The language
+#' - %I: The id
+#' - %C: The corpus prefix
+#' @export
+#' @importFrom stringr str_replace
+dramaNames <- function(x, formatString="%T (%A, %DM)") {
+  stopifnot(inherits(x, "QDDrama"))
+  
+  keys = list("%T"="documentTitle", 
+              "%A"="Name",
+              "%DR" = "Date.Premiere",
+              "%DP" = "Date.Printed",
+              "%DW" = "Date.Written",
+              "%P" = "Pnd",
+              "%I" = "drama",
+              "%C" = "corpus",
+              "%L" = "language")
+  t <- rep(formatString, times=nrow(x$meta))
+  
+  for (key in names(keys)) {
+    column <- x$meta[[keys[[key]]]]
+    t <- stringr::str_replace(t, key, ifelse(is.na(column), 
+                                             "NA",
+                                             as.character(column)))
+    
+  }
+  
+  suppressWarnings(column <- apply(x$meta[,c("Date.Printed", "Date.Written", "Date.Premiere")], 
+                                   1, min, na.rm=TRUE))
+  
+  
+  t <- stringr::str_replace(t, "%DM", ifelse(is.finite(column),
+                                             as.character(column),
+                                             "NA"))
+  
+  
+  
+  t
+}
+
 #' @title Filter characters
 #' @description This function can be used to filter characters from all tables 
 #' that contain  a character column (and are of the class QDHasCharacter). 
