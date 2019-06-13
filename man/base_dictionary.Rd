@@ -11,6 +11,7 @@ base_dictionary
 \description{
 A list of word fields, i.e., collections of German lemmas associated 
 with the five concepts Familie (family), Krieg (war), Liebe (love), Ratio 
-(reason) and Religion (religion).
+(reason) and Religion (religion). The base dictionary is for \emph{demo purposes} 
+only, because it doesn't contain any umlaut characters.
 }
 \keyword{datasets}

@@ -58,7 +58,7 @@ dstat <- dictionaryStatistics(rksp.0)
 test_that("dictionaryStatistics(rksp.0) 
           has correct dimensions and produces correct output", {
   expect_length(dstat, 4)          
-  expect_equal(as.integer(dstat[6,4]), 9)
+  expect_equal(as.integer(dstat[6,4]), 11)
   expect_equal(colnames(dstat)[4], "Liebe")
 })
 
@@ -67,7 +67,7 @@ test_that("dictionaryStatistics(rksp.0, segment='Act')
           has correct dimensions and produces correct output", {
     expect_length(dstat, 5)
     expect_equal(nrow(dstat), 65)
-    expect_equal(as.integer(dstat[7,5]), 6)
+    expect_equal(as.integer(dstat[7,5]), 9)
     expect_equal(colnames(dstat)[3], "Number.Act")
 })
 
@@ -88,7 +88,7 @@ test_that("dictionaryStatistics(rksp.0, fieldnames=c('Ratio', 'Religion'), norma
   expect_equal(colnames(dstat)[4], "Ratio")  
   expect_equal(colnames(dstat)[5], "Religion")
   expect_equal(as.numeric(dstat[5,4]), 0.0042898)
-  expect_equal(as.numeric(dstat[5,5]), 0.003336511)
+  expect_equal(as.numeric(dstat[5,5]), 0.004766444)
 })
 
 
@@ -97,7 +97,7 @@ context("filterByDictionary()")
 
 filtered <- filterByDictionary(frequencytable(rksp.0, byFigure = TRUE))
 test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE) has correct dimensions and produces correct output", {
-  expect_length(filtered, 91)
+  expect_length(filtered, 143)
   expect_length(filtered[,1], 13)
   expect_equal(FALSE %in% (colnames(filtered) %in% base_dictionary$Liebe), FALSE)
 })
@@ -105,7 +105,7 @@ test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE) has correc
 filtered <- filterByDictionary(frequencytable(rksp.0, byFigure = TRUE), fieldnames = c("Krieg"))
 test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE, fieldnames = c('Krieg'))  
           has correct dimensions and produces correct output", {
-  expect_length(filtered, 65)
+  expect_length(filtered, 78)
   expect_length(filtered[,1], 13)
   expect_equal(FALSE %in% (colnames(filtered) %in% base_dictionary$Krieg), FALSE)
 })
