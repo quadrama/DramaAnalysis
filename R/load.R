@@ -34,8 +34,10 @@ setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDram
 #' @exportClass QDDrama
 #' @examples 
 #' # both are equivalent
+#' \dontrun{
 #' d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
 #' d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
+#' }
 loadDrama <- function(ids, defaultCollection="qd") {
   drama <- list()
   drama$text     <- loadText(ids, defaultCollection = defaultCollection)

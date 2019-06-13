@@ -6,7 +6,8 @@
 \alias{as.matrix.QDDictionaryStatistics}
 \title{Dictionary Use}
 \usage{
-dictionaryStatistics(drama, fields = base_dictionary[fieldnames],
+dictionaryStatistics(drama,
+  fields = DramaAnalysis::base_dictionary[fieldnames],
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
   normalizeByFigure = FALSE, normalizeByField = FALSE,
   byFigure = TRUE, column = "Token.lemma", ci = TRUE)

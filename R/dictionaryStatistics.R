@@ -107,7 +107,7 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' data(rksp.0)
 #' dstat <- dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie"))
 #' @export
-dictionaryStatistics <- function(drama, fields=base_dictionary[fieldnames],
+dictionaryStatistics <- function(drama, fields=DramaAnalysis::base_dictionary[fieldnames],
                                  fieldnames=c("Liebe"),
                                  segment=c("Drama","Act","Scene"),
                                  normalizeByFigure = FALSE, 

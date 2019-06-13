@@ -185,6 +185,10 @@ fixColumnType <- function(dt) {
 
 # internal
 loadCharactersTEI <- function(raw_tei, nsp, dt_text) {
+  `:=` <- NULL
+  Speaker.Figure_id <- NULL
+  Gender <- NULL
+  
   dt_characters <- data.table::copy(dt_text)
   dt_characters[, c("utteranceBegin","utteranceEnd", "Token.surface", "Token.pos",
                     "Token.lemma", "length"):=NULL] 

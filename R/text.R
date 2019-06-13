@@ -240,6 +240,7 @@ segment <- function(hasUtteranceBE, hasSegments) {
   `:=` <- NULL
   end.Act <- NULL
   end.Scene <- NULL
+  Number.Scene <- NULL
   
   # if scene begin/end field is NA, we replace it with the act begin/end
   # therefore, we don't loose any text
