@@ -1,24 +1,22 @@
-#' @title Isolates Figure Speech
-#' @description \code{isolateFigureSpeech()} isolates the speeches
-#' of individual figures and optionally saves them in seperate text files.
-#' @param t A text (or multiple texts, as data.frame or data.table)
+#' @title Isolates Character Speech
+#' @description \code{isolateCharacterSpeech()} isolates the speeches
+#' of individual characters and optionally saves them in seperate text files.
+#' @param drama A text (or multiple texts, as a QDDrama object)
 #' @param segment "Drama", "Act", or "Scene". Determines on what segment-level the speech is isolated.
-#' @param min_token_count The minimal token count for a speech to be considered (default = 0)
-#' @param count_punctuation Whether to include punctuation in min_token_count (default = TRUE)
-#' @param write_to_files Whether to write each isolated speech into a new text file (default = TRUE)
+#' @param minTokenCount The minimal token count for a speech to be considered (default = 0)
+#' @param countPunctuation Whether to include punctuation in minTokenCount (default = TRUE)
+#' @param writeToFiles Whether to write each isolated speech into a new text file (default = TRUE)
 #' @param dir The directory into which the files will be written (default = data directory)
 #' @export
 #' @examples
-#' \dontrun{
 #' data(rksp.0)
-#' isolateFigureSpeech(rksp.0, segment="Scene")
-#' }
-isolateFigureSpeech <- function(drama,
-                             segment=c("Drama", "Act", "Scene"),
-                             min_token_count=0,
-                             count_punctuation=TRUE,
-                             write_to_files=TRUE,
-                             dir=getOption("qd.datadir")) {
+#' isolateCharacterSpeech(rksp.0, segment="Scene", writeToFiles=FALSE)
+isolateCharacterSpeech <- function(drama,
+                             segment = c("Drama", "Act", "Scene"),
+                             minTokenCount = 0,
+                             countPunctuation = TRUE,
+                             writeToFiles = TRUE,
+                             dir = getOption("qd.datadir")) {
   stopifnot(inherits(drama, "QDDrama"))
   
   # we need this to prevent notes in R CMD check
@@ -56,24 +54,25 @@ isolateFigureSpeech <- function(drama,
          },
          stop("Please enter valid string-value for argument 'segment' (default = 'Drama', 'Act' or 'Scene').")
   )
-  r <- split(t[, c("drama", "Speaker.figure_id", "Number.Act", "Number.Scene"):=NULL], by="fn", keep.by=FALSE, drop=TRUE)
+  r <- split(t[, c("drama", "Speaker.figure_id", "Number.Act", "Number.Scene"):=NULL], 
+             by="fn", keep.by=FALSE, drop=TRUE)
   
-  if (count_punctuation) {
+  if (countPunctuation) {
     r <- lapply(names(r), function(x) {
-      if (length(r[[x]]$Token.surface) >= min_token_count){
+      if (length(r[[x]]$Token.surface) >= minTokenCount){
         r[x]
       }
     })
   } else {
     r <- lapply(names(r), function(x) {
-      if (length(r[[x]][!grep(pattern="[[:punct:]]", x=r[[x]]$Token.surface)]$Token.surface) >= min_token_count){
+      if (length(r[[x]][!grep(pattern="[[:punct:]]", x=r[[x]]$Token.surface)]$Token.surface) >= minTokenCount){
         r[x]
       }
     })
   }
   r <- unlist(r, recursive=FALSE)
   
-  if (write_to_files) {
+  if (writeToFiles) {
     o <- capture.output(lapply(names(r), function(x) {
       fn <- paste(dir, "/", x, sep="")
       if (file.exists(fn)) {file.remove(fn)}

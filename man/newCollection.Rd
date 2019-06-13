@@ -6,13 +6,13 @@
 \usage{
 newCollection(drama, name = ifelse(inherits(drama, "QDDrama"),
   paste(unique(drama$meta$drama)), paste(drama, collapse = "_")),
-  write_to_file = TRUE, dir = getOption("qd.collectionDirectory"),
+  writeToFile = TRUE, dir = getOption("qd.collectionDirectory"),
   append = TRUE)
 }
 \arguments{
 \item{name}{The name of the collection and its filename (default = concatenated drama IDs)}
 
-\item{write_to_file}{= Whether to write the collection to a file (default = TRUE)}
+\item{writeToFile}{= Whether to write the collection to a file (default = TRUE)}
 
 \item{dir}{The directory into which the collection file will be written (default = collection directory)}
 
