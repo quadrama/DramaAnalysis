@@ -22,6 +22,6 @@ in the corpus.
 \examples{
 
 # returns c("corpus2:play1", "corpus2:play2")
-mapPrefix(c("corpus1:play1", corpus1:play2), list(corpus1="corpus2"))
+mapPrefix(c("corpus1:play1", "corpus1:play2"), list(corpus1="corpus2"))
 
 }

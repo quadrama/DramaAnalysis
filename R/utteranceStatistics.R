@@ -1,6 +1,6 @@
 #' @title Utterance Statistics
-#' @description This method calculates the length of each utterance, organised by figure and drama.
-#' @param t The dramatic text(s)
+#' @description This method calculates the length of each utterance, organised by character and drama.
+#' @param drama The dramatic text(s)
 #' @param normalizeByDramaLength Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
 #' @exportClass QDUtteranceStatistics

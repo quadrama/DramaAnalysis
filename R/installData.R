@@ -7,7 +7,6 @@
 #' @param baseUrl The github user (or group)
 #' @importFrom utils download.file unzip
 #' @export
-#' @rdname setup
 installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
                                   branchOrCommit="master",
                                   repository="metadata",
@@ -51,7 +50,6 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
 #' @param remoteUrl The URL of the remote repository.
 #' @importFrom git2r clone pull in_repository repository
 #' @export
-#' @rdname setup
 installData <- function(dataSource="tg", 
                         dataDirectory=getOption("qd.datadir"),
                         downloadSource="ims", 

@@ -10,6 +10,9 @@ newCollection(drama, name = ifelse(inherits(drama, "QDDrama"),
   append = TRUE)
 }
 \arguments{
+\item{drama}{A text (or multiple texts, as data.frame or data.table), or a character 
+vector containing the drama IDs to be collected}
+
 \item{name}{The name of the collection and its filename (default = concatenated drama IDs)}
 
 \item{writeToFile}{= Whether to write the collection to a file (default = TRUE)}
@@ -18,9 +21,6 @@ newCollection(drama, name = ifelse(inherits(drama, "QDDrama"),
 
 \item{append}{Whether to extend the collection file if it already exists. 
 If FALSE, the file will be overwritten. (default = TRUE)}
-
-\item{t}{A text (or multiple texts, as data.frame or data.table), or a character 
-vector containing the drama IDs to be collected}
 }
 \description{
 \code{newCollection()} can be used to create new collections 

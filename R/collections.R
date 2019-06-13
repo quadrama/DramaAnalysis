@@ -97,7 +97,7 @@ loadSets <- function() {
 #' @examples
 #' 
 #' # returns c("corpus2:play1", "corpus2:play2")
-#' mapPrefix(c("corpus1:play1", corpus1:play2), list(corpus1="corpus2"))
+#' mapPrefix(c("corpus1:play1", "corpus1:play2"), list(corpus1="corpus2"))
 #' 
 mapPrefix <- function(idList, map) {
   r <- idList
@@ -110,7 +110,7 @@ mapPrefix <- function(idList, map) {
 #' @title Create or Extend a Collection
 #' @description \code{newCollection()} can be used to create new collections 
 #' or add dramas to existing collection files.
-#' @param t A text (or multiple texts, as data.frame or data.table), or a character 
+#' @param drama A text (or multiple texts, as data.frame or data.table), or a character 
 #' vector containing the drama IDs to be collected
 #' @param name The name of the collection and its filename (default = concatenated drama IDs)
 #' @param writeToFile = Whether to write the collection to a file (default = TRUE)

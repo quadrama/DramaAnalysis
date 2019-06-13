@@ -7,12 +7,12 @@
 utteranceStatistics(drama, normalizeByDramaLength = TRUE)
 }
 \arguments{
-\item{normalizeByDramaLength}{Logical value. If true, the resulting values will be normalized by the length of the drama.}
+\item{drama}{The dramatic text(s)}
 
-\item{t}{The dramatic text(s)}
+\item{normalizeByDramaLength}{Logical value. If true, the resulting values will be normalized by the length of the drama.}
 }
 \description{
-This method calculates the length of each utterance, organised by figure and drama.
+This method calculates the length of each utterance, organised by character and drama.
 }
 \examples{
 data(rksp.0)
