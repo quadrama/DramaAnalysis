@@ -4,7 +4,7 @@
 \alias{dramaNames}
 \title{Format drama titles}
 \usage{
-dramaNames(x, formatString = "\%T (\%A, \%DM)")
+dramaNames(x, formatString = "\%A: \%T (\%DM)", orderBy = "drama")
 }
 \arguments{
 \item{x}{The QDDrama object}
@@ -12,14 +12,16 @@ dramaNames(x, formatString = "\%T (\%A, \%DM)")
 \item{formatString}{A character vector. Contains special symbols that
 are replaced by meta data entries about the plays. The following symbols can
 be used:
-- %T: title of the play
-- %A: Author name 
-- %P: GND entry of the author (if known)
-- %DR, %DP, %DW: Date of premiere, print or written
-- %DM: The minimal date 
-- %L: The language
-- %I: The id
-- %C: The corpus prefix}
+- \%T: title of the play
+- \%A: Author name 
+- \%P: GND entry of the author (if known)
+- \%DR, %DP, %DW: Date of premiere, print or written
+- \%DM: The minimal date 
+- \%L: The language
+- \%I: The id
+- \%C: The corpus prefix}
+
+\item{orderBy}{The meta data key that the final list will be ordered by}
 }
 \description{
 Given a QDDrama object, this function generates a list of nicely 

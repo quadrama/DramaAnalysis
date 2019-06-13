@@ -73,20 +73,23 @@ format.QDHasCharacter <- function(x,
 #' @description Given a QDDrama object, this function generates a list of nicely 
 #' formatted names, following the format string.
 #' @param x The QDDrama object
+#' @param orderBy The meta data key that the final list will be ordered by
 #' @param formatString A character vector. Contains special symbols that
 #' are replaced by meta data entries about the plays. The following symbols can
 #' be used:
-#' - %T: title of the play
-#' - %A: Author name 
-#' - %P: GND entry of the author (if known)
-#' - %DR, %DP, %DW: Date of premiere, print or written
-#' - %DM: The minimal date 
-#' - %L: The language
-#' - %I: The id
-#' - %C: The corpus prefix
+#' - \%T: title of the play
+#' - \%A: Author name 
+#' - \%P: GND entry of the author (if known)
+#' - \%DR, %DP, %DW: Date of premiere, print or written
+#' - \%DM: The minimal date 
+#' - \%L: The language
+#' - \%I: The id
+#' - \%C: The corpus prefix
 #' @export
 #' @importFrom stringr str_replace
-dramaNames <- function(x, formatString="%T (%A, %DM)") {
+dramaNames <- function(x, 
+                       formatString = "%A: %T (%DM)", 
+                       orderBy = "drama") {
   stopifnot(inherits(x, "QDDrama"))
   
   keys = list("%T"="documentTitle", 
@@ -111,14 +114,13 @@ dramaNames <- function(x, formatString="%T (%A, %DM)") {
   suppressWarnings(column <- apply(x$meta[,c("Date.Printed", "Date.Written", "Date.Premiere")], 
                                    1, min, na.rm=TRUE))
   
-  
   t <- stringr::str_replace(t, "%DM", ifelse(is.finite(column),
                                              as.character(column),
                                              "NA"))
   
   
   
-  t
+  t[order(x$meta[[orderBy]])]
 }
 
 #' @title Filter characters
