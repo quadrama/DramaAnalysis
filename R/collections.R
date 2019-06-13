@@ -93,6 +93,7 @@ loadSets <- function() {
 #' @param idList The list of ids in which we want to replace.
 #' @param map A list containing the old prefix as name and the new one as
 #' values.
+#' @export
 #' @examples
 #' 
 #' # returns c("corpus2:play1", "corpus2:play2")
