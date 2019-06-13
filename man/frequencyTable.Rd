@@ -5,7 +5,8 @@
 \alias{frequencytable}
 \title{Word frequencies}
 \usage{
-filterByDictionary(ft, fields = base_dictionary[fieldnames],
+filterByDictionary(ft,
+  fields = DramaAnalysis::base_dictionary[fieldnames],
   fieldnames = c("Liebe"))
 
 frequencytable(drama, acceptedPOS = postags$de$words,

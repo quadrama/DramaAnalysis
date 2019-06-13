@@ -186,7 +186,7 @@ fixColumnType <- function(dt) {
 # internal
 loadCharactersTEI <- function(raw_tei, nsp, dt_text) {
   `:=` <- NULL
-  Speaker.Figure_id <- NULL
+  Speaker.figure_id <- NULL
   Gender <- NULL
   
   dt_characters <- data.table::copy(dt_text)

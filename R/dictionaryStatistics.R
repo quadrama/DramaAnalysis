@@ -320,7 +320,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
 #' 
 
 filterByDictionary <- function(ft, 
-                           fields=base_dictionary[fieldnames],
+                           fields=DramaAnalysis::base_dictionary[fieldnames],
                            fieldnames=c("Liebe")) {
   as.matrix(ft[,which(colnames(ft) %in% unlist(fields))])
 }
