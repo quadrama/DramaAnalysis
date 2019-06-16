@@ -31,9 +31,10 @@ test_that("configuration() stops if called with multiple plays", {
 })
 
 
-cfg <- configuration(rksp.0, onlyPresence = TRUE, mode = "Passive")
-cfgm <- as.matrix(cfg)
-test_that("configuration (onlyPresence = TRUE, mode = 'Passive') uses mentions for configuration$matrix", {
+test_that("configuration (onlyPresence = TRUE, mode = 'Passive') produces correct results", {
+  cfg <- configuration(rksp.0, onlyPresence = TRUE, mode = "Passive")
+  cfgm <- as.matrix(cfg)
+
   expect_equal(as.vector(cfgm[1,]), c(TRUE, TRUE, TRUE, TRUE, TRUE)) # "DER PRINZ"
   expect_equal(as.vector(cfgm[2,]), c(TRUE, TRUE, TRUE, TRUE, TRUE)) # "EMILIA"
   expect_equal(as.vector(cfgm[3,]), c(TRUE, FALSE, FALSE, FALSE, FALSE)) # "DER KAMMERDIENER"

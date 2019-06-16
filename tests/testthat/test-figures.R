@@ -6,23 +6,23 @@ toler <- 1e-4
 
 # characterStatistics()
 
-fstat <- characterStatistics(rksp.0)
 test_that("characterStatistics(rksp.0) 
           has correct dimensions and produces correct output", {
+  fstat <- characterStatistics(rksp.0)
   expect_length(colnames(fstat), 10)
   expect_length(rownames(fstat), 13)
-  expect_equal(sum(fstat$tokens), 24520)
-  expect_equal(as.numeric(fstat[1,7]), 33.77707, tolerance=toler)
+  expect_equal(sum(fstat$tokens), 25365)
+  expect_equal(as.numeric(fstat[1,7]), 35.36943, tolerance=toler)
   expect_equal(as.numeric(fstat[3,4]), 764, tolerance=toler)
 })
 
-fstat <- characterStatistics(rksp.0, normalize = TRUE)
 test_that("characterStatistics(rksp.0, normalize = TRUE) 
           has correct dimensions and produces correct output", {
+  fstat <- characterStatistics(rksp.0, normalize = TRUE)
   expect_length(colnames(fstat), 10)
   expect_length(rownames(fstat), 13)
-  expect_equal(as.numeric(fstat[1,7]), 33.77707, tolerance=toler)
-  expect_equal(as.numeric(fstat[3,4]), 0.03115824, tolerance=toler)
+  expect_equal(as.numeric(fstat[1,7]), 35.36943, tolerance=toler)
+  expect_equal(as.numeric(fstat[3,4]), 0.03012024, tolerance=toler)
   expect_equal(sum(fstat$tokens), 1, tolerance=toler)
   expect_equal(sum(fstat$utterances), 1, tolerance=toler)
   expect_equal(as.character(fstat$character[1]), "der_prinz")

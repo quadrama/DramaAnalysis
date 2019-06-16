@@ -58,7 +58,7 @@ loadDrama <- function(ids, defaultCollection="qd") {
   drama$characters <- loadCSV(ids, 
                               variant="Characters", 
                               defaultCollection = defaultCollection)
-  drama$stageDirections <- loadCSV(ids,
+  drama$stageDirections <- loadText(ids,
                                    variant="StageDirections",
                                    defaultCollection = defaultCollection)
   class(drama) <- append(Drama, class(drama))
@@ -121,8 +121,8 @@ loadSegments <- function(ids, defaultCollection="qd") {
 #' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
 #' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", 
-                     unifyCharacterFactors=FALSE) {
-  t <- loadCSV(ids, defaultCollection = defaultCollection)
+                     unifyCharacterFactors=FALSE, variant="UtterancesWithTokens") {
+  t <- loadCSV(ids, defaultCollection = defaultCollection, variant=variant)
   colnames(t)[3:4] <- c("utteranceBegin", "utteranceEnd") 
   t$Token.pos <- factor(t$Token.pos)
 
@@ -187,9 +187,13 @@ loadCharacters <- function(ids,
 }
 
 loadCSV <- function(ids, 
-                    variant=c("UtterancesWithTokens", "Segments", "Metadata", "Characters", "Mentions", "StageDirections"), 
+                    variant=c("UtterancesWithTokens", 
+                              "Segments", "Metadata", 
+                              "Characters", "Mentions", 
+                              "StageDirections"), 
                     defaultCollection="tg",
-                    dataDirectory=getOption("qd.datadir")) {
+                    dataDirectory=getOption("qd.datadir"),
+                    classes=c()) {
   
   ids <- unlist(lapply(strsplit(as.character(ids),":",fixed=TRUE),
                        function(x) { paste(c(rep(defaultCollection,2-length(x)),x),sep="",collapse=":") } ))
@@ -218,7 +222,12 @@ loadCSV <- function(ids,
     }
   })
   tables <- tables[!is.na(tables)]
-  Reduce(rbind, tables)
+  r <- Reduce(rbind, tables)
+  if (length(classes)>0) {
+    class(r) <- append(class(r), classes)
+  }
+  
+  r
 }
 
 #' @title Load meta data

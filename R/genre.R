@@ -34,7 +34,7 @@ correlationAnalysis <- function(text.ft,
                                 ...) {
   # filter rare words
   if (culling > 0) {
-    text.ft.filtered <- data.frame(text.ft[,colSums(text.ft!=0) > culling])
+    text.ft.filtered <- data.frame(text.ft[,colSums(text.ft!=0) > culling], check.names = FALSE)
   } else {
     text.ft.filtered <- text.ft
   }
@@ -43,7 +43,9 @@ correlationAnalysis <- function(text.ft,
   nCategories <- as.numeric(categories)
   
   # calculate correlation
-  text.cor <- data.frame( stats::cor( text.ft.filtered, y=nCategories, method=method, ...) )
+  text.cor <- data.frame( stats::cor( text.ft.filtered, 
+                                      y=nCategories, 
+                                      method=method, ...) )
   colnames(text.cor) <- c("cor")
   text.cor$word <- rownames(text.cor)
   

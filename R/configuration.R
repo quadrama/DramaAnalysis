@@ -88,6 +88,11 @@ configuration <- function(d,
     }
   }
   
+  # Remove non-characters
+  if (mode == "Passive") {
+    cfg <- cfg[character %in% d$characters$figure_id]
+  }
+  
   # set class names
   class(cfg) <- c("QDConfiguration", "QDHasCharacter", "data.frame")
   

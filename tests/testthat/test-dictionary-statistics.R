@@ -82,13 +82,15 @@ test_that("dictionaryStatistics(rksp.0, segment='Scene') has correct dimensions 
 })
 
 
-dstat <- dictionaryStatistics(rksp.0, fieldnames=c("Ratio", "Religion"), normalizeByFigure = TRUE)
 test_that("dictionaryStatistics(rksp.0, fieldnames=c('Ratio', 'Religion'), normalizeByFigure = TRUE) has correct dimensions and produces correct output" ,{
+  dstat <- dictionaryStatistics(rksp.0, 
+                                fieldnames=c("Ratio", "Religion"), 
+                                normalizeByFigure = TRUE)
   expect_length(dstat, 5)
   expect_equal(colnames(dstat)[4], "Ratio")  
   expect_equal(colnames(dstat)[5], "Religion")
-  expect_equal(as.numeric(dstat[5,4]), 0.0042898)
-  expect_equal(as.numeric(dstat[5,5]), 0.004766444)
+  expect_equal(as.numeric(dstat[5,4]), 0.004211511)
+  expect_equal(as.numeric(dstat[5,5]), 0.004679457)
 })
 
 

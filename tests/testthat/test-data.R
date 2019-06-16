@@ -6,8 +6,8 @@ data(rjmw.0)
 test_that("rksp.0$mtext and rjmw.0$mtext have correct dimensions", {
   expect_length(rksp.0$text, 12)
   expect_length(rjmw.0$text, 12)
-  expect_length(rksp.0$text$utteranceBegin, 24520)
-  expect_length(rjmw.0$text$utteranceBegin, 30716)
+  expect_length(rksp.0$text$utteranceBegin, 25365)
+  expect_length(rjmw.0$text$utteranceBegin, 31206)
 })
 
 test_that("base_dictionary has correct dimensions", {
