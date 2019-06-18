@@ -10,8 +10,8 @@ Description: This package can be used to import and analyse pre-processed dramat
 License: file LICENSE
 LazyData: TRUE
 Imports:
-   stats (>= 3.3.1), 
-   utils (>= 3.3.1), 
+   stats, 
+   utils, 
    reshape2 (>= 1.4.2), 
    readr (>= 1.1.1),
    data.table (>= 1.10.4),
