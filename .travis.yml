@@ -25,3 +25,16 @@ r_binary_packages:
 - xml2
 - rmarkdown
 - htmlwidgets
+- tidyr
+- colorspace
+- generics
+- gtable
+- labeling
+- later
+- lazyeval
+- lubridate
+- plyr
+- RColorBrewer
+- rlist
+- SnowballC
+- sourcetools
