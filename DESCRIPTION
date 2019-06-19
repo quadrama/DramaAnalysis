@@ -1,12 +1,12 @@
 Package: DramaAnalysis
 Type: Package
-Title: Scripts to support analysis of dramatic texts
+Title: Scripts to Support Analysis of Dramatic Texts
 Version: 2.9.9.9000
 Date: 2018-12-31
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>, Tim Strohmayer <st151528@stud.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
-Description: This package can be used to import and analyse pre-processed dramatic texts.
-  The texts are expected to be in csv format. There is not much to do without preprocessed texts.
+Description: Import and analyse pre-processed dramatic texts.
+  The texts are expected to be in csv format, which can be installed from within the package.
 License: file LICENSE
 LazyData: TRUE
 Imports:
@@ -30,5 +30,4 @@ Suggests: testthat,
     rmarkdown (>= 1.8),
     igraph (>= 1.1.2)
 Encoding: UTF-8
-VignetteBuilder: knitr
 Remotes: bmschmidt/wordVectors@2.0
