@@ -38,7 +38,6 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @param ... All other arguments are ignored.
 #' @seealso \code{\link[stringr]{str_to_title}}
 #' @importFrom stringr str_to_title
-#' @rdname formatNames
 #' @examples 
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0)
