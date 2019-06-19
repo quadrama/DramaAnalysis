@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A table generated from the function}
 
-\item{drama}{A QDDrama object. If specified, segment boundaries
+\item{drama}{Optional QDDrama object. If present, segment boundaries
 are extracted from it and included in the plot.}
 
 \item{colors}{The colors to be used}
@@ -21,8 +21,8 @@ are extracted from it and included in the plot.}
 \item{...}{Parameters passed to stripchart().}
 }
 \description{
-Uses `stripchart` to  plot each utterance at their position,
-in a line representing the figure. The dot is marked in the middle of each utterance.
+Uses the function \code{stripchart} to  plot each utterance at their position,
+in a line representing the character. The dot is marked in the middle of each utterance.
 Might look weird if very long utterances are present.
 }
 \seealso{

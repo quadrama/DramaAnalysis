@@ -1,10 +1,10 @@
 #' @title Utterance positions
-#' @description Uses `stripchart` to  plot each utterance at their position,
-#' in a line representing the figure. The dot is marked in the middle of each utterance.
+#' @description Uses the function \code{stripchart} to  plot each utterance at their position,
+#' in a line representing the character. The dot is marked in the middle of each utterance.
 #' Might look weird if very long utterances are present.
 #' @param x A table generated from the function
 #' @param colors The colors to be used
-#' @param drama A QDDrama object. If specified, segment boundaries
+#' @param drama Optional QDDrama object. If present, segment boundaries
 #' are extracted from it and included in the plot.
 #' @param xlab A character vector that is used as x axis label. Defaults to
 #' "Time".
