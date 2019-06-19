@@ -38,3 +38,9 @@ r_binary_packages:
 - rlist
 - SnowballC
 - sourcetools
+- TTR
+- tokenizers
+- reshape2
+- promises
+- munsell
+- fmsb
