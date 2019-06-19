@@ -52,5 +52,5 @@ cfg <- configuration(rksp.0, mode="Passive")
 
 }
 \seealso{
-\code{\link{format.QDHasCharacter}}
+\code{\link{characterNames}}
 }

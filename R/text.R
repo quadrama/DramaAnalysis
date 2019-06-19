@@ -17,7 +17,7 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 
 #' @export
 #' @title Format Names
-#' @description The S3 function \code{format.QDHasCharacter()} is applicable on 
+#' @description The function \code{characterNames()} is applicable on 
 #' all tables with a character table 
 #' (that are of the class \code{QDHasCharacter}). It can be used to reformat the character 
 #' names. The function \code{FUN} is applied to the character \emph{name} entries within 
@@ -41,8 +41,8 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' @examples 
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0)
-#' ustat <- format(ustat, rksp.0)
-format.QDHasCharacter <- function(x, 
+#' ustat <- characterNames(ustat, rksp.0)
+characterNames <- function(x, 
                                   drama, 
                                   FUN=stringr::str_to_title, 
                                   sort=0, 

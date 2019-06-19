@@ -21,7 +21,7 @@
 #' @export
 #' @rdname configuration
 #' @exportClass QDConfiguration
-#' @seealso \code{\link{format.QDHasCharacter}}
+#' @seealso \code{\link{characterNames}}
 #' @examples
 #' # Active configuration matrix
 #' data(rksp.0)

@@ -26,5 +26,5 @@ boxplot(ustat$utteranceLength ~ ustat$character,
 }
 }
 \seealso{
-\code{\link{format.QDHasCharacter}}
+\code{\link{characterNames}}
 }

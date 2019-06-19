@@ -69,7 +69,7 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' @importFrom stats aggregate ave
 #' @importFrom utils as.roman
 #' @importFrom data.table as.data.table setcolorder
-#' @seealso \code{\link{loadFields}} \code{\link{format.QDHasCharacter}}
+#' @seealso \code{\link{loadFields}} \code{\link{characterNames}}
 #' @rdname dictionaryStatistics
 #' @examples
 #' # Check multiple dictionary entries

@@ -18,7 +18,7 @@
 #' @examples
 #' data(rksp.0)
 #' stat <- characterStatistics(rksp.0)
-#' @seealso \code{\link{format.QDHasCharacter}}
+#' @seealso \code{\link{characterNames}}
 #' @export
 characterStatistics <- function(drama, 
                              normalize = FALSE, 

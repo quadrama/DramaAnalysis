@@ -34,5 +34,5 @@ data(rksp.0)
 stat <- characterStatistics(rksp.0)
 }
 \seealso{
-\code{\link{format.QDHasCharacter}}
+\code{\link{characterNames}}
 }
