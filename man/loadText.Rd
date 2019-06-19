@@ -5,7 +5,7 @@
 \title{Load Text}
 \usage{
 loadText(ids, includeTokens = FALSE, defaultCollection = "tg",
-  unifyCharacterFactors = FALSE)
+  unifyCharacterFactors = FALSE, variant = "UtterancesWithTokens")
 }
 \arguments{
 \item{ids}{A vector containing drama ids to be downloaded}
@@ -16,6 +16,8 @@ loadText(ids, includeTokens = FALSE, defaultCollection = "tg",
 
 \item{unifyCharacterFactors}{Logical value, defaults to TRUE. Controls whether columns 
 representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels}
+
+\item{variant}{The file variant to load}
 }
 \description{
 Load Text
