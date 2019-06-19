@@ -176,7 +176,6 @@ filter <- function(hasCharacter,
 #' limitFigures(), for example), or to summarize them as 'OTHER'.
 #' @param t The text, a data frame listing each token for each figure
 #' @param other Whether to summarize mentioned figures as 'OTHER'
-#' @export
 #' @examples 
 #' \dontrun{
 #' data(rksp.0)
