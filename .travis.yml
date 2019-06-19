@@ -24,3 +24,6 @@ r_binary_packages:
 - testthat
 - XML
 - xml2
+- rmarkdown
+- htmlwidgets
+- highcharter
