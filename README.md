@@ -15,6 +15,22 @@ This package contains a number of functions to support the analyis of dramatic t
 - Generation of a report for a dramatic text
 - Reads in preprocessed texts 
 
+## Example
+
+```r
+# loads a specific, pre-packaged play
+data(rksp.0)
+
+# calculates standard stats about a character
+charStat <- characterStatistics(rksp.0)
+
+# fix character names
+charStat <- characterNames(charStat, rksp.0)
+
+# plot them as a bar plot
+barplot(charStat)
+```
+
 # Requirements
 DramaAnalysis works on Mac OS X, Windows 10 and Linuxes, and requires R 3.3 or later.
 
