@@ -8,7 +8,7 @@
 #' @export
 report <- function(id="test:rksp.0", 
                    of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), 
-                   type=c("Single"),
+                   type=c("Single", "Compare"),
                    ...) {
   force(of)
   type <- match.arg(type)

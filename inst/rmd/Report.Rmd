@@ -44,10 +44,11 @@ toFigureName <- function(x) {
 library(magrittr)
 library(highcharter)
 
-mtext <- loadSegmentedText(params$id)
-meta <- loadMeta(params$id)
-characters <- loadCharacters(params$id)
-title <- as.character(meta[1,"documentTitle"])
+drama <- loadDrama(params$id)
+
+title <- dramaNames(drama, formatString = "%T")
+
+
 
 ```
 
@@ -58,19 +59,22 @@ title: "QuaDramA Report: `r title`"
 
 # Meta data
 
-- Author(s): `r paste(paste0("[",meta$Name,"](http://d-nb.info/gnd/",meta$Pnd,")"),sep=", ")`
-- Acts: `r length(unique(mtext$begin.Act))`
-- Scenes: `r mtext[,length(unique(begin.Scene)),.(begin.Act)]$V1`
+- Author(s): `r paste(paste0("[",drama$meta$Name,"](http://d-nb.info/gnd/",drama$meta$Pnd,")"),sep=", ")`
+- Acts: `r length(unique(drama$segments$begin.Act))`
+- Scenes: `r drama$segments[,length(unique(begin.Scene)),.(begin.Act)]$V1`
 
 # Character Lists {.tabset}
 
 ## By Order of appearance
 
-All figures, in the order they have their first appearance
+All characters, in the order they have their first appearance
 
 ```{r, echo=FALSE}
-begins <- aggregate(mtext$begin, by=list(mtext$Speaker.figure_surface), min)
-as.character(begins[order(begins$x),]$Group.1)
+cs <- characterStatistics(drama) %>%
+  characterNames(drama)
+
+as.character(cs[order(cs$firstBegin),]$character)
+
 ```
 
 # Overall Speech Distribution {.tabset}
@@ -81,24 +85,20 @@ as.character(begins[order(begins$x),]$Group.1)
 Relative amount of words spoken by each figure. 
 
 ```{r, echo=FALSE, messages=FALSE}
-fstat <- figureStatistics(mtext, names=TRUE, normalize=FALSE)
-mat <- figurematrix(fstat)
-b <- barplot(mat$values,col=params$col)
-mat$labels <- tools::toTitleCase(tolower(mat$labels))
-top <- 15
-text(x=b, y=t(head(mat$cs,top)+(head(mat$values,top)/2)),
-     labels=t(substr(head(mat$labels,top),0,20)),cex=0.5)
+
+b <- characterStatistics(drama, normalize = FALSE) %>%
+  characterNames(drama) %>%
+  barplot()
+
 
 ```
 
 ## Table
 
 ```{r,echo=FALSE, results="asis"}
-fstat <- figureStatistics(mtext, names=FALSE, normalize=FALSE)
+table <- characterStatistics(drama, normalize=FALSE) %>%
+  characterNames(drama)
 
-table <- merge(fstat, characters, 
-               by.x=c("corpus","drama","figure"),
-               by.y=c("corpus","drama","figure_id"))
 knitr::kable(table,format="pandoc")
 ```
 
@@ -109,41 +109,43 @@ knitr::kable(table,format="pandoc")
 This segment shows the top `r params$topN` characters. This number can be adjusted by supplying the parameter `topN` with a different value to the `report()` function.
 
 ```{r}
-mtextl <- limitFigures(mtext, other=TRUE, threshold = params$topN);
-ustatl <- utteranceStatistics(mtextl, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
+ustatl <- utteranceStatistics(drama) %>%
+  filterCharacters(drama, by="rank", n=params$topN) %>%
+  characterNames(drama)
+
 ```
 
 ### All Utterances
 ```{r}
-ustatl$figure <- toFigureName(ustatl$figure)
+
 par(mar=c(1,9,1,0),xpd=FALSE)
-plotUtterancePositions(ustatl,mtextl,xlab="")
+plot(ustatl, drama)
 ```
 
 ### Utterance Length Variation
 
 ```{r,echo=FALSE}
 par(mar=c(2,9,0,0))
-boxplot(utteranceLength ~ figure, data=ustatl, horizontal=TRUE,las=1,frame=FALSE)
+boxplot(utteranceLength ~ character, data=ustatl, horizontal=TRUE, las=1, frame=FALSE)
 ```
 
 ## All Characters {.tabset}
 ```{r}
-ustat <- utteranceStatistics(mtext, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
-ustat$figure <- toFigureName(ustat$figure)
+ustat <- utteranceStatistics(drama, normalizeByDramaLength = FALSE) %>%
+  characterNames(drama)
 ```
 
 ### All Utterances
 ```{r,echo=FALSE}
 par(mar=c(1,9,1,0),xpd=FALSE)
-plotUtterancePositions(ustat,mtext,xlab="")
+plot(ustat,drama)
 ```
 
 ### Utterance Length Variation
 
 ```{r,echo=FALSE}
 par(mar=c(2,9,0,0))
-boxplot(utteranceLength ~ figure, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
+boxplot(utteranceLength ~ character, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
 ```
 
 # Configuration and Copresence {.tabset}
@@ -157,19 +159,22 @@ This visualisation displays the relative amount of tokens uttered by a character
 
 ## By Act 
 ```{r, echo=FALSE}
-c <- configuration(mtext)
+c <- configuration(drama) %>% characterNames(drama)
 
-c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
-rownames(c$matrix) <- c$figure
+mat <- as.matrix(c)
 
-b <- barplot(c$matrix,
-        col=params$col)
+mat <- scale(mat, center=FALSE, scale=colSums(mat))
+rownames(mat) <- c$character
+
+b <- barplot(mat,
+             col=params$col,
+             names.arg = as.roman(1:ncol(mat)))
 
 
 
-yPositions <- as.vector(getYPositions(c$matrix,b,limit=actLimit))
-xPositions <- rep(b,each=nrow(c$matrix))
-lab <- rep(as.character(c$figure),ncol(c$matrix))
+yPositions <- as.vector(getYPositions(mat,b,limit=actLimit))
+xPositions <- rep(b,each=nrow(mat))
+lab <- rep(as.character(c$character),ncol(mat))
 
 xPositions <- xPositions[which(!is.na(yPositions))]
 lab <- lab[which(!is.na(yPositions))]
@@ -183,25 +188,35 @@ if (length(yPositions > 0)) {
 ## By Scene
 
 ```{r, echo=FALSE}
-c <- configuration(mtext, by="Scene")
-c$matrix <- scale(c$matrix, center=FALSE, scale=colSums(c$matrix))
-rownames(c$matrix) <- c$figure
+c <- configuration(drama, segment = "Scene") %>% 
+  characterNames(drama)
 
-b <- barplot(c$matrix,
-        col=params$col)
+mat <- as.matrix(c)
+
+mat <- scale(mat, center=FALSE, scale=colSums(mat))
+rownames(mat) <- c$character
+
+sceneLabels <- paste(as.roman(drama$segments[,.N,.(Number.Act, Number.Scene)]$Number.Act), drama$segments[,.N,.(Number.Act, Number.Scene)]$Number.Scene, sep=".")
+
+b <- barplot(mat,
+             col=params$col,
+             names.arg=sceneLabels)
 
 
-
-yPositions <- as.vector(getYPositions(c$matrix,b,limit=sceneLimit))
-xPositions <- rep(b,each=nrow(c$matrix))
-lab <- rep(as.character(c$figure),ncol(c$matrix))
+yPositions <- as.vector(getYPositions(mat,b,limit=actLimit))
+xPositions <- rep(b,each=nrow(mat))
+lab <- rep(as.character(c$character),ncol(mat))
 
 xPositions <- xPositions[which(!is.na(yPositions))]
 lab <- lab[which(!is.na(yPositions))]
 yPositions <- yPositions[which(!is.na(yPositions))]
+
 if (length(yPositions > 0)) {
-  text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.4,srt=90)
-}
+  text(x=xPositions,y=yPositions,labels=tools::toTitleCase(tolower(lab)),cex=0.6)
+} 
+
+
+
 ```
 
 
@@ -213,12 +228,16 @@ In a copresence network, two vertices are connected if the characters they repre
 
 
 ```{r, echo=FALSE, message=FALSE}
-c <- configuration(mtext, onlyPresence = TRUE, by="Scene")
-co <- c$matrix %*% t(c$matrix)
+c <- configuration(drama, 
+                   onlyPresence = TRUE, 
+                   segment="Scene") %>%
+  characterNames(drama)
+co <- as.matrix(c) %*% t(as.matrix(c))
 
 # add figure names
-rownames(co) <- toFigureName(c$figure)
-colnames(co) <- toFigureName(c$figure)
+rownames(co) <- c$character
+colnames(co) <- c$character
+
 require(igraph)
 
 g <- graph_from_adjacency_matrix(co, 
@@ -253,11 +272,14 @@ The "gossip network" represents character that talk about other characters. The 
 Currently, this includes scenes in which both characters are present. This will be changed later.
 
 ```{r}
+mtext <- segment(drama$mentions, drama$segments)
+
 m <- as.matrix(
   as.data.frame.matrix(
-    xtabs( ~ Speaker.figure_id + Mentioned.figure_id,
-           mtext[,.N,.(Speaker.figure_id,Mentioned.figure_id,begin.Scene)]
-           [!is.na(Mentioned.figure_id)])))
+    xtabs( ~ utteranceSpeakerId + entityId,
+           mtext[,.N,.(utteranceSpeakerId,entityId,begin.Scene)])))
+
+m <- m[-1,colnames(m) %in% drama$characters$figure_id]
 
 g <- graph_from_adjacency_matrix(m, 
                                  weighted=TRUE,     # weighted graph
@@ -297,31 +319,29 @@ This analysis shows word fields only for characters that speak more than `r para
 ```{r, echo=FALSE}
 showZScores <- TRUE
 
-baseUrl <- "https://raw.githubusercontent.com/quadrama/metadata/ec8ae3ddd32fa71be4ea0e7f6c634002a002823d/fields/"
+fields <- base_dictionary
+fieldNames <- names(fields)
 
-fieldNames <- c("Liebe", "Krieg", "Familie", "Ratio", "Religion")
-fields <- loadFields(fieldNames,baseurl = baseUrl)
+dstat <- dictionaryStatistics(drama, 
+                              fields = fields,
+                              normalizeByCharacter = TRUE,
+                              normalizeByField = TRUE,
+                              column="Token.lemma") %>%
+  filterCharacters(drama, by="tokens", n=params$minTokens) %>%
+  characterNames(drama)
 
-text2 <- limitFigures(mtext, by="tokens", threshold=params$minTokens)
-dstat <- dictionaryStatistics(
-  text2,  # the text
-  fields=fields,
-  names = TRUE,                 # use figure names (instead of ids)
-  normalizeByFigure = TRUE,   # normalization by figure
-  normalizeByField = TRUE,    # normalization by field
-  column = "Token.lemma",        # lemma-based stats
-  asList = TRUE
-)
-rownames(dstat$mat) <- toFigureName(rownames(dstat$mat))
+mat <- as.matrix(dstat)
+rownames(mat) <- dstat$character
+
 par(mar=c(10,2,0,10),xpd=TRUE)
-b <- barplot(t(dstat$mat), 
+b <- barplot(t(mat), 
         col=params$col[1:length(fields)],
         las=3,
         border=FALSE
         )
-legend(x=max(b)+1,y=max(dstat$mat),
-       legend=colnames(dstat$mat),
-       fill=params$col,
+legend(x=max(b)+1,y=max(mat),
+       legend=colnames(mat),
+       fill=params$col[1:length(fields)],
        bty="n",
        border=FALSE)
 
@@ -331,7 +351,7 @@ legend(x=max(b)+1,y=max(dstat$mat),
 
 
 ```{r, results="asis"}
-if (length(dstat$figure) < 2) {
+if (nrow(dstat) < 2) {
   message("*Less than two characters remain, skipping Z-Score analysis.*")
   showZScores <- FALSE
 }
@@ -340,15 +360,16 @@ if (length(dstat$figure) < 2) {
 [Z-scores in wikipedia](https://en.wikipedia.org/wiki/Standard_score)
 
 ```{r echo=FALSE, eval=showZScores}
-zmat <- scale(dstat$mat)
+zmat <- scale(mat)
 
 
 par(mar=c(2,12,0,6),xpd=TRUE)
 b <- barplot(t(zmat), 
         col=params$col[1:length(fieldNames)],
         las=1,horiz=TRUE,
-        border=FALSE,beside=TRUE
-        )
+        border=FALSE,
+        beside=TRUE
+)
 legend(x=max(zmat),y=max(b)+1,legend=colnames(zmat),fill=params$col,bty="n",border=FALSE)
 
 ```
@@ -357,7 +378,7 @@ legend(x=max(zmat),y=max(b)+1,legend=colnames(zmat),fill=params$col,bty="n",bord
 ## Bar chart (scaled)
 
 ```{r, echo=FALSE}
-mat <- t(scale(t(dstat$mat),center=FALSE,scale=rowSums(dstat$mat)))
+mat <- t(scale(t(mat),center=FALSE,scale=rowSums(mat)))
 
 par(mar=c(10,2,1,10),xpd=TRUE)
 b <- barplot(t(mat),
@@ -365,16 +386,15 @@ b <- barplot(t(mat),
         las=3,
         border=FALSE
         )
-legend(x=max(b)+1,y=max(dstat$mat),legend=colnames(dstat$mat),fill=params$col,bty="n",border=FALSE)
+legend(x=max(b)+1,y=max(mat),
+       legend=colnames(mat),
+       fill=params$col,bty="n",
+       border=FALSE)
 
 ```
 
 
-## Spider Web
 
-```{r, echo=FALSE}
-plotSpiderWebs(dstat, col=params$col)
-```
 
 ## Word fields
 
@@ -385,7 +405,7 @@ fields
 # Personnel Exchange   {.tabset}
 
 ```{r, echo=FALSE}
-showPersonnelExchange = length(unique(mtext$begin.Act)) > 1
+showPersonnelExchange = length(unique(drama$segments$begin.Act)) > 1
 ```
 
 ```{r,echo=FALSE,eval=!showPersonnelExchange, results='asis'}
@@ -400,9 +420,9 @@ The following chart shows for each scene boundary the number of characters excha
 
 ```{r, echo=FALSE, eval=showPersonnelExchange}
 df <- list()
-df$ham <- hamming(mtext, variant="NormalizedHamming")
-df$trilcke <- hamming(mtext, variant="Trilcke")
-df$sd <- scenicDifference(mtext)
+df$ham <- hamming(drama, variant="NormalizedHamming")
+df$trilcke <- hamming(drama, variant="Trilcke")
+df$sd <- scenicDifference(drama)
 
 if (length(df$ham)+1 != length(unique(mtext$begin.Scene))) {
   message("Something is seriously wrong here. Please report this issue.")
@@ -413,9 +433,9 @@ if (length(df$ham)+1 != length(unique(mtext$begin.Scene))) {
 ```{r, echo=FALSE, eval=showPersonnelExchange}
 
 df <- list()
-df$ham <- hamming(mtext, variant="NormalizedHamming")
-df$trilcke <- hamming(mtext, variant="Trilcke")
-df$sd <- scenicDifference(mtext)
+df$ham <- hamming(drama, variant="NormalizedHamming")
+df$trilcke <- hamming(drama, variant="Trilcke")
+df$sd <- scenicDifference(drama)
 
 
 
