@@ -2,7 +2,11 @@ language: r
 r:
 - 3.3
 - 3.4
-- 3.5
-- 3.6
+- oldrel
+- release
+- devel
+os:
+- linux
+- osx
 cache: packages 
 warnings_are_errors: false

@@ -8,7 +8,7 @@ correlationAnalysis(text.ft, categories, method = "spearman",
   culling = 0, ...)
 }
 \arguments{
-\item{text.ft}{A matrix, containing words in columns and figures (or plays) in rows. 
+\item{text.ft}{A matrix, containing words in columns and characters (or plays) in rows. 
 This can be the result of the \code{\link{frequencytable}()} function.}
 
 \item{categories}{A factor or numeric vector that represents a list of categories.}
@@ -34,12 +34,12 @@ should not be used anymore in this fashion.
 }
 \examples{
 data(rksp.0)
-ft <- frequencytable(rksp.0, byFigure=TRUE)
+ft <- frequencytable(rksp.0, byCharacter=TRUE)
 g <- factor(c("m","m","m","m","f","m","m","m","f","m","m","f","m"))
 rksp.0.cor <- correlationAnalysis(ft, g)
 
 # to pre-filter by the total frequency of a word
-ft <- frequencytable(rksp.0, byFigure=TRUE)
+ft <- frequencytable(rksp.0, byCharacter=TRUE)
 ft <- ft[,colSums(ft) > 5]
 correlationAnalysis(ft, g)
 }

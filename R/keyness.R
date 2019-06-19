@@ -16,7 +16,7 @@
 #' @importFrom stats pchisq chisq.test
 #' @examples 
 #' data("rksp.0")
-#' ft <- frequencytable(rksp.0, byFigure = TRUE, normalize = FALSE)
+#' ft <- frequencytable(rksp.0, byCharacter = TRUE, normalize = FALSE)
 #' # Calculate log ratio for all words
 #' genders <- factor(c("m", "m", "m", "m", "f", "m", "m", "m", "f", "m", "m", "f", "m"))
 #' keywords <- keyness(ft, method = "logratio", 

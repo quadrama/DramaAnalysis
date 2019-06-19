@@ -2,7 +2,7 @@
 % Please edit documentation in R/text.R
 \name{filterMentioned}
 \alias{filterMentioned}
-\title{Filtering Mentioned Figures}
+\title{Filtering Mentioned Characters}
 \usage{
 filterMentioned(t, other = FALSE)
 }
