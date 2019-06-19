@@ -28,7 +28,7 @@ test_that("keyness(..., method=logratio) on dummy data produces correct results"
 })
 
 data(rksp.0)
-rksp.0.ft <- frequencytable(rksp.0, byFigure = TRUE)
+rksp.0.ft <- frequencytable(rksp.0, byCharacter = TRUE)
 g <- factor(c("m","m","m","m","f","m","m","m","f","m","m","f","m"))
 
 

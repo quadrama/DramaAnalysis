@@ -16,7 +16,7 @@ test_that("correlationAnalysis(...) on dummy data produces correct results", {
 })
 
 data(rksp.0)
-rksp.0.ft <- frequencytable(rksp.0, byFigure = TRUE)
+rksp.0.ft <- frequencytable(rksp.0, byCharacter = TRUE)
 
 
 test_that("correlationAnalysis(...) produces correct results", {
@@ -44,7 +44,7 @@ test_that("correlationAnalysis(..., culling = 12) produces correct results", {
   expect_equal(ca[5,3], "f")
 })
 
-rksp.0.ft <- frequencytable(rksp.0, byFigure = TRUE, acceptedPOS = postags$de$n)
+rksp.0.ft <- frequencytable(rksp.0, byCharacter = TRUE, acceptedPOS = postags$de$n)
 
 test_that("correlationAnalysis(..., culling = 8) produces correct results", {
   ca <- correlationAnalysis(rksp.0.ft, g, culling = 8)

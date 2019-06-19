@@ -14,29 +14,29 @@ test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon'))
   expect_equal(as.character(dstat[6,3]), "conti")
 })
 
-dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon"), normalizeByFigure = TRUE)
-test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon'), normalizeByFigure = TRUE) has correct dimensions and produces correct output", {
+dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon"), normalizeByCharacter = TRUE)
+test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon'), normalizeByCharacter = TRUE) has correct dimensions and produces correct output", {
   expect_length(dstat, 4)
   expect_equal(as.numeric(dstat[6,4]), 0.0026178010)
 })
 
 dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon","gut"), 
-                                    normalizeByFigure = FALSE,
+                                    normalizeByCharacter = FALSE,
                                     normalizeByField = TRUE)
-test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon','gut'), normalizeByFigure = FALSE, normalizeByField = TRUE) has correct dimensions and produces correct output", {
+test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon','gut'), normalizeByCharacter = FALSE, normalizeByField = TRUE) has correct dimensions and produces correct output", {
   expect_length(dstat, 4)
   expect_equal(as.numeric(dstat[6,4]), 1.0)
 })
 
 
-test_that("dictionaryStatisticsSingle(..., wordfield = c('schon','gut'), byFigure=FALSE) has correct dimensions and produces correct output", {
+test_that("dictionaryStatisticsSingle(..., wordfield = c('schon','gut'), byCharacter=FALSE) has correct dimensions and produces correct output", {
   dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon","gut"), 
-                                      byFigure = FALSE)
+                                      byCharacter = FALSE)
   expect_length(dstat, 3)
   expect_equal(as.numeric(dstat[1,3]), 132)
 
   dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon","gut"), 
-                                      byFigure = FALSE, normalizeByField = TRUE)
+                                      byCharacter = FALSE, normalizeByField = TRUE)
   expect_length(dstat, 3)
   expect_equal(as.numeric(dstat[1,3]), 66)
   
@@ -82,10 +82,10 @@ test_that("dictionaryStatistics(rksp.0, segment='Scene') has correct dimensions 
 })
 
 
-test_that("dictionaryStatistics(rksp.0, fieldnames=c('Ratio', 'Religion'), normalizeByFigure = TRUE) has correct dimensions and produces correct output" ,{
+test_that("dictionaryStatistics(rksp.0, fieldnames=c('Ratio', 'Religion'), normalizeByCharacter = TRUE) has correct dimensions and produces correct output" ,{
   dstat <- dictionaryStatistics(rksp.0, 
                                 fieldnames=c("Ratio", "Religion"), 
-                                normalizeByFigure = TRUE)
+                                normalizeByCharacter = TRUE)
   expect_length(dstat, 5)
   expect_equal(colnames(dstat)[4], "Ratio")  
   expect_equal(colnames(dstat)[5], "Religion")
@@ -97,15 +97,15 @@ test_that("dictionaryStatistics(rksp.0, fieldnames=c('Ratio', 'Religion'), norma
 
 context("filterByDictionary()")
 
-filtered <- filterByDictionary(frequencytable(rksp.0, byFigure = TRUE))
-test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE) has correct dimensions and produces correct output", {
+filtered <- filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE))
+test_that("filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE) has correct dimensions and produces correct output", {
   expect_length(filtered, 143)
   expect_length(filtered[,1], 13)
   expect_equal(FALSE %in% (colnames(filtered) %in% base_dictionary$Liebe), FALSE)
 })
 
-filtered <- filterByDictionary(frequencytable(rksp.0, byFigure = TRUE), fieldnames = c("Krieg"))
-test_that("filterByDictionary(frequencytable(rksp.0, byFigure = TRUE, fieldnames = c('Krieg'))  
+filtered <- filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE), fieldnames = c("Krieg"))
+test_that("filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE, fieldnames = c('Krieg'))  
           has correct dimensions and produces correct output", {
   expect_length(filtered, 78)
   expect_length(filtered[,1], 13)

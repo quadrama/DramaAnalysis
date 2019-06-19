@@ -9,13 +9,14 @@
 dictionaryStatistics(drama,
   fields = DramaAnalysis::base_dictionary[fieldnames],
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
-  normalizeByFigure = FALSE, normalizeByField = FALSE,
-  byFigure = TRUE, column = "Token.lemma", ci = TRUE)
+  normalizeByCharacter = FALSE, normalizeByField = FALSE,
+  byCharacter = TRUE, column = "Token.lemma", ci = TRUE)
 
 dictionaryStatisticsSingle(drama, wordfield = c(), segment = c("Drama",
-  "Act", "Scene"), normalizeByFigure = FALSE, normalizeByField = FALSE,
-  byFigure = TRUE, fieldNormalizer = length(wordfield),
-  column = "Token.lemma", ci = TRUE, colnames = NULL)
+  "Act", "Scene"), normalizeByCharacter = FALSE,
+  normalizeByField = FALSE, byCharacter = TRUE,
+  fieldNormalizer = length(wordfield), column = "Token.lemma",
+  ci = TRUE, colnames = NULL)
 
 \method{as.matrix}{QDDictionaryStatistics}(x, ...)
 }
@@ -31,13 +32,13 @@ By default, we load the \code{base_dictionary}.}
 the entire play will be used. Possible values are "Drama" (default), 
 "Act" or "Scene".}
 
-\item{normalizeByFigure}{Logical. Whether to normalize by character 
+\item{normalizeByCharacter}{Logical. Whether to normalize by character 
 speech length.}
 
 \item{normalizeByField}{Logical. Whether to normalize by dictionary 
 size. You usually want this.}
 
-\item{byFigure}{Logical, defaults to TRUE. If false, values will be calculated
+\item{byCharacter}{Logical, defaults to TRUE. If false, values will be calculated
 for the entire segment (play, act, or scene), and not for individual characters.}
 
 \item{column}{The table column we apply the dictionary on. 

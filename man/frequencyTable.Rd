@@ -10,7 +10,7 @@ filterByDictionary(ft,
   fieldnames = c("Liebe"))
 
 frequencytable(drama, acceptedPOS = postags$de$words,
-  column = "Token.lemma", byFigure = FALSE, sep = "|",
+  column = "Token.lemma", byCharacter = FALSE, sep = "|",
   normalize = FALSE, sortResult = FALSE, segment = c("Drama", "Act",
   "Scene"))
 }
@@ -28,9 +28,9 @@ By default, we load the base_dictionary (as in \code{dictionaryStatistics()}).}
 
 \item{column}{The column name we should use (should be either Token.surface or Token.lemma)}
 
-\item{byFigure}{Wether the count is by figure or by text}
+\item{byCharacter}{Wether the count is by character or by text}
 
-\item{sep}{The separation character that goes between drama name and figure (if applicable)}
+\item{sep}{The separation symbol that goes between drama name and character (if applicable)}
 
 \item{normalize}{Whether to normalize values or not}
 
@@ -43,7 +43,7 @@ The function \code{filterByDictionary()} can be used to filter a matrix as produ
 \code{frequencytable()} by the words in the given dictionary(/-ies).
 
 The function \code{frequencytable()} generates a matrix of word frequencies 
-by drama, act or scene and/or by figure.
+by drama, act or scene and/or by character
 }
 \examples{
 data(rksp.0)

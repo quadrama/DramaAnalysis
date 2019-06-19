@@ -5,7 +5,7 @@
 \title{Extract bigrams instead of words (currently not taking utterance boundaries into account)}
 \usage{
 frequencytable2(t, acceptedPOS = postags$de$words, names = FALSE,
-  cols = c("Token.surface", "Token.surface"), byFigure = FALSE,
+  cols = c("Token.surface", "Token.surface"), byCharacter = FALSE,
   by = c("Drama", "Act", "Scene"))
 }
 \arguments{
@@ -13,11 +13,11 @@ frequencytable2(t, acceptedPOS = postags$de$words, names = FALSE,
 
 \item{acceptedPOS}{A list of accepted pos tags}
 
-\item{names}{Whether to use figure names or ids}
+\item{names}{Whether to use character names or ids}
 
 \item{cols}{The column names we should use (should be either Token.surface or Token.lemma)}
 
-\item{byFigure}{Wether the count is by figure or by text}
+\item{byCharacter}{Wether the count is by character or by text}
 
 \item{by}{Whether the count is by drama (default), act or scene}
 }

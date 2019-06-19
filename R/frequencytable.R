@@ -1,12 +1,12 @@
 #' @title Word frequencies 
 #' @description The function \code{frequencytable()} generates a matrix of word frequencies 
-#' by drama, act or scene and/or by figure.
+#' by drama, act or scene and/or by character
 #' @param drama A \code{QDDrama}. May be covering multiple texts
 #' @param acceptedPOS A list of accepted pos tags
-#' @param byFigure Wether the count is by figure or by text
+#' @param byCharacter Wether the count is by character or by text
 #' @param segment Whether the count is by drama (default), act or scene
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
-#' @param sep The separation character that goes between drama name and figure (if applicable)
+#' @param sep The separation symbol that goes between drama name and character (if applicable)
 #' @param normalize Whether to normalize values or not
 #' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)
 #' @rdname frequencyTable
@@ -21,7 +21,7 @@
 frequencytable <- function(drama, 
                            acceptedPOS = postags$de$words,
                            column="Token.lemma", 
-                           byFigure=FALSE, 
+                           byCharacter=FALSE, 
                            sep="|", 
                            normalize=FALSE, 
                            sortResult=FALSE, 
@@ -42,15 +42,15 @@ frequencytable <- function(drama,
   segment <- match.arg(segment)
   switch(segment,
          Drama = { 
-           if (byFigure == FALSE) { xt <- stats::xtabs(~drama + ft[,get(column)], data=ft) }
+           if (byCharacter == FALSE) { xt <- stats::xtabs(~drama + ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
          Act = {
-           if (byFigure == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,sep=sep) + ~ft[,get(column)], data=ft) }
+           if (byCharacter == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Number.Act,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
          Scene = {
-           if (byFigure == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,sep=sep) + ~ft[,get(column)], data=ft) }
+           if (byCharacter == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,sep=sep) + ~ft[,get(column)], data=ft) }
            else { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
          },
          stop("Please enter valid string-value for argument 'by' (default = 'Drama', 'Act' or 'Scene').")
@@ -78,12 +78,12 @@ frequencytable <- function(drama,
 #' Extract bigrams instead of words (currently not taking utterance boundaries into account)
 #' @param t The text
 #' @param acceptedPOS A list of accepted pos tags
-#' @param names Whether to use figure names or ids
-#' @param byFigure Wether the count is by figure or by text
+#' @param names Whether to use character names or ids
+#' @param byCharacter Wether the count is by character or by text
 #' @param by Whether the count is by drama (default), act or scene
 #' @param cols The column names we should use (should be either Token.surface or Token.lemma)
 #' @keywords internal
-frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), byFigure=FALSE, by=c("Drama","Act","Scene")) {
+frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), byCharacter=FALSE, by=c("Drama","Act","Scene")) {
   ft <- t
   if (length(acceptedPOS) > 0) {
     ft <- t[t$Token.pos %in% acceptedPOS,]
@@ -91,17 +91,17 @@ frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols
   by <- match.arg(by)
   switch(by,
          Drama = { 
-           if (byFigure == FALSE) { index <- paste(ft$drama) }
+           if (byCharacter == FALSE) { index <- paste(ft$drama) }
            else if (names == TRUE) { index <- paste(ft$drama, ft$Speaker.figure_surface) }
            else { index <- paste(ft$drama, ft$Speaker.figure_id) }
          },
          Act = {
-           if (byFigure == FALSE) { index <- paste(ft$drama, ft$Number.Act) }
+           if (byCharacter == FALSE) { index <- paste(ft$drama, ft$Number.Act) }
            else if (names == TRUE) { index <- paste(ft$drama, ft$Number.Act, ft$Speaker.figure_surface) }
            else { index <- paste(ft$drama, ft$Number.Act, ft$Speaker.figure_id) }
          },
          Scene = {
-           if (byFigure == FALSE) { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene) }
+           if (byCharacter == FALSE) { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene) }
            else if (names == TRUE) { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene, ft$Speaker.figure_surface) }
            else { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene, ft$Speaker.figure_id) }
          },
@@ -118,7 +118,7 @@ frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols
 frequencytable3 <- function(drama,
                            acceptedPOS = postags$de$words,
                            column="Token.lemma", 
-                           byFigure=FALSE, 
+                           byCharacter=FALSE, 
                            sep="|", 
                            threshold=10,
                            normalize=FALSE, 
@@ -139,7 +139,7 @@ frequencytable3 <- function(drama,
   
   segment <- match.arg(segment)
   
-  fmla <- if(byFigure == TRUE){
+  fmla <- if(byCharacter == TRUE){
     switch(segment,
            Drama=("drama + Speaker.figure_id"),
            Act=("drama + Number.Act + Speaker.figure_id"),
@@ -151,7 +151,7 @@ frequencytable3 <- function(drama,
            Scene=("drama + Number.Act + Number.Scene"))
   }
   
-  metaCols <- if(byFigure == TRUE)
+  metaCols <- if(byCharacter == TRUE)
   { switch(segment,
            Drama=2,
            Act=3,

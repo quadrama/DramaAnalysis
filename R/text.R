@@ -170,7 +170,7 @@ filter <- function(hasCharacter,
   hasCharacter[hasCharacter$character %in% keep, ]
 }
 
-#' @title Filtering Mentioned Figures
+#' @title Filtering Mentioned Characters
 #' @description This function can be used to remove the mentions of figures 
 #' that do not appear as speakers in the subsetted input text (after using 
 #' limitFigures(), for example), or to summarize them as 'OTHER'.
@@ -221,7 +221,7 @@ tfidf1 <- function(word) {
 #' @export
 #' @examples
 #' data(rksp.0)
-#' rksp.0.ftable <- frequencytable(rksp.0, byFigure=TRUE, normalize=TRUE)
+#' rksp.0.ftable <- frequencytable(rksp.0, byCharacter=TRUE, normalize=TRUE)
 #' rksp.0.tfidf <- tfidf(rksp.0.ftable)
 #' @examples
 #' mat <- matrix(c(0.10,0.2, 0,

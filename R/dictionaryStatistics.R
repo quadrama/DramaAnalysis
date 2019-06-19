@@ -59,7 +59,7 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' @param fieldnames A list of names for the dictionaries. 
 #' @param fields A list of lists that contains the actual field names. 
 #' By default, we load the \code{base_dictionary}.
-#' @param normalizeByFigure Logical. Whether to normalize by character 
+#' @param normalizeByCharacter Logical. Whether to normalize by character 
 #' speech length.
 #' @param normalizeByField Logical. Whether to normalize by dictionary 
 #' size. You usually want this.
@@ -79,9 +79,9 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 dictionaryStatistics <- function(drama, fields=DramaAnalysis::base_dictionary[fieldnames],
                                  fieldnames=c("Liebe"),
                                  segment=c("Drama","Act","Scene"),
-                                 normalizeByFigure = FALSE, 
+                                 normalizeByCharacter = FALSE, 
                                  normalizeByField = FALSE, 
-                                 byFigure = TRUE,
+                                 byCharacter = TRUE,
                                  column="Token.lemma", 
                                  ci = TRUE) {
   stopifnot(inherits(drama, "QDDrama"))
@@ -110,8 +110,8 @@ dictionaryStatistics <- function(drama, fields=DramaAnalysis::base_dictionary[fi
   singles <- lapply(names(fields),function(x) {
     dss <- as.data.table(dictionaryStatisticsSingle(drama, fields[[x]], ci=ci,
                                         segment = segment,
-                                        byFigure = byFigure,
-                                        normalizeByFigure = normalizeByFigure, 
+                                        byCharacter = byCharacter,
+                                        normalizeByCharacter = normalizeByCharacter, 
                                         normalizeByField = normalizeByField, 
                                         column=column))
     colnames(dss)[ncol(dss)] <- x
@@ -135,7 +135,7 @@ dictionaryStatistics <- function(drama, fields=DramaAnalysis::base_dictionary[fi
                                                 Drama = "QDByDrama",
                                                 Act   = "QDByAct",
                                                 Scene ="QDByScene"), "data.frame")
-  if (byFigure) 
+  if (byCharacter) 
     class(r) <- append(class(r), "QDByCharacter")
   
   r
@@ -151,7 +151,7 @@ dictionaryStatistics <- function(drama, fields=DramaAnalysis::base_dictionary[fi
 #' the entire play will be used. Possible values are "Drama" (default), 
 #' "Act" or "Scene".
 #' @param colnames The column names to be used in the output table.
-#' @param byFigure Logical, defaults to TRUE. If false, values will be calculated
+#' @param byCharacter Logical, defaults to TRUE. If false, values will be calculated
 #' for the entire segment (play, act, or scene), and not for individual characters.
 #' @examples
 #' # Check a single dictionary entries
@@ -165,9 +165,9 @@ dictionaryStatistics <- function(drama, fields=DramaAnalysis::base_dictionary[fi
 #' @export
 dictionaryStatisticsSingle <- function(drama, wordfield=c(), 
                                        segment=c("Drama","Act","Scene"),
-                                       normalizeByFigure = FALSE, 
+                                       normalizeByCharacter = FALSE, 
                                        normalizeByField = FALSE, 
-                                       byFigure = TRUE,
+                                       byCharacter = TRUE,
                                        fieldNormalizer = length(wordfield), 
                                        column="Token.lemma", 
                                        ci=TRUE,
@@ -215,27 +215,27 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   
   # counting
   # xt <- dt[,.(x=sum(match)),keyby=bylist]
-  if (byFigure == TRUE) {
+  if (byCharacter == TRUE) {
     xt <- dt[,melt(xtabs(~ Speaker.figure_id, data=.SD[match])), 
              keyby=bylist]
   } else {
     xt <- dt[,.(value=sum(match)), keyby=bylist]
   }
   
-  if(normalizeByField || normalizeByFigure) {
+  if(normalizeByField || normalizeByCharacter) {
     xt$value <- as.double(xt$value)
   }
   
   # remove combinations of character and play that don't exist
-  if (byFigure == TRUE) {
+  if (byCharacter == TRUE) {
     xt <- unique(merge(xt, drama$characters, 
                 by.x = c("corpus","drama","Speaker.figure_id"), 
                 by.y = c("corpus","drama","figure_id"))[,names(xt), with=F])
   }
   # xt$match <- NULL
   
-  if (normalizeByFigure == TRUE) {
-    if (byFigure == TRUE) {
+  if (normalizeByCharacter == TRUE) {
+    if (byCharacter == TRUE) {
       bycolumns <- append(bycolumns,"Speaker.figure_id")
     }
     bylist <- paste(bycolumns, collapse=",")
@@ -250,7 +250,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
   
   r <- xt
   colnames(r)[ncol(r)] <- "x"
-  if (byFigure) {
+  if (byCharacter) {
     colnames(r)[ncol(r)-1] <- "character"
   }
   if (! is.null(colnames)) {
@@ -263,7 +263,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
                        Drama = "QDByDrama",
                        Act   = "QDByAct",
                        Scene ="QDByScene"), "data.frame", class(r))
-  if (byFigure) {
+  if (byCharacter) {
     class(r) <- append(class(r), "QDByCharacter")
     r$character <- as.factor(r$character)
   }
