@@ -30,4 +30,3 @@ Suggests: testthat,
     rmarkdown (>= 1.8),
     igraph (>= 1.1.2)
 Encoding: UTF-8
-Remotes: bmschmidt/wordVectors@2.0

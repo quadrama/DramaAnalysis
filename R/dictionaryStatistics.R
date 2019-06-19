@@ -50,7 +50,9 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' @description \code{enrichDictionary()} enriches an existing dictionary by 
 #' addition of similar words, as 
 #' measured in a word2vec model. The model can, for instance, be trained with 
-#' the package \code{wordVectors}.
+#' the package \code{wordVectors}. This function needs to have the package
+#' \code{wordVectors} be installed. You can download and install it from 
+#' \link{https://github.com/bmschmidt/wordVectors}.
 #' @param dictionary The base dictionary, a named list of lists.
 #' @param model the loaded word2vec model
 #' @param top A maximal number of words that we consider 
@@ -68,6 +70,10 @@ loadFields <- function(fieldnames=c("Liebe","Familie"),
 #' dict_enriched <- enrichDictionary(dict_base, model)
 #' }
 enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) {
+  if (!requireNamespace("wordVectors", quietly = TRUE)) {
+    stop("Package \"wordVectors\" needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
   r <- dictionary
   for (f in 1:length(dictionary)) {
     fn <- names(dictionary)[[f]]

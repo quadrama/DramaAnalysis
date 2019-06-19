@@ -40,7 +40,9 @@ to be added}
 \code{enrichDictionary()} enriches an existing dictionary by 
 addition of similar words, as 
 measured in a word2vec model. The model can, for instance, be trained with 
-the package \code{wordVectors}.
+the package \code{wordVectors}. This function needs to have the package
+\code{wordVectors} be installed. You can download and install it from 
+\link{https://github.com/bmschmidt/wordVectors}.
 }
 \section{File Format}{
 
