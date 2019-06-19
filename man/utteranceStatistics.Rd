@@ -12,7 +12,9 @@ utteranceStatistics(drama, normalizeByDramaLength = TRUE)
 \item{normalizeByDramaLength}{Logical value. If true, the resulting values will be normalized by the length of the drama.}
 }
 \description{
-This method calculates the length of each utterance, organised by character and drama.
+This method calculates the length of each utterance, organised by 
+character and drama. Please note that this function expects the QDDrama object to only 
+contain one play.
 }
 \examples{
 data(rksp.0)
