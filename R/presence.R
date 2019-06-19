@@ -11,7 +11,12 @@ presenceCore <- function(activeM,passiveM,N) {
 #' @param drama A single drama
 #' @param passiveOnlyWhenNotActive Logical. If true (default), passive presence is only 
 #' counted if a character is not actively present in the scene.
-#' @return QDHasCharacter, data.frame
+#' @return QDHasCharacter, data.frame. Columns \code{actives}, \code{passives} and 
+#' \code{scenes} show the 
+#' absolute number of scenes in which a character is actively/passively present, or the
+#' total number of scenes in the play. The column \code{presence} is calculated as 
+#' \eqn{\frac{actives-passives}{scenes}}{(actives-passives)/scenes}.
+#' 
 #' @export
 #' @examples 
 #' data(rksp.0)
@@ -78,6 +83,6 @@ presence <- function(drama,
   }
   
   r$presence <- ( (r$actives - r$passives) / r$scenes )
-  class(r) <- append(class(r), c("QDHasCharacter"))
+  class(r) <- c("QDHasCharacter", class(r))
   r
 }
