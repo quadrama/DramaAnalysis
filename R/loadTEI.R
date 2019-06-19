@@ -16,22 +16,25 @@ loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"),
   } else {
     raw_tei <- xml2::read_xml(paste0(dataDirectory, filename))
     nsp <- xml2::xml_ns_rename(xml2::xml_ns(raw_tei), d1="tei")
-    # dracorid:
+    # dracorid
     # id <- gsub("ger", "", xml2::xml_text(xml2::xml_find_first(raw_tei, "//tei:publicationStmt/tei:idno[@type='dracor']", ns=nsp)))
+    # filename as id
     id <- gsub("([^.]+).xml", "\\1", filename)
     corpus <- "ger"
     
     drama <- list()
-    text_segments <- parseTEI(raw_tei, nsp, id, corpus)
-    drama$text <- text_segments$text
-    drama$segments <- text_segments$segments
+    text_segments_stage <- parseTEI(raw_tei, nsp, id, corpus)
+    drama$text <- text_segments_stage$text
+    drama$segments <- text_segments_stage$segments
     drama$characters <- loadCharactersTEI(raw_tei, nsp, drama$text)
     drama$meta <- loadMetaTEI(raw_tei, nsp, corpus, id)
     drama$mentions <- loadMentionsTEI()
+    drama$stageDirections <- text_segments_stage$stage
     
     class(drama$text) <- append("QDHasUtteranceBE", class(drama$text))
     class(drama$segments) <- append("QDHasSegments", class(drama$segments))
     class(drama$mentions) <- append("QDHasUtteranceBE", class(drama$mentions))
+    class(drama$stageDirections) <- append("QDHasUtteranceBE", class(drama$stageDirections))
     
     class(drama) <- append("QDDrama", class(drama))
   }
@@ -42,6 +45,7 @@ loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"),
 parseTEI <- function(raw_tei, nsp, id, corpus) {
   text_l <- list()
   segments_l <- list()
+  stage_l <- list()
   
   d_length <- 0
   act_counter <- 0
@@ -71,41 +75,42 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
       }
       scene_counter <- scene_counter + 1
       scene_begin <- position
-    } else if (identical(xml2::xml_name(elem, ns = nsp), "tei:stage")) { # stage-direction
+    } else if (identical(xml2::xml_name(elem, ns = nsp), "tei:stage")) { # stage-direction without speaker
       tokenized_st <- tokenizers::tokenize_words(xml2::xml_text(elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
-      #d_length <- d_length + length(tokenized_st)
-      # TODO: STAGE
+      stage_l <- writeTextRow(corpus, id, tokenized_st, c("_Stage"), stage_l, position, elem, "_Stage")
+      d_length <- d_length + length(tokenized_st)
       position <- position + nchar(xml2::xml_text(elem))
     } else if (identical(xml2::xml_name(elem, ns = nsp), "tei:sp")) { # speaker & speach
       raw_ids <- strsplit(xml2::xml_attr(elem, "who", ns = nsp), "#")[[1]]
       speaker_ids <- sapply(raw_ids, trimws)[2:length(raw_ids)]
       for (sp_elem in xml2::xml_children(elem)) {
-        if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:speaker")) {
+        if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:speaker")) { # speaker surface
           speaker_surface <- gsub("\\.", "", xml2::xml_text(sp_elem))
           d_length <- d_length + length(tokenizers::tokenize_words(speaker_surface, lowercase = FALSE, strip_punct = FALSE)[[1]])
-        } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:p")) {
+          position <- position + nchar(xml2::xml_text(sp_elem))
+        } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:p")) { # p-element inside sp-element
           for (p_elem in xml2::xml_contents(sp_elem)) {
-            if (identical(xml2::xml_name(p_elem, ns = nsp), "tei:stage")) {
-              tokenized_st <- tokenizers::tokenize_words(xml2::xml_text(elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
-              #d_length <- d_length + length(tokenized_st)
-              # TODO: STAGE
+            if (identical(xml2::xml_name(p_elem, ns = nsp), "tei:stage")) { # stage-element inside p-element
+              tokenized_st <- tokenizers::tokenize_words(xml2::xml_text(p_elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
+              stage_l <- writeTextRow(corpus, id, tokenized_st, speaker_ids, stage_l, position, p_elem, speaker_surface)
+              d_length <- d_length + length(tokenized_st)
             } else {
               tokenized_p <- tokenizers::tokenize_words(xml2::xml_text(p_elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
               text_l <- writeTextRow(corpus, id, tokenized_p, speaker_ids, text_l, position, sp_elem, speaker_surface)
               d_length <- d_length + length(tokenized_p)
             }
+            position <- position + nchar(xml2::xml_text(p_elem))
           }
-          position <- position + nchar(xml2::xml_text(sp_elem))
-        } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:lg")) {
+        } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:lg")) { # lg-element inside sp-element
           temp_text <- (paste(lapply(xml2::xml_children(sp_elem), xml2::xml_text)))
           tokenized_lg <- tokenizers::tokenize_words(temp_text, lowercase = FALSE, strip_punct = FALSE)[[1]]
           text_l <- writeTextRow(corpus, id, tokenized_lg, speaker_ids, text_l, position, sp_elem, speaker_surface)
           d_length <- d_length + length(tokenized_lg)
           position <- position + nchar(xml2::xml_text(sp_elem))
-        } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:stage")) {
-          tokenized_st <- tokenizers::tokenize_words(xml2::xml_text(elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
-          #d_length <- d_length + length(tokenized_st)
-          # TODO: STAGE
+        } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:stage")) { # stage-element inside sp-element
+          tokenized_st <- tokenizers::tokenize_words(xml2::xml_text(sp_elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
+          stage_l <- writeTextRow(corpus, id, tokenized_st, speaker_ids, stage_l, position, sp_elem, speaker_surface)
+          d_length <- d_length + length(tokenized_st)
           position <- position + nchar(xml2::xml_text(sp_elem))
         }
       }
@@ -119,9 +124,7 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
   dt_text$Token.pos <- NA
   dt_text$Token.lemma <- NA
   dt_text$length <- d_length
-  
   dt_text <- fixColumnType(dt_text)
-  
   dt_text$Speaker.figure_surface <- as.factor(dt_text$Speaker.figure_surface)
   dt_text$Speaker.figure_id <- as.factor(dt_text$Speaker.figure_id)
   
@@ -134,20 +137,30 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
     dt_segments$end.Act[dt_segments$Number.Act == i] <- act_begins[[i]] - 1
   }
   dt_segments$end.Act[is.na(dt_segments$end.Act)] <- position - 1
-  
   dt_segments <- fixColumnType(dt_segments)
   
-  list("text" = dt_text, "segments" = dt_segments)
+  # stage table
+  dt_stage <- data.table::data.table(as.data.frame(do.call(rbind, stage_l)))
+  names(dt_stage) <- c("corpus", "drama", "utteranceBegin", "utteranceEnd", 
+                      "Speaker.figure_surface", "Speaker.figure_id", "Token.surface")
+  dt_stage$Token.pos <- NA
+  dt_stage$Token.lemma <- NA
+  dt_stage$length <- d_length
+  dt_stage <- fixColumnType(dt_stage)
+  dt_stage$Speaker.figure_surface <- as.factor(dt_stage$Speaker.figure_surface)
+  dt_stage$Speaker.figure_id <- as.factor(dt_stage$Speaker.figure_id)
+  
+  list("text" = dt_text, "segments" = dt_segments, "stage" = dt_stage)
 }
 
 # internal
-writeTextRow <- function(corpus, id, tokenized, speakers, text_l, position, sp_elem, speaker_surface) {
+writeTextRow <- function(corpus, id, tokenized, speakers, text_l, position, elem, speaker_surface) {
   for (token in tokenized) {
     for (speaker in speakers) {
       text_l <- append(text_l, list(list(corpus,
                                          id,
                                          position,
-                                         position + nchar(xml2::xml_text(sp_elem)) - 1,
+                                         position + nchar(xml2::xml_text(elem)) - 1,
                                          speaker_surface,
                                          speaker,
                                          token)))
