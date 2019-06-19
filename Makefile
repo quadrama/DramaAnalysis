@@ -6,7 +6,7 @@ document:
 	Rscript -e "devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))"
 
 check: document
-	cd .. && R CMD build DramaAnalysis && R CMD check DramaAnalysis_${VERSION}.tar.gz
+	cd .. && R CMD build DramaAnalysis && R CMD check --as-cran DramaAnalysis_${VERSION}.tar.gz
 
 build:
 	cd .. && R CMD build DramaAnalysis
