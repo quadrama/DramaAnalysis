@@ -110,9 +110,9 @@ plotSpiderWebs <- function(dstat,
 #' @importFrom data.table dcast
 #' @seealso barplot.default
 barplot.QDCharacterStatistics <- function(height, 
-                                       col=qd.colors, 
-                                       column="tokens", 
-                                       order=-1, 
+                                       col = qd.colors, 
+                                       column = "tokens", 
+                                       order = -1, 
                                        labels = TRUE,
                                        top = 5,
                                        ...) {
