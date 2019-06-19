@@ -4,5 +4,8 @@ r:
 - 3.4
 - 3.5
 - 3.6
+os:
+- linux
+- osx
 cache: packages 
 warnings_are_errors: false
