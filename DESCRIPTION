@@ -24,7 +24,7 @@ Depends:
   R (>= 3.0.0)
 RoxygenNote: 6.1.1
 Suggests: testthat,
-    fmsb (>= 0.6.0),
+    fmsb,
     knitr,
     highcharter,
     rmarkdown (>= 1.8),
