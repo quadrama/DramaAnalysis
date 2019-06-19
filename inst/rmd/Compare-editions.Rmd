@@ -9,9 +9,8 @@ output:
     toc_depth: 2
 params:
   id:
-  - "turm:3"
-  - "turm:1"
-  - "turm:2"
+  - "test:rksp.0"
+  - "test:rjmw.0"
   col: NULL
   dynamic: TRUE
   charAlignment: NULL
@@ -54,9 +53,10 @@ library(stringdist)
 
 #print(class(params$id))
 #print(params$id[[2]])
-text <- loadSegmentedText(params$id)
-meta <- loadMeta(params$id)
-characters <- loadCharacters(params$id)
+drama <- loadDrama(params$id)
+text <- segment(drama$text, drama$segments)
+meta <- drama$meta
+characters <- drama$characters
 if (is.null(params$titles)) {
   titles <- toFigureName(meta$documentTitle)
 } else {
@@ -165,11 +165,12 @@ knitr::kable(as.matrix(dist(tblm)))
 This plot shows the spoken words of the most talkative `r params$topn` characters per play.
 
 ```{r}
-tl <- limitFigures(text, threshold = params$topn)
 
-fstat <- figureStatistics(tl, names=TRUE)
+fstat <- characterStatistics(drama) %>%
+  filterCharacters(drama, n=params$topn) %>%
+  characterNames(drama)
 
-xt <- xtabs(tokens ~ paste(corpus,drama,sep=":")+figure,data=fstat)
+xt <- xtabs(tokens ~ paste(corpus,drama,sep=":")+character,data=fstat)
 
 attr(xt, "class") <- NULL 
 attr(xt, "call") <- NULL 
@@ -195,9 +196,10 @@ hc
 The table shows token numbers for all characters.
 
 ```{r, results="asis"}
-fstat <- figureStatistics(text, names=TRUE)
+fstat <- characterStatistics(drama) %>%
+  characterNames(drama)
 
-xt <- xtabs(tokens ~ paste(corpus,drama,sep=":")+figure,data=fstat)
+xt <- xtabs(tokens ~ paste(corpus,drama,sep=":")+character,data=fstat)
 attr(xt, "class") <- NULL 
 attr(xt, "call") <- NULL 
 xt <- as.data.frame(t(xt))
@@ -217,7 +219,9 @@ knitr::kable(xt, format="markdown")
 This plot shows the distribution of utterange lengths for the top `r params$topn` characters in each play. If two characters are aligned, their box is shown side by side. More on [box plots in Wikipedia](https://en.wikipedia.org/wiki/Box_plot). Dots outside of the box indicate potential outliers, color shows the play they belong to.
 
 ```{r}
-ustat <- utteranceStatistics(text, numberOfFigures = params$topn)
+ustat <- utteranceStatistics(drama) %>%
+  filterCharacters(drama, n = params$topn) %>%
+  characterNames(drama)
 
 if (is.null(params$col)) {
   col = "black"
@@ -226,7 +230,7 @@ if (is.null(params$col)) {
 }
 
 hcboxplot(x=ustat$utteranceLength, 
-          var=as.character(ustat$figure), 
+          var=as.character(ustat$character), 
           var2=as.character(ustat$drama),
           color=col
           )
@@ -261,10 +265,10 @@ utteranceDistances <- function(t) {
 }
 
 text[,
-     mcp:=max(end),
+     mcp:=max(utteranceEnd),
      .(corpus,drama)][,
-                      .(utteranceLength=.N,rbegin=begin/mcp),
-                      .(corpus,drama,begin,Speaker.figure_surface)][]
+                      .(utteranceLength=.N,rbegin=utteranceBegin/mcp),
+                      .(corpus,drama,utteranceBegin,Speaker.figure_surface)][]
 
 ```
 
@@ -272,10 +276,10 @@ text[,
 
 ```{r}
 
-textl <- limitFigures(text, threshold = params$topn, other = "_other")
+ustat <- utteranceStatistics(drama, normalizeByDramaLength = FALSE) %>%
+  filterCharacters(drama, n=params$topn) %>%
+  characterNames(drama)
 
-ustat <- utteranceStatistics(textl, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
-ustat$figure <- tools::toTitleCase(tolower(ustat$figure))
 ```
 
 ## All Utterances
@@ -284,9 +288,9 @@ par(mar=c(1,9,1,0),xpd=FALSE)
 
 for (id in params$id) {
   splid <- strsplit(id,":",fixed=TRUE)[[1]]
-  plotUtterancePositions(ustat[paste(ustat$corpus,ustat$drama,sep=":") == id,],
-                         segmentedText=text[paste(text$corpus,text$drama,sep=":") == id,],
-                         xlab="", main=toFigureName(meta[meta$corpus==splid[1] & meta$drama==splid[2],3]))
+  plot(ustat,
+       xlab="", 
+       main=toFigureName(meta[meta$corpus==splid[1] & meta$drama==splid[2],3]))
 }
 ```
 
@@ -294,40 +298,20 @@ for (id in params$id) {
 # Configuration and Copresence {.tabset}
 
 ```{r, fig.height=10}
-configs <- lapply(params$id, function(x) {
-  splid <- strsplit(x,":",fixed=TRUE)[[1]]
+configs <- lapply(split(drama), function(x) {
+  c <- configuration(x, onlyPresence = TRUE, 
+                     segment = "Scene") %>%
+    characterNames(x)
+  copr <- as.matrix(c) %*% t(as.matrix(c))
+  rownames(copr) <- c$character
+  colnames(copr) <- c$character
   
-  cfg <- configuration(text[text$corpus==splid[1] & text$drama==splid[2],], 
-                       onlyPresence=TRUE,
-                       by="Scene")
-  copr <- cfg$matrix %*% t(cfg$matrix)
-  rownames(copr) <- as.character(cfg$figure)
-  colnames(copr) <- as.character(cfg$figure)
   copr <- reshape::melt.array(copr)
-  copr <- copr[copr$X1 != copr$X2,]
-  copr$gid <- x
+  copr$drama <- x$meta$drama
   copr
 })
-names(configs) <- params$id
 
 allcopresence <- Reduce(rbind, configs)
 allcopresence$X1 <- as.character(allcopresence$X1)
 allcopresence$X2 <- as.character(allcopresence$X2)
-
-ac <- cast(allcopresence, formula =  X1+X2~gid)
-
-ac <- ac[!is.na(rowSums(ac[3:5])) & rowSums(ac[3:5])>1,]
-ac <- ac[ac[3] != ac[4] | ac[4] != ac[5],]
-ac$pname <- paste(ac$X1, ac$X2, sep=" & ")
-ac$X1 <- NULL
-ac$X2 <- NULL
-
-hc <- highchart(height=500)
-hc <- hc_yAxis(hc, max=max(ac[1:3]))
-hc <- hc_xAxis(hc, categories=colnames(ac[1:3]))
-for (i in 1:nrow(ac)) {
-  hc <- hc_add_series(hc, data=as.numeric(ac[i,1:3]), type="line", name=ac$pname[i], visible=FALSE)
-}
-hc
-
 ```

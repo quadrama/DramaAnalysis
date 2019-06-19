@@ -3,7 +3,8 @@
 #' @param id The id of the text or a list of ids
 #' @param of The output file
 #' @param type The type of the report. "Single" gives a report about a single play, 
-#' while "Compare" can be used to compare multiple editions of a play
+#' while "Compare" can be used to compare multiple editions of a play. Please note that 
+#' the "Compare" report is still under development.
 #' @param ... Arguments passed through to the rmarkdown document
 #' @export
 report <- function(id="test:rksp.0", 
