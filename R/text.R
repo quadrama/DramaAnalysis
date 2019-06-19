@@ -159,15 +159,21 @@ filterCharacters <- function(hasCharacter,
   # by default, we keep everyone
   keep <- charStat$character
   if (by == "tokens") {
-    keep <- charStat[charStat$tokens >= n,]$character
+    keep <- as.character(charStat[charStat$tokens >= n,]$character)
   } else if (by == "rank") {
-    keep <- charStat[order(charStat$tokens, decreasing = TRUE),]$character[1:n]
+    keep <- as.character(charStat[order(charStat$tokens, decreasing = TRUE),]$character[1:n])
   } else if (by == "name") {
     keep <- n
   }
-  
+
   # filter based on keep and return
-  hasCharacter[hasCharacter$character %in% keep, ]
+  hasCharacter <- hasCharacter[hasCharacter$character %in% keep, ]
+  
+  # remove factor levels
+  if (is.factor(hasCharacter$character)) {
+    hasCharacter$character <- as.factor(as.character(hasCharacter$character))
+  }
+  hasCharacter
 }
 
 #' @title Filtering Mentioned Characters
