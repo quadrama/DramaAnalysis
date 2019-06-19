@@ -24,7 +24,11 @@ This function should be called for a single text. It returns
 a data.frame with one row for each character in the play. The 
 data.frame contains 
 information about the number of scenes in which a character is actively 
-speaking or passively mentions.
+speaking or passively mentions. Please note that the information about
+passive presence is derived from coreference resolved texts, which is a
+difficult task and not entirely reliable. The plays included in the package
+feature manually annotated coreferences (and thus, the presence is calculated on
+the basis of very well data).
 }
 \examples{
 data(rksp.0)

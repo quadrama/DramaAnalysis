@@ -1,13 +1,13 @@
-presenceCore <- function(activeM,passiveM,N) {
-  ( rowSums(activeM) - rowSums(passiveM) ) / N
-}
-
 #' @title Active and Passive Presence
 #' @description This function should be called for a single text. It returns 
 #' a data.frame with one row for each character in the play. The 
 #' data.frame contains 
 #' information about the number of scenes in which a character is actively 
-#' speaking or passively mentions.
+#' speaking or passively mentions. Please note that the information about
+#' passive presence is derived from coreference resolved texts, which is a
+#' difficult task and not entirely reliable. The plays included in the package
+#' feature manually annotated coreferences (and thus, the presence is calculated on
+#' the basis of very well data).
 #' @param drama A single drama
 #' @param passiveOnlyWhenNotActive Logical. If true (default), passive presence is only 
 #' counted if a character is not actively present in the scene.
