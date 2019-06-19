@@ -44,3 +44,5 @@ r_binary_packages:
 - promises
 - munsell
 - broom
+- quantmod
+- httpuv
