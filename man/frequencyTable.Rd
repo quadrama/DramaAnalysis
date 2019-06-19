@@ -53,7 +53,7 @@ data(rksp.0)
 ftable <- frequencytable(rksp.0, 
                          byCharacter = TRUE)
                                               
-filtered <- filterByDictionary(ft, 
+filtered <- filterByDictionary(ftable, 
                                fieldnames=c("Krieg", "Familie"))
 
 data(rksp.0)
