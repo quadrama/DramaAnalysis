@@ -22,28 +22,31 @@ By default, we load the base_dictionary (as in \code{dictionaryStatistics()}).}
 
 \item{fieldnames}{A list of names for the dictionaries.}
 
-\item{drama}{A \code{QDDrama}. May be covering multiple texts}
+\item{drama}{A \code{QDDrama}. May be covering multiple texts.}
 
-\item{acceptedPOS}{A list of accepted pos tags}
+\item{acceptedPOS}{A list of accepted pos tags. Words of all POS tags not in this list 
+are filtered out. Specify NULL or an empty list to include all words.}
 
 \item{column}{The column name we should use (should be either Token.surface or Token.lemma)}
 
-\item{byCharacter}{Wether the count is by character or by text}
+\item{byCharacter}{Logical. Wether the count is by character or by text.}
 
-\item{sep}{The separation symbol that goes between drama name and character (if applicable)}
+\item{sep}{The separation symbol that goes between drama name and character (if applicable). 
+Defaults to the pipe symbol.}
 
-\item{normalize}{Whether to normalize values or not}
+\item{normalize}{Whether to normalize values or not. If set to TRUE, the values are normalized by
+row sums.}
 
 \item{sortResult}{Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)}
 
-\item{segment}{Whether the count is by drama (default), act or scene}
+\item{segment}{Character vector. Whether the count is by drama (default), act or scene}
 }
 \description{
 The function \code{filterByDictionary()} can be used to filter a matrix as produced by 
 \code{frequencytable()} by the words in the given dictionary(/-ies).
 
 The function \code{frequencytable()} generates a matrix of word frequencies 
-by drama, act or scene and/or by character
+by drama, act or scene and/or by character. The output of this function can be fed to stylo.
 }
 \examples{
 data(rksp.0)
@@ -56,6 +59,9 @@ filtered <- filterByDictionary(ft,
 data(rksp.0)
 st <- frequencytable(rksp.0)
 \dontrun{
-stylo(gui=F, frequencies = st)
+stylo(gui=FALSE, frequencies = st)
 }
+}
+\seealso{
+\code{stylo}
 }
