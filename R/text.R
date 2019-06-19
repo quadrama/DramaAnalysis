@@ -138,10 +138,10 @@ dramaNames <- function(x,
 #' @examples 
 #' data(rjmw.0)
 #' dstat <- dictionaryStatistics(rjmw.0)
-#' filter(dstat, rjmw.0, by="tokens", n=1000)
+#' filterCharacters(dstat, rjmw.0, by="tokens", n=1000)
 #' 
 #' 
-filter <- function(hasCharacter, 
+filterCharacters <- function(hasCharacter, 
                    drama, 
                    by=c("rank", "tokens", "name"), 
                    n=ifelse(by=="tokens", 500, ifelse(by=="rank", 10, c()))) {
