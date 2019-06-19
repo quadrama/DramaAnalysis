@@ -9,14 +9,14 @@
 This package contains a number of functions to support the analyis of dramatic texts. 
 
 ## Features
-- Summary statistics about the number of words and utterances per figure
-- Statistics about word use from a dictionary per figure
-- Support for stylometric analyses by figure or text
+- Summary statistics about the number of words and utterances per character
+- Statistics about word use from a dictionary per character
+- Support for stylometric analyses by character or text
 - Generation of a report for a dramatic text
 - Reads in preprocessed texts 
 
 # Requirements
-DramaAnalysis *should* work on Mac OS X, Windows 10 and Linuxes, and is mostly used in [RStudio](https://www.rstudio.com).
+DramaAnalysis works on Mac OS X, Windows 10 and Linuxes, and requires R 3.3 or later.
 
 
 # Installation
