@@ -13,8 +13,11 @@ segment(hasUtteranceBE, hasSegments)
 }
 \description{
 This function takes two tables and combines them. The first table is of the 
-class QDHasUtteranceBE and contains text spans that are designated with begin and end character positions.
-The second table of class QDHasSegments contains information about acts and scenes in the play.
+class QDHasUtteranceBE and contains text spans that are designated with 
+begin and end character positions.
+The second table of class QDHasSegments contains information about acts and scenes 
+in the play. This function is used internally in many other functions, but is exported
+because it might become useful.
 }
 \examples{
 data(rksp.0)
