@@ -9,6 +9,7 @@ sudo: true
 cache: packages 
 warnings_are_errors: false
 r_binary_packages:
+- quantmod
 - data.table
 - git2r
 - readr
@@ -44,5 +45,4 @@ r_binary_packages:
 - promises
 - munsell
 - broom
-- quantmod
 - httpuv
