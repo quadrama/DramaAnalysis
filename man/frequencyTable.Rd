@@ -48,7 +48,7 @@ by drama, act or scene and/or by character
 \examples{
 data(rksp.0)
 filtered <- filterByDictionary(frequencytable(rksp.0, 
-                                              byFigure = TRUE), 
+                                              byCharacter = TRUE), 
                                               fieldnames=c("Krieg", "Familie"))
 
 data(rksp.0)

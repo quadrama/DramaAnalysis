@@ -284,7 +284,7 @@ dictionaryStatisticsSingle <- function(drama, wordfield=c(),
 #' @examples
 #' data(rksp.0)
 #' filtered <- filterByDictionary(frequencytable(rksp.0, 
-#'                                               byFigure = TRUE), 
+#'                                               byCharacter = TRUE), 
 #'                                               fieldnames=c("Krieg", "Familie"))
 #' 
 
