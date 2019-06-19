@@ -29,10 +29,10 @@ library(devtools)
 install_github("quadrama/DramaAnalysis") 
 
 # Install newest development version
-install_github("quadrama/DramaAnalysis", ref="develop/2.x")
+install_github("quadrama/DramaAnalysis", ref="develop/3.x")
 
-# Install specific version (2.0.1)
-install_github("quadrama/DramaAnalysis", ref="v2.0.1") 
+# Install specific version (3.0.0)
+install_github("quadrama/DramaAnalysis", ref="v3.0.0") 
 ```
 
 # Usage and Howto
