@@ -152,27 +152,6 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg",
 }
 
 
-#' @title Load annotations
-#' @description Helper method to load covered annotations. Returns a data.table.
-#' @param ids A vector or list of drama ids
-#' @param type The annotation type to load
-#' @param coveredType The annotation type of covered annotations we want to load
-#' @param columnTypes Can be used to specify column types, which are passed to readr::read.csv.
-#' @param defaultCollection The collection prefix is added if no prefix is found
-#' @export
-#' @importFrom readr read_csv locale cols
-#' @examples
-#' \dontrun{
-#' loadAnnotations(c("tg:rksp.0"))
-#' }
-loadAnnotations <- function(ids, 
-                            type=NULL, 
-                            coveredType=NULL,
-                            defaultCollection="tg",
-                            columnTypes=NULL) {
-  stop("This function is no longer supported. Use loadCSV() instead.")
-}
-
 #' @title Character data loading
 #' @description Loads a table of characters and meta data
 #' @param ids a list or vector of ids
