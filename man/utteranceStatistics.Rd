@@ -13,8 +13,7 @@ utteranceStatistics(drama, normalizeByDramaLength = TRUE)
 }
 \description{
 This method calculates the length of each utterance, organised by 
-character and drama. Please note that this function expects the QDDrama object to only 
-contain one play.
+character and drama.
 }
 \examples{
 data(rksp.0)

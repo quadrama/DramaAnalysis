@@ -1,7 +1,6 @@
 #' @title Utterance Statistics
 #' @description This method calculates the length of each utterance, organised by 
-#' character and drama. Please note that this function expects the QDDrama object to only 
-#' contain one play.
+#' character and drama. 
 #' @param drama The dramatic text(s)
 #' @param normalizeByDramaLength Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
@@ -18,8 +17,7 @@
 #' }
 utteranceStatistics <- function(drama, normalizeByDramaLength = TRUE) {
   stopifnot(inherits(drama, "QDDrama"))
-  stopifnot(numberOfPlays(drama) == 1)
-  
+
   # prevent note in check
   `:=` <- NULL
   dl <- NULL
@@ -41,6 +39,6 @@ utteranceStatistics <- function(drama, normalizeByDramaLength = TRUE) {
 
   # skip empty factor levels
   ulength <- droplevels(ulength)
-  class(ulength) <- c(c("QDUtteranceStatistics", "QDHasCharacter", "data.frame"))
+  class(ulength) <- c("QDUtteranceStatistics", "QDHasCharacter", "data.frame")
   ulength
 }
