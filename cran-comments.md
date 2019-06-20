@@ -1,8 +1,8 @@
 ## Test environments
-* local OS X install, R 3.6.0
-* ubuntu 14.04 (on travis-ci), R 3.3.3, R 3.4.4, R 3.5.3, R 3.6.0
-* OS X 10.13.3 (on travis-ci), R 3.3.3, R 3.5.3, R 3.6.0
-* win-builder (release and oldrel)
+* local OS X 10.14.5 install, R 3.6.0
+* ubuntu 14.04 (on travis-ci), R 3.3.3, R 3.4.4, oldrel, release, devel
+* OS X 10.13.3 (on travis-ci), R 3.3.3, oldrel, release
+* win-builder (release, oldrel, devel)
 
 ## R CMD check results
 There were no ERRORs or WARNINGs.
