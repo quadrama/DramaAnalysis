@@ -2,7 +2,7 @@
 % Please edit documentation in R/collections.R, R/load.R
 \name{setCollectionDirectory}
 \alias{setCollectionDirectory}
-\alias{setup}
+\alias{setDirectories}
 \alias{setDataDirectory}
 \title{This function initialises the paths to data files.}
 \usage{
@@ -10,8 +10,9 @@
   setCollectionDirectory(collectionDirectory = file.path(getOption("qd.datadir"),
   "collections"))
 
-setup(dataDirectory = file.path(path.expand("~"), "QuaDramA", "Data2"),
-  collectionDirectory = file.path(dataDirectory, "collections"))
+setDirectories(dataDirectory = file.path(path.expand("~"), "QuaDramA",
+  "Data2"), collectionDirectory = file.path(dataDirectory,
+  "collections"))
 
 setDataDirectory(dataDirectory = file.path(path.expand("~"), "QuaDramA",
   "Data2"))
