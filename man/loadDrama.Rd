@@ -22,7 +22,7 @@ numberOfPlays(x)
 defaultCollection prefix is applied.}
 
 \item{x}{The object of class \code{QDDrama} (consisting of multiple dramas). 
-For \code{split()} it should consistof multiple plays. For \code{combine()} it 
+For \code{split()} it should consist of multiple plays. For \code{combine()} it 
 can but doesn't have to.}
 
 \item{y}{A \code{QDDrama}}

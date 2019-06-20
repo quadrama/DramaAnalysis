@@ -15,7 +15,7 @@ characterNames(x, drama, FUN = stringr::str_to_title, sort = 0, ...)
 Defaults to \code{stringr::str_to_title}, which
 converts the strings to title case.}
 
-\item{sort}{Numberic. If set to a non-zero value, the resulting data.frame will be sorted 
+\item{sort}{Numeric. If set to a non-zero value, the resulting data.frame will be sorted 
 alphabetically
 according to the drama and character name. If the value is above 0, the 
 sorting will be ascending, if set to a negative value, the sorting is 

@@ -21,7 +21,7 @@
 \item{top}{Limit the labels to the top 5 characters. Otherwise, 
 labels will become unreadable.}
 
-\item{...}{All remainig options are passed to \code{barplot.default()}.}
+\item{...}{All remaining options are passed to \code{barplot.default()}.}
 }
 \description{
 This function expects an object of type QDCharacterStatistics and 

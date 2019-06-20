@@ -4,7 +4,7 @@
 #' @param drama A \code{QDDrama}. May be covering multiple texts.
 #' @param acceptedPOS A list of accepted pos tags. Words of all POS tags not in this list 
 #' are filtered out. Specify NULL or an empty list to include all words.
-#' @param byCharacter Logical. Wether the count is by character or by text.
+#' @param byCharacter Logical. Whether the count is by character or by text.
 #' @param segment Character vector. Whether the count is by drama (default), act or scene
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @param sep The separation symbol that goes between drama name and character (if applicable). 

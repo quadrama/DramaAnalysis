@@ -25,7 +25,7 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' the result values of \code{FUN}.
 #' @param x The object in which we want to transform names, needs to inherit the type \code{QDHasCharacter}.
 #' @param drama The QDDrama object with all the information.
-#' @param sort Numberic. If set to a non-zero value, the resulting data.frame will be sorted 
+#' @param sort Numeric. If set to a non-zero value, the resulting data.frame will be sorted 
 #' alphabetically
 #' according to the drama and character name. If the value is above 0, the 
 #' sorting will be ascending, if set to a negative value, the sorting is 
@@ -287,7 +287,7 @@ combine <- function(x, y) {
 #' be used to split a \code{QDDrama} object that consists of multiple dramas 
 #' into a list thereof. It is the counterpart to \code{combine(x, y)}.
 #' @param x The object of class \code{QDDrama} (consisting of multiple dramas). 
-#' For \code{split()} it should consistof multiple plays. For \code{combine()} it 
+#' For \code{split()} it should consist of multiple plays. For \code{combine()} it 
 #' can but doesn't have to.
 #' @param ... All other arguments are ignored.
 #' @rdname loadDrama

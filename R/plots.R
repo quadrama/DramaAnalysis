@@ -104,7 +104,7 @@ plotSpiderWebs <- function(dstat,
 #' @param top Limit the labels to the top 5 characters. Otherwise, 
 #' labels will become unreadable.
 #' @param col The colors to use
-#' @param ... All remainig options are passed to \code{barplot.default()}.
+#' @param ... All remaining options are passed to \code{barplot.default()}.
 #' @export
 #' @importFrom graphics text barplot
 #' @importFrom data.table dcast

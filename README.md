@@ -6,7 +6,7 @@
 
 # DramaAnalysis with R
 
-This package contains a number of functions to support the analyis of dramatic texts. 
+This package contains a number of functions to support the analysis of dramatic texts. 
 
 ## Features
 - Summary statistics about the number of words and utterances per character

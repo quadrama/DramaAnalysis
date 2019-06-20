@@ -29,7 +29,7 @@ are filtered out. Specify NULL or an empty list to include all words.}
 
 \item{column}{The column name we should use (should be either Token.surface or Token.lemma)}
 
-\item{byCharacter}{Logical. Wether the count is by character or by text.}
+\item{byCharacter}{Logical. Whether the count is by character or by text.}
 
 \item{sep}{The separation symbol that goes between drama name and character (if applicable). 
 Defaults to the pipe symbol.}
