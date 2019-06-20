@@ -12,5 +12,7 @@ matrix:
   exclude:
   - r: 3.4
     os: osx
+  - r: devel
+    os: osx
 cache: packages 
 warnings_are_errors: false
