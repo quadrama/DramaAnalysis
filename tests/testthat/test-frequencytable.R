@@ -60,5 +60,4 @@ ft <- frequencytable(rksp.0, byCharacter = TRUE, acceptedPOS = postags$de$n)
 test_that("frequencytable(..., byCharacter=TRUE, acceptedPOS = postags$de$n) has correct dimensions and produces correct output", {
   expect_equal(ncol(ft), 914)
   expect_equal(nrow(ft), 13)
-  expect_equal(colnames(ft)[c(785, 525, 353)], c("verdacht", "papier", "haus"))
 })
