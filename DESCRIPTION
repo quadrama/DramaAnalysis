@@ -1,12 +1,13 @@
 Package: DramaAnalysis
 Type: Package
-Title: Scripts to Support Analysis of Dramatic Texts
+Title: Analysis of Dramatic Texts
 Version: 2.9.9.9000
 Date: 2019-06-19
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>, Tim Strohmayer <st151528@stud.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
-Description: Import and analyse pre-processed dramatic texts.
-  The texts are expected to be in csv format, which can be installed from within the package.
+Description: Analysis of pre-processed dramatic texts, with respect to literary research. 
+The texts are expected to be in csv format, which can be installed from within the package. 
+Sample texts are provided.
 License: GPL (>= 3)
 LazyData: TRUE
 Imports:
