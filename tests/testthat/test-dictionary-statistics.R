@@ -1,17 +1,117 @@
+context("Dictionary Statistics")
+
 data(rksp.0)
 
-dstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield = c("schön"), names=TRUE)
 
-expect_equal(length(dstat), 4)
-expect_that(as.integer(dstat[6,4]), equals(1))
+# dictionaryStatisticsSingle()
+context("dictionaryStatisticsSingle()")
 
-dstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield = c("schön"), names=TRUE, normalizeByFigure = TRUE)
-expect_that(length(dstat), equals(4))
-expect_that(as.numeric(dstat[6,4]), equals(0.0013089005))
+dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon"))
+test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon'))
+          has correct dimensions and produces correct output", {
+  expect_length(dstat, 4)
+  expect_equal(as.integer(dstat[6,4]), 2)
+  expect_equal(as.character(dstat[6,3]), "conti")
+})
 
-dstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield = c("schön","gut"), names=TRUE, normalizeByFigure = FALSE, normalizeByField = TRUE)
-expect_that(length(dstat), equals(4))
-expect_that(as.numeric(dstat[6,4]), equals(0.5))
+dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon"), normalizeByCharacter = TRUE)
+test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon'), normalizeByCharacter = TRUE) has correct dimensions and produces correct output", {
+  expect_length(dstat, 4)
+  expect_equal(as.numeric(dstat[6,4]), 0.0026178010)
+})
 
-dstat <- dictionaryStatistics(rksp.0$mtext, fields=list(Familie=list("aber")))
-expect_that(as.numeric(dstat[10,4]), equals(29))
+dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon","gut"), 
+                                    normalizeByCharacter = FALSE,
+                                    normalizeByField = TRUE)
+test_that("dictionaryStatisticsSingle(rksp.0, wordfield = c('schon','gut'), normalizeByCharacter = FALSE, normalizeByField = TRUE) has correct dimensions and produces correct output", {
+  expect_length(dstat, 4)
+  expect_equal(as.numeric(dstat[6,4]), 1.0)
+})
+
+
+test_that("dictionaryStatisticsSingle(..., wordfield = c('schon','gut'), byCharacter=FALSE) has correct dimensions and produces correct output", {
+  dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon","gut"), 
+                                      byCharacter = FALSE)
+  expect_length(dstat, 3)
+  expect_equal(as.numeric(dstat[1,3]), 132)
+
+  dstat <- dictionaryStatisticsSingle(rksp.0, wordfield = c("schon","gut"), 
+                                      byCharacter = FALSE, normalizeByField = TRUE)
+  expect_length(dstat, 3)
+  expect_equal(as.numeric(dstat[1,3]), 66)
+  
+})
+
+
+# dictionaryStatistics()
+context("dictionaryStatistics()")
+
+
+dstat <- dictionaryStatistics(rksp.0, fields=list(Familie=list("aber")))
+test_that("dictionaryStatistics(rksp.0, fields=list(Familie=list('aber'))) 
+          produces correct output", {
+  expect_equal(as.numeric(dstat[8,4]), 29)
+  expect_equal(as.character(dstat[8,3]), "der_prinz")
+})
+
+dstat <- dictionaryStatistics(rksp.0)
+test_that("dictionaryStatistics(rksp.0) 
+          has correct dimensions and produces correct output", {
+  expect_length(dstat, 4)          
+  expect_equal(as.integer(dstat[6,4]), 11)
+  expect_equal(colnames(dstat)[4], "Liebe")
+})
+
+dstat <- dictionaryStatistics(rksp.0, segment="Act")
+test_that("dictionaryStatistics(rksp.0, segment='Act') 
+          has correct dimensions and produces correct output", {
+    expect_length(dstat, 5)
+    expect_equal(nrow(dstat), 65)
+    expect_equal(as.integer(dstat[7,5]), 9)
+    expect_equal(colnames(dstat)[3], "Number.Act")
+})
+
+dstat <- dictionaryStatistics(rksp.0, segment="Scene")
+test_that("dictionaryStatistics(rksp.0, segment='Scene') has correct dimensions and produces correct output", {
+    expect_length(dstat, 6)   
+    expect_equal(nrow(dstat), 559)
+    expect_equal(as.integer(dstat[6,6]), 0)
+    expect_equal(as.integer(dstat[8,6]), 2)
+    expect_equal(colnames(dstat)[3], "Number.Act")
+    expect_equal(colnames(dstat)[4], "Number.Scene")
+})
+
+
+test_that("dictionaryStatistics(rksp.0, fieldnames=c('Ratio', 'Religion'), normalizeByCharacter = TRUE) has correct dimensions and produces correct output" ,{
+  dstat <- dictionaryStatistics(rksp.0, 
+                                fieldnames=c("Ratio", "Religion"), 
+                                normalizeByCharacter = TRUE)
+  expect_length(dstat, 5)
+  expect_equal(colnames(dstat)[4], "Ratio")  
+  expect_equal(colnames(dstat)[5], "Religion")
+  expect_equal(as.numeric(dstat[5,4]), 0.004211511)
+  expect_equal(as.numeric(dstat[5,5]), 0.004679457)
+})
+
+
+
+context("filterByDictionary()")
+
+filtered <- filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE))
+test_that("filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE) has correct dimensions and produces correct output", {
+  expect_length(filtered, 143)
+  expect_length(filtered[,1], 13)
+  expect_equal(FALSE %in% (colnames(filtered) %in% base_dictionary$Liebe), FALSE)
+})
+
+filtered <- filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE), fieldnames = c("Krieg"))
+test_that("filterByDictionary(frequencytable(rksp.0, byCharacter = TRUE, fieldnames = c('Krieg'))  
+          has correct dimensions and produces correct output", {
+  expect_length(filtered, 78)
+  expect_length(filtered[,1], 13)
+  expect_equal(FALSE %in% (colnames(filtered) %in% base_dictionary$Krieg), FALSE)
+})
+
+
+
+# TODO: enrichDictionary()?

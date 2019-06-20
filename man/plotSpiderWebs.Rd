@@ -4,24 +4,15 @@
 \alias{plotSpiderWebs}
 \title{Spider-Webs}
 \usage{
-plotSpiderWebs(dstat = NULL, mat = dstat$mat, names = dstat$figure,
-  symbols = c(17, 16, 15, 4, 8), maxValue = max(mat), minValue = min(mat),
-  cglcol = "black", legend = TRUE, legend.cex = 0.7,
-  legend.pos.x = "bottomright", legend.pos.y = NA,
-  legend.horizontal = FALSE, pcol = qd.colors, ...)
+plotSpiderWebs(dstat, symbols = c(17, 16, 15, 4, 8), cglcol = "black",
+  legend = TRUE, legend.cex = 0.7, legend.pos.x = "bottomright",
+  legend.pos.y = NA, legend.horizontal = FALSE, pcol = qd.colors,
+  ...)
 }
 \arguments{
 \item{dstat}{A data frame containing data, e.g., output from dictionaryStatistics()}
 
-\item{mat}{A data frame that only contains data assignments. Defaults to all columns except for the first three from dstat.}
-
-\item{names}{A list of names for the legend}
-
 \item{symbols}{Symbols to be used in the plot}
-
-\item{maxValue}{The maximal value. Defaults to the highest value in mat.}
-
-\item{minValue}{The minimal value. Defaults to the lowest value in mat.}
 
 \item{cglcol}{The color for the spider net}
 
@@ -40,7 +31,10 @@ plotSpiderWebs(dstat = NULL, mat = dstat$mat, names = dstat$figure,
 \item{...}{Miscellaneous arguments to be given for radarchart().}
 }
 \description{
-Generates spider-web like plot
+Generates spider-web like plot. 
+Spider webs may look cool, but they are terrible 
+to interpret. You should think of using a bar 
+chart to represent the same information. \emph{You have been warned.}
 }
 \note{
 radar charts and spider web plots are dangerous, 
@@ -48,11 +42,9 @@ they can easily become misleading. They are in this package
 for historic reasons, but should not be used anymore.
 }
 \examples{
-\dontrun{
 data(rksp.0)
 fnames <- c("Krieg", "Liebe", "Familie", "Ratio","Religion")
-ds <- dictionaryStatistics(rksp.0$mtext, normalizeByField=TRUE, names=TRUE,
-                              fieldnames=fnames, asList=TRUE)
-plotSpiderWebs(dstat=ds,max=50)
-}
+ds <- dictionaryStatistics(rksp.0, normalizeByField=TRUE, 
+                           fieldnames=fnames)
+plotSpiderWebs(ds)
 }

@@ -22,7 +22,9 @@ are given than exist in the play. In this case, a
 warning is printed.
 }
 \examples{
+\dontrun{
 data(rksp.0)
 # Extract the second last scene
-dramaTail(rksp.0$mtext, by="Scene", op="==", n=2)
+dramaTail(rksp.0$text, by="Scene", op="==", n=2)
+}
 }

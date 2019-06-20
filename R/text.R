@@ -14,96 +14,179 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
                rgb(217, 33, 32, maxColorValue = 255)
               );
 
-#' @title Filtering figures
-#' @description This function can be used to remove speech content of certain figures. 
-#' Currently, it offers two ways of filtering: By rank or by spoken words. Filtering by 
-#' rank is an upper criterion, i.e., up to $threshold$ figures are included. Filtering 
-#' by tokens is a lower limit: Every figure that speaks more than $threshold$ figures is
-#' included.
-#' @param text The dramatic text in table form
-#' @param by A character vector, either "rank" or "tokens" (or unambigious sub string)
-#' @param threshold A number specifying the limit
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing their speech
+
 #' @export
+#' @title Format Names
+#' @description The function \code{characterNames()} is applicable on 
+#' all tables with a character table 
+#' (that are of the class \code{QDHasCharacter}). It can be used to reformat the character 
+#' names. The function \code{FUN} is applied to the character \emph{name} entries within 
+#' the \code{QDDrama} object. The factor levels in the character column of \code{x} are replaced by 
+#' the result values of \code{FUN}.
+#' @param x The object in which we want to transform names, needs to inherit the type \code{QDHasCharacter}.
+#' @param drama The QDDrama object with all the information.
+#' @param sort Numberic. If set to a non-zero value, the resulting data.frame will be sorted 
+#' alphabetically
+#' according to the drama and character name. If the value is above 0, the 
+#' sorting will be ascending, if set to a negative value, the sorting is 
+#' descending. If sort is set to 0 (the default), the order is unchanged. 
+#' The ordering can also be specified explicitly, by passing an integer vector 
+#' with as many elements as \code{x} has rows.
+#' @param FUN A function applied to the strings. 
+#' Defaults to \code{stringr::str_to_title}, which
+#' converts the strings to title case.
+#' @param ... All other arguments are ignored.
+#' @seealso \code{\link[stringr]{str_to_title}}
+#' @importFrom stringr str_to_title
 #' @examples 
 #' data(rksp.0)
-#' text.top10 <- limitFigures(rksp.0$mtext)
-limitFigures <- function(text, by=c("rank","tokens"), threshold=ifelse(by=="tokens",500,10), other=FALSE) {
-  by <- match.arg(by)
-  switch(by,
-         tokens=limitFiguresByTokens(text, minTokens=threshold, other=other),
-         rank=limitFiguresByRank(text, maxRank = threshold, other=other),
-         stop("Invalid filtering criterion"))
-}
+#' ustat <- utteranceStatistics(rksp.0)
+#' ustat <- characterNames(ustat, rksp.0)
+characterNames <- function(x, 
+                                  drama, 
+                                  FUN=stringr::str_to_title, 
+                                  sort=0, 
+                                  ...) {
+  requireNamespace("stringr")
+  stopifnot(inherits(x, "QDHasCharacter"))
+  stopifnot(inherits(drama, "QDDrama"))
+  
+  positions <- match(levels(x$character), drama$characters$figure_id)
+  levels(x$character) <- FUN(drama$characters$figure_surface[positions])
 
-#' This method removes the spoken tokens of all but the most frequent n figures
-#' @param t The text, a data frame listing each token for each figure
-#' @param maxRank Up to maxRank figures remain in the data set
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing their speech
-#' @keywords internal
-#' @importFrom utils head
-limitFiguresByRank <- function(t, maxRank=10, other=FALSE) {
-  if (other == FALSE) {
-    r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n%in%maxN(unique(n),maxRank)], by=.(corpus,drama)][,n:=NULL,][]
-  } else {
-    counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id, t$Speaker.figure_surface), length)
-    counts <- counts[order(counts$x, decreasing = TRUE),]
-    rcounts <- Reduce(rbind, by(counts, counts["Group.1"], head, n=maxRank))
-    r <- t
-    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),"OTHER")
-    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),"OTHER")
-    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- "OTHER"
-    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- "OTHER"
+  if (length(sort) == nrow(x)) {
+    x <- x[sort,]
+  } else if (length(sort) == 1) {
+    if (length(sort) == 1 && sort > 0) {
+      x <- x[order(x$drama, x$character),]
+    } else if (length(sort) == 1 && sort < 0) {
+      x <- x[order(x$drama, x$character, decreasing=TRUE),]
+    }
   }
-  r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
-  r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
-  r
+    
+  x
+
 }
 
-#' This method removes the spoken tokens by all figures that speak infrequently.
-#' @param t The text, a data frame listing each token for each figure
-#' @param minTokens The minimal amount of tokens a figure has to speak
-#' @param other Whether to summarize filtered figures as 'OTHER' instead of removing their speech
-#' @keywords internal
-limitFiguresByTokens <- function(t, minTokens=100, other=FALSE) {
-  if (other == FALSE) {
-    r <- t[,n:=.N,.(corpus,drama,Speaker.figure_surface)][,.SD[n>=minTokens],by=.(corpus,drama)][,n:=NULL][]
-  } else {
-    counts <- aggregate(t$Speaker.figure_surface, by=list(t$drama, t$Speaker.figure_id, t$Speaker.figure_surface), length)
-    rcounts <- counts[(counts$x > minTokens),]
-    r <- t
-    levels(r$Speaker.figure_id) <- c(levels(r$Speaker.figure_id),"OTHER")
-    levels(r$Speaker.figure_surface) <- c(levels(r$Speaker.figure_surface),"OTHER")
-    r$Speaker.figure_id[!(r$Speaker.figure_id %in% rcounts$Group.2)] <- "OTHER"
-    r$Speaker.figure_surface[!(r$Speaker.figure_surface %in% rcounts$Group.3)] <- "OTHER"
+#' @title Format drama titles
+#' @description Given a QDDrama object, this function generates a list of nicely 
+#' formatted names, following the format string.
+#' @param x The QDDrama object
+#' @param orderBy The meta data key that the final list will be ordered by
+#' @param formatString A character vector. Contains special symbols that
+#' are replaced by meta data entries about the plays. The following symbols can
+#' be used:
+#' - \%T: title of the play
+#' - \%A: Author name 
+#' - \%P: GND entry of the author (if known)
+#' - \%DR, %DP, %DW: Date of premiere, print or written
+#' - \%DM: The minimal date 
+#' - \%L: The language
+#' - \%I: The id
+#' - \%C: The corpus prefix
+#' @export
+#' @importFrom stringr str_replace
+dramaNames <- function(x, 
+                       formatString = "%A: %T (%DM)", 
+                       orderBy = "drama") {
+  stopifnot(inherits(x, "QDDrama"))
+  
+  keys = list("%T"="documentTitle", 
+              "%A"="Name",
+              "%DR" = "Date.Premiere",
+              "%DP" = "Date.Printed",
+              "%DW" = "Date.Written",
+              "%P" = "Pnd",
+              "%I" = "drama",
+              "%C" = "corpus",
+              "%L" = "language")
+  t <- rep(formatString, times=nrow(x$meta))
+  
+  for (key in names(keys)) {
+    column <- x$meta[[keys[[key]]]]
+    t <- stringr::str_replace(t, key, ifelse(is.na(column), 
+                                             "NA",
+                                             as.character(column)))
+    
   }
-  r$Speaker.figure_id <- droplevels(r$Speaker.figure_id)
-  r$Speaker.figure_surface <- droplevels(r$Speaker.figure_surface)
-  r
+  
+  suppressWarnings(column <- apply(x$meta[,c("Date.Printed", "Date.Written", "Date.Premiere")], 
+                                   1, min, na.rm=TRUE))
+  
+  t <- stringr::str_replace(t, "%DM", ifelse(is.finite(column),
+                                             as.character(column),
+                                             "NA"))
+  
+  
+  
+  t[order(x$meta[[orderBy]])]
 }
 
+#' @title Filter characters
+#' @description This function can be used to filter characters from all tables 
+#' that contain  a character column (and are of the class QDHasCharacter). 
+#' @param hasCharacter The object we want to filter.
+#' @param drama The QDDrama object.
+#' @param by Character vector. Specifies the filter mechanism. 
+#' @param n The threshold or a list of character names/ids to keep.
+#' @details The function supports three filter mechanisms: The filter by 
+#' \code{rank} sorts the characters according to the number of tokens they speak
+#' and \emph{keeps} the top $n$ characters. The filter called \code{tokens} keeps 
+#' all characters that speak $n$ or more tokens. The filter called \code{name} 
+#' keeps the characters that are provided by name as a vector as \code{n}.
+#' @export
+#' @examples 
+#' data(rjmw.0)
+#' dstat <- dictionaryStatistics(rjmw.0)
+#' filterCharacters(dstat, rjmw.0, by="tokens", n=1000)
+#' 
+#' 
+filterCharacters <- function(hasCharacter, 
+                   drama, 
+                   by=c("rank", "tokens", "name"), 
+                   n=ifelse(by=="tokens", 500, ifelse(by=="rank", 10, c()))) {
+  
+  # verify that objects have the correct types
+  stopifnot(inherits(hasCharacter, "QDHasCharacter"))
+  stopifnot(inherits(drama, "QDDrama"))
+  
+  # match argument
+  by <- match.arg(by) 
+  
+  # retrieve character statistics
+  charStat <- characterStatistics(drama)
+  
+  # by default, we keep everyone
+  keep <- charStat$character
+  if (by == "tokens") {
+    keep <- as.character(charStat[charStat$tokens >= n,]$character)
+  } else if (by == "rank") {
+    keep <- as.character(charStat[order(charStat$tokens, decreasing = TRUE),]$character[1:n])
+  } else if (by == "name") {
+    keep <- n
+  }
 
-limit.figures.by.rank <- function(...) {
-  .Deprecated("limitFigures(by=\"rank\"")
-  limitFiguresByRank(...)
+  # filter based on keep and return
+  hasCharacter <- hasCharacter[hasCharacter$character %in% keep, ]
+  
+  # remove factor levels
+  if (is.factor(hasCharacter$character)) {
+    hasCharacter$character <- as.factor(as.character(hasCharacter$character))
+  }
+  hasCharacter
 }
 
-
-limit.figures.by.tokens <- function(...) {
-  .Deprecated("limitFigures(by=\"tokens\"")
-  limitFiguresByTokens(...)
-}
-
-#' @title Filtering Mentioned Figures
+#' @title Filtering Mentioned Characters
 #' @description This function can be used to remove the mentions of figures 
 #' that do not appear as speakers in the subsetted input text (after using 
 #' limitFigures(), for example), or to summarize them as 'OTHER'.
 #' @param t The text, a data frame listing each token for each figure
 #' @param other Whether to summarize mentioned figures as 'OTHER'
-#' @export
 #' @examples 
+#' \dontrun{
 #' data(rksp.0)
-#' text.top10.filtered <- filterMentioned(limitFigures(rksp.0$mtext))
+#' text.top10.filtered <- filterMentioned(limitFigures(rksp.0$text))
+#' }
 filterMentioned <- function(t, other=FALSE) {
   figure_id.set <- unique(t$Speaker.figure_id)
   figure_surface.set <- unique(t$Speaker.figure_surface)
@@ -131,20 +214,20 @@ tfidf1 <- function(word) {
 }
 
 #' @title TF-IDF
-#' @description This function calculates a variant TF-IDF. 
+#' @description This function calculates a variant of TF-IDF. 
 #' The input is assumed to contain relative frequencies.
 #' IDF is calculated as follows: \eqn{idf_t = \log\frac{N+1}{n_t}}, with \eqn{N} being 
 #' the total number of documents (i.e., rows) and \eqn{n_t} the number of documents
 #' containing term \eqn{t}. We add one to the denominator to prevent terms that appear
 #' in every document to become 0.
 #' 
-#' @param ftable A matrix, containing "document" as rows and "terms" as columns. 
+#' @param ftable A matrix, containing "documents" as rows and "terms" as columns. 
 #' Values are assumed to be normalized by document, i.e., contain relative frequencies.
 #' @export
 #' @examples
 #' data(rksp.0)
-#' rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE,normalize=TRUE)
-#' rksp.0.tfidf <- tfidf(rksp.0.ftable)
+#' ftable <- frequencytable(rksp.0, byCharacter=TRUE, normalize=TRUE)
+#' rksp.0.tfidf <- tfidf(ftable)
 #' @examples
 #' mat <- matrix(c(0.10,0.2, 0,
 #'                 0,   0.2, 0,
@@ -170,30 +253,83 @@ extractTopTerms <- function(mat, top=10) {
 
 
 
-#' @title Report
-#' @description generates a report for a specific dramatic text
-#' @param id The id of the text or a list of ids
-#' @param of The output file
-#' @param type The type of the report. "Single" gives a report about a single play, 
-#' while "Compare" can be used to compare multiple editions of a play
-#' @param ... Arguments passed through to the rmarkdown document
-#' @importFrom rmarkdown render
-#' @importFrom igraph graph_from_adjacency_matrix plot.igraph layout_ on_grid
+
+
+
+
 #' @export
-report <- function(id="test:rksp.0", 
-                   of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), 
-                   type=c("Single"),
-                   ...) {
-  force(of)
-  type <- match.arg(type)
+#' @description The function \code{combine(x, y)} can be used to merge 
+#' multiple objects of the type \code{QDDrama} into one.
+#' @param y A \code{QDDrama}
+#' @rdname loadDrama
+#' @examples 
+#' 
+#' data(rksp.0)
+#' data(rjmw.0)
+#' d <- combine(rjmw.0, rksp.0)
+combine <- function(x, y) {
+  stopifnot(inherits(x, "QDDrama"))
+  stopifnot(inherits(y, "QDDrama"))
+
+  r <- lapply(names(x), function(z) {
+    t <- rbind(x[[z]], y[[z]])
+    class(t) <- class(x[[z]])
+    t
+  })
+  names(r) <- names(x)
+  class(r) <- append("QDDrama", class(r))
+
+  r
+}
+
+#' @export
+#' @description The function \code{split(x)} expects an object of type \code{QDDrama} and can 
+#' be used to split a \code{QDDrama} object that consists of multiple dramas 
+#' into a list thereof. It is the counterpart to \code{combine(x, y)}.
+#' @param x The object of class \code{QDDrama} (consisting of multiple dramas). 
+#' For \code{split()} it should consistof multiple plays. For \code{combine()} it 
+#' can but doesn't have to.
+#' @param ... All other arguments are ignored.
+#' @rdname loadDrama
+#' @examples 
+#' data(rksp.0)
+#' data(rjmw.0)
+#' d <- combine(rjmw.0, rksp.0)
+#' dlist <- split(d)
+split.QDDrama <- function(x, ...) {
+  stopifnot(inherits(x, "QDDrama"))
+  r <- lapply(unique(x$characters$drama), function(y) {
+    d <- lapply(x, function(z) {
+      t <- z[z$drama == y]
+      class(t) <- class(z)
+      t
+    })
+    class(d) <- append("QDDrama", class(d))
+    d
+  })
+  names(r) <- unique(x$characters$drama)
+
+  r
+}
+
+#' @description The function \code{numberOfPlays()} determines how many
+#' different plays are contained in a single QDDrama object.
+#' @rdname loadDrama
+#' @export
+#' @examples 
+#' # returns 1
+#' numberOfPlays(rksp.0)
+#' 
+#' # returns 2
+#' numberOfPlays(combine(rksp.0, rjmw.0))
+numberOfPlays <- function(x) {
+  stopifnot(inherits(x, "QDDrama"))
   
-  fileName <- switch(type,
-         Single="Report.Rmd",
-         Compare="Compare-editions.Rmd")
-  rmarkdown::render(system.file(paste0("rmd/",fileName), package="DramaAnalysis"), 
-                    params=list(id=id,col=qd.colors,...), 
-                    output_format = "html_document", 
-                    output_file = of)
+  if ("meta" %in% names(x) && "drama" %in% names(x$meta)) {
+    length(unique(x$meta$drama))
+  } else if ("text" %in% names(x) && "drama" %in% names(x$text)) {
+    length(unique(x$text$drama))
+  }
 }
 
 #' @title Extract section
@@ -205,11 +341,12 @@ report <- function(id="test:rksp.0",
 #' @param op Whether to extract exactly one or more than one
 #' @param by Act or Scene, or matching substring
 #' @param n The number of segments to extract
-#' @export
 #' @examples 
+#' \dontrun{
 #' data(rksp.0)
 #' # Extract the second last scene
-#' dramaTail(rksp.0$mtext, by="Scene", op="==", n=2)
+#' dramaTail(rksp.0$text, by="Scene", op="==", n=2)
+#' }
 dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
   
   # prevent notes in R CMD check
@@ -237,7 +374,6 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 }
 
 #' @title Extract section
-#' @export
 #' @description Extracts a sub segment of the text(s). 
 #' The result is an empty table if more scenes or acts
 #' are given than exist in the play. In this case, a
@@ -247,9 +383,11 @@ dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
 #' @param by Act or Scene, or matching substring
 #' @param n The number of segments to extract
 #' @examples 
+#' \dontrun{
 #' data(rksp.0)
 #' # Extract everything before the 4th scene
-#' dramaHead(rksp.0$mtext, by="Scene", op="<", n=4)
+#' dramaHead(rksp.0$text, by="Scene", op="<", n=4)
+#' }
 dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
   
   # prevent notes in R CMD check

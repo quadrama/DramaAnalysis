@@ -2,15 +2,12 @@
 % Please edit documentation in R/dictionaryStatistics.R
 \name{loadFields}
 \alias{loadFields}
-\alias{enrichDictionary}
 \title{Dictionary Handling}
 \usage{
 loadFields(fieldnames = c("Liebe", "Familie"),
   baseurl = paste("https://raw.githubusercontent.com/quadrama/metadata/master",
-  ensureSuffix(directory, fileSep), sep = fileSep), directory = "fields/",
-  fileSuffix = ".txt", fileSep = "/")
-
-enrichDictionary(dictionary, model, top = 100, minimalSimilarity = 0.4)
+  ensureSuffix(directory, fileSep), sep = fileSep),
+  directory = "fields/", fileSuffix = ".txt", fileSep = "/")
 }
 \arguments{
 \item{fieldnames}{A list of names for the dictionaries. It is expected that files with that name can be found below the URL.}
@@ -24,36 +21,29 @@ Useful to retrieve enriched word fields from metadata repo.}
 
 \item{fileSep}{The file separator used to construct the URL
 Can be overwritten to load local dictionaries.}
-
-\item{dictionary}{The base dictionary, a named list of lists.}
-
-\item{model}{the loaded word2vec model}
-
-\item{top}{A maximal number of words that we consider}
-
-\item{minimalSimilarity}{The minimal similarity for a word in order 
-to be added}
 }
 \description{
 \code{loadFields()} loads dictionaries that are available on the web as plain text files.
-
-\code{enrichDictionary()} enriches an existing dictionary by addition of similar words, as 
-measured in a word2vec model.
 }
 \section{File Format}{
 
-Dictionary files should contain one word per line, with no comments or any other meta information. 
-The entry name for the dictionary is given as the file name. It's therefore best if it does not contain
-special characters. The dictionary must be in UTF-8 encoding, and the file needs to end on .txt.
+Dictionary files should contain one word per line, with no comments 
+or any other meta information. 
+The entry name for the dictionary is given as the file name. 
+It's therefore best if it does not contain
+special characters. The dictionary must be in UTF-8 encoding, and the 
+file needs to end on .txt.
 }
 
 \examples{
 \dontrun{
-# Load base dictionary
-dict_base <- loadFields(fieldnames=c("Familie","Liebe"))
-# Load the word2vec model
-model = read.vectors("models/german-fiction_vectors.bin")
-# Create a new dictionary with added words
-dict_enriched <- enrichDictionary(dict_base, model)
+# retrieves word fields from github
+fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
+
+
+# retrieves word fields from local directory (under windows)
+fields <- loadFields(filednames=c("Health", "Death"),
+                     baseurl="c:\\\\path\\\\to\\\\local\\\\directory",
+                     fileSep="\\\\")
 }
 }

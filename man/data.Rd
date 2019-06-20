@@ -13,6 +13,11 @@ rksp.0
 rjmw.0
 }
 \description{
-\code{rksp.0} represents the data set exported from Emilia Galotti
+\code{rksp.0} represents the data set exported from Lessigns 
+Emilia Galotti, \code{rjmw.0} is the one exported from Miss Sara Sampson 
+(also written by Lessing). Please note that in both plays, special 
+characters have been removed for technical reasons. The text is German, 
+but all umlauts have been replaced by another character. This is only a 
+restriction of the pre-packaged files.
 }
 \keyword{datasets}

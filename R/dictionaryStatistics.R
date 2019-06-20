@@ -9,56 +9,43 @@
 #' Useful to retrieve enriched word fields from metadata repo.
 #' @param fileSep The file separator used to construct the URL
 #' Can be overwritten to load local dictionaries.
-#' @importFrom utils read.csv
+#' @importFrom readr read_csv locale col_character
 #' @section File Format:
-#' Dictionary files should contain one word per line, with no comments or any other meta information. 
-#' The entry name for the dictionary is given as the file name. It's therefore best if it does not contain
-#' special characters. The dictionary must be in UTF-8 encoding, and the file needs to end on .txt.
-#' @rdname dictionaryHandling
-#' @export
-loadFields <- function(fieldnames=c("Liebe","Familie"),
-                      baseurl=paste("https://raw.githubusercontent.com/quadrama/metadata/master",
-                                    ensureSuffix(directory,fileSep),sep=fileSep),
-                      directory="fields/",
-                      fileSuffix=".txt",
-                      fileSep = "/") {
-  r <- list()
-  for (field in fieldnames) {
-    url <- paste(baseurl, field, fileSuffix, sep="")
-    r[[field]] <- as.character((read.csv(url, header=F, fileEncoding = "UTF-8"))$V1)
-  }
-  r
-}
-
-#' @description \code{enrichDictionary()} enriches an existing dictionary by addition of similar words, as 
-#' measured in a word2vec model.
-#' @param dictionary The base dictionary, a named list of lists.
-#' @param model the loaded word2vec model
-#' @param top A maximal number of words that we consider 
-#' @param minimalSimilarity The minimal similarity for a word in order 
-#' to be added
-#' @importFrom wordVectors closest_to
+#' Dictionary files should contain one word per line, with no comments 
+#' or any other meta information. 
+#' The entry name for the dictionary is given as the file name. 
+#' It's therefore best if it does not contain
+#' special characters. The dictionary must be in UTF-8 encoding, and the 
+#' file needs to end on .txt.
 #' @rdname dictionaryHandling
 #' @export
 #' @examples 
 #' \dontrun{
-#' # Load base dictionary
-#' dict_base <- loadFields(fieldnames=c("Familie","Liebe"))
-#' # Load the word2vec model
-#' model = read.vectors("models/german-fiction_vectors.bin")
-#' # Create a new dictionary with added words
-#' dict_enriched <- enrichDictionary(dict_base, model)
+#' # retrieves word fields from github
+#' fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
+#' 
+#' 
+#' # retrieves word fields from local directory (under windows)
+#' fields <- loadFields(filednames=c("Health", "Death"),
+#'                      baseurl="c:\\path\\to\\local\\directory",
+#'                      fileSep="\\")
 #' }
-enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) {
-  r <- dictionary
-  for (f in 1:length(dictionary)) {
-    fn <- names(dictionary)[[f]]
-    sims <- wordVectors::closest_to(model,dictionary[[f]],n=top,fancy_names = FALSE)
-    r[[fn]] <- c(r[[fn]],sims[sims$similarity>=minimalSimilarity,1])
+loadFields <- function(fieldnames=c("Liebe","Familie"),
+                       baseurl=paste("https://raw.githubusercontent.com/quadrama/metadata/master",
+                                     ensureSuffix(directory,fileSep), sep=fileSep),
+                       directory="fields/",
+                       fileSuffix=".txt",
+                       fileSep = "/") {
+  r <- list()
+  for (field in fieldnames) {
+    url <- paste(baseurl, field, fileSuffix, sep="")
+    r[[field]] <- as.character((readr::read_csv(url, 
+                                                col_names = FALSE, 
+                                                locale = readr::locale(),
+                                                col_types = c(readr::col_character())))$X1)
   }
   r
 }
-
 
 #' @name dictionaryStatistics
 #' @title Dictionary Use
@@ -67,80 +54,76 @@ enrichDictionary <- function(dictionary, model, top=100, minimalSimilarity=0.4) 
 #' across different speakers and/or segments.
 #' The function \code{dictionaryStatistics()} calculates statistics for 
 #' dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
-#' for a single word list. Functions ending on \code{L} return a list with 
-#' multiple components.
-#' @param t A text (data.frame or data.table)
+#' for a single word list. 
+#' @param drama A QDDrama object.
 #' @param fieldnames A list of names for the dictionaries. 
 #' @param fields A list of lists that contains the actual field names. 
-#' By default, we try to load the dictionaries using \code{fieldnames} and \code{baseurl}.
-#' @param normalizeByFigure Logical. Whether to normalize by figure speech length
-#' @param normalizeByField Logical. Whether to normalize by dictionary size. You usually want this.
-#' @param names Logical. Whether the resulting table contains figure ids or names.
-#' @param boost A scaling factor to generate nicer values.
-#' @param baseurl The base path delivering the dictionaries.
-#' Should end in a \code{/}.
+#' By default, we load the \code{base_dictionary}.
+#' @param normalizeByCharacter Logical. Whether to normalize by character 
+#' speech length.
+#' @param normalizeByField Logical. Whether to normalize by dictionary 
+#' size. You usually want this.
 #' @param column The table column we apply the dictionary on. 
-#' Should be either "Token.surface" or "Token.lemma".
+#' Should be either "Token.surface" or "Token.lemma", the latter is the default.
 #' @param ci Whether to ignore case. Defaults to TRUE, i.e., case is ignored.
-#' @param asList Logical. Whether to return a list with separated components or a single data.frame.
-#' @importFrom stats aggregate
-#' @importFrom stats ave
+#' @importFrom stats aggregate ave
 #' @importFrom utils as.roman
-#' @seealso \code{\link{loadFields}}
+#' @importFrom data.table as.data.table setcolorder
+#' @seealso \code{\link{loadFields}} \code{\link{characterNames}}
 #' @rdname dictionaryStatistics
 #' @examples
-#' \dontrun{
 #' # Check multiple dictionary entries
 #' data(rksp.0)
-#' dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
-#' }
+#' dstat <- dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie"))
 #' @export
-dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
+dictionaryStatistics <- function(drama, fields=DramaAnalysis::base_dictionary[fieldnames],
                                  fieldnames=c("Liebe"),
                                  segment=c("Drama","Act","Scene"),
-                                 normalizeByFigure = FALSE, 
+                                 normalizeByCharacter = FALSE, 
                                  normalizeByField = FALSE, 
-                                 byFigure = TRUE,
-                                 names = FALSE, 
-                                 boost = 1,
-                                 baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-                                 column="Token.surface", 
-                                 asList = FALSE,
+                                 byCharacter = TRUE,
+                                 column="Token.lemma", 
                                  ci = TRUE) {
+  stopifnot(inherits(drama, "QDDrama"))
+  
   
   # we need this to prevent notes in R CMD check
   .N <- NULL
   . <- NULL
   corpus <- NULL
-  drama <- NULL
   Speaker.figure_surface <- NULL
   Speaker.figure_id <- NULL
   
   
   segment <- match.arg(segment)
   
-  bylist <- list(t$corpus, t$drama, t$Speaker.figure_id)
-  if (names == TRUE)
-    bylist <- list(t$corpus, t$drama, t$Speaker.figure_surface)
-  r <- aggregate(t, by=bylist, length)[,1:3]
+  text <- switch(segment,
+                 Drama=drama$text,
+                 Act=segment(drama$text, drama$segments),
+                 Scene=segment(drama$text, drama$segments))
   
+  
+  bylist <- list(text$corpus, text$drama, text$Speaker.figure_id)
+  r <- aggregate(text, by=bylist, length)[,1:3]
+
   first <- TRUE
   singles <- lapply(names(fields),function(x) {
-    dss <- dictionaryStatisticsSingle(t, fields[[x]], ci=ci,
-                                        segment=segment,
-                                        byFigure = byFigure,
-                                        normalizeByFigure = normalizeByFigure, 
+    dss <- as.data.table(dictionaryStatisticsSingle(drama, fields[[x]], ci=ci,
+                                        segment = segment,
+                                        byCharacter = byCharacter,
+                                        normalizeByCharacter = normalizeByCharacter, 
                                         normalizeByField = normalizeByField, 
-                                        names=names, column=column)
+                                        column=column))
     colnames(dss)[ncol(dss)] <- x
     if (x == names(fields)[[1]]) {
       if (segment=="Scene") {
-        u <- unique(t[,c("begin.Scene","Number.Act", "Number.Scene")])
+        u <- unique(text[,c("begin.Scene","Number.Act", "Number.Scene")])
+        
         dss <- merge(dss, u, 
-                     by.x="begin.Scene",
-                     by.y="begin.Scene")
+                     by.x=c("Number.Act", "Number.Scene"),
+                     by.y=c("Number.Act", "Number.Scene"))
         dss$begin.Scene <- NULL
-        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","figure",x))
+        data.table::setcolorder(dss, c("corpus","drama","Number.Act","Number.Scene","character",x))
       }
       dss
     } else {
@@ -148,87 +131,75 @@ dictionaryStatistics <- function(t, fields=loadFields(fieldnames,baseurl),
     }
   })
   r <- Reduce(cbind,singles)
-
+  class(r) <- c("QDDictionaryStatistics", "QDHasCharacter", switch(segment, 
+                                                Drama = "QDByDrama",
+                                                Act   = "QDByAct",
+                                                Scene ="QDByScene"), "data.frame")
+  if (byCharacter) 
+    class(r) <- append(class(r), "QDByCharacter")
   
-  
-  if (FALSE==TRUE && normalizeByFigure == TRUE) {
-    if (names == TRUE) {
-      tokens <- t[,.N,
-                  .(corpus,drama,Speaker.figure_surface)]
-    } else {
-      tokens <- t[,.N,
-                  .(corpus,drama,Speaker.figure_id)]
-    }
-    r <- merge(r,tokens,
-               by.x=c("corpus","drama","figure"),
-               by.y=c("corpus","drama",ifelse(names==TRUE,"Speaker.figure_surface","Speaker.figure_id")),
-               allow.cartesian = TRUE)
-    r[,(ncol(r)-length(fieldnames)):ncol(r)] <- r[,(ncol(r)-length(fieldnames)):ncol(r)] / r$N
-    r$N <- NULL
-  }
-  
-  if (asList == TRUE) {
-    l <- as.list(r[,1:switch(segment,Drama=3,Act=4,Scene=5)])
-    l$mat <- as.matrix(r[,(ncol(r)-length(fields)+1):ncol(r)])
-    rownames(l$mat) <- switch(segment, 
-                              Drama=as.character(l$figure),
-                              Act=paste(l$figure,utils::as.roman(l$Number.Act)),
-                              Scene=paste(l$figure,l$begin.Scene))
-    l
-  } else {
-    r
-  }
+  r
 }
+
 
 #' @param wordfield A character vector containing the words or lemmas 
 #' to be counted (only for \code{*Single}-functions)
-#' @param fieldNormalizer defaults to the length of the wordfield
+#' @param fieldNormalizer Defaults to the length of the wordfield. 
+#' If normalizeByField is given, the absolute numbers are divided 
+#' by this number.
 #' @param segment The segment level that should be used. By default, 
 #' the entire play will be used. Possible values are "Drama" (default), 
-#' "Act" or "Scene"
-#' @param colnames The column names to be used
-#' @param byFigure Logical, defaults to TRUE. If false, values will be calculated
+#' "Act" or "Scene".
+#' @param colnames The column names to be used in the output table.
+#' @param byCharacter Logical, defaults to TRUE. If false, values will be calculated
 #' for the entire segment (play, act, or scene), and not for individual characters.
 #' @examples
 #' # Check a single dictionary entries
 #' data(rksp.0)
-#' fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
+#' fstat <- dictionaryStatisticsSingle(rksp.0, wordfield=c("der"))
 #' @importFrom stats aggregate
 #' @importFrom stats na.omit
 #' @importFrom reshape2 melt
 #' @importFrom stats as.formula
 #' @rdname dictionaryStatistics
 #' @export
-dictionaryStatisticsSingle <- function(t, wordfield=c(), 
-                                       names = FALSE, 
+dictionaryStatisticsSingle <- function(drama, wordfield=c(), 
                                        segment=c("Drama","Act","Scene"),
-                                       normalizeByFigure = FALSE, 
+                                       normalizeByCharacter = FALSE, 
                                        normalizeByField = FALSE, 
-                                       byFigure = TRUE,
-                                       fieldNormalizer=length(wordfield), 
-                                       column="Token.surface", ci=TRUE,
+                                       byCharacter = TRUE,
+                                       fieldNormalizer = length(wordfield), 
+                                       column="Token.lemma", 
+                                       ci=TRUE,
                                        colnames=NULL)
   {
+  stopifnot(inherits(drama, "QDDrama"))
+  
   # we need this to prevent notes in R CMD check
   .N <- NULL
   . <- NULL
   .SD <- NULL
-  
+  `:=` <- NULL
+  N <- NULL
+  value <- NULL
+
   segment <- match.arg(segment)
+  
+  text <- switch(segment,
+                 Drama=drama$text,
+                 Act=segment(drama$text, drama$segments),
+                 Scene=segment(drama$text, drama$segments))
+  
   bycolumns <- c("corpus",
                  switch(segment,
                         Drama=c("drama"),
                         Act=c("drama","Number.Act"),
-                        Scene=c("drama","begin.Scene"))
+                        Scene=c("drama","Number.Act","Number.Scene"))
                  )
-  if (byFigure == TRUE) {
-    bycolumns <- c(bycolumns, ifelse(names==TRUE,
-                                     "Speaker.figure_surface",
-                                     "Speaker.figure_id"))
-  }
-  
+  #if (byFigure == TRUE) {
+  #  bycolumns <- c(bycolumns, "Speaker.figure_id")
+  #}
   bylist <- paste(bycolumns,collapse=",")
-  dt <- as.data.table(t)
   if (ci) {
     wordfield <- tolower(wordfield)
     casing <- tolower
@@ -239,123 +210,125 @@ dictionaryStatisticsSingle <- function(t, wordfield=c(),
     fieldNormalizer <- 1
   }
   
+  dt <- data.table(text)
   dt$match <- casing(dt[[column]]) %in% wordfield
-  form <- stats::as.formula(paste0("~ ", paste(c(bycolumns,"match"), collapse=" + ")))
-  xt <- data.table::data.table(reshape2::melt(xtabs(form, data=dt)))
-  if (normalizeByFigure == TRUE) {
-    r <- xt[,.((sum(.SD[match==TRUE]$value)/fieldNormalizer)/sum(.SD$value)),
-       keyby=bylist]
+  
+  # counting
+  # xt <- dt[,.(x=sum(match)),keyby=bylist]
+  if (byCharacter == TRUE) {
+    xt <- dt[,melt(xtabs(~ Speaker.figure_id, data=.SD[match])), 
+             keyby=bylist]
   } else {
-    r <- xt[,.(sum(.SD[match==TRUE]$value)/fieldNormalizer),
-            keyby=bylist]
+    xt <- dt[,.(value=sum(match)), keyby=bylist]
   }
   
+  if(normalizeByField || normalizeByCharacter) {
+    xt$value <- as.double(xt$value)
+  }
+  
+  # remove combinations of character and play that don't exist
+  if (byCharacter == TRUE) {
+    xt <- unique(merge(xt, drama$characters, 
+                by.x = c("corpus","drama","Speaker.figure_id"), 
+                by.y = c("corpus","drama","figure_id"))[,names(xt), with=F])
+  }
+  # xt$match <- NULL
+  
+  if (normalizeByCharacter == TRUE) {
+    if (byCharacter == TRUE) {
+      bycolumns <- append(bycolumns,"Speaker.figure_id")
+    }
+    bylist <- paste(bycolumns, collapse=",")
+    xt <- merge(xt, dt[,.N,keyby=bylist], 
+          by.x = bycolumns,
+          by.y = bycolumns)
+    xt[,value:=((value/fieldNormalizer)/N), keyby=bylist]
+    xt <- xt[,-"N"]
+  } else {
+    xt$value <- as.double(xt$value) / fieldNormalizer
+  }
+  
+  r <- xt
   colnames(r)[ncol(r)] <- "x"
-  colnames(r)[ncol(r)-1] <- "figure"
+  if (byCharacter) {
+    colnames(r)[ncol(r)-1] <- "character"
+  }
   if (! is.null(colnames)) {
     colnames(r) <- colnames
   }
   
   r[is.nan(r$x)]$x <- 0
+  class(r) <- c("QDDictionaryStatistics", "QDHasCharacter", 
+                switch(segment, 
+                       Drama = "QDByDrama",
+                       Act   = "QDByAct",
+                       Scene ="QDByScene"), "data.frame", class(r))
+  if (byCharacter) {
+    class(r) <- append(class(r), "QDByCharacter")
+    r$character <- as.factor(r$character)
+  }
   r
 }
 
-dictionaryStatisticsSingleL <- function(...) {
-  dstat <- dictionaryStatisticsSingle(...)
-  as.list(dstat)
-}
 
-#' @description \code{dictionaryStatisticsL()} should not be used 
-#' anymore. Please use \code{dictionaryStatistics()} with the parameter
-#' \code{asList=TRUE}
-#' @param ... All parameters are passed to \code{\link{dictionaryStatistics}}
-#' @section Returned Lists:
-#' The returned list has three named elements:
-#' \describe{
-#' \item{drama}{The drama in which these counts have been counted}
-#' \item{figure}{the figure these values has spoken}
-#' \item{mat}{A matrix containing the actual values}
-#' }
-#' @rdname dictionaryStatistics
+
+
+#' @description The function \code{filterByDictionary()} can be used to filter a matrix as produced by 
+#' \code{frequencytable()} by the words in the given dictionary(/-ies).
+#' @param ft A matrix as produced by \code{frequencytable()}.
+#' @param fieldnames A list of names for the dictionaries.
+#' @param fields A list of lists that contains the actual field names. 
+#' By default, we load the base_dictionary (as in \code{dictionaryStatistics()}).
 #' @export
-dictionaryStatisticsL <- function(...) {
-  .Deprecated("dictionaryStatistics")
-  dictionaryStatistics(..., asList=TRUE)
-}
-
-
-dictionary.statistics <- function(...) {
-  .Deprecated("dictionaryStatistics")
-  dictionaryStatistics(...)
-}
-
-#' @title regroup
-#' @description This function isolates the dictionary statistics for
-#' each character. The return value is a list containing lists similar
-#' to the output of `dictionaryStatistics()`, but only containing 
-#' the table for one character.
-#' @param dstat A list generated by `dictionaryStatistics()`, 
-#' using the `asList` parameter
-#' @param by A character vector, either "Character" or "Field".
-#' Depending on this parameter, we get a list organized by character 
-#' or a list organized by field. If it's organised by character, it allows
-#' comparison of fields for a single character. If organised by field, 
-#' we can compare different characters for a single field.
-#' @export
+#' @rdname frequencyTable
 #' @examples
 #' data(rksp.0)
-#' field <- list(Liebe=c("liebe","lieben","herz"))
-#' dsl <- dictionaryStatistics(rksp.0$mtext, 
-#'    fields=field,
-#'    normalizeByFigure=TRUE,
-#'    asList=TRUE,
-#'    segment="Scene")
-#' dslr <- regroup(dsl, by="Field")
-#' \dontrun{
-#' matplot(apply(dslr$Liebe, 1, cumsum),type="l", main="Liebe", col=rainbow(14))
-#' legend(x="topleft", legend=rownames(dslr$Liebe),lty=1:5,col=rainbow(14), cex = 0.4)
-#' }
-regroup <- function(dstat, by=c("Character","Field")) {
-  by = match.arg(by)
-  switch(by,
-         Character={
-          l <- lapply(levels(dstat$figure), function(x) {
-          myLines = which(dstat$figure == x)
-    
-          innerList <- list()
-          innerList$mat <- dstat$mat[myLines,]
-          if ("Number.Scene" %in% names(dstat)) {
-            innerList$Number.Scene <- dstat$Number.Scene[myLines]
-          }
-          if ("Number.Act" %in% names(dstat)) {
-            innerList$Number.Act <- dstat$Number.Act[myLines]
-          }
-          innerList
-        })
-        names(l) <- levels(dstat$figure)
-        return(l)
-        },
-        Field={
-          l <- lapply(colnames(dstat$mat), function(x) {
-            df <- data.frame(Field=dstat$mat[,x])
-            df$figure <- dstat$figure
-            if ("Number.Scene" %in% names(dstat)) {
-              df$Number.Scene <- dstat$Number.Scene
-            }
-            if ("Number.Act" %in% names(dstat)) {
-              df$Number.Act <- dstat$Number.Act
-            }
-            if ("Number.Act" %in% names(dstat) && "Number.Scene" %in% names(dstat)) {
-              df$Segment <- paste(as.roman(df$Number.Act), df$Number.Scene)
-            }
-            
-            df2 <- reshape(df, direction="wide", timevar=c("Segment"), idvar=c("figure"),drop=c("Number.Act","Number.Scene"))
-            rownames(df2) <- df2$figure
-            df2$figure <- NULL
-            colnames(df2) <- substr(colnames(df2), 7, 100)
-            df2
-          })
-          names(l) <- colnames(dstat$mat)
-          return(l)
-        });
+#' ftable <- frequencytable(rksp.0, 
+#'                          byCharacter = TRUE)
+#'                                               
+#' filtered <- filterByDictionary(ftable, 
+#'                                fieldnames=c("Krieg", "Familie"))
+#' 
+
+filterByDictionary <- function(ft, 
+                           fields=DramaAnalysis::base_dictionary[fieldnames],
+                           fieldnames=c("Liebe")) {
+  as.matrix(ft[,which(colnames(ft) %in% unlist(fields))])
 }
+
+#' @export
+#' @rdname dictionaryStatistics
+#' @description Extract the number part from a 
+#' \code{QDDictionaryStatistics} table as a matrix 
+#' @param x An object of the type \code{QDDictionaryStatistics}, 
+#' e.g., the output of \code{dictionaryStatistics}.
+#' @param ... All other parameters are passed to \code{as.matrix.data.frame()}.
+#' @return A numeric matrix that contains the frequency with which 
+#' a dictionary is present in a subset of tokens
+#' @examples
+#' mat <- as.matrix(dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie")))
+as.matrix.QDDictionaryStatistics <- function (x, ...) {
+  stopifnot(inherits(x, "QDDictionaryStatistics"))
+  
+  # check if there is a column for the character
+  if (inherits(x, "QDByCharacter")) {
+    byCharacter <- TRUE
+  } else {
+    byCharacter <- FALSE
+  }
+  
+  # check how many segment columns there are
+  if (inherits(x, "QDByDrama")) {
+    segment <- "Drama"
+    metaCols <- 1:(3+byCharacter)
+  } else if (inherits(x, "QDByAct")) {
+    segment <- "Act"
+    metaCols <- 1:(4+byCharacter)
+  } else if (inherits(x, "QDByScene")) {
+    segment <- "Scene"
+    metaCols <- 1:(5+byCharacter)
+  }
+  
+  as.matrix.data.frame(x[,max(metaCols):ncol(x)])
+}
+

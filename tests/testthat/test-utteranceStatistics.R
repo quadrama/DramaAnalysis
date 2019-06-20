@@ -1,17 +1,28 @@
+context("utteranceStatistics()")
+
 data(rksp.0)
 
-ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 100, 
-                             normalizeByDramaLength = FALSE)
+ustat <- utteranceStatistics(rksp.0)
+test_that("uterranceStatistics() has correct type", {
+  expect_true(inherits(ustat, "QDUtteranceStatistics"))
+  expect_true(inherits(ustat, "QDHasCharacter"))
+  expect_true(inherits(ustat, "data.frame"))
+})
 
-expect_that(length(ustat), equals(5))
-expect_that(length(ustat$drama), equals(835))
-expect_that(median(ustat$utteranceLength), equals(17))
-expect_that(median(ustat[ustat$figure=="ODOARDO GALOTTI",5]), equals(14))
+ustat <- utteranceStatistics(rksp.0, normalizeByDramaLength = FALSE)
+test_that("utteranceStatistics(rksp.0, normalizeByDramaLength = FALSE) 
+          has correct dimensions and produces correct output.", {
+  expect_equal(length(ustat), 5)
+  expect_equal(length(ustat$drama), 835)
+  expect_equal(median(ustat$utteranceLength), 17)
+  expect_equal(median(ustat[ustat$character=="odoardo",]$utteranceLength), 14)
+})
 
-ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 10, 
-                             normalizeByDramaLength = TRUE)
-
-expect_that(length(ustat), equals(6))
-expect_that(length(ustat$drama), equals(812))
-expect_equal(median(ustat$utteranceLength), 0.0006996082, tolerance=0.00001)
-expect_equal(median(ustat[ustat$figure=="ODOARDO GALOTTI",5]), 0.0005596866, tolerance=0.00001)
+test_that("utteranceStatistics(rksp.0, normalizeByDramaLength = TRUE) 
+          has correct dimensions and produces correct output", {
+  ustat <- utteranceStatistics(rksp.0, normalizeByDramaLength = TRUE)
+  expect_equal(length(ustat), 5)
+  expect_equal(length(ustat$drama), 835)
+  expect_equal(median(ustat$utteranceLength), 0.0006702149, tolerance=0.00001)
+  expect_equal(median(ustat[ustat$character=="odoardo",]$utteranceLength), 0.0005519417, tolerance=0.00001)
+})

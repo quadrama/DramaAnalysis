@@ -7,11 +7,11 @@
 tfidf(ftable)
 }
 \arguments{
-\item{ftable}{A matrix, containing "document" as rows and "terms" as columns. 
+\item{ftable}{A matrix, containing "documents" as rows and "terms" as columns. 
 Values are assumed to be normalized by document, i.e., contain relative frequencies.}
 }
 \description{
-This function calculates a variant TF-IDF. 
+This function calculates a variant of TF-IDF. 
 The input is assumed to contain relative frequencies.
 IDF is calculated as follows: \eqn{idf_t = \log\frac{N+1}{n_t}}, with \eqn{N} being 
 the total number of documents (i.e., rows) and \eqn{n_t} the number of documents
@@ -20,8 +20,8 @@ in every document to become 0.
 }
 \examples{
 data(rksp.0)
-rksp.0.ftable <- frequencytable(rksp.0$mtext,byFigure=TRUE,normalize=TRUE)
-rksp.0.tfidf <- tfidf(rksp.0.ftable)
+ftable <- frequencytable(rksp.0, byCharacter=TRUE, normalize=TRUE)
+rksp.0.tfidf <- tfidf(ftable)
 mat <- matrix(c(0.10,0.2, 0,
                 0,   0.2, 0,
                 0.1, 0.2, 0.1,

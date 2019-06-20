@@ -16,7 +16,6 @@ Three additional *types* of branches are used:
 - Set all version numbers to the correct version
   - `DESCRIPTION` file for the R package
   - `README.md` for badge
-- Create vignettes by running `devtools::build_vignettes()` in R
 - Check that the R package is well: `make check`
 - Make a source package by running `make build`
 - If all works well, merge the branch into master, tag it with `v1.0.0`
@@ -26,4 +25,3 @@ Three additional *types* of branches are used:
   install_github("quadrama/DramaAnalysis", ref="v2.0.0") 
   ```
 - Add the PDF documentation for the R package to the release page
-- Post the updated vignettes on the wiki: `make wiki`

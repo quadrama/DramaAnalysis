@@ -1,4 +1,15 @@
 language: r
-sudo: false
+r:
+- 3.3
+- 3.4
+- oldrel
+- release
+os:
+- linux
+- osx
+matrix:
+  exclude:
+  - r: 3.4
+    os: osx
 cache: packages 
 warnings_are_errors: false

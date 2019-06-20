@@ -3,65 +3,66 @@
 \name{dictionaryStatistics}
 \alias{dictionaryStatistics}
 \alias{dictionaryStatisticsSingle}
-\alias{dictionaryStatisticsL}
+\alias{as.matrix.QDDictionaryStatistics}
 \title{Dictionary Use}
 \usage{
-dictionaryStatistics(t, fields = loadFields(fieldnames, baseurl),
+dictionaryStatistics(drama,
+  fields = DramaAnalysis::base_dictionary[fieldnames],
   fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
-  normalizeByFigure = FALSE, normalizeByField = FALSE, byFigure = TRUE,
-  names = FALSE, boost = 1,
-  baseurl = "https://raw.githubusercontent.com/quadrama/metadata/master/fields/",
-  column = "Token.surface", asList = FALSE, ci = TRUE)
+  normalizeByCharacter = FALSE, normalizeByField = FALSE,
+  byCharacter = TRUE, column = "Token.lemma", ci = TRUE)
 
-dictionaryStatisticsSingle(t, wordfield = c(), names = FALSE,
-  segment = c("Drama", "Act", "Scene"), normalizeByFigure = FALSE,
-  normalizeByField = FALSE, byFigure = TRUE,
-  fieldNormalizer = length(wordfield), column = "Token.surface",
+dictionaryStatisticsSingle(drama, wordfield = c(), segment = c("Drama",
+  "Act", "Scene"), normalizeByCharacter = FALSE,
+  normalizeByField = FALSE, byCharacter = TRUE,
+  fieldNormalizer = length(wordfield), column = "Token.lemma",
   ci = TRUE, colnames = NULL)
 
-dictionaryStatisticsL(...)
+\method{as.matrix}{QDDictionaryStatistics}(x, ...)
 }
 \arguments{
-\item{t}{A text (data.frame or data.table)}
+\item{drama}{A QDDrama object.}
 
 \item{fields}{A list of lists that contains the actual field names. 
-By default, we try to load the dictionaries using \code{fieldnames} and \code{baseurl}.}
+By default, we load the \code{base_dictionary}.}
 
 \item{fieldnames}{A list of names for the dictionaries.}
 
 \item{segment}{The segment level that should be used. By default, 
 the entire play will be used. Possible values are "Drama" (default), 
-"Act" or "Scene"}
+"Act" or "Scene".}
 
-\item{normalizeByFigure}{Logical. Whether to normalize by figure speech length}
+\item{normalizeByCharacter}{Logical. Whether to normalize by character 
+speech length.}
 
-\item{normalizeByField}{Logical. Whether to normalize by dictionary size. You usually want this.}
+\item{normalizeByField}{Logical. Whether to normalize by dictionary 
+size. You usually want this.}
 
-\item{byFigure}{Logical, defaults to TRUE. If false, values will be calculated
+\item{byCharacter}{Logical, defaults to TRUE. If false, values will be calculated
 for the entire segment (play, act, or scene), and not for individual characters.}
 
-\item{names}{Logical. Whether the resulting table contains figure ids or names.}
-
-\item{boost}{A scaling factor to generate nicer values.}
-
-\item{baseurl}{The base path delivering the dictionaries.
-Should end in a \code{/}.}
-
 \item{column}{The table column we apply the dictionary on. 
-Should be either "Token.surface" or "Token.lemma".}
-
-\item{asList}{Logical. Whether to return a list with separated components or a single data.frame.}
+Should be either "Token.surface" or "Token.lemma", the latter is the default.}
 
 \item{ci}{Whether to ignore case. Defaults to TRUE, i.e., case is ignored.}
 
 \item{wordfield}{A character vector containing the words or lemmas 
 to be counted (only for \code{*Single}-functions)}
 
-\item{fieldNormalizer}{defaults to the length of the wordfield}
+\item{fieldNormalizer}{Defaults to the length of the wordfield. 
+If normalizeByField is given, the absolute numbers are divided 
+by this number.}
 
-\item{colnames}{The column names to be used}
+\item{colnames}{The column names to be used in the output table.}
 
-\item{...}{All parameters are passed to \code{\link{dictionaryStatistics}}}
+\item{x}{An object of the type \code{QDDictionaryStatistics}, 
+e.g., the output of \code{dictionaryStatistics}.}
+
+\item{...}{All other parameters are passed to \code{as.matrix.data.frame()}.}
+}
+\value{
+A numeric matrix that contains the frequency with which 
+a dictionary is present in a subset of tokens
 }
 \description{
 These methods retrieve 
@@ -69,33 +70,20 @@ count the number of occurrences of the words in the dictionaries,
 across different speakers and/or segments.
 The function \code{dictionaryStatistics()} calculates statistics for 
 dictionaries with multiple entries, \code{dictionaryStatisticsSingle()} only
-for a single word list. Functions ending on \code{L} return a list with 
-multiple components.
+for a single word list.
 
-\code{dictionaryStatisticsL()} should not be used 
-anymore. Please use \code{dictionaryStatistics()} with the parameter
-\code{asList=TRUE}
+Extract the number part from a 
+\code{QDDictionaryStatistics} table as a matrix
 }
-\section{Returned Lists}{
-
-The returned list has three named elements:
-\describe{
-\item{drama}{The drama in which these counts have been counted}
-\item{figure}{the figure these values has spoken}
-\item{mat}{A matrix containing the actual values}
-}
-}
-
 \examples{
-\dontrun{
 # Check multiple dictionary entries
 data(rksp.0)
-dstat <- dictionaryStatistics(rksp.0$mtext, fieldnames=c("Krieg","Familie"), names=TRUE)
-}
+dstat <- dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie"))
 # Check a single dictionary entries
 data(rksp.0)
-fstat <- dictionaryStatisticsSingle(rksp.0$mtext, wordfield=c("der"), names=TRUE)
+fstat <- dictionaryStatisticsSingle(rksp.0, wordfield=c("der"))
+mat <- as.matrix(dictionaryStatistics(rksp.0, fieldnames=c("Krieg","Familie")))
 }
 \seealso{
-\code{\link{loadFields}}
+\code{\link{loadFields}} \code{\link{characterNames}}
 }

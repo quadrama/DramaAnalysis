@@ -4,13 +4,14 @@
 \alias{keyness}
 \title{Keywords}
 \usage{
-keyness(ft, row = 1, epsilon = 1e-100, siglevel = 0.05,
-  method = c("loglikelihood", "logratio"), minimalFrequency = 10)
+keyness(ft, categories = c(1, rep(2, nrow(ft) - 1)), epsilon = 1e-100,
+  siglevel = 0.05, method = c("loglikelihood", "logratio"),
+  minimalFrequency = 10)
 }
 \arguments{
 \item{ft}{The frequency table}
 
-\item{row}{The row number we want to compare to the others, can be a vector of row numbers}
+\item{categories}{A factor or numeric vector that represents an assignment of categories.}
 
 \item{epsilon}{null values are replaced by this value, in order to avoid division by zero}
 
@@ -21,19 +22,25 @@ keyness(ft, row = 1, epsilon = 1e-100, siglevel = 0.05,
 \item{minimalFrequency}{Words less frequent than this value are not considered at all}
 }
 \value{
-A list of keywords, sorted by their log-likelihood value, calculated according to http://ucrel.lancs.ac.uk/llwizard.html
+A list of keywords, sorted by their log-likelihood or log ratio value, calculated according to \href{http://ucrel.lancs.ac.uk/llwizard.html}{http://ucrel.lancs.ac.uk/llwizard.html}.
 }
 \description{
 Given a frequency table (with texts as rows and words as columns),
 this function calculates log-likelihood and log ratio of one set of rows against the other rows. 
-The return value is a list containing scores for each word
+The return value is a list containing scores for each word. If the method 
+is \code{loglikelihood}, the returned scores are unsigned G2 values. To estimate the 
+\emph{direction} of the keyness, the \code{log ratio} is more informative. A nice introduction 
+into log ratio can be found \href{http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/}{here}.
 }
 \examples{
 data("rksp.0")
-ft <- frequencytable(rksp.0$mtext,byFigure = TRUE,names=TRUE,normalize = FALSE)
+ft <- frequencytable(rksp.0, byCharacter = TRUE, normalize = FALSE)
 # Calculate log ratio for all words
-keywords <- keyness(ft, method="logratio", row=7, minimalFrequency = 5)
+genders <- factor(c("m", "m", "m", "m", "f", "m", "m", "m", "f", "m", "m", "f", "m"))
+keywords <- keyness(ft, method = "logratio", 
+                    categories = genders, 
+                    minimalFrequency = 5)
 # Remove words that are not significantly different
-keywords <- keywords[names(keywords) \%in\% names(keyness(ft, row=1,siglevel=0.01))]
+keywords <- keywords[names(keywords) \%in\% names(keyness(ft, siglevel = 0.01))]
 
 }

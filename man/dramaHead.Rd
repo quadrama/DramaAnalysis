@@ -22,7 +22,9 @@ are given than exist in the play. In this case, a
 warning is printed.
 }
 \examples{
+\dontrun{
 data(rksp.0)
 # Extract everything before the 4th scene
-dramaHead(rksp.0$mtext, by="Scene", op="<", n=4)
+dramaHead(rksp.0$text, by="Scene", op="<", n=4)
+}
 }

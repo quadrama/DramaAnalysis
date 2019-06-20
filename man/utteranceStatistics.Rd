@@ -4,24 +4,26 @@
 \alias{utteranceStatistics}
 \title{Utterance Statistics}
 \usage{
-utteranceStatistics(t, numberOfFigures = 10, normalizeByDramaLength = TRUE)
+utteranceStatistics(drama, normalizeByDramaLength = TRUE)
 }
 \arguments{
-\item{t}{The dramatic text(s)}
-
-\item{numberOfFigures}{The maximal number of figures per drama to include. Default: 10. Set to FALSE to include all figures.}
+\item{drama}{The dramatic text(s)}
 
 \item{normalizeByDramaLength}{Logical value. If true, the resulting values will be normalized by the length of the drama.}
 }
 \description{
-This method calculates the length of each utterance, organised by figure and drama.
+This method calculates the length of each utterance, organised by 
+character and drama.
 }
 \examples{
 data(rksp.0)
-ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 5)
+ustat <- utteranceStatistics(rksp.0)
 \dontrun{
-boxplot(ustat$utteranceLength ~ ustat$figure,
+boxplot(ustat$utteranceLength ~ ustat$character,
    col=qd.colors[1:5],
    las=2, frame=FALSE)
 }
+}
+\seealso{
+\code{\link{characterNames}}
 }

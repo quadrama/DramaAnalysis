@@ -9,13 +9,13 @@ output:
     toc_depth: 2
 params:
   id:
-  - "turm:1"
-  - "turm:2"
-  - "turm:3"
+  - "test:rksp.0"
+  - "test:rjmw.0"
   col: NULL
   dynamic: TRUE
   charAlignment: NULL
   topn: 10
+  titles: NULL
 ---
 
 
@@ -53,11 +53,16 @@ library(stringdist)
 
 #print(class(params$id))
 #print(params$id[[2]])
-text <- loadSegmentedText(params$id)
-meta <- loadMeta(params$id)
-characters <- loadCharacters(params$id)
-#titles <- lapply(meta,function(x) { as.character(x[1,"documentTitle"]) })
-
+drama <- loadDrama(params$id)
+text <- segment(drama$text, drama$segments)
+meta <- drama$meta
+characters <- drama$characters
+if (is.null(params$titles)) {
+  titles <- toFigureName(meta$documentTitle)
+} else {
+  titles <- params$titles
+}
+names(titles) <- params$id
 ```
 
 
@@ -103,8 +108,8 @@ tblm <- as.matrix(tbl[,3:ncol(tbl)])
 
 barplot(tblm,
         beside=TRUE,
-        legend.text = rownames(tbl),
-        col=params$col)
+        legend.text = titles[rownames(tbl)],
+        col=params$col,args.legend = c(x="bottom"))
 
 #knitr::kable(tbl)
 
@@ -119,7 +124,7 @@ barplot(tblm,
 ```{r}
 tbl <- text[,.(Characters=length(unique(Speaker.figure_surface))),
             .(corpus,drama)]
-rownames(tbl) <- paste(tbl$corpus,tbl$drama,sep=":")
+rownames(tbl) <- titles[paste(tbl$corpus,tbl$drama,sep=":")]
 tblm <- as.matrix(tbl[,3:ncol(tbl)])
 ```
 
@@ -128,13 +133,13 @@ tblm <- as.matrix(tbl[,3:ncol(tbl)])
 ```{r}
 tbl <- text[,.(Characters=length(unique(Speaker.figure_surface))),
             .(corpus,drama)]
-rownames(tbl) <- paste(tbl$corpus,tbl$drama,sep=":")
+rownames(tbl) <- titles[paste(tbl$corpus,tbl$drama,sep=":")]
 tblm <- as.matrix(tbl[,3:ncol(tbl)])
 rownames(tblm) <- rownames(tbl)
 barplot(tblm,
         beside=TRUE,
         legend.text = rownames(tbl),
-        col=params$col)
+        col=params$col, args.legend = c(x="bottom"))
 
 #knitr::kable(tbl)
 
@@ -157,26 +162,29 @@ knitr::kable(as.matrix(dist(tblm)))
 
 ### Overview
 
+This plot shows the spoken words of the most talkative `r params$topn` characters per play.
+
 ```{r}
-tl <- limitFigures(text, threshold = params$topn)
 
-fstat <- figureStatistics(tl, names=TRUE)
+fstat <- characterStatistics(drama) %>%
+  filterCharacters(drama, n=params$topn) %>%
+  characterNames(drama)
 
-xt <- xtabs(tokens ~  drama+figure,data=fstat)
+xt <- xtabs(tokens ~ paste(corpus,drama,sep=":")+character,data=fstat)
 
 attr(xt, "class") <- NULL 
 attr(xt, "call") <- NULL 
 #barplot(xt, beside=TRUE,las=3)
 
 xt <- as.data.frame(t(xt))
-
+colnames(xt) <- titles[colnames(xt)]
 hc <- highchart()
 
 hc <- hc_yAxis(hc, max=max(xt))
 hc <- hc_xAxis(hc, categories=rownames(xt))
 
 for (i in 1:ncol(xt)) {
-  hc <- hc_add_series(hc, xt[,i], type="column", name=i)
+  hc <- hc_add_series(hc, xt[,i], type="column", name=colnames(xt)[i])
 }
 
 hc
@@ -185,13 +193,20 @@ hc
 
 ### Table
 
+The table shows token numbers for all characters.
+
 ```{r, results="asis"}
-fstat <- figureStatistics(text, names=TRUE)
+fstat <- characterStatistics(drama) %>%
+  characterNames(drama)
 
-xt <- xtabs(tokens ~  drama+figure,data=fstat)
+xt <- xtabs(tokens ~ paste(corpus,drama,sep=":")+character,data=fstat)
+attr(xt, "class") <- NULL 
+attr(xt, "call") <- NULL 
+xt <- as.data.frame(t(xt))
+colnames(xt) <- titles[colnames(xt)]
 
 
-knitr::kable(t(xt), format="markdown")
+knitr::kable(xt, format="markdown")
 
 
 ```
@@ -201,11 +216,12 @@ knitr::kable(t(xt), format="markdown")
 
 ### Lengths
 
-This plot shows the distribution of utterange lengths for the top *n* characters in each play. If two characters are aligned, their box is shown side by side. More on [box plots in Wikipedia](https://en.wikipedia.org/wiki/Box_plot). Dots outside of the box indicate potential outliers, color shows the play they belong to.
+This plot shows the distribution of utterange lengths for the top `r params$topn` characters in each play. If two characters are aligned, their box is shown side by side. More on [box plots in Wikipedia](https://en.wikipedia.org/wiki/Box_plot). Dots outside of the box indicate potential outliers, color shows the play they belong to.
 
 ```{r}
-#tl <- limitFigures(text, threshold = 15)
-ustat <- utteranceStatistics(text, numberOfFigures = params$topn)
+ustat <- utteranceStatistics(drama) %>%
+  filterCharacters(drama, n = params$topn) %>%
+  characterNames(drama)
 
 if (is.null(params$col)) {
   col = "black"
@@ -214,7 +230,7 @@ if (is.null(params$col)) {
 }
 
 hcboxplot(x=ustat$utteranceLength, 
-          var=as.character(ustat$figure), 
+          var=as.character(ustat$character), 
           var2=as.character(ustat$drama),
           color=col
           )
@@ -224,11 +240,12 @@ hcboxplot(x=ustat$utteranceLength,
 
 ### Table
 
+This table records information about *every utterance* in each play. It is therefore very long.
+
 ```{r, results="asis"}
 
-#b <- boxplot(utteranceLength~drama+figure, data=ustat, plot=FALSE)
+knitr::kable(ustat, format="markdown")
 
-#knitr::kable(ustat,format="markdown")
 ```
 
 
@@ -248,34 +265,53 @@ utteranceDistances <- function(t) {
 }
 
 text[,
-     mcp:=max(end),
+     mcp:=max(utteranceEnd),
      .(corpus,drama)][,
-                      .(utteranceLength=.N,rbegin=begin/mcp),
-                      .(corpus,drama,begin,Speaker.figure_surface)][]
+                      .(utteranceLength=.N,rbegin=utteranceBegin/mcp),
+                      .(corpus,drama,utteranceBegin,Speaker.figure_surface)][]
 
 ```
 
 # Presence and Utterances {.tabset}
 
-```{r,echo=FALSE}
-ustat <- utteranceStatistics(text, normalizeByDramaLength = FALSE, numberOfFigures = FALSE)
-ustat$figure <- tools::toTitleCase(tolower(ustat$figure))
+```{r}
+
+ustat <- utteranceStatistics(drama, normalizeByDramaLength = FALSE) %>%
+  filterCharacters(drama, n=params$topn) %>%
+  characterNames(drama)
+
 ```
 
 ## All Utterances
-```{r,echo=FALSE}
+```{r}
 par(mar=c(1,9,1,0),xpd=FALSE)
 
-for (id in params$ids) {
-  plotUtterancePositions(ustat[paste(ustat$corpus,ustat$drama,sep=":") == id,],
-                         text[paste(text$corpus,text$drama,sep=":") == id,],
-                         xlab="")
+for (id in params$id) {
+  splid <- strsplit(id,":",fixed=TRUE)[[1]]
+  plot(ustat,
+       xlab="", 
+       main=toFigureName(meta[meta$corpus==splid[1] & meta$drama==splid[2],3]))
 }
 ```
 
 
 # Configuration and Copresence {.tabset}
 
-```{r}
+```{r, fig.height=10}
+configs <- lapply(split(drama), function(x) {
+  c <- configuration(x, onlyPresence = TRUE, 
+                     segment = "Scene") %>%
+    characterNames(x)
+  copr <- as.matrix(c) %*% t(as.matrix(c))
+  rownames(copr) <- c$character
+  colnames(copr) <- c$character
+  
+  copr <- reshape::melt.array(copr)
+  copr$drama <- x$meta$drama
+  copr
+})
 
+allcopresence <- Reduce(rbind, configs)
+allcopresence$X1 <- as.character(allcopresence$X1)
+allcopresence$X2 <- as.character(allcopresence$X2)
 ```

@@ -6,16 +6,17 @@
 \alias{scenicDifference}
 \title{Measuring Personnel Exchange over Boundaries}
 \usage{
-hamming(mtext, variant = c("Trilcke", "Hamming", "NormalizedHamming"))
+hamming(drama, variant = c("Trilcke", "Hamming", "NormalizedHamming"))
 
-scenicDifference(mtext, norm = length(unique(mtext$Speaker.figure_surface)))
+scenicDifference(drama,
+  norm = length(unique(drama$text$Speaker.figure_id)))
 }
 \arguments{
-\item{mtext}{The segmented drama text}
+\item{drama}{The QDDrama Object}
 
-\item{variant}{For hamming(), variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"}
+\item{variant}{For \code{hamming()}, variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"}
 
-\item{norm}{For scenicDifference(), specifies the normalization constant}
+\item{norm}{For \code{scenicDifference()}, specifies the normalization constant}
 }
 \description{
 There are multiple ways to quantify the number of characters that are 
@@ -23,7 +24,7 @@ exchanged over a scene or act boundary.
 }
 \examples{
 data(rksp.0)
-dist_trilcke  <- hamming(rksp.0$mtext)
-dist_hamming  <- hamming(rksp.0$mtext, variant = "Hamming")
-dist_nhamming <- hamming(rksp.0$mtext, variant = "NormalizedHamming")
+dist_trilcke  <- hamming(rksp.0)
+dist_hamming  <- hamming(rksp.0, variant = "Hamming")
+dist_nhamming <- hamming(rksp.0, variant = "NormalizedHamming")
 }

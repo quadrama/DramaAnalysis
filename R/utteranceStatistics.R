@@ -1,48 +1,44 @@
 #' @title Utterance Statistics
-#' @description This method calculates the length of each utterance, organised by figure and drama.
-#' @param t The dramatic text(s)
-#' @param numberOfFigures The maximal number of figures per drama to include. Default: 10. Set to FALSE to include all figures.
+#' @description This method calculates the length of each utterance, organised by 
+#' character and drama. 
+#' @param drama The dramatic text(s)
 #' @param normalizeByDramaLength Logical value. If true, the resulting values will be normalized by the length of the drama.
 #' @export
+#' @exportClass QDUtteranceStatistics
+#' @exportClass QDHasCharacter
+#' @seealso \code{\link{characterNames}}
 #' @examples
 #' data(rksp.0)
-#' ustat <- utteranceStatistics(rksp.0$mtext, numberOfFigures = 5)
+#' ustat <- utteranceStatistics(rksp.0)
 #' \dontrun{
-#' boxplot(ustat$utteranceLength ~ ustat$figure,
+#' boxplot(ustat$utteranceLength ~ ustat$character,
 #'    col=qd.colors[1:5],
 #'    las=2, frame=FALSE)
 #' }
-#' @importFrom stats aggregate
-utteranceStatistics <- function(t, numberOfFigures=10, normalizeByDramaLength = TRUE) {
+utteranceStatistics <- function(drama, normalizeByDramaLength = TRUE) {
+  stopifnot(inherits(drama, "QDDrama"))
 
-  if (typeof(numberOfFigures) == "double") {
-    t <- limitFigures(t, by="rank", threshold = numberOfFigures)
-  }
-  # utterance statistics
-  ulength <- aggregate(t$Token.surface, by=list(t$corpus,t$drama, t$Speaker.figure_surface, t$begin), length)
-
-  colnames(ulength) <- c("corpus","drama", "figure", "begin", "utteranceLength")
+  # prevent note in check
+  `:=` <- NULL
+  dl <- NULL
+  .N <- NULL
+  . <- NULL
+  corpus <- NULL
+  Speaker.figure_id <- NULL
+  utteranceBegin <- NULL
+  
+  text <- drama$text
 
   # normalize by drama length
   if (normalizeByDramaLength == TRUE) {
-    dlength <- aggregate(t$Token.surface, by=list(corpus=t$corpus, drama=t$drama), length)
-    ulength <- merge(ulength,dlength, by.x=c("corpus","drama"),by.y=c("corpus","drama"))
-    ulength$utteranceLength <- ulength$utteranceLength / ulength$x
+    ulength <- text[,dl:=.N,.(corpus,drama)][,.N/dl,.(corpus,drama,Speaker.figure_id,utteranceBegin,dl)][,-"dl"]
+  } else {    
+    ulength <- text[,.N,.(corpus, drama, Speaker.figure_id, utteranceBegin)]
   }
+  colnames(ulength) <- c("corpus", "drama", "character", "utteranceBegin", "utteranceLength")
+
   # skip empty factor levels
   ulength <- droplevels(ulength)
-
-  # make nicer names
-  ulength$figure <- sapply(strsplit(x = as.character(ulength$figure), split="[,.]"),"[", 1)
-
-  # order them by drama and alphabetically
-  ulength$figure <- factor(ulength$figure, levels=unique(ulength[order(ulength$drama, ulength$figure),]$figure))
-
+  class(ulength) <- c("QDUtteranceStatistics", "QDHasCharacter", "data.frame")
   ulength
-}
-
-
-utterance_statistics <- function(...) {
-  .Deprecated("utteranceStatistics")
-  utteranceStatistics(...)
 }
