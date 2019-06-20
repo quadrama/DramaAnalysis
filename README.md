@@ -52,5 +52,5 @@ install_github("quadrama/DramaAnalysis", ref="v3.0.0")
 ```
 
 # Usage and Howto
-Please see the [wiki](https://github.com/quadrama/DramaAnalysis/wiki).
+Please refer to the [tutorial](https://quadrama.github.io/DramaAnalysis/tutorial/3/).
 
