@@ -198,6 +198,7 @@ tfidf1 <- function(word) {
 #' @param ftable A matrix, containing "documents" as rows and "terms" as columns. 
 #' Values are assumed to be normalized by document, i.e., contain relative frequencies.
 #' @export
+#' @return A matrix containing TF*IDF values instead of relative frequencies.
 #' @examples
 #' data(rksp.0)
 #' ftable <- frequencytable(rksp.0, byCharacter=TRUE, normalize=TRUE)
