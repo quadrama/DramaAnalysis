@@ -10,7 +10,7 @@ Description: Analysis of preprocessed dramatic texts, with respect to literary r
   stage directions, the dramatic structure and the text itself.
   The dramatic texts are expected to be in CSV format, which can be installed from within 
   the package, sample texts are provided. The package and the reasoning behind it are described in 
-  Reiter et al. (2017) <https://dx.doi.org/10.18420/in2017_119>.
+  Reiter et al. (2017) <doi:10.18420/in2017_119>.
 URL: https://github.com/quadrama/DramaAnalysis
 BugReports: https://github.com/quadrama/DramaAnalysis/issues
 License: GPL (>= 3)
