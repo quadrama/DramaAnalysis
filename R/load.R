@@ -66,21 +66,6 @@ loadDrama <- function(ids, defaultCollection="qd") {
 
 
 
-
-#' @title Text Loading
-#' @description Loads a text with its segmentation
-#' @param ids The ids for which we want to get the text
-#' @importFrom data.table setkey foverlaps data.table
-#' @param defaultCollection The collection prefix is added if no prefix is found
-#' @examples 
-#' \donttest{
-#' installData("test")
-#' mtext <- loadSegmentedText("test:rksp.0")
-#' }
-loadSegmentedText <- function(ids,defaultCollection="tg") {
-  .Defunct("segment(loadText(ids), loadSegments(ids))")
-}
-
 #' @exportClass QD.HasUtteranceBE
 loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable <- loadCSV(ids, 
