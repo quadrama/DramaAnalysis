@@ -1,7 +1,7 @@
 [![release](https://img.shields.io/badge/release-3.0.0-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v3.0.0)
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
 [![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
-[![license](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE) 
+[![license](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) 
 [![Join the chat at https://gitter.im/quadrama/DramaAnalysis](https://badges.gitter.im/quadrama/DramaAnalysis.svg)](https://gitter.im/quadrama/DramaAnalysis?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 # DramaAnalysis with R
