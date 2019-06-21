@@ -12,6 +12,7 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
 #' or a data.frame with two columns (corpus, drama)
 #' @param dataDirectory The directory in which precompiled 
 #' drama data is installed
+#' @return A character vector with all installed play ids
 #' @export
 #' 
 loadAllInstalledIds <- function(asDataFrame=FALSE, 
