@@ -37,18 +37,11 @@ DramaAnalysis works on Mac OS X, Windows 10 and Linuxes, and requires R 3.3 or l
 
 # Installation
 ```R
-# this is only necessary once per system
-install.packages("devtools") 
-library(devtools)
+# installation from CRAN
+install.packages("DramaAnalysis")
 
-# Install newest stable version
-install_github("quadrama/DramaAnalysis") 
-
-# Install newest development version
-install_github("quadrama/DramaAnalysis", ref="develop/3.x")
-
-# Install specific version (3.0.0)
-install_github("quadrama/DramaAnalysis", ref="v3.0.0") 
+# Install newest development version, requires devtools to be installed
+devtools::install_github("quadrama/DramaAnalysis", ref="develop/3.x")
 ```
 
 # Usage and Howto
