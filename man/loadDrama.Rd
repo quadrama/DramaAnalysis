@@ -2,16 +2,10 @@
 % Please edit documentation in R/load.R, R/text.R
 \name{loadDrama}
 \alias{loadDrama}
-\alias{combine}
-\alias{split.QDDrama}
 \alias{numberOfPlays}
 \title{Load drama}
 \usage{
 loadDrama(ids, defaultCollection = "qd")
-
-combine(x, y)
-
-\method{split}{QDDrama}(x, ...)
 
 numberOfPlays(x)
 }
@@ -20,31 +14,18 @@ numberOfPlays(x)
 
 \item{defaultCollection}{If the ids do not have a collection prefix, the 
 defaultCollection prefix is applied.}
-
-\item{x}{The object of class \code{QDDrama} (consisting of multiple dramas). 
-For \code{split()} it should consist of multiple plays. For \code{combine()} it 
-can but doesn't have to.}
-
-\item{y}{A \code{QDDrama}}
-
-\item{...}{All other arguments are ignored.}
 }
 \value{
 The function returns a \code{QDDrama} object. This is essentially a 
 list of \code{data.table}s, covering the different aspects (utterances, segments, 
 characters, ...). If multiple ids have been supplied as arguments, the tables 
 contain the information of multiple plays.
+
+An integer. The number of plays contained in the QDDrama object.
 }
 \description{
 This function loads one or more of the installed plays and 
 returns them as a \code{QDDrama} object.
-
-The function \code{combine(x, y)} can be used to merge 
-multiple objects of the type \code{QDDrama} into one.
-
-The function \code{split(x)} expects an object of type \code{QDDrama} and can 
-be used to split a \code{QDDrama} object that consists of multiple dramas 
-into a list thereof. It is the counterpart to \code{combine(x, y)}.
 
 The function \code{numberOfPlays()} determines how many
 different plays are contained in a single QDDrama object.
@@ -55,14 +36,6 @@ different plays are contained in a single QDDrama object.
 d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
 d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
 }
-
-data(rksp.0)
-data(rjmw.0)
-d <- combine(rjmw.0, rksp.0)
-data(rksp.0)
-data(rjmw.0)
-d <- combine(rjmw.0, rksp.0)
-dlist <- split(d)
 # returns 1
 numberOfPlays(rksp.0)
 

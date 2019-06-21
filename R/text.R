@@ -233,10 +233,11 @@ extractTopTerms <- function(mat, top=10) {
 
 
 #' @export
+#' @title Combine multiple plays
 #' @description The function \code{combine(x, y)} can be used to merge 
 #' multiple objects of the type \code{QDDrama} into one.
 #' @param y A \code{QDDrama}
-#' @rdname loadDrama
+#' @return A single QDDrama object that represents both plays.
 #' @examples 
 #' 
 #' data(rksp.0)
@@ -258,6 +259,7 @@ combine <- function(x, y) {
 }
 
 #' @export
+#' @title Split multiple plays
 #' @description The function \code{split(x)} expects an object of type \code{QDDrama} and can 
 #' be used to split a \code{QDDrama} object that consists of multiple dramas 
 #' into a list thereof. It is the counterpart to \code{combine(x, y)}.
@@ -265,7 +267,7 @@ combine <- function(x, y) {
 #' For \code{split()} it should consist of multiple plays. For \code{combine()} it 
 #' can but doesn't have to.
 #' @param ... All other arguments are ignored.
-#' @rdname loadDrama
+#' @return Returns a list of individual QDDrama objects, each containing one text.
 #' @examples 
 #' data(rksp.0)
 #' data(rjmw.0)
@@ -290,6 +292,7 @@ split.QDDrama <- function(x, ...) {
 #' @description The function \code{numberOfPlays()} determines how many
 #' different plays are contained in a single QDDrama object.
 #' @rdname loadDrama
+#' @return An integer. The number of plays contained in the QDDrama object.
 #' @export
 #' @examples 
 #' # returns 1
