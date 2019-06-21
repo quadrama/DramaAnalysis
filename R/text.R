@@ -289,9 +289,9 @@ split.QDDrama <- function(x, ...) {
   r
 }
 
+#' @title Number of plays
 #' @description The function \code{numberOfPlays()} determines how many
 #' different plays are contained in a single QDDrama object.
-#' @rdname loadDrama
 #' @return An integer. The number of plays contained in the QDDrama object.
 #' @export
 #' @examples 
