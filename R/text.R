@@ -176,33 +176,7 @@ filterCharacters <- function(hasCharacter,
   hasCharacter
 }
 
-#' @title Filtering Mentioned Characters
-#' @description This function can be used to remove the mentions of figures 
-#' that do not appear as speakers in the subsetted input text (after using 
-#' limitFigures(), for example), or to summarize them as 'OTHER'.
-#' @param t The text, a data frame listing each token for each figure
-#' @param other Whether to summarize mentioned figures as 'OTHER'
-#' @examples 
-#' \dontrun{
-#' data(rksp.0)
-#' text.top10.filtered <- filterMentioned(limitFigures(rksp.0$text))
-#' }
-filterMentioned <- function(t, other=FALSE) {
-  figure_id.set <- unique(t$Speaker.figure_id)
-  figure_surface.set <- unique(t$Speaker.figure_surface)
-  if (other == FALSE) {
-    t$Mentioned.figure_id[!(t$Mentioned.figure_id %in% figure_id.set)] <- NA
-    t$Mentioned.figure_surface[!t$Mentioned.figure_surface %in% figure_surface.set] <- NA
-  } else {
-    levels(t$Mentioned.figure_id) <- c(levels(t$Mentioned.figure_id),"OTHER")
-    levels(t$Mentioned.figure_surface) <- c(levels(t$Mentioned.figure_surface),"OTHER")
-    t$Mentioned.figure_id[!(t$Mentioned.figure_id %in% figure_id.set) & !(is.na(t$Mentioned.figure_id))] <- "OTHER"
-    t$Mentioned.figure_surface[!(t$Mentioned.figure_surface %in% figure_surface.set) & !(is.na(t$Mentioned.figure_surface))] <- "OTHER"
-  }
-  t$Mentioned.figure_id <- droplevels(t$Mentioned.figure_id)
-  t$Mentioned.figure_surface <- droplevels(t$Mentioned.figure_surface)
-  t
-}
+
 
 tfidf1 <- function(word) {
   docfreq <- sum(word>0)
@@ -332,88 +306,7 @@ numberOfPlays <- function(x) {
   }
 }
 
-#' @title Extract section
-#' @description Extracts a sub segment of the text(s).
-#' The result is an empty table if more scenes or acts
-#' are given than exist in the play. In this case, a
-#' warning is printed.
-#' @param input Segmented text (can be multiple texts)
-#' @param op Whether to extract exactly one or more than one
-#' @param by Act or Scene, or matching substring
-#' @param n The number of segments to extract
-#' @examples 
-#' \dontrun{
-#' data(rksp.0)
-#' # Extract the second last scene
-#' dramaTail(rksp.0$text, by="Scene", op="==", n=2)
-#' }
-dramaTail <- function(input, by=c("Act","Scene"), op="==", n=1) {
-  
-  # prevent notes in R CMD check
-  corpus <- NULL
-  drama <- NULL
-  begin.Act <- NULL
-  begin.Scene <- NULL
-  .SD <- NULL
-  . <- NULL
-  
-  oper <- match.fun(FUN=op)
-  by <- match.arg(by)
-  
-  switch(by,
-         Act=ifelse(n>length(unique(input$begin.Act)), 
-                    warning(paste("Play has only", length(unique(input$begin.Act)) , "acts."), call. = FALSE),
-                    NA),
-         Scene=ifelse(n>length(unique(input$begin.Scene)), 
-                      warning(paste("Play has only", length(unique(input$begin.Scene)) , "scenes."), call. = FALSE),
-                      NA))
-  
-  switch(by,
-         Act=input[,.SD[oper(begin.Act,last(unique(begin.Act), n))],.(corpus,drama)][],
-         Scene=input[,.SD[oper(begin.Scene,last(unique(begin.Scene), n))],.(corpus,drama)][])
-}
 
-#' @title Extract section
-#' @description Extracts a sub segment of the text(s). 
-#' The result is an empty table if more scenes or acts
-#' are given than exist in the play. In this case, a
-#' warning is printed.
-#' @param input Segmented text (can be multiple texts)
-#' @param op Whether to extract exactly one or more than one
-#' @param by Act or Scene, or matching substring
-#' @param n The number of segments to extract
-#' @examples 
-#' \dontrun{
-#' data(rksp.0)
-#' # Extract everything before the 4th scene
-#' dramaHead(rksp.0$text, by="Scene", op="<", n=4)
-#' }
-dramaHead <- function(input, by=c("Act", "Scene"), op="==", n=1) {
-  
-  # prevent notes in R CMD check
-  corpus <- NULL
-  drama <- NULL
-  begin.Act <- NULL
-  begin.Scene <- NULL
-  .SD <- NULL
-  . <- NULL
-  
-  
-  
-  oper <- match.fun(FUN=op)
-  by <- match.arg(by)
-  switch(by,
-         Act=ifelse(n>length(unique(input$begin.Act)), 
-                    warning(paste("Play has only", length(unique(input$begin.Act)) , "acts."), call. = FALSE),
-                    NA),
-         Scene=ifelse(n>length(unique(input$begin.Scene)), 
-                      warning(paste("Play has only", length(unique(input$begin.Scene)) , "scenes."), call. = FALSE),
-                      NA))
-  
-  switch(by,
-         Act=input[,.SD[oper(begin.Act,first(unique(begin.Act), n))],.(corpus,drama)][],
-         Scene=input[,.SD[oper(begin.Scene,first(unique(begin.Scene), n))],.(corpus,drama)][])
-}
 
 first <- function(x,n=0) {
   sort(x)[n]
