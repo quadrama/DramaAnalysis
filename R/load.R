@@ -33,7 +33,7 @@ setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDram
 #' @exportClass QDDrama
 #' @examples 
 #' # both are equivalent
-#' \dontrun{
+#' \donttest{
 #' d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
 #' d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
 #' }
@@ -73,7 +73,7 @@ loadDrama <- function(ids, defaultCollection="qd") {
 #' @importFrom data.table setkey foverlaps data.table
 #' @param defaultCollection The collection prefix is added if no prefix is found
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' installData("test")
 #' mtext <- loadSegmentedText("test:rksp.0")
 #' }

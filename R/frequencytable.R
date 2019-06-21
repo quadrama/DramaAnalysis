@@ -18,7 +18,7 @@
 #' @examples
 #' data(rksp.0)
 #' st <- frequencytable(rksp.0)
-#' \dontrun{
+#' \donttest{
 #' stylo(gui=FALSE, frequencies = st)
 #' }
 #' @export

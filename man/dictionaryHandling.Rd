@@ -36,7 +36,7 @@ file needs to end on .txt.
 }
 
 \examples{
-\dontrun{
+\donttest{
 # retrieves word fields from github
 fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
 

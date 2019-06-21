@@ -51,7 +51,7 @@ different plays are contained in a single QDDrama object.
 }
 \examples{
 # both are equivalent
-\dontrun{
+\donttest{
 d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
 d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
 }

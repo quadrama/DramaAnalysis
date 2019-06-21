@@ -15,7 +15,7 @@ loadSegmentedText(ids, defaultCollection = "tg")
 Loads a text with its segmentation
 }
 \examples{
-\dontrun{
+\donttest{
 installData("test")
 mtext <- loadSegmentedText("test:rksp.0")
 }
