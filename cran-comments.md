@@ -1,3 +1,10 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Added a reference paper to the Description
+
+* Replaced the LICENSE link in README.md by an actual link
+
 ## Test environments
 * local OS X 10.14.5 install, R 3.6.0
 * ubuntu 14.04 (on travis-ci), R 3.3.3, R 3.4.4, oldrel, release, devel
