@@ -25,6 +25,10 @@ with as many elements as \code{x} has rows.}
 
 \item{...}{All other arguments are ignored.}
 }
+\value{
+The function returns \code{x}, but with modified character
+names.
+}
 \description{
 The function \code{characterNames()} is applicable on 
 all tables with a character table 
