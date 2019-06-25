@@ -17,6 +17,7 @@
 #' It's therefore best if it does not contain
 #' special characters. The dictionary must be in UTF-8 encoding, and the 
 #' file needs to end on .txt.
+#' @return A named list that holds the loaded dictionaries as character vectors.
 #' @rdname dictionaryHandling
 #' @export
 #' @examples 

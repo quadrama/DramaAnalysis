@@ -5,6 +5,7 @@
 #' @export
 #' @param x The character vector
 #' @param suffix The suffix
+#' @return The input character vector with the desired suffix
 #' 
 ensureSuffix <- function(x, suffix) {
   if (! endsWith(x, suffix)) {

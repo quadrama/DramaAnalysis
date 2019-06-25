@@ -105,6 +105,7 @@ plotSpiderWebs <- function(dstat,
 #' labels will become unreadable.
 #' @param col The colors to use
 #' @param ... All remaining options are passed to \code{barplot.default()}.
+#' @return See \code{barplot.default()}.
 #' @export
 #' @importFrom graphics text barplot
 #' @importFrom data.table dcast

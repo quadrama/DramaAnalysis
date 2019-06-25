@@ -23,6 +23,9 @@ labels will become unreadable.}
 
 \item{...}{All remaining options are passed to \code{barplot.default()}.}
 }
+\value{
+See \code{barplot.default()}.
+}
 \description{
 This function expects an object of type QDCharacterStatistics and 
 plots the specified column as a stacked bar plot.
