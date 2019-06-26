@@ -22,6 +22,9 @@ installData(dataSource = "tg", dataDirectory = getOption("qd.datadir"),
 
 \item{remoteUrl}{The URL of the remote repository.}
 }
+\value{
+\code{NULL}
+}
 \description{
 This function downloads pre-processed dramatic texts via http and stores them locally in your data directory
 }

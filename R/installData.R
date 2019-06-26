@@ -5,6 +5,7 @@
 #' @param branchOrCommit The git branch, commit id, or tag that we want to download
 #' @param repository The repository
 #' @param baseUrl The github user (or group)
+#' @return \code{NULL}
 #' @importFrom utils download.file unzip
 #' @export
 installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
@@ -38,6 +39,8 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
   
   # remove temp file
   unlink(tf)
+  
+  invisible(NULL)
 }
 
 #' @title Download preprocessed drama data
@@ -48,6 +51,7 @@ installCollectionData <- function(dataDirectory=getOption("qd.datadir"),
 #' @param removeZipFile No longer used.
 #' @param baseUrl The remote repository owner (e.g., https://github.com/quadrama)
 #' @param remoteUrl The URL of the remote repository.
+#' @return \code{NULL}
 #' @importFrom git2r clone pull in_repository repository
 #' @export
 installData <- function(dataSource="tg", 
@@ -69,6 +73,8 @@ installData <- function(dataSource="tg",
     message("Cloning ", remoteUrl, ".")
     git2r::clone(remoteUrl,localDirectory)
   }
+  
+  invisible(NULL)
 }
 
 

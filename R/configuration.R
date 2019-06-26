@@ -18,6 +18,7 @@
 #' Using the argument \code{mode}, we can also create passive
 #' configuration matrices. They look very similar, but are based
 #' on who's mentioned in a scene or an act. 
+#' @return Drama configuration matrix as a \code{QDConfiguration} object (of type \code{data.frame}).
 #' @export
 #' @rdname configuration
 #' @exportClass QDConfiguration

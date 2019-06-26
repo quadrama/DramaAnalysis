@@ -86,6 +86,7 @@ characterNames <- function(x,
 #' - \%L: The language
 #' - \%I: The id
 #' - \%C: The corpus prefix
+#' @return Character vector of formatted drama names
 #' @export
 #' @importFrom stringr str_replace
 dramaNames <- function(x, 
@@ -136,6 +137,7 @@ dramaNames <- function(x,
 #' and \emph{keeps} the top $n$ characters. The filter called \code{tokens} keeps 
 #' all characters that speak $n$ or more tokens. The filter called \code{name} 
 #' keeps the characters that are provided by name as a vector as \code{n}.
+#' @return The filtered QDHasCharacter object
 #' @export
 #' @examples 
 #' data(rjmw.0)

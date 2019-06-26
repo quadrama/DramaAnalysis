@@ -11,6 +11,9 @@ ensureSuffix(x, suffix)
 
 \item{suffix}{The suffix}
 }
+\value{
+The input character vector with the desired suffix
+}
 \description{
 \code{ensureSuffix} makes certain that a character vector ends in 
 a given suffix

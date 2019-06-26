@@ -29,6 +29,9 @@ represented, which usually gives a very wrong impression.}
 
 \item{...}{All other arguments are passwd to \code{as.matrix.data.frame}.}
 }
+\value{
+Drama configuration matrix as a \code{QDConfiguration} object (of type \code{data.frame}).
+}
 \description{
 The function \code{configuration(...)} Creates drama configuration matrix as a \code{QDConfiguration} object, which is also a data.frame. The S3 function \code{as.matrix()} can be used to extract a numeric or logical matrix containing the core.
 }
