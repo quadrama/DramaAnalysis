@@ -43,5 +43,5 @@ ustat <- utteranceStatistics(rksp.0)
 ustat <- characterNames(ustat, rksp.0)
 }
 \seealso{
-\code{\link[stringr]{str_to_title}}
+\code{str_to_title}
 }

@@ -11,6 +11,7 @@
 #' @param ... Parameters passed to stripchart().
 #' @importFrom graphics stripchart abline
 #' @export
+#' @return See \code{stripchart()}.
 #' @seealso stripchart
 plot.QDUtteranceStatistics <- function(x,
                                        drama=NULL,

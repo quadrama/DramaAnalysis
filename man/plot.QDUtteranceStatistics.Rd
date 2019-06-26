@@ -20,6 +20,9 @@ are extracted from it and included in the plot.}
 
 \item{...}{Parameters passed to stripchart().}
 }
+\value{
+See \code{stripchart()}.
+}
 \description{
 Uses the function \code{stripchart} to  plot each utterance at their position,
 in a line representing the character. The dot is marked in the middle of each utterance.

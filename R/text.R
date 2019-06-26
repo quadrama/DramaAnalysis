@@ -36,7 +36,7 @@ qd.colors <- c(rgb(120,28,129, maxColorValue = 255),
 #' Defaults to \code{stringr::str_to_title}, which
 #' converts the strings to title case.
 #' @param ... All other arguments are ignored.
-#' @seealso \code{\link[stringr]{str_to_title}}
+#' @seealso \code{str_to_title}
 #' @importFrom stringr str_to_title
 #' @return The function returns \code{x}, but with modified character
 #' names.
