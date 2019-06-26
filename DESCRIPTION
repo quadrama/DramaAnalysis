@@ -32,6 +32,7 @@ RoxygenNote: 6.1.1
 Suggests: testthat,
     fmsb,
     knitr,
+    magrittr,
     highcharter,
     rmarkdown (>= 1.8),
     igraph (>= 1.1.2)
