@@ -53,6 +53,7 @@ plot.QDUtteranceStatistics <- function(x,
 #' @param legend.horizontal Whether to print legend horizontally or vertically
 #' @param ... Miscellaneous arguments to be given for radarchart().
 #' @export
+#' @return No value is returned.
 #' @examples 
 #' data(rksp.0)
 #' fnames <- c("Krieg", "Liebe", "Familie", "Ratio","Religion")

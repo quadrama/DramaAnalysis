@@ -30,6 +30,9 @@ plotSpiderWebs(dstat, symbols = c(17, 16, 15, 4, 8), cglcol = "black",
 
 \item{...}{Miscellaneous arguments to be given for radarchart().}
 }
+\value{
+No value is returned.
+}
 \description{
 Generates spider-web like plot. 
 Spider webs may look cool, but they are terrible 
