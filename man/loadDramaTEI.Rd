@@ -5,7 +5,7 @@
 \title{Load drama}
 \usage{
 loadDramaTEI(filename, dataDirectory = paste0(getOption("qd.datadir"),
-  "/tei/"))
+  "/tei"))
 }
 \arguments{
 \item{filename}{The filename of the drama to load (or a list thereof).}
