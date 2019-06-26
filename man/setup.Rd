@@ -24,6 +24,9 @@ By default, the directory is called "collection" below the data directory.}
 \item{dataDirectory}{A path to the directory in which data and metadata are located. 
 "~/QuaDramA/Data2" by default.}
 }
+\value{
+The \code{set*Directory()} functions always return \code{NULL}.
+}
 \description{
 This function initialises the paths to data files.
 }

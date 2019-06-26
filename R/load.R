@@ -3,18 +3,21 @@
 #' "~/QuaDramA/Data2" by default.
 #' @param collectionDirectory A path to the directory in which collections are stored. 
 #' By default, the directory is called "collection" below the data directory.
+#' @return The \code{set*Directory()} functions always return \code{NULL}.
 #' @rdname setup
 #' @export
 setDirectories <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2"), 
                   collectionDirectory = file.path(dataDirectory,"collections")) {
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
+  NULL
 }
 
 #' @export
 #' @rdname setup
 setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDramA","Data2")) {
   options(qd.datadir=dataDirectory)
+  NULL
 }
 
 

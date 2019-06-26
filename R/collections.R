@@ -2,6 +2,7 @@
 #' @rdname setup
 setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd.datadir"), "collections")) {
   options(qd.collectionDirectory=collectionDirectory)
+  NULL
 }
 
 
