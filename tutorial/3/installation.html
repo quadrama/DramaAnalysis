@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | DramaAnalysis</title>
-  <meta name="description" content="References | DramaAnalysis" />
+  <title>2 Installation | DramaAnalysis</title>
+  <meta name="description" content="2 Installation | DramaAnalysis" />
   <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | DramaAnalysis" />
+  <meta property="og:title" content="2 Installation | DramaAnalysis" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | DramaAnalysis" />
+  <meta name="twitter:title" content="2 Installation | DramaAnalysis" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="resterampe.html">
-
+<link rel="prev" href="introduction.html">
+<link rel="next" href="basics.html">
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -220,34 +220,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="installation" class="section level1">
+<h1><span class="header-section-number">2</span> Installation</h1>
+<p>There are two ways to install the R package. As of version 3.0, the R package DramaAnalysis is published in the Comprehensive R Archive Network (CRAN). This makes the installation straightforward, and also takes care of all dependencies. Depending on your installation (R version, operating system etc.), downloading (and sometimes compiling) dependencies might take a while.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;DramaAnalysis&quot;</span>)</code></pre>
+<p>The package version in CRAN is updated once in a while, but potentially not every time there is a feature added or bug removed. If you want to install the version we are currently developing, you should install the package “remotes” first. Then, you can install the DramaAnalysis package directly from GitHub. The following code does both, and should also install all dependencies.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)
 
-<div id="refs" class="references">
-<div>
-<p>Arnold, Taylor, and Lauren Tilton. 2015. <em>Humanities Data in R</em>. Springer International Publishing. <a href="https://doi.org/10.1007/978-3-319-20702-5">https://doi.org/10.1007/978-3-319-20702-5</a>.</p>
-</div>
-<div>
-<p>Hamming, Richard W. 1950. “Error Detecting and Error Correcting Codes.” <em>The Bell System Technical Journal</em> 29 (2): 147–60. <a href="https://doi.org/10.1002/j.1538-7305.1950.tb00463.x">https://doi.org/10.1002/j.1538-7305.1950.tb00463.x</a>.</p>
-</div>
-<div>
-<p>Pfister, Manfred. 1988. <em>The Theory and Analysis of Drama</em>. Translated by John Halliday. European Studies in English Literature. Cambridge University Press. <a href="https://doi.org/10.1017/CBO9780511553998">https://doi.org/10.1017/CBO9780511553998</a>.</p>
-</div>
-<div>
-<p>Trilcke, Peer, Frank Fischer, Mathias Göbel, Dario Kampkaspar, and Christopher Kittel. 2017. “Netzwerkdynamik, Plotanalyse – Zur Visualisierung und Berechnung der ›progressiven Strukturierung‹ literarischer Texte.” In <em>Book of Abstracts of Dhd 2017</em>. Bern, Switzerland.</p>
-</div>
-<div>
-<p>Trilcke, Peer, Frank Fischer, and Dario Kampkaspar. 2015. “Digital Network Analysis of Dramatic Texts.” In <em>DH2015 Conference Abstracts</em>. Sydney, Australia.</p>
-</div>
-</div>
+remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;quadrama/DramaAnalysis&quot;</span>, 
+                        <span class="dt">dependencies =</span> <span class="ot">TRUE</span>)</code></pre>
+<p>On GitHub, we distinguish between different branch for development. The most recent stable version is in the master branch, and this will be installed by the above snippet. If you want to use the “bleeding edge” code, you may want to install the <code>develop/3.x</code> branch. This can be done by adding the argument <code>ref=develop/3.x</code> to the <code>install_github</code> call:</p>
+<pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;quadrama/DramaAnalysis&quot;</span>, 
+                        <span class="dt">dependencies =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">ref =</span> <span class="st">&quot;develop/3.x&quot;</span>)</code></pre>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="resterampe.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="basics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
