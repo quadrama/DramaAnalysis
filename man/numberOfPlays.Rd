@@ -6,6 +6,9 @@
 \usage{
 numberOfPlays(x)
 }
+\arguments{
+\item{x}{The QDDrama object}
+}
 \value{
 An integer. The number of plays contained in the QDDrama object.
 }

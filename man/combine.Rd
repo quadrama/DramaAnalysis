@@ -7,6 +7,8 @@
 combine(x, y)
 }
 \arguments{
+\item{x}{A \code{QDDrama}}
+
 \item{y}{A \code{QDDrama}}
 }
 \value{
