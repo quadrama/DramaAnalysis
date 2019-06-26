@@ -6,7 +6,7 @@
 #' @importFrom data.table data.table
 #' @exportClass QDDrama
 #' @export
-loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"), "/tei/")) {
+loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"), "/tei")) {
   if (is.list(filename)) {
     drama_list <- lapply(filename, loadDramaTEI)
     drama <- drama_list[[1]]
@@ -14,19 +14,19 @@ loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"),
       drama <- combine(drama, drama_list[[i]])
     }
   } else {
-    raw_tei <- xml2::read_xml(paste0(dataDirectory, filename))
+    raw_tei <- xml2::read_xml(paste0(dataDirectory, "/", filename))
     nsp <- xml2::xml_ns_rename(xml2::xml_ns(raw_tei), d1="tei")
     # dracorid
     # id <- gsub("ger", "", xml2::xml_text(xml2::xml_find_first(raw_tei, "//tei:publicationStmt/tei:idno[@type='dracor']", ns=nsp)))
     # filename as id
     id <- gsub("([^.]+).xml", "\\1", filename)
-    corpus <- "ger"
+    corpus <- "tei"
     
     drama <- list()
     text_segments_stage <- parseTEI(raw_tei, nsp, id, corpus)
     drama$text <- text_segments_stage$text
     drama$segments <- text_segments_stage$segments
-    drama$characters <- loadCharactersTEI(raw_tei, nsp, drama$text)
+    drama$characters <- loadCharactersTEI(raw_tei, nsp, corpus, id)
     drama$meta <- loadMetaTEI(raw_tei, nsp, corpus, id)
     drama$mentions <- loadMentionsTEI()
     drama$stageDirections <- text_segments_stage$stage
@@ -111,6 +111,11 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
           tokenized_st <- tokenizers::tokenize_words(xml2::xml_text(sp_elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
           stage_l <- writeTextRow(corpus, id, tokenized_st, speaker_ids, stage_l, position, sp_elem, speaker_surface)
           d_length <- d_length + length(tokenized_st)
+          position <- position + nchar(xml2::xml_text(sp_elem))
+        } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:l")) { # l-element inside sp-element
+          tokenized_l <- tokenizers::tokenize_words(xml2::xml_text(sp_elem), lowercase = FALSE, strip_punct = FALSE)[[1]]
+          text_l <- writeTextRow(corpus, id, tokenized_l, speaker_ids, text_l, position, sp_elem, speaker_surface)
+          d_length <- d_length + length(tokenized_l)
           position <- position + nchar(xml2::xml_text(sp_elem))
         }
       }
@@ -197,21 +202,13 @@ fixColumnType <- function(dt) {
 }
 
 # internal
-loadCharactersTEI <- function(raw_tei, nsp, dt_text) {
-  `:=` <- NULL
-  Speaker.figure_id <- NULL
-  Gender <- NULL
-  
-  dt_characters <- data.table::copy(dt_text)
-  dt_characters[, c("utteranceBegin","utteranceEnd", "Token.surface", "Token.pos",
-                    "Token.lemma", "length"):=NULL] 
-  dt_characters <- unique(dt_characters)
-  dt_characters$Gender <- character()
+loadCharactersTEI <- function(raw_tei, nsp, corpus, drama) {
+  dt_characters <- data.table::data.table(corpus=character(), drama=character(), Speaker.figure_surface=character(), 
+                                          Speaker.figure_id=character(), Gender=character(), Age=numeric())
   listPerson <- xml2::xml_find_all(raw_tei, "//tei:listPerson/tei:person", ns = nsp)
   for (elem in listPerson) {
-    dt_characters[Speaker.figure_id == xml2::xml_attr(elem, "id"), Gender := xml2::xml_attr(elem, "sex")]
+    dt_characters <- rbind(dt_characters, list(corpus, drama, xml2::xml_text(xml2::xml_children(elem)[[1]]), xml2::xml_attr(elem, "id"), xml2::xml_attr(elem, "sex"), xml2::xml_attr(elem, "age")))
   }
-  dt_characters$Age <- numeric()
   dt_characters
 }
 
