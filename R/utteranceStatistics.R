@@ -7,6 +7,8 @@
 #' @exportClass QDUtteranceStatistics
 #' @exportClass QDHasCharacter
 #' @seealso \code{\link{characterNames}}
+#' @return Returns an object of class \code{QDUtteranceStatistics}, 
+#' which is essentially a data.frame.
 #' @examples
 #' data(rksp.0)
 #' ustat <- utteranceStatistics(rksp.0)

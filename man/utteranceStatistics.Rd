@@ -11,6 +11,10 @@ utteranceStatistics(drama, normalizeByDramaLength = TRUE)
 
 \item{normalizeByDramaLength}{Logical value. If true, the resulting values will be normalized by the length of the drama.}
 }
+\value{
+Returns an object of class \code{QDUtteranceStatistics}, 
+which is essentially a data.frame.
+}
 \description{
 This method calculates the length of each utterance, organised by 
 character and drama.
