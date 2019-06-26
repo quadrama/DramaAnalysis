@@ -17,6 +17,9 @@ installCollectionData(dataDirectory = getOption("qd.datadir"),
 
 \item{baseUrl}{The github user (or group)}
 }
+\value{
+\code{NULL}
+}
 \description{
 Function to download collection data (grouped texts) from github. 
 Overwrites (!) the current collections.

@@ -22,6 +22,9 @@ Useful to retrieve enriched word fields from metadata repo.}
 \item{fileSep}{The file separator used to construct the URL
 Can be overwritten to load local dictionaries.}
 }
+\value{
+A named list that holds the loaded dictionaries as character vectors.
+}
 \description{
 \code{loadFields()} loads dictionaries that are available on the web as plain text files.
 }
@@ -36,7 +39,7 @@ file needs to end on .txt.
 }
 
 \examples{
-\dontrun{
+\donttest{
 # retrieves word fields from github
 fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
 

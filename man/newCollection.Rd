@@ -27,7 +27,7 @@ If FALSE, the file will be overwritten. (default = TRUE)}
 or add dramas to existing collection files.
 }
 \examples{
-\dontrun{
+\donttest{
 t <- combine(rksp.0, rjmw.0)
 newCollection(t)
 newCollection(c("rksp.0", "rjmw.0"), append=FALSE) # produces identical file

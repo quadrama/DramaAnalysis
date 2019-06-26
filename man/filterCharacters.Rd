@@ -16,6 +16,9 @@ filterCharacters(hasCharacter, drama, by = c("rank", "tokens", "name"),
 
 \item{n}{The threshold or a list of character names/ids to keep.}
 }
+\value{
+The filtered QDHasCharacter object
+}
 \description{
 This function can be used to filter characters from all tables 
 that contain  a character column (and are of the class QDHasCharacter).

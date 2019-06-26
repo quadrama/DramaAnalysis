@@ -10,6 +10,9 @@ tfidf(ftable)
 \item{ftable}{A matrix, containing "documents" as rows and "terms" as columns. 
 Values are assumed to be normalized by document, i.e., contain relative frequencies.}
 }
+\value{
+A matrix containing TF*IDF values instead of relative frequencies.
+}
 \description{
 This function calculates a variant of TF-IDF. 
 The input is assumed to contain relative frequencies.

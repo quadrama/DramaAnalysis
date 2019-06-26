@@ -41,6 +41,9 @@ row sums.}
 
 \item{segment}{Character vector. Whether the count is by drama (default), act or scene}
 }
+\value{
+Matrix of word frequencies in the format words X segments
+}
 \description{
 The function \code{filterByDictionary()} can be used to filter a matrix as produced by 
 \code{frequencytable()} by the words in the given dictionary(/-ies).
@@ -58,7 +61,7 @@ filtered <- filterByDictionary(ftable,
 
 data(rksp.0)
 st <- frequencytable(rksp.0)
-\dontrun{
+\donttest{
 stylo(gui=FALSE, frequencies = st)
 }
 }

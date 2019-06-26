@@ -18,7 +18,7 @@ character and drama.
 \examples{
 data(rksp.0)
 ustat <- utteranceStatistics(rksp.0)
-\dontrun{
+\donttest{
 boxplot(ustat$utteranceLength ~ ustat$character,
    col=qd.colors[1:5],
    las=2, frame=FALSE)

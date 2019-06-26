@@ -23,6 +23,9 @@ be used:
 
 \item{orderBy}{The meta data key that the final list will be ordered by}
 }
+\value{
+Character vector of formatted drama names
+}
 \description{
 Given a QDDrama object, this function generates a list of nicely 
 formatted names, following the format string.

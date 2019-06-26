@@ -12,13 +12,14 @@
 #' @param normalize Whether to normalize values or not. If set to TRUE, the values are normalized by
 #' row sums.
 #' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)
+#' @return Matrix of word frequencies in the format words X segments
 #' @rdname frequencyTable
 #' @seealso \code{stylo}
 #' @importFrom stats xtabs ftable
 #' @examples
 #' data(rksp.0)
 #' st <- frequencytable(rksp.0)
-#' \dontrun{
+#' \donttest{
 #' stylo(gui=FALSE, frequencies = st)
 #' }
 #' @export
@@ -84,15 +85,16 @@ frequencytable <- function(drama,
 #' @param acceptedPOS A list of accepted pos tags
 #' @param names Whether to use character names or ids
 #' @param byCharacter Wether the count is by character or by text
-#' @param by Whether the count is by drama (default), act or scene
-#' @param cols The column names we should use (should be either Token.surface or Token.lemma)
+#' @param segment Whether the count is by drama (default), act or scene
+#' @param column The column names we should use (should be either Token.surface or Token.lemma)
+#' @return Matrix of bigram frequencies in the format bigrams X segments
 #' @keywords internal
-frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols=c("Token.surface", "Token.surface"), byCharacter=FALSE, by=c("Drama","Act","Scene")) {
+frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, column=c("Token.surface", "Token.surface"), byCharacter=FALSE, segment=c("Drama","Act","Scene")) {
   ft <- t
   if (length(acceptedPOS) > 0) {
     ft <- t[t$Token.pos %in% acceptedPOS,]
   }
-  by <- match.arg(by)
+  by <- match.arg(segment)
   switch(by,
          Drama = { 
            if (byCharacter == FALSE) { index <- paste(ft$drama) }
@@ -112,7 +114,7 @@ frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, cols
          stop("Please enter valid string-value for argument 'by' (default = 'Drama', 'Act' or 'Scene').")
   )
   
-  r <- do.call(rbind, tapply(paste(ft[[cols[1]]], ft[[cols[2]]][-1]), index, function(x){prop.table(table(x))}))
+  r <- do.call(rbind, tapply(paste(ft[[column[1]]], ft[[column[2]]][-1]), index, function(x){prop.table(table(x))}))
   r[,order(colSums(r),decreasing=TRUE)]
   
 }

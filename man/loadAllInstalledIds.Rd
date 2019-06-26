@@ -15,6 +15,9 @@ or a data.frame with two columns (corpus, drama)}
 \item{dataDirectory}{The directory in which precompiled 
 drama data is installed}
 }
+\value{
+A character vector with all installed play ids
+}
 \description{
 Returns a list of all ids that are installed
 }

@@ -33,7 +33,7 @@ setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDram
 #' @exportClass QDDrama
 #' @examples 
 #' # both are equivalent
-#' \dontrun{
+#' \donttest{
 #' d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
 #' d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
 #' }
@@ -65,21 +65,6 @@ loadDrama <- function(ids, defaultCollection="qd") {
 }
 
 
-
-
-#' @title Text Loading
-#' @description Loads a text with its segmentation
-#' @param ids The ids for which we want to get the text
-#' @importFrom data.table setkey foverlaps data.table
-#' @param defaultCollection The collection prefix is added if no prefix is found
-#' @examples 
-#' \dontrun{
-#' installData("test")
-#' mtext <- loadSegmentedText("test:rksp.0")
-#' }
-loadSegmentedText <- function(ids,defaultCollection="tg") {
-  .Defunct("segment(loadText(ids), loadSegments(ids))")
-}
 
 #' @exportClass QD.HasUtteranceBE
 loadMentions <- function(ids, defaultCollection="qd") {

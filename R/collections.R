@@ -12,6 +12,7 @@ setCollectionDirectory <- function(collectionDirectory = file.path(getOption("qd
 #' or a data.frame with two columns (corpus, drama)
 #' @param dataDirectory The directory in which precompiled 
 #' drama data is installed
+#' @return A character vector with all installed play ids
 #' @export
 #' 
 loadAllInstalledIds <- function(asDataFrame=FALSE, 
@@ -119,7 +120,7 @@ mapPrefix <- function(idList, map) {
 #' If FALSE, the file will be overwritten. (default = TRUE)
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' t <- combine(rksp.0, rjmw.0)
 #' newCollection(t)
 #' newCollection(c("rksp.0", "rjmw.0"), append=FALSE) # produces identical file
