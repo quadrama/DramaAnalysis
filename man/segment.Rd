@@ -11,6 +11,10 @@ segment(hasUtteranceBE, hasSegments)
 
 \item{hasSegments}{Table with segment info}
 }
+\value{
+The function returns a \code{data.table} that has both the play
+segmentation and the token data in it.
+}
 \description{
 This function takes two tables and combines them. The first table is of the 
 class QDHasUtteranceBE and contains text spans that are designated with 

@@ -7,6 +7,8 @@
 #' because it might become useful.
 #' @param hasUtteranceBE Table with utterances
 #' @param hasSegments Table with segment info
+#' @return The function returns a \code{data.table} that has both the play
+#' segmentation and the token data in it.
 #' @examples
 #' data(rksp.0)
 #' segmentedText <- segment(rksp.0$text, rksp.0$segments)
