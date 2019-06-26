@@ -8,6 +8,8 @@
 #' @param variant For \code{hamming()}, variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"
 #' @param norm For \code{scenicDifference()}, specifies the normalization constant
 #' @rdname personnelExchange
+#' @return A list of values, one for each scene change. The values 
+#' indicate the (potentially) normalized number of characters that are exchanged.
 #' @export
 #' @examples 
 #' data(rksp.0)

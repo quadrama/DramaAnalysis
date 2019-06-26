@@ -18,6 +18,10 @@ scenicDifference(drama,
 
 \item{norm}{For \code{scenicDifference()}, specifies the normalization constant}
 }
+\value{
+A list of values, one for each scene change. The values 
+indicate the (potentially) normalized number of characters that are exchanged.
+}
 \description{
 There are multiple ways to quantify the number of characters that are 
 exchanged over a scene or act boundary.
