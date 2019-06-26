@@ -19,6 +19,9 @@ the "Compare" report is still under development.}
 
 \item{...}{Arguments passed through to the rmarkdown document}
 }
+\value{
+The return value of \code{\link[rmarkdown]{render}}
+}
 \description{
 generates a report for a specific dramatic text
 }

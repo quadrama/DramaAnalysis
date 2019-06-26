@@ -6,6 +6,7 @@
 #' while "Compare" can be used to compare multiple editions of a play. Please note that 
 #' the "Compare" report is still under development.
 #' @param ... Arguments passed through to the rmarkdown document
+#' @return The return value of \code{\link[rmarkdown]{render}}
 #' @export
 report <- function(id="test:rksp.0", 
                    of=file.path(getwd(),paste0(unlist(strsplit(id,":",fixed=TRUE))[2], ".html")), 
