@@ -24,7 +24,7 @@
 <meta name="author" content="Nils Reiter" />
 
 
-<meta name="date" content="2019-06-19" />
+<meta name="date" content="2019-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -245,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>As we can see, each character has a few numbers associated: The column <code>actives</code> shows the number of scenes in which the character is actively present. This is equivalent to the information in the configuration matrix. The column <code>passives</code> shows the number of scenes in which a character is mentioned. By default, this excludes the scenes in which they are present themselves, because they can be assumed to be addresses to the character (this behaviour can be changed by adding the parameter <code>passiveOnlyWhenNotActive = TRUE</code> to the call of the <code>presence</code> function).</p>
 <p>A simple visualisation that shows the characters active and passive presence in one plot can be generated like this: The first line (<code>plot()</code>) is responsible for the plotting of the symbols, the second line (<code>text()</code>) adds the character names or ids numbers.</p>
 <pre class="sourceCode r"><code class="sourceCode r">pres &lt;-<span class="st"> </span><span class="kw">presence</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
 
 <span class="kw">plot</span>(<span class="dt">x=</span>pres<span class="op">$</span>active<span class="op">/</span>pres<span class="op">$</span>scenes, 
      <span class="dt">y=</span>pres<span class="op">$</span>passive<span class="op">/</span>pres<span class="op">$</span>scenes, 
@@ -317,7 +317,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["DramaAnalysis.pdf", "DramaAnalysis.epub"],
+"download": null,
 "toc": {
 "collapse": "section",
 "scroll_highlight": true

@@ -24,7 +24,7 @@
 <meta name="author" content="Nils Reiter" />
 
 
-<meta name="date" content="2019-06-19" />
+<meta name="date" content="2019-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -288,7 +288,7 @@ Figure 4.1: Relevant classes and functions in this chapter
 <li>the character position of the start of the first utterance (<code>firstBegin</code>), and</li>
 <li>the character position of the end of the last utterance (<code>lastEnd</code>).</li>
 </ul>
-<p>The function <code>characterStatistics()</code> provides a number of options to control its exact behaviour. Entering <code>?characterStatistics</code> in the R console opens the documentation for the function with a description of all the options. We’ll describe some frequently used options here as well:</p>
+<p>The function <code>characterStatistics()</code> provides a number of options to control its exact behaviour. Entering <a href="https://quadrama.github.io/DramaAnalysis/3.0.0/reference/characterStatistics.html"><code>?characterStatistics</code></a> in the R console opens the documentation for the function with a description of all the options. We’ll describe some frequently used options here as well:</p>
 <ul>
 <li><p>Punctuation: By default, all punctuation marks are counted as tokens. This behaviour can be changed by setting <code>filterPunctuation=TRUE</code>.</p></li>
 <li><p>Normalization: The values in the table above are all absolute values. When comparing to other texts, one is often interested in normalized values. If the option <code>normalize</code> is set to <code>TRUE</code>, all values will be normalised (if applicable).</p></li>
@@ -366,10 +366,10 @@ Figure 4.1: Relevant classes and functions in this chapter
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <div id="format" class="section level2">
 <h2><span class="header-section-number">4.1</span> Character names instead of identifiers</h2>
-<p>By default, all our functions identify characters using technical ids, which may or may not be human-readable. Even if they are, it’s usually a good idea to replace them with nice to read labels before publication. We therefore provide the function <code>format()</code>, which can be applied to any table that contains a column with character ids (i.e., any object of type <code>QDHasCharacter</code>).</p>
+<p>By default, all our functions identify characters using technical ids, which may or may not be human-readable. Even if they are, it’s usually a good idea to replace them with nice to read labels before publication. We therefore provide the function <a href="https://quadrama.github.io/DramaAnalysis/3.0.0/reference/characterNames.html"><code>characterNames()</code></a>, which can be applied to any table that contains a column with character ids (i.e., any object of type <code>QDHasCharacter</code>).</p>
 <pre class="sourceCode r"><code class="sourceCode r">charStats &lt;-<span class="st"> </span><span class="kw">characterStatistics</span>(text, <span class="dt">normalize=</span><span class="ot">FALSE</span>)
 
-charStats &lt;-<span class="st"> </span><span class="kw">format</span>(charStats, text) <span class="co"># Replace ids with names</span>
+charStats &lt;-<span class="st"> </span><span class="kw">characterNames</span>(charStats, text) <span class="co"># Replace ids with names</span>
 
 <span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">9</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">2</span>)) <span class="co"># increase plot margins, so that the labels can be plotted</span>
 
@@ -378,18 +378,18 @@ charStats &lt;-<span class="st"> </span><span class="kw">format</span>(charStats
         <span class="dt">las=</span><span class="dv">2</span> <span class="co"># rotate the labels on both axes</span>
 )</code></pre>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p>As can be seen above <code>format()</code> requires two arguments: The table in which we want to replace ids by characters, and the original drama object (that we got from calling the function <code>loadDrama()</code>).</p>
+<p>As can be seen above <code>characterNames()</code> requires two arguments: The table in which we want to replace ids by characters, and the original drama object (that we got from calling the function <code>loadDrama()</code>).</p>
 </div>
 <div id="stacked-bar-plot" class="section level2">
 <h2><span class="header-section-number">4.2</span> Stacked bar plot</h2>
 <p>The plot shown above is quite wide, and some aspects (like the ranking in terms of spoken tokens), is hard to see. We often use another way of visualizing this, which can be used if you supply the <code>QDCharacterStatistics</code> directly into the <code>barplot()</code> function. In combination with the <code>magrittr</code> pipes (see <a href="basics.html#magrittr">2.2</a>), we can call it like this (enter <code>?barplot.QDCharacterStatistics</code> for details on the special barplot function):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">characterStatistics</span>(text, <span class="dt">normalize=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(text) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(text) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">barplot</span>(<span class="dt">names.arg=</span><span class="kw">dramaNames</span>(text, <span class="st">&quot;%T&quot;</span>))</code></pre>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>By default, the <code>barplot.QDCharacterStatistics()</code> function visualises the number of tokens spoken by the characters (and ranks the characters accordingly). This can be changed by supplying the option <code>column</code>, and specifying another value.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">characterStatistics</span>(text, <span class="dt">normalize=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(text) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(text) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">barplot</span>(<span class="dt">names.arg=</span><span class="kw">dramaNames</span>(text, <span class="st">&quot;%T&quot;</span>), 
           <span class="dt">column =</span> <span class="st">&quot;utteranceLengthMean&quot;</span>) <span class="co"># show mean utterance length</span></code></pre>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
@@ -412,7 +412,7 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">loadDrama</
 
 <span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">30</span>,<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw">characterStatistics</span>(sturm_und_drang.plays, <span class="dt">normalize=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(sturm_und_drang.plays) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(sturm_und_drang.plays) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">barplot</span>(<span class="dt">las=</span><span class="dv">2</span>, <span class="dt">names.arg =</span> <span class="kw">dramaNames</span>(sturm_und_drang.plays, 
                                         <span class="dt">formatString =</span> <span class="st">&quot;%A: %T&quot;</span>))</code></pre>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
@@ -462,7 +462,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["DramaAnalysis.pdf", "DramaAnalysis.epub"],
+"download": null,
 "toc": {
 "collapse": "section",
 "scroll_highlight": true

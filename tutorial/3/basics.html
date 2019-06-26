@@ -24,7 +24,7 @@
 <meta name="author" content="Nils Reiter" />
 
 
-<meta name="date" content="2019-06-19" />
+<meta name="date" content="2019-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -242,15 +242,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 d <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">dictionaryStatistics</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(d) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(d) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filterCharacters</span>(d) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(d) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">barplot</span>() </code></pre>
 <p>Again, this is equivalent to a version with variables:</p>
 <pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">loadDrama</span>(<span class="st">&quot;test:rksp.0&quot;</span>)
 
 ds &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(d)
-dsf &lt;-<span class="st"> </span><span class="kw">filter</span>(ds, d)
-dsff &lt;-<span class="st"> </span><span class="kw">format</span>(dsf, d)
+dsf &lt;-<span class="st"> </span><span class="kw">filterCharacters</span>(ds, d)
+dsff &lt;-<span class="st"> </span><span class="kw">characterNames</span>(dsf, d)
 <span class="kw">barplot</span>(dsff)</code></pre>
 <p>Pipes are much faster to write and more transparent, that’s why they are used in this tutorial.</p>
 </div>
@@ -301,7 +301,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["DramaAnalysis.pdf", "DramaAnalysis.epub"],
+"download": null,
 "toc": {
 "collapse": "section",
 "scroll_highlight": true

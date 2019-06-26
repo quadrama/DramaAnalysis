@@ -24,7 +24,7 @@
 <meta name="author" content="Nils Reiter" />
 
 
-<meta name="date" content="2019-06-19" />
+<meta name="date" content="2019-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -250,9 +250,9 @@ In R, we can put them in a character vector, and we use lemmas:</p>
 <p>We can visualise these counts in a simple bar chart:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># retrieve counts and replace character ids by names</span>
 dstat &lt;-<span class="st"> </span><span class="kw">dictionaryStatisticsSingle</span>(rksp<span class="fl">.0</span>, <span class="dt">wordfield =</span> wf_love) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
 
-<span class="co"># remove figures not using these words at all</span>
+<span class="co"># remove characters not using these words at all</span>
 dstat &lt;-<span class="st"> </span>dstat[dstat<span class="op">$</span>x<span class="op">&gt;</span><span class="dv">0</span>,]
 
 <span class="co"># create a bar plot</span>
@@ -262,10 +262,10 @@ dstat &lt;-<span class="st"> </span>dstat[dstat<span class="op">$</span>x<span c
 )</code></pre>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
 <p>Apparently, the prince and Marinelli are mentioning these words a lot more than the other characters.</p>
-<p>When comparing characters, it often (but not always) makes sense to normalize the counts according to the total number of spoken words by a character. This can be enabled by setting the argument <code>normalizeByFigure=TRUE</code>. This will divide the number of words in this field by the total number of words a character speaks.</p>
+<p>When comparing characters, it often (but not always) makes sense to normalize the counts according to the total number of spoken words by a character. This can be enabled by setting the argument <code>normalizeByCharacter=TRUE</code>. This will divide the number of words in this field by the total number of words a character speaks.</p>
 <pre class="sourceCode r"><code class="sourceCode r">dstat &lt;-<span class="st"> </span><span class="kw">dictionaryStatisticsSingle</span>(rksp<span class="fl">.0</span>, <span class="dt">wordfield=</span>wf_love,
-  <span class="dt">normalizeByFigure =</span> <span class="ot">TRUE</span>   <span class="co"># apply normalization</span>
-) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)         <span class="co"># reformat character names</span>
+  <span class="dt">normalizeByCharacter =</span> <span class="ot">TRUE</span>   <span class="co"># apply normalization</span>
+) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)         <span class="co"># reformat character names</span>
 
 <span class="co"># remove figures not using these words at all</span>
 dstat &lt;-<span class="st"> </span>dstat[dstat<span class="op">$</span>x<span class="op">&gt;</span><span class="dv">0</span>,]
@@ -288,7 +288,7 @@ dstat &lt;-<span class="st"> </span>dstat[dstat<span class="op">$</span>x<span c
   rksp<span class="fl">.0</span>,  <span class="co"># the text</span>
   <span class="dt">fieldnames =</span> <span class="co"># fields we want to measure (from base_dictionary)</span>
     <span class="kw">c</span>(<span class="st">&quot;Liebe&quot;</span>, <span class="st">&quot;Familie&quot;</span>, <span class="st">&quot;Ratio&quot;</span>, <span class="st">&quot;Krieg&quot;</span>, <span class="st">&quot;Religion&quot;</span>),
-  <span class="dt">normalizeByFigure =</span> <span class="ot">TRUE</span>,   <span class="co"># normalization by figure</span>
+  <span class="dt">normalizeByCharacter =</span> <span class="ot">TRUE</span>,   <span class="co"># normalization by figure</span>
   <span class="dt">normalizeByField =</span> <span class="ot">TRUE</span>     <span class="co"># normalization by field</span>
 )
 dstat</code></pre>
@@ -320,7 +320,7 @@ dstat</code></pre>
 ## 11 4.992433e-05 5.679295e-05
 ## 12 3.014373e-05 1.184596e-05
 ## 13 2.439500e-05 9.586809e-05</code></pre>
-<p>The variable <code>dstat</code> now contains multiple columns, one for each word field. We have been using the option <code>normalizeByFigure</code> before. When comparing multiple fields, it often happens that they have a different size (i.e., different number of words). In this case, it makes sense to <em>also</em> normalize with the number of words in the word field. This is achieved by <code>normalizeByField=TRUE</code>. This makes the numbers very small, but they should be used in comparison anyway.</p>
+<p>The variable <code>dstat</code> now contains multiple columns, one for each word field. We have been using the option <code>normalizeByCharacter</code> before. When comparing multiple fields, it often happens that they have a different size (i.e., different number of words). In this case, it makes sense to <em>also</em> normalize with the number of words in the word field. This is achieved by <code>normalizeByField=TRUE</code>. This makes the numbers very small, but they should be used in comparison anyway.</p>
 <div id="bar-plot-by-character" class="section level3">
 <h3><span class="header-section-number">9.2.1</span> Bar plot by character</h3>
 <p>It is now straightforward to show the distribution of fields for a single character:</p>
@@ -339,10 +339,10 @@ dstat</code></pre>
   rksp<span class="fl">.0</span>,  <span class="co"># the text</span>
   <span class="dt">fieldnames =</span> <span class="co"># fields we want to measure (from base_dictionary)</span>
     <span class="kw">c</span>(<span class="st">&quot;Liebe&quot;</span>, <span class="st">&quot;Familie&quot;</span>, <span class="st">&quot;Ratio&quot;</span>, <span class="st">&quot;Krieg&quot;</span>, <span class="st">&quot;Religion&quot;</span>),
-  <span class="dt">normalizeByFigure =</span> <span class="ot">TRUE</span>,   <span class="co"># normalization by figure</span>
+  <span class="dt">normalizeByCharacter =</span> <span class="ot">TRUE</span>,   <span class="co"># normalization by figure</span>
   <span class="dt">normalizeByField =</span> <span class="ot">TRUE</span>     <span class="co"># normalization by field</span>
 ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
   
 mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(dstat)
 
@@ -363,7 +363,7 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(dstat)
 <p>The matrix doesn’t have row names by default. The snippet below can be used to add row names.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ds &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(rksp<span class="fl">.0</span>, 
                             <span class="dt">fieldnames=</span><span class="kw">c</span>(<span class="st">&quot;Liebe&quot;</span>, <span class="st">&quot;Familie&quot;</span>, <span class="st">&quot;Ratio&quot;</span>, <span class="st">&quot;Krieg&quot;</span>, <span class="st">&quot;Religion&quot;</span>),
-                            <span class="dt">normalizeByFigure=</span><span class="ot">TRUE</span>)
+                            <span class="dt">normalizeByCharacter=</span><span class="ot">TRUE</span>)
 m &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(ds)
 <span class="kw">rownames</span>(m) &lt;-<span class="st"> </span>ds<span class="op">$</span>character
 m</code></pre>
@@ -429,7 +429,7 @@ g &lt;-<span class="st"> </span><span class="kw">graph_from_adjacency_matrix</sp
 <p>We can now plot the theme progress over the course of the play. This can be done for specific characters, as shown below.</p>
 <pre class="sourceCode r"><code class="sourceCode r">dsl &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(rksp<span class="fl">.0</span>, 
                             <span class="dt">fieldnames=</span><span class="kw">c</span>(<span class="st">&quot;Liebe&quot;</span>, <span class="st">&quot;Familie&quot;</span>, <span class="st">&quot;Ratio&quot;</span>, <span class="st">&quot;Krieg&quot;</span>, <span class="st">&quot;Religion&quot;</span>),
-                            <span class="dt">normalizeByFigure=</span><span class="ot">TRUE</span>,
+                            <span class="dt">normalizeByCharacter=</span><span class="ot">TRUE</span>,
                             <span class="dt">segment=</span><span class="st">&quot;Act&quot;</span>)
 
 mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(dsl[dsl<span class="op">$</span>character<span class="op">==</span><span class="st">&quot;marinelli&quot;</span>,])
@@ -440,7 +440,7 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(dsl[dsl<span
 <p>Depending on the use case, it might be easier to interpret if the numbers are cumulatively added up. The snippet below shows how this works.</p>
 <pre class="sourceCode r"><code class="sourceCode r">dsl &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(rksp<span class="fl">.0</span>, 
                             <span class="dt">fieldnames=</span><span class="kw">c</span>(<span class="st">&quot;Liebe&quot;</span>, <span class="st">&quot;Familie&quot;</span>, <span class="st">&quot;Ratio&quot;</span>, <span class="st">&quot;Krieg&quot;</span>, <span class="st">&quot;Religion&quot;</span>),
-                            <span class="dt">normalizeByFigure=</span><span class="ot">TRUE</span>,
+                            <span class="dt">normalizeByCharacter=</span><span class="ot">TRUE</span>,
                             <span class="dt">segment=</span><span class="st">&quot;Act&quot;</span>) 
 
 mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(dsl[dsl<span class="op">$</span>character<span class="op">==</span><span class="st">&quot;marinelli&quot;</span>,])
@@ -460,11 +460,11 @@ mat &lt;-<span class="st"> </span><span class="kw">apply</span>(mat,<span class=
 <p>Simultaneously to the setting above, we now want to compare the development of several characters for a single word field. This unfortunately requires some reshuffling of the data, using the function <code>reshape</code> (from the <code>stats</code> package).</p>
 <pre class="sourceCode r"><code class="sourceCode r">dsl &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(rksp<span class="fl">.0</span>, 
                             <span class="dt">fieldnames=</span><span class="kw">c</span>(<span class="st">&quot;Liebe&quot;</span>),
-                            <span class="dt">normalizeByFigure=</span><span class="ot">TRUE</span>,
+                            <span class="dt">normalizeByCharacter=</span><span class="ot">TRUE</span>,
                             <span class="dt">segment=</span><span class="st">&quot;Act&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(rksp<span class="fl">.0</span>,
+<span class="st">  </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>,
          <span class="dt">n =</span> <span class="dv">6</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
 
 dsl &lt;-<span class="st"> </span><span class="kw">reshape</span>(dsl, <span class="dt">direction =</span> <span class="st">&quot;wide&quot;</span>,  <span class="co"># the table becomes wider</span>
                <span class="dt">timevar =</span> <span class="st">&quot;Number.Act&quot;</span>,   <span class="co"># the column that specifies multiple readings</span>
@@ -771,7 +771,7 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">loadDrama</
 <p>Counting word frequencies on a corpus works exactly as on a single text.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dictionaryStatistics</span>(sturm_und_drang.plays, 
                      <span class="dt">fieldnames=</span><span class="kw">names</span>(base_dictionary), 
-                     <span class="dt">byFigure =</span> <span class="ot">FALSE</span>)</code></pre>
+                     <span class="dt">byCharacter =</span> <span class="ot">FALSE</span>)</code></pre>
 <pre><code>##    corpus   drama Familie Krieg Ratio Liebe Religion
 ## 1      qd 11f81.0     169    48   100   161       48
 ## 2      qd 11g1d.0     158   188   107   190      143
@@ -797,8 +797,8 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">loadDrama</
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># count the words (as before)</span>
 dstat &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(sturm_und_drang.plays, 
                      <span class="dt">fieldnames=</span><span class="kw">names</span>(base_dictionary), 
-                     <span class="dt">byFigure =</span> <span class="ot">FALSE</span>, 
-                     <span class="dt">normalizeByFigure =</span> <span class="ot">TRUE</span>)
+                     <span class="dt">byCharacter =</span> <span class="ot">FALSE</span>, 
+                     <span class="dt">normalizeByCharacter =</span> <span class="ot">TRUE</span>)
 
 <span class="co"># merge them with the meta object</span>
 dstat &lt;-<span class="st"> </span><span class="kw">merge</span>(dstat, sturm_und_drang.plays<span class="op">$</span>meta)
@@ -900,7 +900,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["DramaAnalysis.pdf", "DramaAnalysis.epub"],
+"download": null,
 "toc": {
 "collapse": "section",
 "scroll_highlight": true

@@ -24,7 +24,7 @@
 <meta name="author" content="Nils Reiter" />
 
 
-<meta name="date" content="2019-06-19" />
+<meta name="date" content="2019-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -255,10 +255,10 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <div id="filter" class="section level3">
 <h3><span class="header-section-number">6.1.1</span> Filtering unimportant characters</h3>
-<p>This is informative, but doesn’t look very nice and some colors are difficult to associate with characters because colors are repeating. We will therefore use the function <code>filter()</code>, which is very similar to <code>format()</code>: It can be applied to any object of the type <code>QDHasCharacter</code> and removes rows according to certain criteria. In this case, we filter every character except the five most talkative ones. As usual, see <code>?filter.QDHasCharacter</code> to see other options.</p>
+<p>This is informative, but doesn’t look very nice and some colors are difficult to associate with characters because colors are repeating. We will therefore use the function <code>filterCharacters()</code>, which is very similar to <code>characterNames()</code>: It can be applied to any object of the type <code>QDHasCharacter</code> and removes rows according to certain criteria. In this case, we filter every character except the five most talkative ones. As usual, see <code>?filterCharacters</code> to see other options.</p>
 <pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)
+<span class="st">  </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
 
 mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
 
@@ -280,7 +280,7 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
 <pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>)   <span class="co"># getting the full configuration (with all characters)</span>
 mat_orig &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)     <span class="co"># extracting the matrix</span>
 
-c_filtered &lt;-<span class="st"> </span>c <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rksp<span class="fl">.0</span>,<span class="dt">n =</span> <span class="dv">8</span>) <span class="co"># filtering, so that only the top 8 characters remain</span>
+c_filtered &lt;-<span class="st"> </span>c <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>,<span class="dt">n =</span> <span class="dv">8</span>) <span class="co"># filtering, so that only the top 8 characters remain</span>
 mat_filtered &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c_filtered)  <span class="co"># extracting the filtered matrix</span>
 
 <span class="co"># scaling, using values from the unfiltered matrix</span>
@@ -400,8 +400,8 @@ copresence</code></pre>
 <h3><span class="header-section-number">6.2.1</span> As Heatmap</h3>
 <p>The copresence can be visualised in a simple heat map. We first focus on the lower triangle and also remove the diagonal values. The actual plotting is a bit more complicated in this case, because we are just using the values in the copresence matrix as pixel intensities in the plot. Also, the axes need to be suppressed first, and can be added later with the proper names of the characters. If needed the code can also be used to include labels into the heat map.</p>
 <pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>, <span class="dt">onlyPresence =</span> <span class="ot">TRUE</span>, <span class="dt">segment=</span><span class="st">&quot;Scene&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">7</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)
+<span class="st">  </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">7</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
 
 <span class="co"># extract a matrix</span>
 mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
@@ -444,8 +444,8 @@ copresence[<span class="kw">lower.tri</span>(copresence,<span class="dt">diag=</
 <p>The same information can also be visualized as a copresence network. For this, we employ the R-package <code>igraph</code>. A nice introduction to <code>igraph</code> can be found in <span class="citation">(Arnold and Tilton 2015)</span>, particularly for literary networks.</p>
 <p>Technically, the matrix we created before is an <a href="https://en.wikipedia.org/wiki/Adjacency_matrix">adjacency matrix</a>. It is therefore simple to convert it to a graph, and igraph offers the function <code>graph_from_adjacency_matrix()</code> for this.</p>
 <pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>, <span class="dt">onlyPresence =</span> <span class="ot">TRUE</span>, <span class="dt">segment=</span><span class="st">&quot;Scene&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">7</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)
+<span class="st">  </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">7</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
 
 <span class="co"># extract a matrix</span>
 mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
@@ -578,7 +578,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["DramaAnalysis.pdf", "DramaAnalysis.epub"],
+"download": null,
 "toc": {
 "collapse": "section",
 "scroll_highlight": true

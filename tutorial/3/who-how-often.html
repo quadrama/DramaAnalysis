@@ -24,7 +24,7 @@
 <meta name="author" content="Nils Reiter" />
 
 
-<meta name="date" content="2019-06-19" />
+<meta name="date" content="2019-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -220,7 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="who-how-often" class="section level1">
 <h1><span class="header-section-number">5</span> Who’s talking how often?</h1>
 <p>So far, we have counted words for characters. Now we will turn to utterances, and their properties.</p>
-<p>First, we will use the function <code>utteranceStatistics()</code> to extract quantitative information about utterances:</p>
+<p>First, we will use the function <a href="https://quadrama.github.io/DramaAnalysis/3.0.0/reference/utteranceStatistics.html"><code>utteranceStatistics()</code></a> to extract quantitative information about utterances:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">utteranceStatistics</span>(rksp<span class="fl">.0</span>)</code></pre>
 <pre><code>##    corpus  drama        character utteranceBegin utteranceLength
 ## 1    test rksp.0        der_prinz            426    4.888626e-03
@@ -235,7 +235,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10   test rksp.0 der_kammerdiener           2299    3.548196e-04</code></pre>
 <p>This creates a table that is very long, which is why we only show the first 10 rows here. The table contains one row for each utterance, and information about the speaker of the utterance, its length (measured in tokens) and its starting position (character position). We can now inspect the variance in utterance length:</p>
 <pre class="sourceCode r"><code class="sourceCode r">ustat &lt;-<span class="st"> </span><span class="kw">utteranceStatistics</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>)   <span class="co"># use names instead of character ids (see above)</span>
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)   <span class="co"># use names instead of character ids (see above)</span>
   
 <span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">9</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>)) <span class="co"># increase margin</span>
 
@@ -252,17 +252,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="dv">2</span>))
 
 <span class="kw">utteranceStatistics</span>(rjmw<span class="fl">.0</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rjmw<span class="fl">.0</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># character names instead of ids</span>
+<span class="st">  </span><span class="kw">characterNames</span>(rjmw<span class="fl">.0</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># character names instead of ids</span>
 <span class="st">  </span><span class="kw">plot</span>(<span class="dt">main=</span><span class="kw">dramaNames</span>(rjmw<span class="fl">.0</span>))                <span class="co"># calling plot.QDUtteranceStatistics()</span></code></pre>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-<p>Each dot in this plot represents one utterance, the x-axis is measured in character positions. This is not really intuitive, but the flow from left to right represents the flow of the text. More technically, we again apply the function <code>format()</code> to display character names instead of character ids. This is the same function as above, just applied to a different table. It can be applied to any table of the type <code>QDHasCharacter</code>. Secondly, the call to the function <code>plot()</code> gets rerouted to the function <code>plot.QDUtteranceStatistics()</code>, because the object we supply as argument is of the type <code>QDUtteranceStatistics</code>. Information about this function can be retrieved by entering <code>?plot.QDUtteranceStatistics</code>.</p>
+<p>Each dot in this plot represents one utterance, the x-axis is measured in character positions. This is not really intuitive, but the flow from left to right represents the flow of the text. More technically, we again apply the function <code>characterNames()</code> to display character names instead of character ids. This is the same function as above, just applied to a different table. It can be applied to any table of the type <code>QDHasCharacter</code>. Secondly, the call to the function <code>plot()</code> gets rerouted to the function <code>plot.QDUtteranceStatistics()</code>, because the object we supply as argument is of the type <code>QDUtteranceStatistics</code>. Information about this function can be retrieved by entering <code>?plot.QDUtteranceStatistics</code>.</p>
 </div>
 <div id="adding-act-boundaries" class="section level2">
 <h2><span class="header-section-number">5.2</span> Adding act boundaries</h2>
 <p>Now it would be useful to include information on act/scene boundaries in this plot. This can be done by supplying the original drama object as a second argument to the <code>plot()</code> function:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dv">2</span>,<span class="dv">2</span>))
 <span class="kw">utteranceStatistics</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">format</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">plot</span>(rksp<span class="fl">.0</span>, <span class="co"># adding the `QDDrama` object here creates the act boundaries.</span>
        <span class="dt">main=</span><span class="kw">dramaNames</span>(rksp<span class="fl">.0</span>)) </code></pre>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
@@ -290,7 +290,7 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">split</span
 <span class="kw">lapply</span>(sturm_und_drang.plays, 
        <span class="cf">function</span>(x) {
          <span class="kw">utteranceStatistics</span>(x) <span class="op">%&gt;%</span>
-<span class="st">           </span><span class="kw">format</span>(x) <span class="op">%&gt;%</span>
+<span class="st">           </span><span class="kw">characterNames</span>(x) <span class="op">%&gt;%</span>
 <span class="st">           </span><span class="kw">plot</span>(x, <span class="dt">main=</span><span class="kw">dramaNames</span>(x))
        }
 )</code></pre>
@@ -341,7 +341,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["DramaAnalysis.pdf", "DramaAnalysis.epub"],
+"download": null,
 "toc": {
 "collapse": "section",
 "scroll_highlight": true
