@@ -12,6 +12,10 @@ mapPrefix(idList, map)
 \item{map}{A list containing the old prefix as name and the new one as
 values.}
 }
+\value{
+The function returns a list of the same length of the input list, but
+with replaced play prefixes.
+}
 \description{
 This function can be used to replace corpus prefixes.
 If a list of play ids contains textgrid prefixes, for instance, this 
