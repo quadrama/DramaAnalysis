@@ -12,6 +12,9 @@ loadDramaTEI(filename, dataDirectory = paste0(getOption("qd.datadir"),
 
 \item{dataDirectory}{The directory that holds the file(s).}
 }
+\value{
+The function returns an object of class \code{QDDrama}.
+}
 \description{
 This function parses and loads one or more dramas in raw TEI format.
 }

@@ -5,6 +5,7 @@
 #' @import xml2
 #' @importFrom data.table data.table
 #' @exportClass QDDrama
+#' @return The function returns an object of class \code{QDDrama}.
 #' @export
 loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"), "/tei")) {
   if (is.list(filename)) {
