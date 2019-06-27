@@ -106,5 +106,5 @@ configuration <- function(d,
 #' @param ... All other arguments are passwd to \code{as.matrix.data.frame}.
 as.matrix.QDConfiguration <- function(x, ...) {
   stopifnot(inherits(x, "QDConfiguration"))
-  as.matrix.data.frame(x[,4:ncol(x)], ...)
+  as.matrix.data.frame(x[,4:ncol(x), drop=FALSE], ...)
 }
