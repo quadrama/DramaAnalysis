@@ -19,6 +19,9 @@ representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor lev
 
 \item{variant}{The file variant to load}
 }
+\value{
+a data.frame that is also of class \code{QDHasUtteranceBE}.
+}
 \description{
 Load Text
 }

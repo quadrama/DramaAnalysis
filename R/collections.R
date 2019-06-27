@@ -63,6 +63,7 @@ loadSetsInternally <- function() {
 #' the returned table to the set name. If set to FALSE (default), a vector
 #' is returned. In this case, association to collections is not returned.
 #' Otherwise, it's a data.frame.
+#' @return A character vector with play ids that belong to the set.
 #' @export
 loadSet <- function(setName, addGenreColumn=FALSE) {
   sets <- loadSetsInternally()

@@ -11,6 +11,9 @@ loadMeta(ids, type = NULL)
 
 \item{type}{The annotation type to load. No longer used.}
 }
+\value{
+a data frame
+}
 \description{
 helper method to load meta data about dramatic texts (E.g., author, year)
 }

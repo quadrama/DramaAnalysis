@@ -14,6 +14,9 @@ loadCharacters(ids, defaultCollection = "tg",
 
 \item{dataDirectory}{the data directory}
 }
+\value{
+A data.frame extracted from the CSV file about characters
+}
 \description{
 Loads a table of characters and meta data
 }

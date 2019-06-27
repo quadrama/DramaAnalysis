@@ -108,6 +108,7 @@ loadSegments <- function(ids, defaultCollection="qd") {
 #' @param variant The file variant to load
 #' @param unifyCharacterFactors Logical value, defaults to TRUE. Controls whether columns 
 #' representing characters (i.e., Speaker.* and Mentioned.*) are sharing factor levels
+#' @return a data.frame that is also of class \code{QDHasUtteranceBE}.
 loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg", 
                      unifyCharacterFactors=FALSE, variant="UtterancesWithTokens") {
   t <- loadCSV(ids, defaultCollection = defaultCollection, variant=variant)
@@ -144,6 +145,7 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg",
 #' @param ids a list or vector of ids
 #' @param defaultCollection the default collection
 #' @param dataDirectory the data directory
+#' @return A data.frame extracted from the CSV file about characters
 loadCharacters <- function(ids, 
                            defaultCollection="tg", 
                            dataDirectory=getOption("qd.datadir")) {
@@ -201,6 +203,7 @@ loadCSV <- function(ids,
 #' @description helper method to load meta data about dramatic texts (E.g., author, year)
 #' @param ids A vector or list of drama ids
 #' @param type The annotation type to load. No longer used.
+#' @return a data frame
 loadMeta <- function(ids,type=NULL) {
   loadCSV(ids, variant="Metadata")
 }

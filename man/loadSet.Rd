@@ -17,6 +17,9 @@ the returned table to the set name. If set to FALSE (default), a vector
 is returned. In this case, association to collections is not returned.
 Otherwise, it's a data.frame.}
 }
+\value{
+A character vector with play ids that belong to the set.
+}
 \description{
 Function to load a set from collection files
 Can optionally set the set name as a genre in the returned table. 
