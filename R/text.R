@@ -74,6 +74,8 @@ characterNames <- function(x,
 #' @description Given a QDDrama object, this function generates a list of nicely 
 #' formatted names, following the format string.
 #' @param x The QDDrama object
+#' @param ids If specified, should be a character vector of play ids (prefixed with corpus). 
+#' Then the return value only contains the plays in the vector and in the order specified.
 #' @param orderBy The meta data key that the final list will be ordered by
 #' @param formatString A character vector. Contains special symbols that
 #' are replaced by meta data entries about the plays. The following symbols can
@@ -90,6 +92,7 @@ characterNames <- function(x,
 #' @export
 #' @importFrom stringr str_replace
 dramaNames <- function(x, 
+                       ids = NULL,
                        formatString = "%A: %T (%DM)", 
                        orderBy = "drama") {
   stopifnot(inherits(x, "QDDrama"))
@@ -104,14 +107,13 @@ dramaNames <- function(x,
               "%C" = "corpus",
               "%L" = "language")
   t <- rep(formatString, times=nrow(x$meta))
-  
   for (key in names(keys)) {
     column <- x$meta[[keys[[key]]]]
     t <- stringr::str_replace(t, key, ifelse(is.na(column), 
                                              "NA",
                                              as.character(column)))
-    
   }
+  names(t) <- x$meta$drama
   
   suppressWarnings(column <- apply(x$meta[,c("Date.Printed", "Date.Written", "Date.Premiere")], 
                                    1, min, na.rm=TRUE))
@@ -120,9 +122,13 @@ dramaNames <- function(x,
                                              as.character(column),
                                              "NA"))
   
+  names(t) <- paste(x$meta$corpus, x$meta$drama, sep=":")
   
-  
-  t[order(x$meta[[orderBy]])]
+  if (is.null(ids)) {
+    t[order(x$meta[[orderBy]])]
+  } else {
+    t[ids]
+  }
 }
 
 #' @title Filter characters

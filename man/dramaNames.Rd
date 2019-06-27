@@ -4,10 +4,14 @@
 \alias{dramaNames}
 \title{Format drama titles}
 \usage{
-dramaNames(x, formatString = "\%A: \%T (\%DM)", orderBy = "drama")
+dramaNames(x, ids = NULL, formatString = "\%A: \%T (\%DM)",
+  orderBy = "drama")
 }
 \arguments{
 \item{x}{The QDDrama object}
+
+\item{ids}{If specified, should be a character vector of play ids (prefixed with corpus). 
+Then the return value only contains the plays in the vector and in the order specified.}
 
 \item{formatString}{A character vector. Contains special symbols that
 are replaced by meta data entries about the plays. The following symbols can
