@@ -122,6 +122,7 @@ mapPrefix <- function(idList, map) {
 #' @param append Whether to extend the collection file if it already exists. 
 #' If FALSE, the file will be overwritten. (default = TRUE)
 #' @export
+#' @return The function returns the ids that belong to the collection as a character vector.
 #' @examples
 #' \donttest{
 #' t <- combine(rksp.0, rjmw.0)

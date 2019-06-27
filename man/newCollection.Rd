@@ -22,6 +22,9 @@ vector containing the drama IDs to be collected}
 \item{append}{Whether to extend the collection file if it already exists. 
 If FALSE, the file will be overwritten. (default = TRUE)}
 }
+\value{
+The function returns the ids that belong to the collection as a character vector.
+}
 \description{
 \code{newCollection()} can be used to create new collections 
 or add dramas to existing collection files.
