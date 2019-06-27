@@ -11,7 +11,7 @@
 #' Defaults to the pipe symbol.
 #' @param normalize Whether to normalize values or not. If set to TRUE, the values are normalized by
 #' row sums.
-#' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)
+#' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first). If false, the columns are ordered alphabetically by column name.
 #' @return Matrix of word frequencies in the format words X segments
 #' @rdname frequencyTable
 #' @seealso \code{stylo}
@@ -68,7 +68,9 @@ frequencytable <- function(drama,
   } 
   
   if (sortResult == TRUE) {
-    r <- r[,order(colSums(r),decreasing = TRUE)]
+    r <- r[,order(colSums(r),decreasing = TRUE),drop = FALSE]
+  } else {
+    r <- r[, order(colnames(r)) ,drop = FALSE]
   }
   
   class(r) <- append(class(r), switch(segment, 

@@ -37,7 +37,7 @@ Defaults to the pipe symbol.}
 \item{normalize}{Whether to normalize values or not. If set to TRUE, the values are normalized by
 row sums.}
 
-\item{sortResult}{Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first)}
+\item{sortResult}{Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first). If false, the columns are ordered alphabetically by column name.}
 
 \item{segment}{Character vector. Whether the count is by drama (default), act or scene}
 }
