@@ -204,8 +204,8 @@ fixColumnType <- function(dt) {
 
 # internal
 loadCharactersTEI <- function(raw_tei, nsp, corpus, drama) {
-  dt_characters <- data.table::data.table(corpus=character(), drama=character(), Speaker.figure_surface=character(), 
-                                          Speaker.figure_id=character(), Gender=character(), Age=numeric())
+  dt_characters <- data.table::data.table(corpus=character(), drama=character(), figure_surface=character(), 
+                                          figure_id=character(), Gender=character(), Age=numeric())
   listPerson <- xml2::xml_find_all(raw_tei, "//tei:listPerson/tei:person", ns = nsp)
   for (elem in listPerson) {
     dt_characters <- rbind(dt_characters, list(corpus, drama, xml2::xml_text(xml2::xml_children(elem)[[1]]), xml2::xml_attr(elem, "id"), xml2::xml_attr(elem, "sex"), xml2::xml_attr(elem, "age")))
