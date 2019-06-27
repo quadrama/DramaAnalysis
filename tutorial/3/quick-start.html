@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Basics | DramaAnalysis</title>
-  <meta name="description" content="3 Basics | DramaAnalysis" />
+  <title>4 Quick Start | DramaAnalysis</title>
+  <meta name="description" content="4 Quick Start | DramaAnalysis" />
   <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Basics | DramaAnalysis" />
+  <meta property="og:title" content="4 Quick Start | DramaAnalysis" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Basics | DramaAnalysis" />
+  <meta name="twitter:title" content="4 Quick Start | DramaAnalysis" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="installation.html">
-<link rel="next" href="quick-start.html">
+<link rel="prev" href="basics.html">
+<link rel="next" href="data.html">
 <script src="assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -221,56 +221,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="basics" class="section level1">
-<h1><span class="header-section-number">3</span> Basics</h1>
-<p>This is not really an R tutorial. If you’re looking for a full-fledged R tutorial, we recommend <span class="citation">(Arnold and Tilton 2015)</span>, because it is very practical, and also deals with text analysis. However, this chapter introduces some concepts related to R.</p>
-<div id="r-basics" class="section level2">
-<h2><span class="header-section-number">3.1</span> R Basics</h2>
-<div id="variable-assignment" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> Variable assignment</h3>
-<p>Assigning variables is one of the things you do most frequently in most programming languages. In R, this is done with the arrow operator: <code>a &lt;- 5</code>. This creates a new variable <code>a</code> that has the value 5. Conceptually, variables are aliases for values. The same value can be assigned to multiple names, but one variable only can point to one value.</p>
-</div>
-<div id="function-calls" class="section level3">
-<h3><span class="header-section-number">3.1.2</span> Function calls</h3>
-<p>The R package for drama analysis defines a number of functions. Functions are mini programs that can be executed anytime by a user. Function calls (i.e., the execution of a function) can be recognized by round parentheses: <code>sessionInfo()</code> is a function call. If you enter this in the R console and press enter, the function gets executed and its return value is printed on the console. The function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.0/topics/sessionInfo"><code>sessionInfo()</code></a> can be used to get information about your R session and installation. The function does not take any arguments, which is why the round parentheses are empty. The function <code>sum</code>, on the other hand, takes arguments: The values it should add. Thus, calling <code>sum(1,1)</code> prints 2 on the console.</p>
-</div>
-</div>
-<div id="magrittr" class="section level2">
-<h2><span class="header-section-number">3.2</span> magrittr Pipes / <code>%&gt;%</code></h2>
-<p>In the tutorial, we make heavy use of <code>magrittr</code>-pipes. These are provided by the R package <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html"><code>magrittr</code></a>. The core idea behind pipes is to use the output of one function directly as input for the next function – to create a pipeline of functions (if you’re familiar with the unix command line you probably have used this before).</p>
-<p>The pipeline is represented by <code>%&gt;%</code>. The semantics of <code>%&gt;%</code> is to use the output of whatever comes before as <em>first argument</em> for whatever comes after. Thus, if we write <code>runif(5) %&gt;% barplot</code>, the result of <code>runif(5)</code> (which is a vector with five random numbers) is used as the first argument for the function <code>barplot()</code>. This is eqivalent to:</p>
-<pre class="sourceCode r"><code class="sourceCode r">r &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">5</span>)
-<span class="kw">barplot</span>(r)</code></pre>
-<p>The nice thing about magrittr is that you can create pipes that are much longer:</p>
-<pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">loadDrama</span>(<span class="st">&quot;test:rksp.0&quot;</span>)
+<div id="quick-start" class="section level1">
+<h1><span class="header-section-number">4</span> Quick Start</h1>
+<p>The following code installs <em>all</em> packages used in this tutorial, so that you can directly get started.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;DramaAnalysis&quot;</span>, <span class="st">&quot;magrittr&quot;</span>, <span class="st">&quot;igraph&quot;</span>, <span class="st">&quot;highcharter&quot;</span>, <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;fmsb&quot;</span>, <span class="st">&quot;knitr&quot;</span>))
 
-d <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">dictionaryStatistics</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filterCharacters</span>(d) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">characterNames</span>(d) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">barplot</span>() </code></pre>
-<p>Again, this is equivalent to a version with variables:</p>
-<pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">loadDrama</span>(<span class="st">&quot;test:rksp.0&quot;</span>)
-
-ds &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(d)
-dsf &lt;-<span class="st"> </span><span class="kw">filterCharacters</span>(ds, d)
-dsff &lt;-<span class="st"> </span><span class="kw">characterNames</span>(dsf, d)
-<span class="kw">barplot</span>(dsff)</code></pre>
-<p>Pipes are much faster to write and more transparent, that’s why they are used in this tutorial. In order to re-create the steps in the tutorial, you will need to load the library like this:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># download/update the library from CRAN</span>
-<span class="kw">install.packages</span>(<span class="st">&quot;magrittr&quot;</span>)
-
-<span class="co"># load it into the active environment</span>
-<span class="kw">library</span>(magrittr)</code></pre>
+<span class="kw">library</span>(DramaAnalysis)
+<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(igraph)</code></pre>
 </div>
-</div>
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="installation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="quick-start.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="basics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
