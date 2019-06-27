@@ -1,4 +1,17 @@
+## Resubmission 
+
+This is a resubmission. In this version I have:
+
+* Added documentation on return values of all functions
+
+* Replaced \dontrun{} by \donttest{} in the examples
+
+* Removed examples for unexported functions
+
+* Fixed a bug in the function loadDramaTEI()
+
 ## Resubmission
+
 This is a resubmission. In this version I have:
 
 * Added a reference paper to the Description
