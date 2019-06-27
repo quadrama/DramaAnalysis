@@ -125,9 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
-</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
@@ -224,7 +222,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quick-start" class="section level1">
 <h1><span class="header-section-number">4</span> Quick Start</h1>
 <p>The following code installs <em>all</em> packages used in this tutorial, so that you can directly get started.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;DramaAnalysis&quot;</span>, <span class="st">&quot;magrittr&quot;</span>, <span class="st">&quot;igraph&quot;</span>, <span class="st">&quot;highcharter&quot;</span>, <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;fmsb&quot;</span>, <span class="st">&quot;knitr&quot;</span>))
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;DramaAnalysis&quot;</span>, <span class="st">&quot;magrittr&quot;</span>, 
+                   <span class="st">&quot;igraph&quot;</span>, <span class="st">&quot;highcharter&quot;</span>, 
+                   <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;fmsb&quot;</span>, 
+                   <span class="st">&quot;knitr&quot;</span>))
 
 <span class="kw">library</span>(DramaAnalysis)
 <span class="kw">library</span>(magrittr)
@@ -282,7 +283,7 @@ gitbook.start({
 "scroll_highlight": true
 },
 "toolbar": {
-"position": "static"
+"position": "fixed"
 },
 "search": true
 });

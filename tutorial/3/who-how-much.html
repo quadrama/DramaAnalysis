@@ -125,9 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
-</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
@@ -369,7 +367,7 @@ text &lt;-<span class="st"> </span><span class="kw">combine</span>(rksp<span cla
         <span class="dt">names.arg =</span> charStats<span class="op">$</span>character, <span class="co"># the labels on the x-axis</span>
         <span class="dt">las=</span><span class="dv">2</span> <span class="co"># rotate the labels on both axes</span>
 ) </code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <div id="format" class="section level2">
 <h2><span class="header-section-number">6.1</span> Character names instead of identifiers</h2>
 <p>By default, all our functions identify characters using technical ids, which may or may not be human-readable. Even if they are, it’s usually a good idea to replace them with nice to read labels before publication. We therefore provide the function <a href="https://quadrama.github.io/DramaAnalysis/3.0.0/reference/characterNames.html"><code>characterNames()</code></a>, which can be applied to any table that contains a column with character ids (i.e., any object of type <code>QDHasCharacter</code>).</p>
@@ -383,7 +381,7 @@ charStats &lt;-<span class="st"> </span><span class="kw">characterNames</span>(c
         <span class="dt">names.arg =</span> charStats<span class="op">$</span>character, <span class="co"># the labels on the x-axis</span>
         <span class="dt">las=</span><span class="dv">2</span> <span class="co"># rotate the labels on both axes</span>
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>As can be seen above <code>characterNames()</code> requires two arguments: The table in which we want to replace ids by characters, and the original drama object (that we got from calling the function <code>loadDrama()</code>).</p>
 </div>
 <div id="stacked-bar-plot" class="section level2">
@@ -392,13 +390,13 @@ charStats &lt;-<span class="st"> </span><span class="kw">characterNames</span>(c
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">characterStatistics</span>(text, <span class="dt">normalize=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">characterNames</span>(text) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">barplot</span>(<span class="dt">names.arg=</span><span class="kw">dramaNames</span>(text, <span class="dt">formatString =</span> <span class="st">&quot;%T&quot;</span>))</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>By default, the <code>barplot.QDCharacterStatistics()</code> function visualises the number of tokens spoken by the characters (and ranks the characters accordingly). This can be changed by supplying the option <code>column</code>, and specifying another value.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">characterStatistics</span>(text, <span class="dt">normalize=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">characterNames</span>(text) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">barplot</span>(<span class="dt">names.arg=</span><span class="kw">dramaNames</span>(text, <span class="dt">formatString =</span> <span class="st">&quot;%T&quot;</span>), 
           <span class="dt">column =</span> <span class="st">&quot;utteranceLengthMean&quot;</span>) <span class="co"># show mean utterance length</span></code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p>This picture looks quite different! Other interesting columns to experiment with are <code>types</code> and <code>utteranceLengthSd</code>.</p>
 <p>Another function that we used above is called <code>dramaNames()</code>. It can be used to extract</p>
 </div>
@@ -421,7 +419,7 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">loadDrama</
 <span class="st">  </span><span class="kw">characterNames</span>(sturm_und_drang.plays) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">barplot</span>(<span class="dt">las=</span><span class="dv">2</span>, <span class="dt">names.arg =</span> <span class="kw">dramaNames</span>(sturm_und_drang.plays, 
                                         <span class="dt">formatString =</span> <span class="st">&quot;%A: %T&quot;</span>))</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p>While readability can certainly be improved upon, we can directly see that the relative active presence of the characters is distributed very differently in different plays. The most “talkative” character in Klinger’s <em>Zwillinge</em>, for instance, speaks almost one half of the words in the play, while Wenzelslaus in Lenz’ <em>Hofmeister</em> speaks much less, even in relative terms.</p>
 
 </div>
@@ -475,7 +473,7 @@ gitbook.start({
 "scroll_highlight": true
 },
 "toolbar": {
-"position": "static"
+"position": "fixed"
 },
 "search": true
 });

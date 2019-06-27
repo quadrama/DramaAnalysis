@@ -125,9 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
-</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
@@ -242,12 +240,20 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">loadDrama</
         <span class="dt">names.arg =</span> <span class="kw">dramaNames</span>(sturm_und_drang.plays, <span class="dt">formatString =</span> <span class="st">&quot;%T&quot;</span>), 
         <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">col=</span>qd.colors)</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
 <p>Next, we will turn to the temporal distribution of stage directions over the plays. Since the plays have different lengths, we will need to normalize the position of the stage directions, so that they are given in percentage values.</p>
 <p>The table that contains the stage directions (<code>sturm_und_drang.plays$stageDirections</code>) also contains a column called <code>utteranceBegin</code>. They are not strictly utterances, but the column name is the same as in other tables so that it’s easier to re-use code. We will use this column to visualize the temporal distribution of the stage directions. To normalize the temporal distribution, we first add a new column that gives us the maximal value. In the second step, we divide by this value.</p>
-<pre class="sourceCode r"><code class="sourceCode r">sturm_und_drang.plays<span class="op">$</span>stageDirections[,m<span class="op">:</span><span class="er">=</span><span class="kw">max</span>(utteranceBegin),.(corpus,drama)]
-
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">14</span>,<span class="dv">2</span>,<span class="dv">2</span>))
+<pre class="sourceCode r"><code class="sourceCode r">sturm_und_drang.plays<span class="op">$</span>stageDirections[,m<span class="op">:</span><span class="er">=</span><span class="kw">max</span>(utteranceBegin),.(corpus,drama)]</code></pre>
+<pre><code>## Warning in `[.data.table`(sturm_und_drang.plays$stageDirections, ,
+## `:=`(m, : Invalid .internal.selfref detected and fixed by taking a
+## (shallow) copy of the data.table so that := can add this new column by
+## reference. At an earlier point, this data.table has been copied by R (or
+## was created manually using structure() or similar). Avoid names&lt;- and
+## attr&lt;- which in R currently (and oddly) may copy the whole data.table. Use
+## set* syntax instead to avoid copying: ?set, ?setnames and ?setattr. If this
+## message doesn&#39;t help, please report your use case to the data.table issue
+## tracker so the root cause can be fixed or this message improved.</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">14</span>,<span class="dv">2</span>,<span class="dv">2</span>))
 <span class="kw">stripchart</span>(utteranceBegin<span class="op">/</span>m <span class="op">~</span><span class="st"> </span>drama, 
            <span class="dt">data =</span> sturm_und_drang.plays<span class="op">$</span>stageDirections,
            <span class="dt">las =</span> <span class="dv">1</span>,
@@ -255,7 +261,7 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">loadDrama</
            <span class="dt">col=</span>qd.colors,
            <span class="dt">cex.axis=</span><span class="fl">0.7</span>,
            <span class="dt">group.names =</span> <span class="kw">dramaNames</span>(sturm_und_drang.plays, <span class="dt">formatString =</span> <span class="st">&quot;%T&quot;</span>))</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
 <p>This plot shows each stage direction at its relative position in the play. There is no clear pattern to discern here, except that they are not equally distributed in the plays (but we already knew that, see above).</p>
 <p>Of course, we can also look at the length of stage directions, and their variances. This is very similar to what we did for character utterances. Please note that the length here is measured in <em>character numbers</em>. A single word direction like <em>smiles</em> has a length of 6 characters.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">12</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>))
@@ -264,7 +270,7 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">loadDrama</
         <span class="dt">las=</span><span class="dv">2</span>,<span class="dt">cex.axis=</span><span class="fl">0.7</span>,
         <span class="dt">names=</span><span class="kw">dramaNames</span>(sturm_und_drang.plays, <span class="dt">formatString =</span> <span class="st">&quot;%T&quot;</span>),
         <span class="dt">xlab=</span><span class="ot">NULL</span>, <span class="dt">ylab=</span><span class="ot">NULL</span>)</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
 
 
 </div>
@@ -317,7 +323,7 @@ gitbook.start({
 "scroll_highlight": true
 },
 "toolbar": {
-"position": "static"
+"position": "fixed"
 },
 "search": true
 });

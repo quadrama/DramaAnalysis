@@ -125,9 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
-</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
@@ -264,7 +262,7 @@ dstat &lt;-<span class="st"> </span>dstat[dstat<span class="op">$</span>x<span c
         <span class="dt">names.arg =</span> dstat<span class="op">$</span>character,  <span class="co"># x axis labels</span>
         <span class="dt">las=</span><span class="dv">2</span>                         <span class="co"># turn axis labels</span>
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
 <p>Apparently, the prince and Marinelli are mentioning these words a lot more than the other characters.</p>
 <p>When comparing characters, it often (but not always) makes sense to normalize the counts according to the total number of spoken words by a character. This can be enabled by setting the argument <code>normalizeByCharacter=TRUE</code>. This will divide the number of words in this field by the total number of words a character speaks.</p>
 <pre class="sourceCode r"><code class="sourceCode r">dstat &lt;-<span class="st"> </span><span class="kw">dictionaryStatisticsSingle</span>(rksp<span class="fl">.0</span>, <span class="dt">wordfield=</span>wf_love,
@@ -278,7 +276,7 @@ dstat &lt;-<span class="st"> </span>dstat[dstat<span class="op">$</span>x<span c
         <span class="dt">names.arg =</span> dstat<span class="op">$</span>character, 
         <span class="dt">las=</span><span class="dv">2</span>            
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
 </div>
 <div id="multiple-word-fields" class="section level2">
 <h2><span class="header-section-number">11.2</span> Multiple Word Fields</h2>
@@ -334,7 +332,7 @@ dstat</code></pre>
         <span class="dt">main=</span><span class="st">&quot;Emilia&#39;s speech&quot;</span>,
         <span class="dt">names.arg=</span><span class="kw">colnames</span>(mat)
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
 </div>
 <div id="bar-plot-by-field" class="section level3">
 <h3><span class="header-section-number">11.2.2</span> Bar plot by field</h3>
@@ -358,7 +356,7 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(dstat)
         <span class="dt">names.arg =</span> dstat<span class="op">$</span>character,   <span class="co"># x axis labels</span>
         <span class="dt">las=</span><span class="dv">2</span>                     <span class="co"># rotation for labels</span>
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
 </div>
 </div>
 <div id="dictionary-based-distance" class="section level2">
@@ -422,7 +420,7 @@ g &lt;-<span class="st"> </span><span class="kw">graph_from_adjacency_matrix</sp
             <span class="dt">edge.width=</span><span class="kw">E</span>(g)<span class="op">$</span>weight<span class="op">*</span><span class="dv">100</span>    <span class="co"># scale edges according to their weight </span>
                                           <span class="co"># (since the distances are so small, we multiply)</span>
             )  </code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
 <p>Although this network is similar to the one shown in <a href="configuration.html#network">Section 5.2.2</a> (both undirected and weighted), it displays a totally different kind of information. The networks based on copresence connect characters that appear together on stage, while this network connects characters with similar thematic profile in their speech (within the limits of being able to detect thematic profiles via word fields).</p>
 </div>
 <div id="development-over-the-course-of-the-play" class="section level2">
@@ -440,7 +438,7 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(dsl[dsl<span
 
 <span class="kw">matplot</span>(mat, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)
 <span class="kw">legend</span>(<span class="dt">x=</span><span class="st">&quot;topleft&quot;</span>,<span class="dt">legend=</span><span class="kw">colnames</span>(mat), <span class="dt">lty=</span><span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(dsl))</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
 <p>Depending on the use case, it might be easier to interpret if the numbers are cumulatively added up. The snippet below shows how this works.</p>
 <pre class="sourceCode r"><code class="sourceCode r">dsl &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(rksp<span class="fl">.0</span>, 
                             <span class="dt">fieldnames=</span><span class="kw">c</span>(<span class="st">&quot;Liebe&quot;</span>, <span class="st">&quot;Familie&quot;</span>, <span class="st">&quot;Ratio&quot;</span>, <span class="st">&quot;Krieg&quot;</span>, <span class="st">&quot;Religion&quot;</span>),
@@ -457,7 +455,7 @@ mat &lt;-<span class="st"> </span><span class="kw">apply</span>(mat,<span class=
 <span class="kw">abline</span>(<span class="dt">v=</span><span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat))
 
 <span class="kw">legend</span>(<span class="dt">x=</span><span class="st">&quot;topleft&quot;</span>, <span class="dt">legend=</span><span class="kw">colnames</span>(mat), <span class="dt">lty=</span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-67-1.png" width="672" /></p>
 </div>
 <div id="comparing-characters" class="section level3">
 <h3><span class="header-section-number">11.4.2</span> Comparing characters</h3>
@@ -482,7 +480,7 @@ mat &lt;-<span class="st"> </span><span class="kw">apply</span>(mat,<span class=
 
 <span class="kw">matplot</span>(mat, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">lty =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat), <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Liebe&quot;</span>)
 <span class="kw">legend</span>(<span class="dt">x=</span><span class="st">&quot;topleft&quot;</span>, <span class="dt">legend=</span><span class="kw">colnames</span>(mat), <span class="dt">lty=</span><span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat))</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-67-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
 </div>
 </div>
 <div id="corpus-analysis-1" class="section level2">
@@ -831,7 +829,7 @@ dstat &lt;-<span class="st"> </span>dstat[<span class="kw">order</span>(dstat<sp
      <span class="dt">pch =</span> <span class="dv">4</span>,           <span class="co"># we print a cross (see ?points for other options)</span>
      <span class="dt">xlab=</span><span class="st">&quot;Year&quot;</span>        <span class="co"># label of the x axis</span>
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
 <p>The resulting plot shows the percentage of <em>love</em>-words in each play, organized by reference date. Thus, in 1776, a very “lovely” play has been published, achieving over 1.8 percent of love words (it’s <em>Stella</em> by Goethe). The identification of plays in this plot can be simplified if we plot not only crosses/points, but some kind of identifier. In the plot below, we use the textgrid id of the play (which we also use in QuaDramA, because it’s relatively short and still memorable).</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># it makes use of the text() function much easier if we have</span>
 <span class="co"># a new variable for this filtered data set</span>
@@ -847,7 +845,7 @@ dstat.filtered &lt;-<span class="st"> </span>dstat[dstat<span class="op">$</span
      <span class="dt">y =</span> dstat.filtered<span class="op">$</span>Liebe,
      <span class="dt">labels=</span>dstat.filtered<span class="op">$</span>drama,
      <span class="dt">cex=</span><span class="fl">0.7</span>)</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
 <p>For publication, one might want to replace the ids with actual names. This can be done with the function <code>dramaNames()</code> (not shown here).</p>
 </div>
 <div id="enriching-the-word-fields-distributionally" class="section level2">
@@ -905,7 +903,7 @@ gitbook.start({
 "scroll_highlight": true
 },
 "toolbar": {
-"position": "static"
+"position": "fixed"
 },
 "search": true
 });

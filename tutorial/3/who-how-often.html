@@ -125,9 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
-</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
@@ -248,7 +246,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <span class="dt">main =</span> <span class="kw">dramaNames</span>(rksp<span class="fl">.0</span>), <span class="co"># the main title of the plot</span>
         <span class="dt">las =</span> <span class="dv">2</span> <span class="co"># rotate axis labels</span>
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p>This uses the regular <code>boxplot()</code> function, enter <code>?boxplot</code> for documentation. <code>utteranceLength ~ character</code> is called a formula in R and (in this case) expresses that we want to look at the column <code>utteranceLength</code>, grouped by the column <code>character</code>. The boxplot is a useful way to grasp the dispersion of a set of values (in this case: the lengths of all utterances by a character).</p>
 <div id="when-are-characters-talking" class="section level2">
 <h2><span class="header-section-number">7.1</span> When are characters talking?</h2>
@@ -258,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="kw">utteranceStatistics</span>(rjmw<span class="fl">.0</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">characterNames</span>(rjmw<span class="fl">.0</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># character names instead of ids</span>
 <span class="st">  </span><span class="kw">plot</span>(<span class="dt">main=</span><span class="kw">dramaNames</span>(rjmw<span class="fl">.0</span>))                <span class="co"># calling plot.QDUtteranceStatistics()</span></code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>Each dot in this plot represents one utterance, the x-axis is measured in character positions. This is not really intuitive, but the flow from left to right represents the flow of the text. More technically, we again apply the function <code>characterNames()</code> to display character names instead of character ids. This is the same function as above, just applied to a different table. It can be applied to any table of the type <code>QDHasCharacter</code>. Secondly, the call to the function <code>plot()</code> gets rerouted to the function <code>plot.QDUtteranceStatistics()</code>, because the object we supply as argument is of the type <code>QDUtteranceStatistics</code>. Information about this function can be retrieved by entering <code>?plot.QDUtteranceStatistics</code>.</p>
 </div>
 <div id="adding-act-boundaries" class="section level2">
@@ -269,7 +267,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">plot</span>(rksp<span class="fl">.0</span>, <span class="co"># adding the `QDDrama` object here creates the act boundaries.</span>
        <span class="dt">main=</span><span class="kw">dramaNames</span>(rksp<span class="fl">.0</span>)) </code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <p>Please note that the information contained in this plot is very similar to the information in configuration matrices.</p>
 </div>
 <div id="who-how-often-collection" class="section level2">
@@ -298,7 +296,7 @@ sturm_und_drang.plays &lt;-<span class="st"> </span><span class="kw">split</span
 <span class="st">           </span><span class="kw">plot</span>(x, <span class="dt">main=</span><span class="kw">dramaNames</span>(x))
        }
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -351,7 +349,7 @@ gitbook.start({
 "scroll_highlight": true
 },
 "toolbar": {
-"position": "static"
+"position": "fixed"
 },
 "search": true
 });

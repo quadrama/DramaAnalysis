@@ -125,9 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
-</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
@@ -256,7 +254,7 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
                            <span class="dt">y=</span><span class="kw">max</span>(<span class="kw">colSums</span>(mat)) <span class="co"># legend y pos</span>
                         ), 
         <span class="dt">col=</span>qd.colors)</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <div id="filter" class="section level3">
 <h3><span class="header-section-number">8.1.1</span> Filtering unimportant characters</h3>
 <p>This is informative, but doesn’t look very nice and some colors are difficult to associate with characters because colors are repeating. We will therefore use the function <code>filterCharacters()</code>, which is very similar to <code>characterNames()</code>: It can be applied to any object of the type <code>QDHasCharacter</code> and removes rows according to certain criteria. In this case, we filter every character except the five most talkative ones. As usual, see <code>?filterCharacters</code> to see other options.</p>
@@ -275,12 +273,12 @@ mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
                            <span class="dt">y=</span><span class="kw">max</span>(<span class="kw">colSums</span>(mat)) <span class="co"># legend y pos</span>
                         ), 
         <span class="dt">col=</span>qd.colors)</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <p>Of course, the speech of characters that do not speak often is now removed, leaving only a portion of each act covered in the plot.</p>
 </div>
 <div id="normalization" class="section level3">
 <h3><span class="header-section-number">8.1.2</span> Normalization</h3>
-<p>Since each act has a different length, it is often useful to normalize each block, according to the total number of spoken tokens. This way, we can display the relative active presence of each character in each act. In combination with the filtering we did before, however, we need to be careful: If the scale with the filtered matrix, a certain portion of the character speech gets lost. The following snippet shows how to scale using the original matrix, but still only include the top eight characters into the matrix.</p>
+<p>Since each act has a different length, it is often useful to normalize each block, according to the total number of spoken tokens. This way, we can display the relative active presence of each character in each act. In combination with the filtering we did before, however, we need to be careful: If we scale with the filtered matrix, the resulting values do not reflect the portion of the speech in the scene, but only to the top 8 characters. This way, one would get the impression that the filtered characters’ speeches add up to 100% of a segment, which is not the case. The following snippet shows how to scale using the original matrix, but still only include the top eight characters into the matrix.</p>
 <pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>)   <span class="co"># getting the full configuration (with all characters)</span>
 mat_orig &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)     <span class="co"># extracting the matrix</span>
 
@@ -305,7 +303,7 @@ mat &lt;-<span class="st"> </span><span class="kw">scale</span>(mat_filtered,
         <span class="dt">las=</span><span class="dv">1</span>,        <span class="co"># rotate labels on y axis</span>
         <span class="dt">col=</span>qd.colors <span class="co"># provide colors</span>
 )</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 </div>
 </div>
 <div id="copresence" class="section level2">
@@ -440,7 +438,7 @@ copresence[<span class="kw">lower.tri</span>(copresence,<span class="dt">diag=</
 <span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">at =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> <span class="kw">length</span>(c<span class="op">$</span>character)), <span class="dt">labels =</span> c<span class="op">$</span>character, <span class="dt">las=</span><span class="dv">3</span>)
 <span class="co"># add the y axis</span>
 <span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">at =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> <span class="kw">length</span>(c<span class="op">$</span>character)), <span class="dt">labels =</span> c<span class="op">$</span>character, <span class="dt">las=</span><span class="dv">1</span>)</code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 <p>Apparently, Marinelli and the prince have the most shared scenes. Marinelli also shares a scene with most other figures (sum of the vertical bar: 16).</p>
 </div>
 <div id="network" class="section level3">
@@ -479,7 +477,7 @@ g &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"
      <span class="dt">vertex.frame.color=</span><span class="ot">NA</span>,        <span class="co"># no vertex border</span>
      <span class="dt">edge.width=</span><span class="kw">E</span>(g)<span class="op">$</span>weight        <span class="co"># scale edges according to their weight</span>
 )  </code></pre>
-<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 </div>
 <div id="network-properties" class="section level3">
 <h3><span class="header-section-number">8.2.3</span> Network properties</h3>
@@ -588,7 +586,7 @@ gitbook.start({
 "scroll_highlight": true
 },
 "toolbar": {
-"position": "static"
+"position": "fixed"
 },
 "search": true
 });
