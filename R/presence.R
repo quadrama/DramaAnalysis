@@ -35,6 +35,11 @@ presence <- function(drama,
   
   stopifnot(inherits(drama, "QDDrama"))
 
+  if (nrow(drama$mentions) == 0) {
+    warning("Mentions table was empty, no presence calculation possible.")
+    return(NA)
+  }
+  
   conf.active <- configuration(drama, segment="Scene", 
                                mode="Active",
                                onlyPresence = TRUE)

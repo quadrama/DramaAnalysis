@@ -57,6 +57,11 @@ configuration <- function(d,
                       Active=segment(d$text, d$segments),
                       Passive=segment(d$mentions, d$segments))
   
+  if (mode =="Passive" && nrow(segmented) == 0) {
+    warning("Mentions table was empty. Passive configuration cannot be determined.")
+    return(NA)
+  }
+  
   # set the column to separate the segments 
   segmentColumn <- switch(segment,
                           Act=quote(Number.Act),
