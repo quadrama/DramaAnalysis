@@ -52,6 +52,7 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
   act_counter <- 0
   scene_counter <- 0
   position <- 1
+  no_scenes <- FALSE
   relevant_tei <- xml2::xml_find_all(raw_tei, 
                                      "//tei:div[@type='act']|
                                       //tei:div[@type='scene']|
@@ -64,6 +65,11 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
       if (act_counter > 0 && scene_counter == 0) { # if there are no scenes
         segments_l <- writeSegmentRow(corpus, id, act_begin, 
                                       act_counter, 0, 0, scene_counter, segments_l)
+        no_scenes <- TRUE
+      } else if (scene_counter > 0) { # write last scene of last act
+        scene_end <- position - 1
+        segments_l <- writeSegmentRow(corpus, id, act_begin, act_counter, 
+                                      scene_begin, scene_end, scene_counter, segments_l)
       }
       act_begin <- position
       act_counter <- act_counter + 1
@@ -124,6 +130,15 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
         }
       }
     }
+  }
+  # write last segments row
+  if (no_scenes) { # if there are no scenes
+    segments_l <- writeSegmentRow(corpus, id, act_begin, 
+                                  act_counter, 0, 0, scene_counter, segments_l)
+  } else {
+    scene_end <- position - 1
+    segments_l <- writeSegmentRow(corpus, id, act_begin, act_counter, 
+                                  scene_begin, scene_end, scene_counter, segments_l)
   }
   
   # text table
