@@ -3,6 +3,11 @@ context("frequencytable()")
 data(rksp.0)
 toler <- 1e-4
 
+# This needs to be set so that the ordering of 
+# matrices is defined properly. Otherweise, tests
+# might fail.
+Sys.setlocale("LC_COLLATE", "C")
+
 test_that("frequencytable(rksp.0) 
           has correct dimensions and produces correct output", {
   ft <- frequencytable(rksp.0)
