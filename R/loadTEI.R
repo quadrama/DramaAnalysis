@@ -70,6 +70,9 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
       scene_counter <- 0
     } else if (identical(xml2::xml_attr(elem, "type", ns = nsp), "scene")) { # new scene
       scene_end <- position - 1
+      if (act_counter == 0) { # if there are no acts
+        act_begin <- 0
+      }
       if (scene_counter > 0) {
         segments_l <- writeSegmentRow(corpus, id, act_begin, act_counter, 
                                       scene_begin, scene_end, scene_counter, segments_l)
@@ -139,10 +142,14 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
   names(dt_segments) <- c("corpus", "drama", "begin.Act", "end.Act", "Number.Act",
                           "begin.Scene", "end.Scene", "Number.Scene")
   act_begins <- unique(dt_segments$begin.Act)[-1]
-  for (i in 1:length(act_begins)) {
-    dt_segments$end.Act[dt_segments$Number.Act == i] <- act_begins[[i]] - 1
+  if (act_counter > 0) {
+    for (i in 1:length(act_begins)) {
+      dt_segments$end.Act[dt_segments$Number.Act == i] <- act_begins[[i]] - 1
+    }
+    dt_segments$end.Act[is.na(dt_segments$end.Act)] <- position - 1 
+  } else { # if there are no acts
+    dt_segments$end.Act[] <- position - 1
   }
-  dt_segments$end.Act[is.na(dt_segments$end.Act)] <- position - 1
   dt_segments <- fixColumnType(dt_segments)
   
   # stage table
