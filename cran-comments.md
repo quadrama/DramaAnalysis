@@ -8,7 +8,7 @@ This is a resubmission. In this version I have:
 
 * Removed examples for unexported functions
 
-* Fixed a bug in the function loadDramaTEI()
+* Fixed several bugs in the function loadDramaTEI()
 
 ## Resubmission
 
