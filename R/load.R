@@ -200,11 +200,12 @@ loadCSV <- function(ids,
 }
 
 #' @title Load meta data
-#' @description helper method to load meta data about dramatic texts (E.g., author, year)
+#' @description helper method to load meta data about dramatic texts (E.g., author, year). 
+#' Does not load the texts, so it's much faster.
 #' @param ids A vector or list of drama ids
-#' @param type The annotation type to load. No longer used.
 #' @return a data frame
-loadMeta <- function(ids,type=NULL) {
+#' @export
+loadMeta <- function(ids) {
   loadCSV(ids, variant="Metadata")
 }
 

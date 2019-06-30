@@ -4,16 +4,15 @@
 \alias{loadMeta}
 \title{Load meta data}
 \usage{
-loadMeta(ids, type = NULL)
+loadMeta(ids)
 }
 \arguments{
 \item{ids}{A vector or list of drama ids}
-
-\item{type}{The annotation type to load. No longer used.}
 }
 \value{
 a data frame
 }
 \description{
-helper method to load meta data about dramatic texts (E.g., author, year)
+helper method to load meta data about dramatic texts (E.g., author, year). 
+Does not load the texts, so it's much faster.
 }
