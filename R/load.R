@@ -63,18 +63,18 @@ loadDrama <- function(ids, defaultCollection="qd") {
   drama$stageDirections <- loadText(ids,
                                    variant="StageDirections",
                                    defaultCollection = defaultCollection)
-  class(drama) <- append(Drama, class(drama))
+  class(drama) <- append("QDDrama", class(drama))
   drama
 }
 
 
 
-#' @exportClass QD.HasUtteranceBE
+#' @exportClass QDHasUtteranceBE
 loadMentions <- function(ids, defaultCollection="qd") {
   mentionsTable <- loadCSV(ids, 
                            defaultCollection = defaultCollection, 
                            variant = "Mentions")
-  class(mentionsTable) <- append(HasUtteranceBE, class(mentionsTable))
+  class(mentionsTable) <- append("QDHasUtteranceBE", class(mentionsTable))
   mentionsTable
 }
 
@@ -135,7 +135,7 @@ loadText <- function(ids, includeTokens=FALSE, defaultCollection="tg",
     t$Speaker.figure_surface <- factor(t$Speaker.figure_surface)
     t$Mentioned.figure_surface <- factor(t$Mentioned.figure_surface)
   }
-  class(t) <- append(HasUtteranceBE, class(t))
+  class(t) <- append("QDHasUtteranceBE", class(t))
   t
 }
 
