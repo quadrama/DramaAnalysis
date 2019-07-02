@@ -157,7 +157,9 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
   names(dt_segments) <- c("corpus", "drama", "begin.Act", "end.Act", "Number.Act",
                           "begin.Scene", "end.Scene", "Number.Scene")
   act_begins <- unique(dt_segments$begin.Act)[-1]
-  if (act_counter > 0) {
+  if (act_counter == 1) { # if there is only one act
+    dt_segments$end.Act[] <- position - 1
+  } else if (act_counter > 1) { # if there is more than one act
     for (i in 1:length(act_begins)) {
       dt_segments$end.Act[dt_segments$Number.Act == i] <- act_begins[[i]] - 1
     }
