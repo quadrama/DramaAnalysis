@@ -496,7 +496,7 @@ highchart() %>%
 
 # About
 
-This report has geen generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io). Please report errors [here](https://github.com/quadrama/DramaAnalysis/issues), or contact [me](mailto:nils.reiter@ims.uni-stuttgart.de).
+This report has been generated using the R package `DramaAnalysis` in version `r pver`. The package is being developed [here](http://github.com/quadrama/DramaAnalysis), in the context of the project [QuaDramA](https://quadrama.github.io). Please report errors [here](https://github.com/quadrama/DramaAnalysis/issues), or contact [me](mailto:nils.reiter@ims.uni-stuttgart.de).
 
 ## Reproduction
 For the generation of this report, the following list of parameters was used:
