@@ -82,15 +82,42 @@ as.character(cs[order(cs$firstBegin),]$character)
 
 ## Bar chart 
 
-Relative amount of words spoken by each figure. 
 
 ```{r, echo=FALSE, messages=FALSE}
 
 b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
-  barplot()
+  barplot(#names.arg=dramaNames(drama, formatString = "%T"),
+          column="tokens",
+          main = "Absolute amount of words spoken by each figure (Tokens).")
+
+```
 
 
+```{r, echo=FALSE, messages=FALSE}
+b <- characterStatistics(drama, normalize = FALSE) %>%
+  characterNames(drama) %>%
+  barplot(names.arg=dramaNames(drama, formatString = "%T"),
+          column="utterances",
+          main= "Absolute amount of utterances of each figure.")
+```
+
+
+```{r, echo=FALSE, messages=FALSE}
+b <- characterStatistics(drama, normalize = FALSE) %>%
+  characterNames(drama) %>%
+  barplot(names.arg=dramaNames(drama, formatString = "%T"),
+          column="utteranceLengthMean",
+          main="Mean of the length of the utterances of each figure.")
+```
+
+
+```{r, echo=FALSE, messages=FALSE}
+b <- characterStatistics(drama, normalize = FALSE) %>%
+  characterNames(drama) %>%
+  barplot(names.arg=dramaNames(drama, formatString = "%T"),
+          column="types",
+          main="Absolute amount of different Words spoken by each figure (Types).")
 ```
 
 ## Table
@@ -108,7 +135,7 @@ knitr::kable(table,format="pandoc")
 
 This segment shows the top `r params$topN` characters. This number can be adjusted by supplying the parameter `topN` with a different value to the `report()` function.
 
-```{r}
+```{r, message=FALSE}
 ustatl <- utteranceStatistics(drama) %>%
   filterCharacters(drama, by="rank", n=params$topN) %>%
   characterNames(drama)
