@@ -97,7 +97,7 @@ b <- characterStatistics(drama, normalize = FALSE) %>%
 ```{r, echo=FALSE, messages=FALSE}
 b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
-  barplot(names.arg=dramaNames(drama, formatString = "%T"),
+  barplot(#names.arg=dramaNames(drama, formatString = "%T"),
           column="utterances",
           main= "Absolute amount of utterances of each figure.")
 ```
@@ -106,7 +106,7 @@ b <- characterStatistics(drama, normalize = FALSE) %>%
 ```{r, echo=FALSE, messages=FALSE}
 b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
-  barplot(names.arg=dramaNames(drama, formatString = "%T"),
+  barplot(#names.arg=dramaNames(drama, formatString = "%T"),
           column="utteranceLengthMean",
           main="Mean of the length of the utterances of each figure.")
 ```
@@ -115,7 +115,7 @@ b <- characterStatistics(drama, normalize = FALSE) %>%
 ```{r, echo=FALSE, messages=FALSE}
 b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
-  barplot(names.arg=dramaNames(drama, formatString = "%T"),
+  barplot(#names.arg=dramaNames(drama, formatString = "%T"),
           column="types",
           main="Absolute amount of different Words spoken by each figure (Types).")
 ```
@@ -139,6 +139,7 @@ This segment shows the top `r params$topN` characters. This number can be adjust
 ustatl <- utteranceStatistics(drama) %>%
   filterCharacters(drama, by="rank", n=params$topN) %>%
   characterNames(drama)
+unique(ustatl$character)
 
 ```
 
@@ -152,8 +153,12 @@ plot(ustatl, drama)
 ### Utterance Length Variation
 
 ```{r,echo=FALSE}
-par(mar=c(2,9,0,0))
-boxplot(utteranceLength ~ character, data=ustatl, horizontal=TRUE, las=1, frame=FALSE)
+# par(mar=c(2,9,0,0))
+par(mar=c(9,4,2,2))
+boxplot(utteranceLength ~ character, 
+        data=ustatl, 
+        #horizontal=TRUE, 
+        las=2)
 ```
 
 ## All Characters {.tabset}
@@ -171,11 +176,20 @@ plot(ustat,drama)
 ### Utterance Length Variation
 
 ```{r,echo=FALSE}
-par(mar=c(2,9,0,0))
-boxplot(utteranceLength ~ character, data=ustat, horizontal=TRUE,las=1,frame=FALSE)
+#par(mar=c(2,9,0,0))
+par(mar=c(9,4,2,2))
+
+boxplot(utteranceLength ~ character, 
+        data=ustat, 
+        #horizontal=TRUE,
+        #frame=FALSE,
+        #las=1,
+        las=2)
 ```
 
 # Configuration and Copresence {.tabset}
+
+## Visualizations {.tabset}
 
 ```{r}
 actLimit <- 0.1
@@ -184,7 +198,7 @@ sceneLimit <- 0.3
 
 This visualisation displays the relative amount of tokens uttered by a character. The plot includes names of characters only when they speak more than `r actLimit*100`% of the tokens in an act and more than  `r sceneLimit*100`% of the tokens in a scene.
 
-## By Act 
+### By Act 
 ```{r, echo=FALSE}
 c <- configuration(drama) %>% characterNames(drama)
 
@@ -212,7 +226,7 @@ if (length(yPositions > 0)) {
 } 
 ```
 
-## By Scene
+### By Scene
 
 ```{r, echo=FALSE}
 c <- configuration(drama, segment = "Scene") %>% 
@@ -246,6 +260,62 @@ if (length(yPositions > 0)) {
 
 ```
 
+### Heatmap
+```{r, echo=FALSE}
+c <- configuration(drama, onlyPresence=TRUE, segment="Scene") %>%
+  filterCharacters(drama, n=7) %>%
+  characterNames(drama)
+
+mat <- as.matrix(c)
+
+copresence <- mat %*% t(mat)
+
+rownames(copresence) <- c$character
+colnames(copresence) <- c$character
+
+copresence[lower.tri(copresence, diag=TRUE)] <- NA
+
+par(mar=c(10,10,1,1))
+
+image(copresence,
+      col=rgb(256,111,184, alpha=(seq(0,255)),
+              maxColorValue = 256),
+      xaxt="n",
+      yaxt="n",
+      frame=TRUE)
+
+text(y=(rep(1:ncol(copresence), each=nrow(copresence))-1)/(nrow(copresence)-1),
+     x=(1:nrow(copresence)-1)/(nrow(copresence)-1),
+     labels=as.vector(copresence))
+
+# add the x axis
+axis(1, at = seq(0,1,length.out = length(c$character)), labels = c$character, las=3)
+# add the y axis
+axis(2, at = seq(0,1,length.out = length(c$character)), labels = c$character, las=1)
+```
+
+
+
+
+
+## Table {.tabset}
+
+### By Act
+```{r, echo=FALSE, results="asis"}
+table <- characterNames(configuration(drama, segment = "Act"), drama)
+
+knitr::kable(table,format="pandoc")
+
+```
+
+
+### By Scene 
+```{r, echo=FALSE, results="asis"}
+table <- characterNames(configuration(drama, segment = "Scene"), drama)
+
+knitr::kable(table,format="pandoc")
+
+```
 
 #  Network Analysis  {.tabset}
 
@@ -258,6 +328,7 @@ In a copresence network, two vertices are connected if the characters they repre
 c <- configuration(drama, 
                    onlyPresence = TRUE, 
                    segment="Scene") %>%
+  #filterCharacters(drama, n=7) %>%
   characterNames(drama)
 co <- as.matrix(c) %*% t(as.matrix(c))
 
@@ -276,12 +347,25 @@ g <- graph_from_adjacency_matrix(co,
 # Now we plot
 plot.igraph(g, 
             layout=layout_with_gem,       # how to lay out the graph
-            vertex.label.cex=0.6,         # label size
+            vertex.label.cex=0.8,         # label size
             vertex.label.color="black",   # font color
-            vertex.color=qd.colors[4],    # vertex color
+            vertex.color=qd.colors[6],    # vertex color
             vertex.frame.color=NA,        # no vertex border
             edge.width=E(g)$weight        # scale edges according to their weight
             )  
+```
+
+Properties of the network:
+
+Graph density: `r graph.density(g)`
+
+Edge connectivity: `r edge_connectivity(g)`
+
+Average nearest neighbor degree:
+```{r, echo=FALSE, results="asis"}
+table <- knn(g)
+knitr::kable(table,format="pandoc")
+
 ```
 
 ## Independent Vertex Sets
