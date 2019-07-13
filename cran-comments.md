@@ -1,6 +1,6 @@
 ## Resubmission 
 
-This is a resubmission. In this version I have:
+This is a resubmission. In this version we have:
 
 * Added documentation on return values of all functions
 
@@ -9,6 +9,11 @@ This is a resubmission. In this version I have:
 * Removed examples for unexported functions
 
 * Fixed several bugs in the function loadDramaTEI()
+
+* R CMD check reports one doi that currently can't 
+  be resolved, because the German computer science
+  association (GI) is currently restructuring their
+  web page (http://dx.doi.org/10.18420/in2017_119).
 
 ## Resubmission
 
