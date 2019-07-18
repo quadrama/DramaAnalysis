@@ -1,3 +1,4 @@
+[![CRAN](http://www.r-pkg.org/badges/version/DramaAnalysis)](https://cran.r-project.org/package=DramaAnalysis)
 [![release](https://img.shields.io/badge/release-3.0.0-blue.svg)](https://github.com/quadrama/DramaAnalysis/releases/tag/v3.0.0)
 [![Build Status](https://travis-ci.org/quadrama/DramaAnalysis.svg?branch=master)](https://travis-ci.org/quadrama/DramaAnalysis)
 [![DOI](https://zenodo.org/badge/64286398.svg)](https://zenodo.org/badge/latestdoi/64286398)
