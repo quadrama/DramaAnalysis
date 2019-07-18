@@ -23,11 +23,11 @@ has taken place on the text, either manually or automatic. If not,
 only very basic references (first person pronouns and proper names) are 
 represented, which usually gives a very wrong impression.}
 
-\item{onlyPresence}{If TRUE, the function only records whether a character was presence. If FALSE (which is the default), the function counts the number of tokens spoken (active) or referenced (passive).}
+\item{onlyPresence}{If TRUE, the function only records whether a character was present. If FALSE (which is the default), the function counts the number of tokens spoken (active) or referenced (passive).}
 
 \item{x}{An object of class QDConfiguration}
 
-\item{...}{All other arguments are passwd to \code{as.matrix.data.frame}.}
+\item{...}{All other arguments are passed to \code{as.matrix.data.frame}.}
 }
 \value{
 Drama configuration matrix as a \code{QDConfiguration} object (of type \code{data.frame}).

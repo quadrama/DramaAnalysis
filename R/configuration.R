@@ -2,7 +2,7 @@
 #' @description The function \code{configuration(...)} Creates drama configuration matrix as a \code{QDConfiguration} object, which is also a data.frame. The S3 function \code{as.matrix()} can be used to extract a numeric or logical matrix containing the core.
 #' @param d A \code{QDDrama} object
 #' @param segment A character vector, either "Act" or "Scene". Partial matching allowed.
-#' @param onlyPresence If TRUE, the function only records whether a character was presence. If FALSE (which is the default), the function counts the number of tokens spoken (active) or referenced (passive).
+#' @param onlyPresence If TRUE, the function only records whether a character was present. If FALSE (which is the default), the function counts the number of tokens spoken (active) or referenced (passive).
 #' @param mode Character vector, should be either "Active" or "Passive".
 #' Passive configurations express when characters are mentioned, active
 #' ones when they speak themselves. Please note that extracting passive 
@@ -108,7 +108,7 @@ configuration <- function(d,
 #' @export
 #' @rdname configuration
 #' @param x An object of class QDConfiguration
-#' @param ... All other arguments are passwd to \code{as.matrix.data.frame}.
+#' @param ... All other arguments are passed to \code{as.matrix.data.frame}.
 as.matrix.QDConfiguration <- function(x, ...) {
   stopifnot(inherits(x, "QDConfiguration"))
   as.matrix.data.frame(x[,4:ncol(x), drop=FALSE], ...)
