@@ -1,4 +1,4 @@
-# DramaAnalysis 3.0
+# DramaAnalysis 3.0.0
 
 This is a redesign and complete overhaul of the R package. Existing code that uses functions of the package cannot be expected to continue to run without modifications. The major changes (compared to 2.x) are:
 
