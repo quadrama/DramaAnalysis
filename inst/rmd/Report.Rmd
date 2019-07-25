@@ -37,7 +37,7 @@ getYPositions <- function(x,b,limit=100) {
   rl
 }
 
-toFigureName <- function(x) {
+toCharacterName <- function(x) {
   tools::toTitleCase(tolower(x))
 }
 
@@ -89,7 +89,7 @@ b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
   barplot(#names.arg=dramaNames(drama, formatString = "%T"),
           column="tokens",
-          main = "Absolute amount of words spoken by each figure (Tokens).")
+          main = "Absolute amount of words spoken by each character (Tokens).")
 
 ```
 
@@ -99,7 +99,7 @@ b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
   barplot(#names.arg=dramaNames(drama, formatString = "%T"),
           column="utterances",
-          main= "Absolute amount of utterances of each figure.")
+          main= "Absolute amount of utterances of each character.")
 ```
 
 
@@ -108,7 +108,7 @@ b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
   barplot(#names.arg=dramaNames(drama, formatString = "%T"),
           column="utteranceLengthMean",
-          main="Mean of the length of the utterances of each figure.")
+          main="Mean of the length of the utterances of each character.")
 ```
 
 
@@ -117,7 +117,7 @@ b <- characterStatistics(drama, normalize = FALSE) %>%
   characterNames(drama) %>%
   barplot(#names.arg=dramaNames(drama, formatString = "%T"),
           column="types",
-          main="Absolute amount of different Words spoken by each figure (Types).")
+          main="Absolute amount of different Words spoken by each character (Types).")
 ```
 
 ## Table
@@ -135,7 +135,7 @@ knitr::kable(table,format="pandoc")
 
 This segment shows the top `r params$topN` characters. This number can be adjusted by supplying the parameter `topN` with a different value to the `report()` function.
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ustatl <- utteranceStatistics(drama) %>%
   filterCharacters(drama, by="rank", n=params$topN) %>%
   characterNames(drama)
@@ -332,7 +332,7 @@ c <- configuration(drama,
   characterNames(drama)
 co <- as.matrix(c) %*% t(as.matrix(c))
 
-# add figure names
+# add character names
 rownames(co) <- c$character
 colnames(co) <- c$character
 
