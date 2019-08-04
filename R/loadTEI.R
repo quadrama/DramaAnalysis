@@ -146,7 +146,7 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
           
           # parse lg-element inside sp
         } else if (identical(xml2::xml_name(sp_elem, ns = nsp), "tei:lg")) {
-          temp_text <- (paste(lapply(xml2::xml_children(sp_elem), xml2::xml_text)))
+          temp_text <- paste(lapply(xml2::xml_children(sp_elem), xml2::xml_text), collapse=" ")
           tokenized_lg <- tokenizers::tokenize_words(temp_text, lowercase = FALSE, strip_punct = FALSE)[[1]]
           text_l <- writeTextRow(corpus, id, tokenized_lg, speaker_ids, text_l, position, sp_elem, speaker_surface)
           d_length <- d_length + length(tokenized_lg)
