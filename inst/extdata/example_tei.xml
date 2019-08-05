@@ -59,16 +59,16 @@ language of the play.-->
             <speaker>BAR</speaker>
             <lg>
               <l>That's right!</l>
-              <l>Plays structured in lines contain text in l-elements.</l>
+              <l>Plays structured in <emph>lines</emph> contain text in l-elements.</l>
               <l>Usually, these lines are inside lg-elements.</l>
             </lg>
-            <stage>Stage directions are also allowed anywhere inside sp-elements.</stage>
+            <stage>Stage directions are <emph>also</emph> allowed anywhere inside sp-elements.</stage>
           </sp>
         </div>
         <div type="scene">
           <sp who="#foo">
             <speaker>FOO</speaker>
-            <l>Out of convenience, lines are also allowed to appear alone.</l>
+            <l>Out of convenience, <emph>lines</emph> are also allowed to appear alone.</l>
             <l>lg-elements are therefore not mandatory.</l>
           </sp>
         </div>
