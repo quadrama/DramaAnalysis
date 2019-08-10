@@ -19,7 +19,7 @@ The function returns an object of class \code{QDDrama}.
 This function parses and loads one or more dramas in raw TEI format.
 }
 \examples{
-tei_example_file <- system.file("extdata", "example_tei.xml", 
+tei_example_file <- system.file("extdata", "example_tei.xml",
                                 package="DramaAnalysis", mustWork=TRUE)
 d <- loadDramaTEI(tei_example_file, dataDirectory="")
 }
