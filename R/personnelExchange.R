@@ -50,5 +50,7 @@ scenicDifference <- function(drama, norm=length(unique(drama$text$Speaker.figure
     same <- sum(pm[,i] & pm[,i+1])
     vec[i] <- numberOfFigures - same
   }
-  vec/norm
+  vec <- vec/norm
+  class(vec) <- append("QDHamming", class(vec))
+  vec
 }

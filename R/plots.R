@@ -46,6 +46,7 @@ plot.QDUtteranceStatistics <- function(x,
 #' "Exchange".
 #' @param ... Parameters passed to \code{plot.default()}.
 #' @import graphics
+#' @importFrom utils tail
 #' @export
 #' @return See \code{plot.default()}.
 #' @seealso plot.default
@@ -78,6 +79,7 @@ plot.QDHamming <- function(x,
     graphics::axis(1, at=1:length(x)) 
   } else {
     stopifnot(inherits(drama, "QDDrama"))
+    segments_dt <- cbind(drama$segments, nscene=1:nrow(drama$segments))
     # draw vertical act lines
     graphics::abline(v=segments_dt[Number.Scene == 1]$nscene[2:nrow(segments_dt[Number.Scene == 1])] - 0.5)
     # add x-axis
