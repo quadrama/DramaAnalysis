@@ -45,7 +45,7 @@ plot.QDUtteranceStatistics <- function(x,
 #' @param ylab A character vector that is used as y axis label. Defaults to
 #' "Exchange".
 #' @param ... Parameters passed to \code{plot.default()}.
-#' @import graphics
+#' @importFrom graphics plot.default axis abline mtext
 #' @importFrom utils tail
 #' @export
 #' @return See \code{plot.default()}.

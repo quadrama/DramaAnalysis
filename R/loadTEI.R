@@ -3,8 +3,8 @@
 #' @param filename The filename of the drama to load (or a list thereof).
 #' @param dataDirectory The directory that holds the file(s).
 #' @import xml2
-#' @import data.table
-#' @import tokenizers
+#' @importFrom data.table data.table
+#' @importFrom tokenizers tokenize_words
 #' @exportClass QDDrama
 #' @return The function returns an object of class \code{QDDrama}.
 #' @export
