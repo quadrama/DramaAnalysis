@@ -3,6 +3,8 @@
 #' @param filename The filename of the drama to load (or a list thereof).
 #' @param dataDirectory The directory that holds the file(s).
 #' @import xml2
+#' @import data.table
+#' @import tokenizers
 #' @exportClass QDDrama
 #' @return The function returns an object of class \code{QDDrama}.
 #' @export
@@ -44,11 +46,9 @@ loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"),
   drama
 }
 
-#' @description This function parses the xml object iteratively, 
-#' constructs the text, segments and stageDirections data.table objects row by 
-#' row as a list and then converts them into the right format.
-#' @import tokenizers
-#' @import data.table
+# This function parses the xml object iteratively, constructs the text, 
+# segments and stageDirections data.table objects row by row as a list 
+# and then converts them into the right format.
 # internal
 parseTEI <- function(raw_tei, nsp, id, corpus) {
   
@@ -229,7 +229,7 @@ parseTEI <- function(raw_tei, nsp, id, corpus) {
   list("text" = dt_text, "segments" = dt_segments, "stage" = dt_stage)
 }
 
-#' @description This helper function for \code{parseTEI()} adds a row to the input text list.
+# This helper function for \code{parseTEI()} adds a row to the input text list.
 # internal
 writeTextRow <- function(corpus, id, tokenized, speakers, text_l, position, elem, speaker_surface) {
   for (token in tokenized) {
@@ -246,7 +246,7 @@ writeTextRow <- function(corpus, id, tokenized, speakers, text_l, position, elem
   text_l
 }
 
-#' @description This helper function for \code{parseTEI()} adds a row to the input segments list.
+# This helper function for \code{parseTEI()} adds a row to the input segments list.
 # internal
 writeSegmentRow <- function(corpus, id, act_begin, act_counter, 
                             scene_begin, scene_end, scene_counter, segments_l) {
@@ -260,7 +260,7 @@ writeSegmentRow <- function(corpus, id, act_begin, act_counter,
                                              scene_counter)))
 }
 
-#' @description This helper function for \code{parseTEI()} fixes column types of the input data.table object.
+# This helper function for \code{parseTEI()} fixes column types of the input data.table object.
 # internal
 fixColumnType <- function(dt) {
   dt[] <- lapply(dt, function(column) {
@@ -275,9 +275,8 @@ fixColumnType <- function(dt) {
   dt
 }
 
-#' @description This function parses the raw input tei and creates the 
-#' characters data.table from the listPerson-element.
-#' @import data.table
+# This function parses the raw input tei and creates the characters data.table
+# from the listPerson-element.
 # internal
 loadCharactersTEI <- function(raw_tei, nsp, corpus, drama) {
   
@@ -296,10 +295,8 @@ loadCharactersTEI <- function(raw_tei, nsp, corpus, drama) {
   dt_characters
 }
 
-#' @description This function parses the raw input tei and creates the
-#' meta data.table from the titleStmt-element and the bibl-element of type 
-#' originalSource.
-#' @import data.table
+# This function parses the raw input tei and creates the meta data.table from 
+# the titleStmt-element and the bibl-element of type originalSource.
 # internal
 loadMetaTEI <- function (raw_tei, nsp, corpus, id) {
   
@@ -325,7 +322,7 @@ loadMetaTEI <- function (raw_tei, nsp, corpus, id) {
   dt_meta
 }
 
-#' @description This helper function for \code{loadMetaTEI()} fixes the type of dates if available.
+# This helper function for \code{loadMetaTEI()} fixes the type of dates if available.
 # internal 
 fixDate <- function(date) {
   if (is.na(date)) {
@@ -335,10 +332,8 @@ fixDate <- function(date) {
   }
 }
 
-#' @description This function creates the mentions data.table. Since there are
-#' no linguistic annotations for the tei files (yet), the mentions table is 
-#' left empty.
-#' @import data.table
+# This function creates the mentions data.table. Since there are no linguistic
+# annotations for the tei files (yet), the mentions table is left empty.
 # internal
 loadMentionsTEI <- function() {
   dt_mentions <- data.table::data.table(corpus=character(), drama=character(), utteranceBegin=numeric(),
@@ -346,4 +341,3 @@ loadMentionsTEI <- function() {
                             mentionBegin=numeric(), mentionEnd=numeric(), 
                             mentionSurface=character(), entityId=character())
 }
-
