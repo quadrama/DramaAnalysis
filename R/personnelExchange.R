@@ -8,8 +8,8 @@
 #' @param variant For \code{hamming()}, variants are "Trilcke" (default), "NormalizedHamming", and "Hamming"
 #' @param norm For \code{scenicDifference()}, specifies the normalization constant
 #' @rdname personnelExchange
-#' @return A list of values, one for each scene change. The values 
-#' indicate the (potentially) normalized number of characters that are exchanged.
+#' @return A QDHamming object, which is a list of values, one for each scene change.
+#' The values indicate the (potentially) normalized number of characters that are exchanged.
 #' @export
 #' @examples 
 #' data(rksp.0)
@@ -33,6 +33,7 @@ hamming <- function(drama, variant=c("Trilcke","Hamming","NormalizedHamming")) {
     edits <- sum(xor(pm[,i],pm[,i+1]))
     vec[i] <- edits/allFigures
   }
+  class(vec) <- append("QDHamming", class(vec))
   vec
 }
 
@@ -49,5 +50,7 @@ scenicDifference <- function(drama, norm=length(unique(drama$text$Speaker.figure
     same <- sum(pm[,i] & pm[,i+1])
     vec[i] <- numberOfFigures - same
   }
-  vec/norm
+  vec <- vec/norm
+  class(vec) <- append("QDHamming", class(vec))
+  vec
 }
