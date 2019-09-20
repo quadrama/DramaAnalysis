@@ -63,6 +63,12 @@ loadDrama <- function(ids, defaultCollection="qd") {
   drama$stageDirections <- loadText(ids,
                                    variant="StageDirections",
                                    defaultCollection = defaultCollection)
+  
+  if (sum(is.na(drama$text$Speaker.figure_id)) > 0) {
+    warning(paste(sum(is.na(drama$text$Speaker.figure_id)), "spoken words are not assigned to a character (NA values). They have been removed to prevent subsequent issues."))
+    nas <- which(is.na(drama$text$Speaker.figure_id))
+    drama$text <- drama$text[-nas,]
+  }
   class(drama) <- append("QDDrama", class(drama))
   drama
 }
