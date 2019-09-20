@@ -34,7 +34,7 @@ presence <- function(drama,
   . <- NULL
   
   stopifnot(inherits(drama, "QDDrama"))
-
+  
   if (nrow(drama$mentions) == 0) {
     warning("Mentions table was empty, no presence calculation possible.")
     return(NA)
@@ -59,13 +59,21 @@ presence <- function(drama,
   rownames(conf.active) <- conf.active$character
   rownames(conf.passive) <- conf.passive$character
   r <- merge(meta, drama$segments[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)], by=c("corpus","drama"))
-
-
+  
+  
   # active
-  conf.active$actives <- rowSums(conf.active[,4:ncol(conf.active)])
+  if (ncol(conf.active)==4) {
+    conf.active$actives <- as.numeric(conf.active[,4])
+  } else {
+    conf.active$actives <- rowSums(conf.active[,4:ncol(conf.active)])
+  }
   # passive
-  conf.passive$passives <- rowSums(conf.passive[,4:ncol(conf.passive)])
-
+  if (ncol(conf.passive)==4) {
+    conf.passive$passives <- as.numeric(conf.passive[,4])
+  } else {
+    conf.passive$passives <- rowSums(conf.passive[,4:ncol(conf.passive)])
+  }
+  
   #conf.active <- conf.active[order(conf.active$character)]
   #conf.passive <- conf.passive[order(conf.passive$character)]  
   r <- merge(r, 
@@ -82,7 +90,7 @@ presence <- function(drama,
     actives.which <- lapply(split(actives.mat, seq(nrow(actives.mat))), 
                             function(x) {which(unlist(x))})
     passives.which <- lapply(split(passives.mat, seq(nrow(passives.mat))), 
-                            function(x) {which(unlist(x))})
+                             function(x) {which(unlist(x))})
     
     overlaps <- mapply(function(x,y) { intersect(x,y) }, actives.which, passives.which )
     overlaps.cnt <- as.vector(Reduce(rbind,lapply(overlaps, length)))
