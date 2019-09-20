@@ -52,19 +52,23 @@ presence <- function(drama,
   conf.passive <- merge(meta, conf.passive, all.x=TRUE)
   for (j in seq_len(ncol(conf.passive)))
     data.table::set(conf.passive, which(is.na(conf.passive[[j]])),j,FALSE)
+  class(conf.passive) <- c("QDConfiguration", "QDHasCharacter", "data.frame")
   
   rownames(conf.active) <- conf.active$character
   rownames(conf.passive) <- conf.passive$character
   r <- merge(meta, drama$segments[,.(scenes=length(unique(begin.Scene))),.(corpus,drama)], by=c("corpus","drama"))
 
+  conf.active <- conf.active[order(conf.active$character),]
+  conf.passive <- conf.passive[order(conf.passive$character),]  
+  
+  actives.mat <- as.matrix(conf.active)
+  passives.mat <- as.matrix(conf.passive)
 
   # active
-  conf.active$actives <- rowSums(conf.active[,4:ncol(conf.active)])
+  conf.active$actives <- rowSums(actives.mat)
   # passive
-  conf.passive$passives <- rowSums(conf.passive[,4:ncol(conf.passive)])
+  conf.passive$passives <- rowSums(passives.mat)
 
-  #conf.active <- conf.active[order(conf.active$character)]
-  #conf.passive <- conf.passive[order(conf.passive$character)]  
   r <- merge(r, 
              conf.active[,c("corpus","drama","character","actives")],
              by=c("corpus","drama","character"), all.x = TRUE)
@@ -74,8 +78,8 @@ presence <- function(drama,
   
   
   if (passiveOnlyWhenNotActive) {
-    actives.mat <- as.matrix(conf.active[,4:(ncol(conf.active)-1)])
-    passives.mat <- as.matrix(conf.passive[,4:(ncol(conf.passive)-1)])
+    #actives.mat <- as.matrix(conf.active[,4:(ncol(conf.active)-1)])
+    #passives.mat <- as.matrix(conf.passive[,4:(ncol(conf.passive)-1)])
     actives.which <- lapply(split(actives.mat, seq(nrow(actives.mat))), 
                             function(x) {which(unlist(x))})
     passives.which <- lapply(split(passives.mat, seq(nrow(passives.mat))), 
