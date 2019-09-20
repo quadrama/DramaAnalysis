@@ -47,6 +47,9 @@ presence <- function(drama,
                                 mode="Passive",
                                 onlyPresence = TRUE)
   
+  conf.active <- conf.active[order(as.character(conf.active$character)),]
+  conf.passive <- conf.passive[order(as.character(conf.passive$character)),]
+  
   meta <- conf.active[,1:3]
   
   conf.passive <- merge(meta, conf.passive, all.x=TRUE)
