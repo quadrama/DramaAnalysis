@@ -222,7 +222,7 @@ tfidf1 <- function(word) {
 #' mat2 <- tfidf(mat)
 #' print(mat2)
 tfidf <- function(ftable) {
-  if (mean(apply(ftable,1,sum))!=1)
+  if (mean(apply(ftable,1,sum)) - 1 > 1e-5)
     stop("Matrix should contain relative frequencies")
   r <- apply(ftable, 2, tfidf1)
   rownames(r) <- rownames(ftable)
