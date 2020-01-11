@@ -4,7 +4,7 @@ Bugfix release
 
 - presence() function now also produces results if the play has only a single scene (#158)
 - presence() function calculates correct active and passive presence (#161)
-- fixes testing issue with respect floating point numbers (#162)
+- fixes testing issue with respect floating point numbers ("noLD issue") (#162)
 - loadDramaTEI() now only accepts a filename
 
 # DramaAnalysis 3.0.0
