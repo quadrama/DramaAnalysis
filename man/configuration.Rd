@@ -5,8 +5,12 @@
 \alias{as.matrix.QDConfiguration}
 \title{Character Configuration}
 \usage{
-configuration(d, segment = c("Act", "Scene"), mode = c("Active",
-  "Passive"), onlyPresence = FALSE)
+configuration(
+  d,
+  segment = c("Act", "Scene"),
+  mode = c("Active", "Passive"),
+  onlyPresence = FALSE
+)
 
 \method{as.matrix}{QDConfiguration}(x, ...)
 }

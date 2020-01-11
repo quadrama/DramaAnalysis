@@ -8,8 +8,7 @@
 \usage{
 hamming(drama, variant = c("Trilcke", "Hamming", "NormalizedHamming"))
 
-scenicDifference(drama,
-  norm = length(unique(drama$text$Speaker.figure_id)))
+scenicDifference(drama, norm = length(unique(drama$text$Speaker.figure_id)))
 }
 \arguments{
 \item{drama}{The QDDrama Object}

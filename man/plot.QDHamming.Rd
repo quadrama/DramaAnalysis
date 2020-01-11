@@ -4,8 +4,7 @@
 \alias{plot.QDHamming}
 \title{Personnel Exchange}
 \usage{
-\method{plot}{QDHamming}(x, drama = NULL, xlab = "Scene",
-  ylab = "Exchange after Scene", ...)
+\method{plot}{QDHamming}(x, drama = NULL, xlab = "Scene", ylab = "Exchange after Scene", ...)
 }
 \arguments{
 \item{x}{A numeric vector generated from the function}

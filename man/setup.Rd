@@ -6,16 +6,18 @@
 \alias{setDataDirectory}
 \title{This function initialises the paths to data files.}
 \usage{
+setCollectionDirectory(
+  collectionDirectory = file.path(getOption("qd.datadir"), "collections")
+)
 
-  setCollectionDirectory(collectionDirectory = file.path(getOption("qd.datadir"),
-  "collections"))
+setDirectories(
+  dataDirectory = file.path(path.expand("~"), "QuaDramA", "Data2"),
+  collectionDirectory = file.path(dataDirectory, "collections")
+)
 
-setDirectories(dataDirectory = file.path(path.expand("~"), "QuaDramA",
-  "Data2"), collectionDirectory = file.path(dataDirectory,
-  "collections"))
-
-setDataDirectory(dataDirectory = file.path(path.expand("~"), "QuaDramA",
-  "Data2"))
+setDataDirectory(
+  dataDirectory = file.path(path.expand("~"), "QuaDramA", "Data2")
+)
 }
 \arguments{
 \item{collectionDirectory}{A path to the directory in which collections are stored. 

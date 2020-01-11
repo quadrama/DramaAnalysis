@@ -4,8 +4,15 @@
 \alias{barplot.QDCharacterStatistics}
 \title{Stacked Bar Plot}
 \usage{
-\method{barplot}{QDCharacterStatistics}(height, col = qd.colors,
-  column = "tokens", order = -1, labels = TRUE, top = 5, ...)
+\method{barplot}{QDCharacterStatistics}(
+  height,
+  col = qd.colors,
+  column = "tokens",
+  order = -1,
+  labels = TRUE,
+  top = 5,
+  ...
+)
 }
 \arguments{
 \item{height}{The object of class QDCharacterStatistics that is to be plotted}

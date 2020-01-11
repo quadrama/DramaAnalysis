@@ -5,14 +5,22 @@
 \alias{frequencytable}
 \title{Word frequencies}
 \usage{
-filterByDictionary(ft,
+filterByDictionary(
+  ft,
   fields = DramaAnalysis::base_dictionary[fieldnames],
-  fieldnames = c("Liebe"))
+  fieldnames = c("Liebe")
+)
 
-frequencytable(drama, acceptedPOS = postags$de$words,
-  column = "Token.lemma", byCharacter = FALSE, sep = "|",
-  normalize = FALSE, sortResult = FALSE, segment = c("Drama", "Act",
-  "Scene"))
+frequencytable(
+  drama,
+  acceptedPOS = postags$de$words,
+  column = "Token.lemma",
+  byCharacter = FALSE,
+  sep = "|",
+  normalize = FALSE,
+  sortResult = FALSE,
+  segment = c("Drama", "Act", "Scene")
+)
 }
 \arguments{
 \item{ft}{A matrix as produced by \code{frequencytable()}.}
