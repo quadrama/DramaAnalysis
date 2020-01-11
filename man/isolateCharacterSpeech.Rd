@@ -31,7 +31,7 @@ A named list of character vectors, each corresponding to character speeches as d
 }
 \description{
 \code{isolateCharacterSpeech()} isolates the speeches
-of individual characters and optionally saves them in seperate text files.
+of individual characters and optionally saves them in separate text files.
 }
 \examples{
 data(rksp.0)

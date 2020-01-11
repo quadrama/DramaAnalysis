@@ -1,4 +1,4 @@
-#' This function initialises the paths to data files.
+#' This function initializes the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
 #' "~/QuaDramA/Data2" by default.
 #' @param collectionDirectory A path to the directory in which collections are stored. 

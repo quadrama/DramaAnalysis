@@ -4,7 +4,7 @@
 \alias{setCollectionDirectory}
 \alias{setDirectories}
 \alias{setDataDirectory}
-\title{This function initialises the paths to data files.}
+\title{This function initializes the paths to data files.}
 \usage{
 setCollectionDirectory(
   collectionDirectory = file.path(getOption("qd.datadir"), "collections")
@@ -30,5 +30,5 @@ By default, the directory is called "collection" below the data directory.}
 The \code{set*Directory()} functions always return \code{NULL}.
 }
 \description{
-This function initialises the paths to data files.
+This function initializes the paths to data files.
 }

@@ -3,10 +3,11 @@ Type: Package
 Title: Analysis of Dramatic Texts
 Version: 3.0.1
 Date: 2020-01-11
+Language: en-US
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Description: Analysis of preprocessed dramatic texts, with respect to literary research. 
-  The package provides functions to analyse and visualise information about characters,
+  The package provides functions to analyze and visualize information about characters,
   stage directions, the dramatic structure and the text itself.
   The dramatic texts are expected to be in CSV format, which can be installed from within 
   the package, sample texts are provided. The package and the reasoning behind it are described in 
