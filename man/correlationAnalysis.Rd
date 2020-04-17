@@ -4,8 +4,7 @@
 \alias{correlationAnalysis}
 \title{Correlation analysis}
 \usage{
-correlationAnalysis(text.ft, categories, method = "spearman",
-  culling = 0, ...)
+correlationAnalysis(text.ft, categories, method = "spearman", culling = 0, ...)
 }
 \arguments{
 \item{text.ft}{A matrix, containing words in columns and characters (or plays) in rows. 

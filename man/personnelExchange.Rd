@@ -8,8 +8,7 @@
 \usage{
 hamming(drama, variant = c("Trilcke", "Hamming", "NormalizedHamming"))
 
-scenicDifference(drama,
-  norm = length(unique(drama$text$Speaker.figure_id)))
+scenicDifference(drama, norm = length(unique(drama$text$Speaker.figure_id)))
 }
 \arguments{
 \item{drama}{The QDDrama Object}
@@ -19,8 +18,8 @@ scenicDifference(drama,
 \item{norm}{For \code{scenicDifference()}, specifies the normalization constant}
 }
 \value{
-A list of values, one for each scene change. The values 
-indicate the (potentially) normalized number of characters that are exchanged.
+A QDHamming object, which is a list of values, one for each scene change.
+The values indicate the (potentially) normalized number of characters that are exchanged.
 }
 \description{
 There are multiple ways to quantify the number of characters that are 

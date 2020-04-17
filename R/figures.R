@@ -114,7 +114,7 @@ figureStatistics <- function(...) {
 
 #' @title Isolate Character Speech
 #' @description \code{isolateCharacterSpeech()} isolates the speeches
-#' of individual characters and optionally saves them in seperate text files.
+#' of individual characters and optionally saves them in separate text files.
 #' @param drama A text (or multiple texts, as a QDDrama object)
 #' @param segment "Drama", "Act", or "Scene". Determines on what segment-level the speech is isolated.
 #' @param minTokenCount The minimal token count for a speech to be considered (default = 0)

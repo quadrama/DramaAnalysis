@@ -4,10 +4,14 @@
 \alias{installData}
 \title{Download preprocessed drama data}
 \usage{
-installData(dataSource = "tg", dataDirectory = getOption("qd.datadir"),
-  downloadSource = "ims", removeZipFile = TRUE,
-  baseUrl = "https://github.com/quadrama", remoteUrl = paste0(baseUrl,
-  "/data_", dataSource, ".git"))
+installData(
+  dataSource = "tg",
+  dataDirectory = getOption("qd.datadir"),
+  downloadSource = "ims",
+  removeZipFile = TRUE,
+  baseUrl = "https://github.com/quadrama",
+  remoteUrl = paste0(baseUrl, "/data_", dataSource, ".git")
+)
 }
 \arguments{
 \item{dataSource}{Currently, only "tg" (textgrid) is supported}

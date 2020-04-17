@@ -34,6 +34,68 @@ plot.QDUtteranceStatistics <- function(x,
   }
 }
 
+#' @title Personnel Exchange
+#' @description Uses the default scatterplot function to plot the personnel 
+#' exchange in each scene.
+#' @param x A numeric vector generated from the function
+#' @param drama Optional QDDrama object. If present, act boundaries
+#' and correct scene labels are included in the plot.
+#' @param xlab A character vector that is used as x axis label. Defaults to
+#' "Scene".
+#' @param ylab A character vector that is used as y axis label. Defaults to
+#' "Exchange".
+#' @param ... Parameters passed to \code{plot.default()}.
+#' @importFrom graphics plot.default axis abline mtext
+#' @importFrom utils tail
+#' @export
+#' @return See \code{plot.default()}.
+#' @seealso plot.default
+#' @examples
+#' data(rksp.0)
+#' h <- hamming(rksp.0)
+#' plot(h, drama=rksp.0)
+plot.QDHamming <- function(x, 
+                           drama=NULL,
+                           xlab="Scene",
+                           ylab="Exchange after Scene",
+                           ...) {
+  
+  # prevent notes in R CMD check
+  Number.Act <- NA
+  Number.Scene <- NA
+  
+  stopifnot(inherits(x, "QDHamming"))
+  
+  graphics::plot.default(x, 
+                         xlab=xlab,
+                         ylab=ylab,
+                         pch=20,
+                         xaxt="n",
+                         bty="n",
+                         ...)
+  
+  if ( is.null(drama) ) {
+    # add x-axis
+    graphics::axis(1, at=1:length(x)) 
+  } else {
+    stopifnot(inherits(drama, "QDDrama"))
+    segments_dt <- cbind(drama$segments, nscene=1:nrow(drama$segments))
+    # draw vertical act lines
+    graphics::abline(v=segments_dt[Number.Scene == 1]$nscene[2:nrow(segments_dt[Number.Scene == 1])] - 0.5)
+    # add x-axis
+    graphics::axis(1, at=1:(nrow(segments_dt)-1), labels=head(segments_dt$Number.Scene, -1))
+    # compute positions for act axis
+    act_index = sapply(unique(segments_dt$Number.Act), function(x) {
+      beginScene = segments_dt[Number.Act == x][1]$nscene
+      endScene = tail(segments_dt[Number.Act == x], 1)$nscene
+      (beginScene + endScene) / 2
+    })
+    # add and label act axis above plot
+    graphics::axis(3, at=act_index, labels=unique(segments_dt$Number.Act), tick=FALSE, xlab="Act")
+    graphics::mtext("Act", side=3, line=3)
+  }
+}
+
 #' @title Spider-Webs
 #' @description Generates spider-web like plot. 
 #' Spider webs may look cool, but they are terrible 

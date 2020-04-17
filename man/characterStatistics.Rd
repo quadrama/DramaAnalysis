@@ -4,8 +4,12 @@
 \alias{characterStatistics}
 \title{Basic Character Statistics}
 \usage{
-characterStatistics(drama, normalize = FALSE, segment = c("Drama",
-  "Act", "Scene"), filterPunctuation = FALSE)
+characterStatistics(
+  drama,
+  normalize = FALSE,
+  segment = c("Drama", "Act", "Scene"),
+  filterPunctuation = FALSE
+)
 }
 \arguments{
 \item{drama}{A \code{QDDrama} object}

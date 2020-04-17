@@ -4,8 +4,11 @@
 \alias{loadCharacters}
 \title{Character data loading}
 \usage{
-loadCharacters(ids, defaultCollection = "tg",
-  dataDirectory = getOption("qd.datadir"))
+loadCharacters(
+  ids,
+  defaultCollection = "tg",
+  dataDirectory = getOption("qd.datadir")
+)
 }
 \arguments{
 \item{ids}{a list or vector of ids}

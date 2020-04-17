@@ -4,9 +4,14 @@
 \alias{isolateCharacterSpeech}
 \title{Isolate Character Speech}
 \usage{
-isolateCharacterSpeech(drama, segment = c("Drama", "Act", "Scene"),
-  minTokenCount = 0, countPunctuation = TRUE, writeToFiles = TRUE,
-  dir = getOption("qd.datadir"))
+isolateCharacterSpeech(
+  drama,
+  segment = c("Drama", "Act", "Scene"),
+  minTokenCount = 0,
+  countPunctuation = TRUE,
+  writeToFiles = TRUE,
+  dir = getOption("qd.datadir")
+)
 }
 \arguments{
 \item{drama}{A text (or multiple texts, as a QDDrama object)}
@@ -26,7 +31,7 @@ A named list of character vectors, each corresponding to character speeches as d
 }
 \description{
 \code{isolateCharacterSpeech()} isolates the speeches
-of individual characters and optionally saves them in seperate text files.
+of individual characters and optionally saves them in separate text files.
 }
 \examples{
 data(rksp.0)

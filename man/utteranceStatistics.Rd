@@ -16,7 +16,7 @@ Returns an object of class \code{QDUtteranceStatistics},
 which is essentially a data.frame.
 }
 \description{
-This method calculates the length of each utterance, organised by 
+This method calculates the length of each utterance, organized by 
 character and drama.
 }
 \examples{

@@ -4,8 +4,7 @@
 \alias{dramaNames}
 \title{Format drama titles}
 \usage{
-dramaNames(x, ids = NULL, formatString = "\%A: \%T (\%DM)",
-  orderBy = "drama")
+dramaNames(x, ids = NULL, formatString = "\%A: \%T (\%DM)", orderBy = "drama")
 }
 \arguments{
 \item{x}{The QDDrama object}

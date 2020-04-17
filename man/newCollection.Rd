@@ -4,10 +4,14 @@
 \alias{newCollection}
 \title{Create or Extend a Collection}
 \usage{
-newCollection(drama, name = ifelse(inherits(drama, "QDDrama"),
-  paste(unique(drama$meta$drama)), paste(drama, collapse = "_")),
-  writeToFile = TRUE, dir = getOption("qd.collectionDirectory"),
-  append = TRUE)
+newCollection(
+  drama,
+  name = ifelse(inherits(drama, "QDDrama"), paste(unique(drama$meta$drama)),
+    paste(drama, collapse = "_")),
+  writeToFile = TRUE,
+  dir = getOption("qd.collectionDirectory"),
+  append = TRUE
+)
 }
 \arguments{
 \item{drama}{A text (or multiple texts, as data.frame or data.table), or a character 

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is a dummy file that demonstrates the minimal structure that is 
+needed to parse xml files in TEI-format with the function loadDramaTEI.-->
+
+<!--The TEI namespace is mandatory. xml:lang will be parsed as the 
+language of the play.-->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+  <teiHeader>
+    <!-- The fileDesc is parsed for metadata. The author, the author 
+    pnd, the title and dates are parsed if present as follows.-->
+    <fileDesc>
+      <titleStmt>
+        <title type="main">TEI Example File</title>
+        <author key="pnd:examplepnd">Author, Example</author>
+      </titleStmt>
+      <sourceDesc>
+        <bibl type="originalSource">
+          <date type="written" when="1"/>
+          <date type="print" when="2"/>
+          <date type="premiere" when="3"/>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <particDesc>
+        <!--The listPerson element should contain all characters that 
+        occur in the play. Sex and age are parsed if present. The xml:id
+        should be the same as in the who attributes of the sp-elements 
+        below, minus the '#'.-->
+        <listPerson>
+          <!-- The xml:id will be parsed as the speaker id.-->
+          <person xml:id="foo" sex="FEMALE" age="25">
+            <!-- The first persName element will be parsed as the surface name of the speaker.-->
+            <persName>Foo</persName>
+          </person>
+          <person xml:id="bar" sex="MALE" age="20">
+            <persName>Bar</persName>
+          </person>
+        </listPerson>
+      </particDesc>
+    </profileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <!--The play can either be structured like this (with acts 
+      containing scenes) or with non-nested scenes or acts respectively.-->
+      <div type="act">
+        <stage>This is an act-level stage direction.</stage>
+        <div type="scene">
+          <stage>Stage directions are also allowed inside scenes.</stage>
+          <sp who="#foo">
+            <speaker>FOO</speaker> <!--This is the speaker as present in the orginal text.-->
+            <p>This is Foo speaking. Speaker text can be strucutred 
+            through p-elements. <stage>Stage directions are also allowed 
+            inside p-elements.</stage> <emph>Emphasis</emph> is allowed 
+            inside speech. Other structures are also allowed.</p>
+          </sp>
+          <sp who="#bar">
+            <speaker>BAR</speaker>
+            <lg>
+              <l>That's right!</l>
+              <l>Plays structured in <emph>lines</emph> contain text in l-elements.</l>
+              <l>Usually, these lines are inside lg-elements.</l>
+            </lg>
+            <stage>Stage directions are <emph>also</emph> allowed anywhere inside sp-elements.</stage>
+          </sp>
+        </div>
+        <div type="scene">
+          <sp who="#foo">
+            <speaker>FOO</speaker>
+            <l>Out of convenience, <emph>lines</emph> are also allowed to appear alone.</l>
+            <l>lg-elements are therefore not mandatory.</l>
+          </sp>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

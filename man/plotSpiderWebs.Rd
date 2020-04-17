@@ -4,10 +4,18 @@
 \alias{plotSpiderWebs}
 \title{Spider-Webs}
 \usage{
-plotSpiderWebs(dstat, symbols = c(17, 16, 15, 4, 8), cglcol = "black",
-  legend = TRUE, legend.cex = 0.7, legend.pos.x = "bottomright",
-  legend.pos.y = NA, legend.horizontal = FALSE, pcol = qd.colors,
-  ...)
+plotSpiderWebs(
+  dstat,
+  symbols = c(17, 16, 15, 4, 8),
+  cglcol = "black",
+  legend = TRUE,
+  legend.cex = 0.7,
+  legend.pos.x = "bottomright",
+  legend.pos.y = NA,
+  legend.horizontal = FALSE,
+  pcol = qd.colors,
+  ...
+)
 }
 \arguments{
 \item{dstat}{A data frame containing data, e.g., output from dictionaryStatistics()}

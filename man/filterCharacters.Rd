@@ -4,8 +4,12 @@
 \alias{filterCharacters}
 \title{Filter characters}
 \usage{
-filterCharacters(hasCharacter, drama, by = c("rank", "tokens", "name"),
-  n = ifelse(by == "tokens", 500, ifelse(by == "rank", 10, c())))
+filterCharacters(
+  hasCharacter,
+  drama,
+  by = c("rank", "tokens", "name"),
+  n = ifelse(by == "tokens", 500, ifelse(by == "rank", 10, c()))
+)
 }
 \arguments{
 \item{hasCharacter}{The object we want to filter.}
