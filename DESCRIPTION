@@ -1,8 +1,8 @@
 Package: DramaAnalysis
 Type: Package
 Title: Analysis of Dramatic Texts
-Version: 3.0.1
-Date: 2020-01-11
+Version: 3.0.2
+Date: 2020-04-17
 Language: en-US
 Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
 Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
