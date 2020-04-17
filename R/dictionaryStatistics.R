@@ -21,16 +21,8 @@
 #' @rdname dictionaryHandling
 #' @export
 #' @examples 
-#' \donttest{
 #' # retrieves word fields from github
 #' fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
-#' 
-#' 
-#' # retrieves word fields from local directory (under windows)
-#' fields <- loadFields(filednames=c("Health", "Death"),
-#'                      baseurl="c:\\path\\to\\local\\directory",
-#'                      fileSep="\\")
-#' }
 loadFields <- function(fieldnames=c("Liebe","Familie"),
                        baseurl=paste("https://raw.githubusercontent.com/quadrama/metadata/master",
                                      ensureSuffix(directory,fileSep), sep=fileSep),
