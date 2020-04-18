@@ -1,7 +1,5 @@
 language: r
 r:
-- 3.3
-- 3.4
 - oldrel
 - release
 - devel
@@ -11,8 +9,6 @@ os:
 matrix:
   exclude:
   - r: 3.4
-    os: osx
-  - r: devel
     os: osx
 cache: packages 
 warnings_are_errors: false
