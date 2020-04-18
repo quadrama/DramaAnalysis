@@ -15,10 +15,3 @@ The function returns an object of class \code{QDDrama}.
 \description{
 This function parses and loads one or more dramas in raw TEI format.
 }
-\examples{
-\donttest{
-tei_example_file <- "example_tei.xml"
-d <- loadDramaTEI(tei_example_file)
-}
-
-}

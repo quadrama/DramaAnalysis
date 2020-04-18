@@ -69,9 +69,6 @@ filtered <- filterByDictionary(ftable,
 
 data(rksp.0)
 st <- frequencytable(rksp.0)
-\donttest{
-stylo(gui=FALSE, frequencies = st)
-}
 }
 \seealso{
 \code{stylo}

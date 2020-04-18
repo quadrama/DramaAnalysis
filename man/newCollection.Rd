@@ -34,10 +34,8 @@ The function returns the ids that belong to the collection as a character vector
 or add dramas to existing collection files.
 }
 \examples{
-\donttest{
 t <- combine(rksp.0, rjmw.0)
-newCollection(t)
-newCollection(c("rksp.0", "rjmw.0"), append=FALSE) # produces identical file
-newCollection(c("a", "b"), name="rksp.0_rjmw.0") # adds "a" and "b" to the file
-}
+newCollection(t, writeToFile=FALSE)
+newCollection(c("rksp.0", "rjmw.0"), writeToFile=FALSE) # produces identical file
+newCollection(c("a", "b"), name="rksp.0_rjmw.0", writeToFile=FALSE) # adds "a" and "b" to the file
 }
