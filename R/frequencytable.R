@@ -19,6 +19,7 @@
 #' @rdname frequencyTable
 #' @seealso \code{stylo}
 #' @importFrom stats xtabs ftable
+#' @importFrom data.table shift
 #' @examples
 #' data(rksp.0)
 #' st <- frequencytable(rksp.0)
@@ -50,7 +51,7 @@ frequencytable <- function(drama,
     ft <- ft[as.character(ft$Token.pos) %in% acceptedPOS,]
  
   if (bigram == TRUE) {
-    ft$nextToken <- shift(ft[,get(column)], n=-1)
+    ft$nextToken <- data.table::shift(ft[,get(column)], n=-1)
     ft$ngram <- paste(ft[,get(column)], ft$nextToken, sep=sepBigram)
   } else {
     ft$ngram <- ft[,get(column)]
