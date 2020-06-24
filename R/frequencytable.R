@@ -4,11 +4,14 @@
 #' @param drama A \code{QDDrama}. May be covering multiple texts.
 #' @param acceptedPOS A list of accepted pos tags. Words of all POS tags not in this list 
 #' are filtered out. Specify NULL or an empty list to include all words.
+#' @param bigram Logical. Calculates bigram frequencies instead of frequencies of single words.
 #' @param byCharacter Logical. Whether the count is by character or by text.
 #' @param segment Character vector. Whether the count is by drama (default), act or scene
 #' @param column The column name we should use (should be either Token.surface or Token.lemma)
 #' @param sep The separation symbol that goes between drama name and character (if applicable). 
 #' Defaults to the pipe symbol.
+#' @param sepBigram The separation symbol that goes between words of a bigram. Ignored if \code{bigram} is false.
+#' Defaults to " " (a single space).
 #' @param normalize Whether to normalize values or not. If set to TRUE, the values are normalized by
 #' row sums.
 #' @param sortResult Logical. If true, the columns with the highest sum are ordered left (i.e., frequent words are visible first). If false, the columns are ordered alphabetically by column name.
@@ -16,18 +19,23 @@
 #' @rdname frequencyTable
 #' @seealso \code{stylo}
 #' @importFrom stats xtabs ftable
+#' @importFrom data.table shift
 #' @examples
 #' data(rksp.0)
 #' st <- frequencytable(rksp.0)
+#' st2 <- frequencytable(rksp.0, bigram=TRUE)
 #' \donttest{
 #' stylo(gui=FALSE, frequencies = st)
+#' stylo(gui=FALSE, frequencies = st2, ngram.size=2)
 #' }
 #' @export
 frequencytable <- function(drama, 
                            acceptedPOS = postags$de$words,
+			   bigram=FALSE,
                            column="Token.lemma", 
                            byCharacter=FALSE, 
                            sep="|", 
+			   sepBigram=" ",
                            normalize=FALSE, 
                            sortResult=FALSE, 
                            segment=c("Drama", "Act", "Scene")) {
@@ -43,24 +51,31 @@ frequencytable <- function(drama,
   
   if (length(acceptedPOS) > 0)
     ft <- ft[as.character(ft$Token.pos) %in% acceptedPOS,]
+ 
+  if (bigram == TRUE) {
+    ft$nextToken <- data.table::shift(ft[,get(column)], n=-1)
+    ft$ngram <- paste(ft[,get(column)], ft$nextToken, sep=sepBigram)
+  } else {
+    ft$ngram <- ft[,get(column)]
+  }
   
   segment <- match.arg(segment)
   switch(segment,
          Drama = { 
-           if (byCharacter == FALSE) { xt <- stats::xtabs(~drama + ft[,get(column)], data=ft) }
-           else { xt <- stats::xtabs(~ paste(drama,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
+           if (byCharacter == FALSE) { xt <- stats::xtabs(~drama + ft$ngram, data=ft) }
+           else { xt <- stats::xtabs(~ paste(drama,Speaker.figure_id,sep=sep) + ~ft$ngram, data=ft) }
          },
          Act = {
-           if (byCharacter == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,sep=sep) + ~ft[,get(column)], data=ft) }
-           else { xt <- stats::xtabs(~ paste(drama,Number.Act,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
+           if (byCharacter == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,sep=sep) + ~ft$ngram, data=ft) }
+           else { xt <- stats::xtabs(~ paste(drama,Number.Act,Speaker.figure_id,sep=sep) + ~ft$ngram, data=ft) }
          },
          Scene = {
-           if (byCharacter == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,sep=sep) + ~ft[,get(column)], data=ft) }
-           else { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,Speaker.figure_id,sep=sep) + ~ft[,get(column)], data=ft) }
+           if (byCharacter == FALSE) { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,sep=sep) + ~ft$ngram, data=ft) }
+           else { xt <- stats::xtabs(~ paste(drama,Number.Act,Number.Scene,Speaker.figure_id,sep=sep) + ~ft$ngram, data=ft) }
          },
          stop("Please enter valid string-value for argument 'segment' (default = 'Drama', 'Act' or 'Scene').")
   )
-  
+
   r <- as.matrix(stats::ftable(xt, row.vars = c(), col.vars = c()))
   
   if (normalize == TRUE) {
@@ -79,46 +94,6 @@ frequencytable <- function(drama,
                                       Scene ="QDByScene"))
   
   r
-}
-
-
-#' Extract bigrams instead of words (currently not taking utterance boundaries into account)
-#' @param t The text
-#' @param acceptedPOS A list of accepted pos tags
-#' @param names Whether to use character names or ids
-#' @param byCharacter Wether the count is by character or by text
-#' @param segment Whether the count is by drama (default), act or scene
-#' @param column The column names we should use (should be either Token.surface or Token.lemma)
-#' @return Matrix of bigram frequencies in the format bigrams X segments
-#' @keywords internal
-frequencytable2 <- function(t, acceptedPOS = postags$de$words, names=FALSE, column=c("Token.surface", "Token.surface"), byCharacter=FALSE, segment=c("Drama","Act","Scene")) {
-  ft <- t
-  if (length(acceptedPOS) > 0) {
-    ft <- t[t$Token.pos %in% acceptedPOS,]
-  }
-  by <- match.arg(segment)
-  switch(by,
-         Drama = { 
-           if (byCharacter == FALSE) { index <- paste(ft$drama) }
-           else if (names == TRUE) { index <- paste(ft$drama, ft$Speaker.figure_surface) }
-           else { index <- paste(ft$drama, ft$Speaker.figure_id) }
-         },
-         Act = {
-           if (byCharacter == FALSE) { index <- paste(ft$drama, ft$Number.Act) }
-           else if (names == TRUE) { index <- paste(ft$drama, ft$Number.Act, ft$Speaker.figure_surface) }
-           else { index <- paste(ft$drama, ft$Number.Act, ft$Speaker.figure_id) }
-         },
-         Scene = {
-           if (byCharacter == FALSE) { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene) }
-           else if (names == TRUE) { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene, ft$Speaker.figure_surface) }
-           else { index <- paste(ft$drama, ft$Number.Act, ft$Number.Scene, ft$Speaker.figure_id) }
-         },
-         stop("Please enter valid string-value for argument 'by' (default = 'Drama', 'Act' or 'Scene').")
-  )
-  
-  r <- do.call(rbind, tapply(paste(ft[[column[1]]], ft[[column[2]]][-1]), index, function(x){prop.table(table(x))}))
-  r[,order(colSums(r),decreasing=TRUE)]
-  
 }
 
 
