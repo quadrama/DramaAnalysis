@@ -23,8 +23,10 @@
 #' @examples
 #' data(rksp.0)
 #' st <- frequencytable(rksp.0)
+#' st2 <- frequencytable(rksp.0, bigram=TRUE)
 #' \donttest{
 #' stylo(gui=FALSE, frequencies = st)
+#' stylo(gui=FALSE, frequencies = st2, ngram.size=2)
 #' }
 #' @export
 frequencytable <- function(drama, 
