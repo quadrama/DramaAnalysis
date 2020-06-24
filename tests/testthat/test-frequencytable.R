@@ -66,3 +66,33 @@ test_that("frequencytable(..., byCharacter=TRUE, acceptedPOS = postags$de$n) has
   expect_equal(ncol(ft), 914)
   expect_equal(nrow(ft), 13)
 })
+
+ft <- frequencytable(rksp.0, bigram = TRUE)
+test_that("frequencytable(rksp.0, bigram=TRUE) 
+          has correct dimensions and produces correct output", {
+  expect_length(ft, 11904)
+  expect_equal(colnames(ft)[4], "- O")
+  expect_equal(ft[4], 20)
+  expect_equal(colnames(ft)[2000], "der freund")
+  expect_equal(ft[2000], 2)
+})
+
+ft <- frequencytable(rksp.0, bigram = TRUE, sepBigram = "+")
+test_that("frequencytable(rksp.0, bigram=TRUE, sepBigram = '+')
+          has correct dimensions and produces correct output", {
+  expect_length(ft, 11904)
+  expect_equal(colnames(ft)[4], "-+O")
+  expect_equal(ft[4], 20)
+  expect_equal(colnames(ft)[2000], "der+freund")
+  expect_equal(ft[2000], 2)
+})
+
+ft <- frequencytable(rksp.0, bigram=TRUE, byCharacter=TRUE, sortResult=TRUE, segment="Scene")
+test_that("frequencytable(rksp.0, bigram=TRUE, byCharacter=TRUE, sortResult=TRUE, segment='Scene') 
+          has correct dimensions and produces correct output", {
+  expect_length(colnames(ft), 11904)
+  expect_length(rownames(ft), 94)
+  expect_equal(colnames(ft)[4], "der prinz")
+  expect_equal(rownames(ft)[1], "rksp.0|1|1|der_kammerdiener")
+  expect_equal(ft[1,1], 1)
+})
