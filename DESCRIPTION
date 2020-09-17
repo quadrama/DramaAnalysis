@@ -25,7 +25,8 @@ Imports:
    git2r (>= 0.24.0),
    xml2 (>= 1.2.0),
    tokenizers (>= 0.2.1),
-   stringr (>= 1.4.0)
+   stringr (>= 1.4.0),
+   shiny (>= 1.5.0)
 Depends:
   R (>= 3.3.0)
 RoxygenNote: 6.1.1
