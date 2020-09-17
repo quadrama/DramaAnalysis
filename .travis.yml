@@ -16,3 +16,5 @@ matrix:
     os: osx
 cache: packages 
 warnings_are_errors: false
+git:
+  submodules: false
