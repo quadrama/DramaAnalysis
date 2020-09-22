@@ -1,0 +1,3 @@
+[submodule "DramaAnalysisWeb"]
+	path = DramaAnalysisWeb
+	url = https://github.com/quadrama/DramaAnalysisWeb
