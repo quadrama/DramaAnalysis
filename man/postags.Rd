@@ -4,7 +4,9 @@
 \name{postags}
 \alias{postags}
 \title{Provides lists of groups of pos tags for various word classes.}
-\format{An object of class \code{list} of length 1.}
+\format{
+An object of class \code{list} of length 1.
+}
 \usage{
 postags
 }

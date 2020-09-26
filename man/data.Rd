@@ -6,7 +6,11 @@
 \alias{rksp.0}
 \alias{rjmw.0}
 \title{Data sets}
-\format{A list containing data.frames and data.table.}
+\format{
+A list containing data.frames and data.table.
+
+An object of class \code{QDDrama} (inherits from \code{list}) of length 6.
+}
 \usage{
 rksp.0
 

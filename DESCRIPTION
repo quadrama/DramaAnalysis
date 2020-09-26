@@ -2,7 +2,7 @@ Package: DramaAnalysis
 Type: Package
 Title: Analysis of Dramatic Texts
 Version: 3.0.2
-Date: 2020-04-17
+Date: 2020-09-07
 Language: en-US
 Authors@R: c(
   person("Nils", "Reiter", email="nils.reiter@ims.uni-stuttgart.de", role=c("aut", "cre"), comment=(ORCID="0000-0003-3193-6170")),
@@ -31,7 +31,7 @@ Imports:
    stringr (>= 1.4.0)
 Depends:
   R (>= 3.3.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Suggests: testthat,
     fmsb,
     knitr,
