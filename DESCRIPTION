@@ -1,11 +1,13 @@
 Package: DramaAnalysis
 Type: Package
 Title: Analysis of Dramatic Texts
-Version: 3.0.1
-Date: 2020-01-11
+Version: 3.0.2
+Date: 2020-09-07
 Language: en-US
-Author: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
-Maintainer: Nils Reiter <nils.reiter@ims.uni-stuttgart.de>
+Authors@R: c(
+  person("Nils", "Reiter", email="nils.reiter@ims.uni-stuttgart.de", role=c("aut", "cre"), comment=(ORCID="0000-0003-3193-6170")),
+  person("Tim", "Strohmayer", email="st151528@stud.uni-stuttgart.de", role=c("ctb")),
+  person("Janis", "Pagel", email="janis.pagel@ims.uni-stuttgart.de", role=c("ctb")))
 Description: Analysis of preprocessed dramatic texts, with respect to literary research. 
   The package provides functions to analyze and visualize information about characters,
   stage directions, the dramatic structure and the text itself.
@@ -29,7 +31,7 @@ Imports:
    stringr (>= 1.4.0)
 Depends:
   R (>= 3.3.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Suggests: testthat,
     fmsb,
     knitr,

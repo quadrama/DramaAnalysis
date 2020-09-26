@@ -7,12 +7,6 @@
 #' @exportClass QDDrama
 #' @return The function returns an object of class \code{QDDrama}.
 #' @export
-#' @examples
-#' \donttest{
-#' tei_example_file <- "example_tei.xml"
-#' d <- loadDramaTEI(tei_example_file)
-#' }
-#' 
 loadDramaTEI <- function(filename) {
   # recursive loading for multiple dramas
   if (is.list(filename)) {

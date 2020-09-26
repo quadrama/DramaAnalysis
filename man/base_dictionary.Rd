@@ -4,7 +4,9 @@
 \name{base_dictionary}
 \alias{base_dictionary}
 \title{Base dictionary}
-\format{A list with five entries, each of them being a character vector.}
+\format{
+A list with five entries, each of them being a character vector.
+}
 \usage{
 base_dictionary
 }
