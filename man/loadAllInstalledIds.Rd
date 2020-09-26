@@ -4,8 +4,10 @@
 \alias{loadAllInstalledIds}
 \title{Installed texts}
 \usage{
-loadAllInstalledIds(asDataFrame = FALSE,
-  dataDirectory = getOption("qd.datadir"))
+loadAllInstalledIds(
+  asDataFrame = FALSE,
+  dataDirectory = getOption("qd.datadir")
+)
 }
 \arguments{
 \item{asDataFrame}{Logical value. Controls whether 

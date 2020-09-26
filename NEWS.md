@@ -1,3 +1,13 @@
+# DramaAnalysis 3.0.1
+
+Bug fix release
+
+- presence() function now also produces results if the play has only a single scene (#158)
+- presence() function calculates correct active and passive presence (#161)
+- fixes testing issue with respect floating point numbers ("noLD issue") (#162)
+- loadDramaTEI() now only accepts a filename
+- Documentation now uses proper -ize spelling
+
 # DramaAnalysis 3.0.0
 
 This is a redesign and complete overhaul of the R package. Existing code that uses functions of the package cannot be expected to continue to run without modifications. The major changes (compared to 2.x) are:
@@ -5,7 +15,7 @@ This is a redesign and complete overhaul of the R package. Existing code that us
 - Classes: Most functions now produce a classed object. 
   This makes it easier to prevent an erroneous use of functions.
 - Ids and names: All functions now rely only on character ids. If one needs character 
-  names for plotting and visualisation, they can be inserted later using `characterNames()`, 
+  names for plotting and visualization, they can be inserted later using `characterNames()`, 
   with a controlled formatting.
 - Data files now include stage directions and character mentions, and functions can process them
 - Extensive documentation in the form of a tutorial: https://quadrama.github.io/DramaAnalysis/tutorial/3/

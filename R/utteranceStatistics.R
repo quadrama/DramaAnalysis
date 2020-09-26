@@ -1,5 +1,5 @@
 #' @title Utterance Statistics
-#' @description This method calculates the length of each utterance, organised by 
+#' @description This method calculates the length of each utterance, organized by 
 #' character and drama. 
 #' @param drama The dramatic text(s)
 #' @param normalizeByDramaLength Logical value. If true, the resulting values will be normalized by the length of the drama.

@@ -1,7 +1,7 @@
 context("loadDramaTEI()")
 
-tei_file <- system.file("extdata", "example_tei.xml", package="DramaAnalysis", mustWork=TRUE)
-d <- loadDramaTEI(tei_file, dataDirectory="")
+tei_file <- "example_tei.xml"
+d <- loadDramaTEI(tei_file)
 
 test_that("loadDramaTEI parses example_tei.xml correctly", {
   expect_true(inherits(d, "QDDrama"))

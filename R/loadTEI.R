@@ -1,18 +1,13 @@
 #' @title Load drama
 #' @description This function parses and loads one or more dramas in raw TEI format.
 #' @param filename The filename of the drama to load (or a list thereof).
-#' @param dataDirectory The directory that holds the file(s).
 #' @import xml2
 #' @importFrom data.table data.table
 #' @importFrom tokenizers tokenize_words
 #' @exportClass QDDrama
 #' @return The function returns an object of class \code{QDDrama}.
 #' @export
-#' @examples
-#' tei_example_file <- system.file("extdata", "example_tei.xml",
-#'                                 package="DramaAnalysis", mustWork=TRUE)
-#' d <- loadDramaTEI(tei_example_file, dataDirectory="")
-loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"), "/tei")) {
+loadDramaTEI <- function(filename) {
   # recursive loading for multiple dramas
   if (is.list(filename)) {
     drama_list <- lapply(filename, loadDramaTEI)
@@ -21,7 +16,7 @@ loadDramaTEI <- function(filename, dataDirectory=paste0(getOption("qd.datadir"),
       drama <- combine(drama, drama_list[[i]])
     }
   } else {
-    raw_tei <- xml2::read_xml(paste0(dataDirectory, "/", filename)) # read xml file
+    raw_tei <- xml2::read_xml(filename) # read xml file
     nsp <- xml2::xml_ns_rename(xml2::xml_ns(raw_tei), d1="tei") # set tei-namespace
     id <- gsub("([^.]+).xml", "\\1", filename)
     corpus <- "tei"

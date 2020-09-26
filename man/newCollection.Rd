@@ -4,10 +4,14 @@
 \alias{newCollection}
 \title{Create or Extend a Collection}
 \usage{
-newCollection(drama, name = ifelse(inherits(drama, "QDDrama"),
-  paste(unique(drama$meta$drama)), paste(drama, collapse = "_")),
-  writeToFile = TRUE, dir = getOption("qd.collectionDirectory"),
-  append = TRUE)
+newCollection(
+  drama,
+  name = ifelse(inherits(drama, "QDDrama"), paste(unique(drama$meta$drama)),
+    paste(drama, collapse = "_")),
+  writeToFile = TRUE,
+  dir = getOption("qd.collectionDirectory"),
+  append = TRUE
+)
 }
 \arguments{
 \item{drama}{A text (or multiple texts, as data.frame or data.table), or a character 
@@ -30,10 +34,8 @@ The function returns the ids that belong to the collection as a character vector
 or add dramas to existing collection files.
 }
 \examples{
-\donttest{
 t <- combine(rksp.0, rjmw.0)
-newCollection(t)
-newCollection(c("rksp.0", "rjmw.0"), append=FALSE) # produces identical file
-newCollection(c("a", "b"), name="rksp.0_rjmw.0") # adds "a" and "b" to the file
-}
+newCollection(t, writeToFile=FALSE)
+newCollection(c("rksp.0", "rjmw.0"), writeToFile=FALSE) # produces identical file
+newCollection(c("a", "b"), name="rksp.0_rjmw.0", writeToFile=FALSE) # adds "a" and "b" to the file
 }

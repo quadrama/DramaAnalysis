@@ -24,7 +24,8 @@ returns them as a \code{QDDrama} object.
 }
 \examples{
 # both are equivalent
-\donttest{
+\dontrun{
+installData("test")
 d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
 d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
 }

@@ -4,9 +4,14 @@
 \alias{frequencytable2}
 \title{Extract bigrams instead of words (currently not taking utterance boundaries into account)}
 \usage{
-frequencytable2(t, acceptedPOS = postags$de$words, names = FALSE,
-  column = c("Token.surface", "Token.surface"), byCharacter = FALSE,
-  segment = c("Drama", "Act", "Scene"))
+frequencytable2(
+  t,
+  acceptedPOS = postags$de$words,
+  names = FALSE,
+  column = c("Token.surface", "Token.surface"),
+  byCharacter = FALSE,
+  segment = c("Drama", "Act", "Scene")
+)
 }
 \arguments{
 \item{t}{The text}

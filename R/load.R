@@ -1,4 +1,4 @@
-#' This function initialises the paths to data files.
+#' This function initializes the paths to data files.
 #' @param dataDirectory A path to the directory in which data and metadata are located. 
 #' "~/QuaDramA/Data2" by default.
 #' @param collectionDirectory A path to the directory in which collections are stored. 
@@ -36,7 +36,8 @@ setDataDirectory <- function(dataDirectory = file.path(path.expand("~"),"QuaDram
 #' @exportClass QDDrama
 #' @examples 
 #' # both are equivalent
-#' \donttest{
+#' \dontrun{
+#' installData("test")
 #' d <- loadDrama(c("test:rksp.0", "test:rjmw.0"))
 #' d <- loadDrama(c("rksp.0", "rjmw.0"), defaultCollection = "test")
 #' }

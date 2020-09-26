@@ -4,22 +4,14 @@
 \alias{loadDramaTEI}
 \title{Load drama}
 \usage{
-loadDramaTEI(filename, dataDirectory = paste0(getOption("qd.datadir"),
-  "/tei"))
+loadDramaTEI(filename)
 }
 \arguments{
 \item{filename}{The filename of the drama to load (or a list thereof).}
-
-\item{dataDirectory}{The directory that holds the file(s).}
 }
 \value{
 The function returns an object of class \code{QDDrama}.
 }
 \description{
 This function parses and loads one or more dramas in raw TEI format.
-}
-\examples{
-tei_example_file <- system.file("extdata", "example_tei.xml",
-                                package="DramaAnalysis", mustWork=TRUE)
-d <- loadDramaTEI(tei_example_file, dataDirectory="")
 }

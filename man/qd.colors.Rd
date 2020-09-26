@@ -4,7 +4,9 @@
 \name{qd.colors}
 \alias{qd.colors}
 \title{QuaDramA colors}
-\format{An object of class \code{character} of length 10.}
+\format{
+An object of class \code{character} of length 10.
+}
 \usage{
 qd.colors
 }

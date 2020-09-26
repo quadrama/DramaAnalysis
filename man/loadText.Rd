@@ -4,8 +4,13 @@
 \alias{loadText}
 \title{Load Text}
 \usage{
-loadText(ids, includeTokens = FALSE, defaultCollection = "tg",
-  unifyCharacterFactors = FALSE, variant = "UtterancesWithTokens")
+loadText(
+  ids,
+  includeTokens = FALSE,
+  defaultCollection = "tg",
+  unifyCharacterFactors = FALSE,
+  variant = "UtterancesWithTokens"
+)
 }
 \arguments{
 \item{ids}{A vector containing drama ids to be downloaded}

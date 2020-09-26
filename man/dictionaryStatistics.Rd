@@ -6,17 +6,30 @@
 \alias{as.matrix.QDDictionaryStatistics}
 \title{Dictionary Use}
 \usage{
-dictionaryStatistics(drama,
+dictionaryStatistics(
+  drama,
   fields = DramaAnalysis::base_dictionary[fieldnames],
-  fieldnames = c("Liebe"), segment = c("Drama", "Act", "Scene"),
-  normalizeByCharacter = FALSE, normalizeByField = FALSE,
-  byCharacter = TRUE, column = "Token.lemma", ci = TRUE)
+  fieldnames = c("Liebe"),
+  segment = c("Drama", "Act", "Scene"),
+  normalizeByCharacter = FALSE,
+  normalizeByField = FALSE,
+  byCharacter = TRUE,
+  column = "Token.lemma",
+  ci = TRUE
+)
 
-dictionaryStatisticsSingle(drama, wordfield = c(), segment = c("Drama",
-  "Act", "Scene"), normalizeByCharacter = FALSE,
-  normalizeByField = FALSE, byCharacter = TRUE,
-  fieldNormalizer = length(wordfield), column = "Token.lemma",
-  ci = TRUE, colnames = NULL)
+dictionaryStatisticsSingle(
+  drama,
+  wordfield = c(),
+  segment = c("Drama", "Act", "Scene"),
+  normalizeByCharacter = FALSE,
+  normalizeByField = FALSE,
+  byCharacter = TRUE,
+  fieldNormalizer = length(wordfield),
+  column = "Token.lemma",
+  ci = TRUE,
+  colnames = NULL
+)
 
 \method{as.matrix}{QDDictionaryStatistics}(x, ...)
 }

@@ -4,9 +4,12 @@
 \alias{installCollectionData}
 \title{Download and install collection data}
 \usage{
-installCollectionData(dataDirectory = getOption("qd.datadir"),
-  branchOrCommit = "master", repository = "metadata",
-  baseUrl = "https://github.com/quadrama/")
+installCollectionData(
+  dataDirectory = getOption("qd.datadir"),
+  branchOrCommit = "master",
+  repository = "metadata",
+  baseUrl = "https://github.com/quadrama/"
+)
 }
 \arguments{
 \item{dataDirectory}{The data directory in which collection and data files are stored}

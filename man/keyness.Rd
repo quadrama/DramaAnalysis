@@ -4,9 +4,14 @@
 \alias{keyness}
 \title{Keywords}
 \usage{
-keyness(ft, categories = c(1, rep(2, nrow(ft) - 1)), epsilon = 1e-100,
-  siglevel = 0.05, method = c("loglikelihood", "logratio"),
-  minimalFrequency = 10)
+keyness(
+  ft,
+  categories = c(1, rep(2, nrow(ft) - 1)),
+  epsilon = 1e-100,
+  siglevel = 0.05,
+  method = c("loglikelihood", "logratio"),
+  minimalFrequency = 10
+)
 }
 \arguments{
 \item{ft}{The frequency table}

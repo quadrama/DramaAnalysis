@@ -4,10 +4,14 @@
 \alias{loadFields}
 \title{Dictionary Handling}
 \usage{
-loadFields(fieldnames = c("Liebe", "Familie"),
+loadFields(
+  fieldnames = c("Liebe", "Familie"),
   baseurl = paste("https://raw.githubusercontent.com/quadrama/metadata/master",
-  ensureSuffix(directory, fileSep), sep = fileSep),
-  directory = "fields/", fileSuffix = ".txt", fileSep = "/")
+    ensureSuffix(directory, fileSep), sep = fileSep),
+  directory = "fields/",
+  fileSuffix = ".txt",
+  fileSep = "/"
+)
 }
 \arguments{
 \item{fieldnames}{A list of names for the dictionaries. It is expected that files with that name can be found below the URL.}
@@ -39,14 +43,6 @@ file needs to end on .txt.
 }
 
 \examples{
-\donttest{
 # retrieves word fields from github
 fields <- loadFields(fieldnames=c("Liebe", "Familie", "Krieg"))
-
-
-# retrieves word fields from local directory (under windows)
-fields <- loadFields(filednames=c("Health", "Death"),
-                     baseurl="c:\\\\path\\\\to\\\\local\\\\directory",
-                     fileSep="\\\\")
-}
 }

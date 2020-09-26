@@ -19,9 +19,6 @@
 #' @examples
 #' data(rksp.0)
 #' st <- frequencytable(rksp.0)
-#' \donttest{
-#' stylo(gui=FALSE, frequencies = st)
-#' }
 #' @export
 frequencytable <- function(drama, 
                            acceptedPOS = postags$de$words,
