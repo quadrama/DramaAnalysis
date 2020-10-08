@@ -1,5 +1,9 @@
 .onLoad <- function(libname, pkgname) {
-  dataDirectory <- file.path(path.expand("~"),"QuaDramA","Data2")
+  if (!Sys.getenv(c("QUADRAMA_DIR")) == "") {
+    dataDirectory <- Sys.getenv(c("QUADRAMA_DIR"))
+  } else {
+    dataDirectory <- file.path(path.expand("~"),"QuaDramA","Data2")
+  }
   collectionDirectory <- file.path(dataDirectory,"collections")
   options(qd.datadir=dataDirectory)
   options(qd.collectionDirectory=collectionDirectory)
