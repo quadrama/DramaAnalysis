@@ -97,6 +97,7 @@ configuration <- function(d,
   # Remove non-characters
   if (mode == "Passive") {
     cfg <- cfg[character %in% d$characters$figure_id]
+    cfg$character <- factor(cfg$character, levels = sort(unique(cfg$character)))
   }
   
   # set class names
