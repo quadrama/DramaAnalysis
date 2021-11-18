@@ -76,6 +76,17 @@ configuration <- function(d,
   words.per.segment <- segmented[,.N,
                                  .(corpus, drama, eval(characterColumn), eval(segmentColumn))]
 
+  # Add a dummy row for each missing segment with a count of 0
+  segments.missing <- setdiff(unique(d$segments[,eval(segmentColumn)]), unique(words.per.segment$segmentColumn))
+  new_rows <- Reduce(rbind, lapply(segments.missing, function(x) {
+    new_row <- words.per.segment[1]
+    new_row$segmentColumn <- x
+    new_row$N <- 0
+    new_row
+  }))
+  words.per.segment <- rbind(words.per.segment, new_rows)
+  words.per.segment <- words.per.segment[order(words.per.segment$segmentColumn),]
+
   # reshape the words per segment
   cfg <- stats::reshape(words.per.segment, direction="wide", 
                         idvar = c("corpus","drama","characterColumn"), 
