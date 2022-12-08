@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3 Basics | DramaAnalysis</title>
   <meta name="description" content="3 Basics | DramaAnalysis" />
-  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3 Basics | DramaAnalysis" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -22,24 +21,27 @@
   
 
 <meta name="author" content="Nils Reiter" />
+<meta name="author" content="Janis Pagel" />
 
 
-<meta name="date" content="2019-07-13" />
+<meta name="date" content="2022-12-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="installation.html">
-<link rel="next" href="quick-start.html">
-<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link rel="prev" href="installation.html"/>
+<link rel="next" href="quick-start.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -47,29 +49,34 @@
 
 
 
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -78,15 +85,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -99,7 +106,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -111,6 +118,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 </head>
@@ -128,8 +158,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
-<li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
-<li class="chapter" data-level="3.1" data-path="basics.html"><a href="basics.html#r-basics"><i class="fa fa-check"></i><b>3.1</b> R Basics</a><ul>
+<li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="basics.html"><a href="basics.html#r-basics"><i class="fa fa-check"></i><b>3.1</b> R Basics</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="basics.html"><a href="basics.html#variable-assignment"><i class="fa fa-check"></i><b>3.1.1</b> Variable assignment</a></li>
 <li class="chapter" data-level="3.1.2" data-path="basics.html"><a href="basics.html#function-calls"><i class="fa fa-check"></i><b>3.1.2</b> Function calls</a></li>
 </ul></li>
@@ -137,67 +169,83 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>4</b> Quick Start</a></li>
 <li class="part"><span><b>I DramaAnalysis</b></span></li>
-<li class="chapter" data-level="5" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>5</b> Data</a><ul>
+<li class="chapter" data-level="5" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>5</b> Data</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="data.html"><a href="data.html#origin-tei-xml"><i class="fa fa-check"></i><b>5.1</b> Origin: TEI-XML</a></li>
-<li class="chapter" data-level="5.2" data-path="data.html"><a href="data.html#preprocessed-data"><i class="fa fa-check"></i><b>5.2</b> Preprocessed data</a><ul>
+<li class="chapter" data-level="5.2" data-path="data.html"><a href="data.html#preprocessed-data"><i class="fa fa-check"></i><b>5.2</b> Preprocessed data</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="data.html"><a href="data.html#sample-data"><i class="fa fa-check"></i><b>5.2.1</b> Sample data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="data.html"><a href="data.html#installing-corpora"><i class="fa fa-check"></i><b>5.3</b> Installing corpora</a><ul>
+<li class="chapter" data-level="5.3" data-path="data.html"><a href="data.html#installing-corpora"><i class="fa fa-check"></i><b>5.3</b> Installing corpora</a>
+<ul>
 <li class="chapter" data-level="5.3.1" data-path="data.html"><a href="data.html#data-sources-and-credits"><i class="fa fa-check"></i><b>5.3.1</b> Data sources and credits</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="data.html"><a href="data.html#collection-data"><i class="fa fa-check"></i><b>5.4</b> Collection data</a><ul>
+<li class="chapter" data-level="5.4" data-path="data.html"><a href="data.html#collection-data"><i class="fa fa-check"></i><b>5.4</b> Collection data</a>
+<ul>
 <li class="chapter" data-level="5.4.1" data-path="data.html"><a href="data.html#defining-collections"><i class="fa fa-check"></i><b>5.4.1</b> Defining collections</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="who-how-much.html"><a href="who-how-much.html"><i class="fa fa-check"></i><b>6</b> Who’s talking how much?</a><ul>
+<li class="chapter" data-level="6" data-path="who-how-much.html"><a href="who-how-much.html"><i class="fa fa-check"></i><b>6</b> Who’s talking how much?</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="who-how-much.html"><a href="who-how-much.html#format"><i class="fa fa-check"></i><b>6.1</b> Character names instead of identifiers</a></li>
 <li class="chapter" data-level="6.2" data-path="who-how-much.html"><a href="who-how-much.html#stacked-bar-plot"><i class="fa fa-check"></i><b>6.2</b> Stacked bar plot</a></li>
 <li class="chapter" data-level="6.3" data-path="who-how-much.html"><a href="who-how-much.html#collection-analysis"><i class="fa fa-check"></i><b>6.3</b> Collection analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="who-how-often.html"><a href="who-how-often.html"><i class="fa fa-check"></i><b>7</b> Who’s talking how often?</a><ul>
+<li class="chapter" data-level="7" data-path="who-how-often.html"><a href="who-how-often.html"><i class="fa fa-check"></i><b>7</b> Who’s talking how often?</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="who-how-often.html"><a href="who-how-often.html#when-are-characters-talking"><i class="fa fa-check"></i><b>7.1</b> When are characters talking?</a></li>
 <li class="chapter" data-level="7.2" data-path="who-how-often.html"><a href="who-how-often.html#adding-act-boundaries"><i class="fa fa-check"></i><b>7.2</b> Adding act boundaries</a></li>
 <li class="chapter" data-level="7.3" data-path="who-how-often.html"><a href="who-how-often.html#who-how-often-collection"><i class="fa fa-check"></i><b>7.3</b> Collection analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="configuration.html"><a href="configuration.html"><i class="fa fa-check"></i><b>8</b> Configuration</a><ul>
-<li class="chapter" data-level="8.1" data-path="configuration.html"><a href="configuration.html#matrices"><i class="fa fa-check"></i><b>8.1</b> Matrices</a><ul>
+<li class="chapter" data-level="8" data-path="configuration.html"><a href="configuration.html"><i class="fa fa-check"></i><b>8</b> Configuration</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="configuration.html"><a href="configuration.html#matrices"><i class="fa fa-check"></i><b>8.1</b> Matrices</a>
+<ul>
 <li class="chapter" data-level="8.1.1" data-path="configuration.html"><a href="configuration.html#filter"><i class="fa fa-check"></i><b>8.1.1</b> Filtering unimportant characters</a></li>
 <li class="chapter" data-level="8.1.2" data-path="configuration.html"><a href="configuration.html#normalization"><i class="fa fa-check"></i><b>8.1.2</b> Normalization</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="configuration.html"><a href="configuration.html#copresence"><i class="fa fa-check"></i><b>8.2</b> Copresence</a><ul>
+<li class="chapter" data-level="8.2" data-path="configuration.html"><a href="configuration.html#copresence"><i class="fa fa-check"></i><b>8.2</b> Copresence</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="configuration.html"><a href="configuration.html#as-heatmap"><i class="fa fa-check"></i><b>8.2.1</b> As Heatmap</a></li>
 <li class="chapter" data-level="8.2.2" data-path="configuration.html"><a href="configuration.html#network"><i class="fa fa-check"></i><b>8.2.2</b> As Network</a></li>
 <li class="chapter" data-level="8.2.3" data-path="configuration.html"><a href="configuration.html#network-properties"><i class="fa fa-check"></i><b>8.2.3</b> Network properties</a></li>
 <li class="chapter" data-level="8.2.4" data-path="configuration.html"><a href="configuration.html#graph-export"><i class="fa fa-check"></i><b>8.2.4</b> Graph Export</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="character-exchange.html"><a href="character-exchange.html"><i class="fa fa-check"></i><b>9</b> Character Exchange</a><ul>
-<li class="chapter" data-level="9.1" data-path="character-exchange.html"><a href="character-exchange.html#hamming-distance"><i class="fa fa-check"></i><b>9.1</b> Hamming Distance</a><ul>
+<li class="chapter" data-level="9" data-path="character-exchange.html"><a href="character-exchange.html"><i class="fa fa-check"></i><b>9</b> Character Exchange</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="character-exchange.html"><a href="character-exchange.html#hamming-distance"><i class="fa fa-check"></i><b>9.1</b> Hamming Distance</a>
+<ul>
 <li class="chapter" data-level="9.1.1" data-path="character-exchange.html"><a href="character-exchange.html#normalizedhamming"><i class="fa fa-check"></i><b>9.1.1</b> NormalizedHamming</a></li>
 <li class="chapter" data-level="9.1.2" data-path="character-exchange.html"><a href="character-exchange.html#trilcke"><i class="fa fa-check"></i><b>9.1.2</b> Trilcke</a></li>
 </ul></li>
 <li class="chapter" data-level="9.2" data-path="character-exchange.html"><a href="character-exchange.html#corpus-analysis"><i class="fa fa-check"></i><b>9.2</b> Corpus Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="stage-directions.html"><a href="stage-directions.html"><i class="fa fa-check"></i><b>10</b> Stage Directions</a></li>
-<li class="chapter" data-level="11" data-path="word-field-analysis.html"><a href="word-field-analysis.html"><i class="fa fa-check"></i><b>11</b> Word Field Analysis</a><ul>
+<li class="chapter" data-level="11" data-path="word-field-analysis.html"><a href="word-field-analysis.html"><i class="fa fa-check"></i><b>11</b> Word Field Analysis</a>
+<ul>
 <li class="chapter" data-level="11.1" data-path="word-field-analysis.html"><a href="word-field-analysis.html#single-word-field"><i class="fa fa-check"></i><b>11.1</b> Single word field</a></li>
-<li class="chapter" data-level="11.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#multiple-word-fields"><i class="fa fa-check"></i><b>11.2</b> Multiple Word Fields</a><ul>
+<li class="chapter" data-level="11.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#multiple-word-fields"><i class="fa fa-check"></i><b>11.2</b> Multiple Word Fields</a>
+<ul>
 <li class="chapter" data-level="11.2.1" data-path="word-field-analysis.html"><a href="word-field-analysis.html#bar-plot-by-character"><i class="fa fa-check"></i><b>11.2.1</b> Bar plot by character</a></li>
 <li class="chapter" data-level="11.2.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#bar-plot-by-field"><i class="fa fa-check"></i><b>11.2.2</b> Bar plot by field</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="word-field-analysis.html"><a href="word-field-analysis.html#dictionary-based-distance"><i class="fa fa-check"></i><b>11.3</b> Dictionary Based Distance</a></li>
-<li class="chapter" data-level="11.4" data-path="word-field-analysis.html"><a href="word-field-analysis.html#development-over-the-course-of-the-play"><i class="fa fa-check"></i><b>11.4</b> Development over the course of the play</a><ul>
+<li class="chapter" data-level="11.4" data-path="word-field-analysis.html"><a href="word-field-analysis.html#development-over-the-course-of-the-play"><i class="fa fa-check"></i><b>11.4</b> Development over the course of the play</a>
+<ul>
 <li class="chapter" data-level="11.4.1" data-path="word-field-analysis.html"><a href="word-field-analysis.html#individual-characters"><i class="fa fa-check"></i><b>11.4.1</b> Individual characters</a></li>
 <li class="chapter" data-level="11.4.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#comparing-characters"><i class="fa fa-check"></i><b>11.4.2</b> Comparing characters</a></li>
 </ul></li>
 <li class="chapter" data-level="11.5" data-path="word-field-analysis.html"><a href="word-field-analysis.html#corpus-analysis-1"><i class="fa fa-check"></i><b>11.5</b> Corpus Analysis</a></li>
 <li class="chapter" data-level="11.6" data-path="word-field-analysis.html"><a href="word-field-analysis.html#enriching-the-word-fields-distributionally"><i class="fa fa-check"></i><b>11.6</b> Enriching the word fields distributionally</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html"><i class="fa fa-check"></i><b>12</b> Advanced Text Analysis</a><ul>
+<li class="chapter" data-level="12" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html"><i class="fa fa-check"></i><b>12</b> Advanced Text Analysis</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html#when-are-characters-mentioned"><i class="fa fa-check"></i><b>12.1</b> When are characters mentioned?</a></li>
 <li class="chapter" data-level="12.2" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html#who-mentions-whom"><i class="fa fa-check"></i><b>12.2</b> Who mentions whom?</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="resterampe.html"><a href="resterampe.html"><i class="fa fa-check"></i><b>13</b> Resterampe</a><ul>
+<li class="chapter" data-level="13" data-path="resterampe.html"><a href="resterampe.html"><i class="fa fa-check"></i><b>13</b> Resterampe</a>
+<ul>
 <li class="chapter" data-level="13.0.1" data-path="resterampe.html"><a href="resterampe.html#character-meta-data"><i class="fa fa-check"></i><b>13.0.1</b> Character meta data</a></li>
 <li class="chapter" data-level="13.0.2" data-path="resterampe.html"><a href="resterampe.html#character-groups"><i class="fa fa-check"></i><b>13.0.2</b> Character groups</a></li>
 </ul></li>
@@ -219,47 +267,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="basics" class="section level1">
-<h1><span class="header-section-number">3</span> Basics</h1>
+<div id="basics" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Basics<a href="basics.html#basics" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>This is not really an R tutorial. If you’re looking for a full-fledged R tutorial, we recommend <span class="citation">(Arnold and Tilton 2015)</span>, because it is very practical, and also deals with text analysis. However, this chapter introduces some concepts related to R.</p>
-<div id="r-basics" class="section level2">
-<h2><span class="header-section-number">3.1</span> R Basics</h2>
-<div id="variable-assignment" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> Variable assignment</h3>
+<div id="r-basics" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> R Basics<a href="basics.html#r-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="variable-assignment" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Variable assignment<a href="basics.html#variable-assignment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Assigning variables is one of the things you do most frequently in most programming languages. In R, this is done with the arrow operator: <code>a &lt;- 5</code>. This creates a new variable <code>a</code> that has the value 5. Conceptually, variables are aliases for values. The same value can be assigned to multiple names, but one variable only can point to one value.</p>
 </div>
-<div id="function-calls" class="section level3">
-<h3><span class="header-section-number">3.1.2</span> Function calls</h3>
+<div id="function-calls" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Function calls<a href="basics.html#function-calls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The R package for drama analysis defines a number of functions. Functions are mini programs that can be executed anytime by a user. Function calls (i.e., the execution of a function) can be recognized by round parentheses: <code>sessionInfo()</code> is a function call. If you enter this in the R console and press enter, the function gets executed and its return value is printed on the console. The function <a href="https://www.rdocumentation.org/packages/utils/versions/3.6.0/topics/sessionInfo"><code>sessionInfo()</code></a> can be used to get information about your R session and installation. The function does not take any arguments, which is why the round parentheses are empty. The function <code>sum</code>, on the other hand, takes arguments: The values it should add. Thus, calling <code>sum(1,1)</code> prints 2 on the console.</p>
 </div>
 </div>
-<div id="magrittr" class="section level2">
-<h2><span class="header-section-number">3.2</span> magrittr Pipes / <code>%&gt;%</code></h2>
+<div id="magrittr" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> magrittr Pipes / <code>%&gt;%</code><a href="basics.html#magrittr" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In the tutorial, we make heavy use of <code>magrittr</code>-pipes. These are provided by the R package <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html"><code>magrittr</code></a>. The core idea behind pipes is to use the output of one function directly as input for the next function – to create a pipeline of functions (if you’re familiar with the unix command line you probably have used this before).</p>
 <p>The pipeline is represented by <code>%&gt;%</code>. The semantics of <code>%&gt;%</code> is to use the output of whatever comes before as <em>first argument</em> for whatever comes after. Thus, if we write <code>runif(5) %&gt;% barplot</code>, the result of <code>runif(5)</code> (which is a vector with five random numbers) is used as the first argument for the function <code>barplot()</code>. This is eqivalent to:</p>
-<pre class="sourceCode r"><code class="sourceCode r">r &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">5</span>)
-<span class="kw">barplot</span>(r)</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="basics.html#cb5-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5</span>)</span>
+<span id="cb5-2"><a href="basics.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(r)</span></code></pre></div>
 <p>The nice thing about magrittr is that you can create pipes that are much longer:</p>
-<pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">loadDrama</span>(<span class="st">&quot;test:rksp.0&quot;</span>)
-
-d <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">dictionaryStatistics</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filterCharacters</span>(d) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">characterNames</span>(d) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">barplot</span>() </code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="basics.html#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">loadDrama</span>(<span class="st">&quot;test:rksp.0&quot;</span>)</span>
+<span id="cb6-2"><a href="basics.html#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="basics.html#cb6-3" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="basics.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dictionaryStatistics</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="basics.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filterCharacters</span>(d) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="basics.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">characterNames</span>(d) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="basics.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">barplot</span>() </span></code></pre></div>
 <p>Again, this is equivalent to a version with variables:</p>
-<pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">loadDrama</span>(<span class="st">&quot;test:rksp.0&quot;</span>)
-
-ds &lt;-<span class="st"> </span><span class="kw">dictionaryStatistics</span>(d)
-dsf &lt;-<span class="st"> </span><span class="kw">filterCharacters</span>(ds, d)
-dsff &lt;-<span class="st"> </span><span class="kw">characterNames</span>(dsf, d)
-<span class="kw">barplot</span>(dsff)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="basics.html#cb7-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">loadDrama</span>(<span class="st">&quot;test:rksp.0&quot;</span>)</span>
+<span id="cb7-2"><a href="basics.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="basics.html#cb7-3" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">dictionaryStatistics</span>(d)</span>
+<span id="cb7-4"><a href="basics.html#cb7-4" aria-hidden="true" tabindex="-1"></a>dsf <span class="ot">&lt;-</span> <span class="fu">filterCharacters</span>(ds, d)</span>
+<span id="cb7-5"><a href="basics.html#cb7-5" aria-hidden="true" tabindex="-1"></a>dsff <span class="ot">&lt;-</span> <span class="fu">characterNames</span>(dsf, d)</span>
+<span id="cb7-6"><a href="basics.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(dsff)</span></code></pre></div>
 <p>Pipes are much faster to write and more transparent, that’s why they are used in this tutorial. In order to re-create the steps in the tutorial, you will need to load the library like this:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># download/update the library from CRAN</span>
-<span class="kw">install.packages</span>(<span class="st">&quot;magrittr&quot;</span>)
-
-<span class="co"># load it into the active environment</span>
-<span class="kw">library</span>(magrittr)</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="basics.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download/update the library from CRAN</span></span>
+<span id="cb8-2"><a href="basics.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;magrittr&quot;</span>)</span>
+<span id="cb8-3"><a href="basics.html#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="basics.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load it into the active environment</span></span>
+<span id="cb8-5"><a href="basics.html#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span></code></pre></div>
 </div>
 </div>
             </section>
@@ -272,12 +320,13 @@ dsff &lt;-<span class="st"> </span><span class="kw">characterNames</span>(dsf, d
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -285,12 +334,12 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -305,15 +354,22 @@ gitbook.start({
 "link": null,
 "text": null
 },
+"view": {
+"link": null,
+"text": null
+},
 "download": ["DramaAnalysis.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "section",
 "scroll_highlight": true
 },
 "toolbar": {
 "position": "fixed"
-},
-"search": true
+}
 });
 });
 </script>

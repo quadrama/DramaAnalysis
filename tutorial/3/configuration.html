@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>8 Configuration | DramaAnalysis</title>
   <meta name="description" content="8 Configuration | DramaAnalysis" />
-  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="8 Configuration | DramaAnalysis" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -22,24 +21,27 @@
   
 
 <meta name="author" content="Nils Reiter" />
+<meta name="author" content="Janis Pagel" />
 
 
-<meta name="date" content="2019-07-13" />
+<meta name="date" content="2022-12-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="who-how-often.html">
-<link rel="next" href="character-exchange.html">
-<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link rel="prev" href="who-how-often.html"/>
+<link rel="next" href="character-exchange.html"/>
+<script src="assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -47,29 +49,34 @@
 
 
 
+
+<link href="assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -78,15 +85,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -99,7 +106,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -111,6 +118,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 </head>
@@ -128,8 +158,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
-<li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a><ul>
-<li class="chapter" data-level="3.1" data-path="basics.html"><a href="basics.html#r-basics"><i class="fa fa-check"></i><b>3.1</b> R Basics</a><ul>
+<li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> Basics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="basics.html"><a href="basics.html#r-basics"><i class="fa fa-check"></i><b>3.1</b> R Basics</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="basics.html"><a href="basics.html#variable-assignment"><i class="fa fa-check"></i><b>3.1.1</b> Variable assignment</a></li>
 <li class="chapter" data-level="3.1.2" data-path="basics.html"><a href="basics.html#function-calls"><i class="fa fa-check"></i><b>3.1.2</b> Function calls</a></li>
 </ul></li>
@@ -137,67 +169,83 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="quick-start.html"><a href="quick-start.html"><i class="fa fa-check"></i><b>4</b> Quick Start</a></li>
 <li class="part"><span><b>I DramaAnalysis</b></span></li>
-<li class="chapter" data-level="5" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>5</b> Data</a><ul>
+<li class="chapter" data-level="5" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>5</b> Data</a>
+<ul>
 <li class="chapter" data-level="5.1" data-path="data.html"><a href="data.html#origin-tei-xml"><i class="fa fa-check"></i><b>5.1</b> Origin: TEI-XML</a></li>
-<li class="chapter" data-level="5.2" data-path="data.html"><a href="data.html#preprocessed-data"><i class="fa fa-check"></i><b>5.2</b> Preprocessed data</a><ul>
+<li class="chapter" data-level="5.2" data-path="data.html"><a href="data.html#preprocessed-data"><i class="fa fa-check"></i><b>5.2</b> Preprocessed data</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="data.html"><a href="data.html#sample-data"><i class="fa fa-check"></i><b>5.2.1</b> Sample data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="data.html"><a href="data.html#installing-corpora"><i class="fa fa-check"></i><b>5.3</b> Installing corpora</a><ul>
+<li class="chapter" data-level="5.3" data-path="data.html"><a href="data.html#installing-corpora"><i class="fa fa-check"></i><b>5.3</b> Installing corpora</a>
+<ul>
 <li class="chapter" data-level="5.3.1" data-path="data.html"><a href="data.html#data-sources-and-credits"><i class="fa fa-check"></i><b>5.3.1</b> Data sources and credits</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="data.html"><a href="data.html#collection-data"><i class="fa fa-check"></i><b>5.4</b> Collection data</a><ul>
+<li class="chapter" data-level="5.4" data-path="data.html"><a href="data.html#collection-data"><i class="fa fa-check"></i><b>5.4</b> Collection data</a>
+<ul>
 <li class="chapter" data-level="5.4.1" data-path="data.html"><a href="data.html#defining-collections"><i class="fa fa-check"></i><b>5.4.1</b> Defining collections</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="who-how-much.html"><a href="who-how-much.html"><i class="fa fa-check"></i><b>6</b> Who’s talking how much?</a><ul>
+<li class="chapter" data-level="6" data-path="who-how-much.html"><a href="who-how-much.html"><i class="fa fa-check"></i><b>6</b> Who’s talking how much?</a>
+<ul>
 <li class="chapter" data-level="6.1" data-path="who-how-much.html"><a href="who-how-much.html#format"><i class="fa fa-check"></i><b>6.1</b> Character names instead of identifiers</a></li>
 <li class="chapter" data-level="6.2" data-path="who-how-much.html"><a href="who-how-much.html#stacked-bar-plot"><i class="fa fa-check"></i><b>6.2</b> Stacked bar plot</a></li>
 <li class="chapter" data-level="6.3" data-path="who-how-much.html"><a href="who-how-much.html#collection-analysis"><i class="fa fa-check"></i><b>6.3</b> Collection analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="who-how-often.html"><a href="who-how-often.html"><i class="fa fa-check"></i><b>7</b> Who’s talking how often?</a><ul>
+<li class="chapter" data-level="7" data-path="who-how-often.html"><a href="who-how-often.html"><i class="fa fa-check"></i><b>7</b> Who’s talking how often?</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="who-how-often.html"><a href="who-how-often.html#when-are-characters-talking"><i class="fa fa-check"></i><b>7.1</b> When are characters talking?</a></li>
 <li class="chapter" data-level="7.2" data-path="who-how-often.html"><a href="who-how-often.html#adding-act-boundaries"><i class="fa fa-check"></i><b>7.2</b> Adding act boundaries</a></li>
 <li class="chapter" data-level="7.3" data-path="who-how-often.html"><a href="who-how-often.html#who-how-often-collection"><i class="fa fa-check"></i><b>7.3</b> Collection analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="configuration.html"><a href="configuration.html"><i class="fa fa-check"></i><b>8</b> Configuration</a><ul>
-<li class="chapter" data-level="8.1" data-path="configuration.html"><a href="configuration.html#matrices"><i class="fa fa-check"></i><b>8.1</b> Matrices</a><ul>
+<li class="chapter" data-level="8" data-path="configuration.html"><a href="configuration.html"><i class="fa fa-check"></i><b>8</b> Configuration</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="configuration.html"><a href="configuration.html#matrices"><i class="fa fa-check"></i><b>8.1</b> Matrices</a>
+<ul>
 <li class="chapter" data-level="8.1.1" data-path="configuration.html"><a href="configuration.html#filter"><i class="fa fa-check"></i><b>8.1.1</b> Filtering unimportant characters</a></li>
 <li class="chapter" data-level="8.1.2" data-path="configuration.html"><a href="configuration.html#normalization"><i class="fa fa-check"></i><b>8.1.2</b> Normalization</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="configuration.html"><a href="configuration.html#copresence"><i class="fa fa-check"></i><b>8.2</b> Copresence</a><ul>
+<li class="chapter" data-level="8.2" data-path="configuration.html"><a href="configuration.html#copresence"><i class="fa fa-check"></i><b>8.2</b> Copresence</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="configuration.html"><a href="configuration.html#as-heatmap"><i class="fa fa-check"></i><b>8.2.1</b> As Heatmap</a></li>
 <li class="chapter" data-level="8.2.2" data-path="configuration.html"><a href="configuration.html#network"><i class="fa fa-check"></i><b>8.2.2</b> As Network</a></li>
 <li class="chapter" data-level="8.2.3" data-path="configuration.html"><a href="configuration.html#network-properties"><i class="fa fa-check"></i><b>8.2.3</b> Network properties</a></li>
 <li class="chapter" data-level="8.2.4" data-path="configuration.html"><a href="configuration.html#graph-export"><i class="fa fa-check"></i><b>8.2.4</b> Graph Export</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="character-exchange.html"><a href="character-exchange.html"><i class="fa fa-check"></i><b>9</b> Character Exchange</a><ul>
-<li class="chapter" data-level="9.1" data-path="character-exchange.html"><a href="character-exchange.html#hamming-distance"><i class="fa fa-check"></i><b>9.1</b> Hamming Distance</a><ul>
+<li class="chapter" data-level="9" data-path="character-exchange.html"><a href="character-exchange.html"><i class="fa fa-check"></i><b>9</b> Character Exchange</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="character-exchange.html"><a href="character-exchange.html#hamming-distance"><i class="fa fa-check"></i><b>9.1</b> Hamming Distance</a>
+<ul>
 <li class="chapter" data-level="9.1.1" data-path="character-exchange.html"><a href="character-exchange.html#normalizedhamming"><i class="fa fa-check"></i><b>9.1.1</b> NormalizedHamming</a></li>
 <li class="chapter" data-level="9.1.2" data-path="character-exchange.html"><a href="character-exchange.html#trilcke"><i class="fa fa-check"></i><b>9.1.2</b> Trilcke</a></li>
 </ul></li>
 <li class="chapter" data-level="9.2" data-path="character-exchange.html"><a href="character-exchange.html#corpus-analysis"><i class="fa fa-check"></i><b>9.2</b> Corpus Analysis</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="stage-directions.html"><a href="stage-directions.html"><i class="fa fa-check"></i><b>10</b> Stage Directions</a></li>
-<li class="chapter" data-level="11" data-path="word-field-analysis.html"><a href="word-field-analysis.html"><i class="fa fa-check"></i><b>11</b> Word Field Analysis</a><ul>
+<li class="chapter" data-level="11" data-path="word-field-analysis.html"><a href="word-field-analysis.html"><i class="fa fa-check"></i><b>11</b> Word Field Analysis</a>
+<ul>
 <li class="chapter" data-level="11.1" data-path="word-field-analysis.html"><a href="word-field-analysis.html#single-word-field"><i class="fa fa-check"></i><b>11.1</b> Single word field</a></li>
-<li class="chapter" data-level="11.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#multiple-word-fields"><i class="fa fa-check"></i><b>11.2</b> Multiple Word Fields</a><ul>
+<li class="chapter" data-level="11.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#multiple-word-fields"><i class="fa fa-check"></i><b>11.2</b> Multiple Word Fields</a>
+<ul>
 <li class="chapter" data-level="11.2.1" data-path="word-field-analysis.html"><a href="word-field-analysis.html#bar-plot-by-character"><i class="fa fa-check"></i><b>11.2.1</b> Bar plot by character</a></li>
 <li class="chapter" data-level="11.2.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#bar-plot-by-field"><i class="fa fa-check"></i><b>11.2.2</b> Bar plot by field</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="word-field-analysis.html"><a href="word-field-analysis.html#dictionary-based-distance"><i class="fa fa-check"></i><b>11.3</b> Dictionary Based Distance</a></li>
-<li class="chapter" data-level="11.4" data-path="word-field-analysis.html"><a href="word-field-analysis.html#development-over-the-course-of-the-play"><i class="fa fa-check"></i><b>11.4</b> Development over the course of the play</a><ul>
+<li class="chapter" data-level="11.4" data-path="word-field-analysis.html"><a href="word-field-analysis.html#development-over-the-course-of-the-play"><i class="fa fa-check"></i><b>11.4</b> Development over the course of the play</a>
+<ul>
 <li class="chapter" data-level="11.4.1" data-path="word-field-analysis.html"><a href="word-field-analysis.html#individual-characters"><i class="fa fa-check"></i><b>11.4.1</b> Individual characters</a></li>
 <li class="chapter" data-level="11.4.2" data-path="word-field-analysis.html"><a href="word-field-analysis.html#comparing-characters"><i class="fa fa-check"></i><b>11.4.2</b> Comparing characters</a></li>
 </ul></li>
 <li class="chapter" data-level="11.5" data-path="word-field-analysis.html"><a href="word-field-analysis.html#corpus-analysis-1"><i class="fa fa-check"></i><b>11.5</b> Corpus Analysis</a></li>
 <li class="chapter" data-level="11.6" data-path="word-field-analysis.html"><a href="word-field-analysis.html#enriching-the-word-fields-distributionally"><i class="fa fa-check"></i><b>11.6</b> Enriching the word fields distributionally</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html"><i class="fa fa-check"></i><b>12</b> Advanced Text Analysis</a><ul>
+<li class="chapter" data-level="12" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html"><i class="fa fa-check"></i><b>12</b> Advanced Text Analysis</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html#when-are-characters-mentioned"><i class="fa fa-check"></i><b>12.1</b> When are characters mentioned?</a></li>
 <li class="chapter" data-level="12.2" data-path="advanced-text-analysis.html"><a href="advanced-text-analysis.html#who-mentions-whom"><i class="fa fa-check"></i><b>12.2</b> Who mentions whom?</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="resterampe.html"><a href="resterampe.html"><i class="fa fa-check"></i><b>13</b> Resterampe</a><ul>
+<li class="chapter" data-level="13" data-path="resterampe.html"><a href="resterampe.html"><i class="fa fa-check"></i><b>13</b> Resterampe</a>
+<ul>
 <li class="chapter" data-level="13.0.1" data-path="resterampe.html"><a href="resterampe.html#character-meta-data"><i class="fa fa-check"></i><b>13.0.1</b> Character meta data</a></li>
 <li class="chapter" data-level="13.0.2" data-path="resterampe.html"><a href="resterampe.html#character-groups"><i class="fa fa-check"></i><b>13.0.2</b> Character groups</a></li>
 </ul></li>
@@ -219,13 +267,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="configuration" class="section level1">
-<h1><span class="header-section-number">8</span> Configuration</h1>
+<div id="configuration" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">8</span> Configuration<a href="configuration.html#configuration" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><em>This section does not refer to the configuration of the R-package, but to the literary analysis concept configuration matrix <span class="citation">(Pfister 1988)</span>.</em></p>
-<div id="matrices" class="section level2">
-<h2><span class="header-section-number">8.1</span> Matrices</h2>
+<div id="matrices" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Matrices<a href="configuration.html#matrices" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Configuration matrices can be extracted with the function <code>configuration()</code>. As usual, entering <code>?configuration</code> provies more detailed information about the options the function provides. This function can only deal with a single play at a time, but using <code>lappy()</code>, we can call it for many plays quickly (this the same we did with the function <code>utteranceStatistics()</code> <a href="who-how-often.html#who-how-often-collection">above</a>).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">configuration</span>(rksp<span class="fl">.0</span>)</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="configuration.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">configuration</span>(rksp<span class="fl">.0</span>)</span></code></pre></div>
 <pre><code>##    corpus  drama        character    1    2    3    4    5
 ## 1    test rksp.0        der_prinz 2947    0  965  809  832
 ## 2    test rksp.0 der_kammerdiener   42    0    0    0    0
@@ -242,118 +290,104 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 22   test rksp.0           orsina    0    0    0 2962    0</code></pre>
 <p>This creates a basic configuration matrix, but instead of just containing the presence or absence of a figure, it contains the number of spoken tokens for each act for each character. This information is in fact similar to what we can extract with <code>characterStatistics(rksp.0, segment="Act")</code>, but in a different form and structure. The above table contains a lot of information that can be visualised.</p>
 <p>We first need to extract the numeric content from the above table. This can easily be done with the function <code>as.matrix()</code> (this will, in detail, be rerouted to the function <code>as.matrix.QDConfiguration()</code>, which knows what part of the table needs to be in the matrix). A matrix containing only numbers can easily be plotted using the regular <code>barplot()</code> function, as shown below.</p>
-<pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>)
-
-mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
-
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">10</span>))
-
-<span class="kw">barplot</span>(mat, 
-        <span class="dt">legend.text =</span> c<span class="op">$</span>character,  <span class="co"># legend text</span>
-        <span class="dt">args.legend =</span> <span class="kw">list</span>(<span class="dt">x=</span><span class="kw">ncol</span>(mat)<span class="op">+</span><span class="dv">3</span>,      <span class="co"># legend x position</span>
-                           <span class="dt">y=</span><span class="kw">max</span>(<span class="kw">colSums</span>(mat)) <span class="co"># legend y pos</span>
-                        ), 
-        <span class="dt">col=</span>qd.colors)</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="configuration.html#cb31-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">configuration</span>(rksp<span class="fl">.0</span>)</span>
+<span id="cb31-2"><a href="configuration.html#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="configuration.html#cb31-3" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(c)</span>
+<span id="cb31-4"><a href="configuration.html#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="configuration.html#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">10</span>))</span>
+<span id="cb31-6"><a href="configuration.html#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="configuration.html#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(mat, </span>
+<span id="cb31-8"><a href="configuration.html#cb31-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> c<span class="sc">$</span>character,  <span class="co"># legend text</span></span>
+<span id="cb31-9"><a href="configuration.html#cb31-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">args.legend =</span> <span class="fu">list</span>(<span class="at">x=</span><span class="fu">ncol</span>(mat)<span class="sc">+</span><span class="dv">3</span>,      <span class="co"># legend x position</span></span>
+<span id="cb31-10"><a href="configuration.html#cb31-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">y=</span><span class="fu">max</span>(<span class="fu">colSums</span>(mat)) <span class="co"># legend y pos</span></span>
+<span id="cb31-11"><a href="configuration.html#cb31-11" aria-hidden="true" tabindex="-1"></a>                        ), </span>
+<span id="cb31-12"><a href="configuration.html#cb31-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span>qd.colors)</span></code></pre></div>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
-<div id="filter" class="section level3">
-<h3><span class="header-section-number">8.1.1</span> Filtering unimportant characters</h3>
+<div id="filter" class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Filtering unimportant characters<a href="configuration.html#filter" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>This is informative, but doesn’t look very nice and some colors are difficult to associate with characters because colors are repeating. We will therefore use the function <code>filterCharacters()</code>, which is very similar to <code>characterNames()</code>: It can be applied to any object of the type <code>QDHasCharacter</code> and removes rows according to certain criteria. In this case, we filter every character except the five most talkative ones. As usual, see <code>?filterCharacters</code> to see other options.</p>
-<pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
-
-mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
-
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">10</span>))
-
-<span class="kw">barplot</span>(mat, 
-        <span class="dt">names.arg =</span> <span class="kw">as.roman</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),   <span class="co"># roman act numbers</span>
-        <span class="dt">legend.text =</span> c<span class="op">$</span>character,  <span class="co"># legend text</span>
-        <span class="dt">args.legend =</span> <span class="kw">list</span>(<span class="dt">x=</span><span class="kw">ncol</span>(mat)<span class="op">+</span><span class="dv">3</span>,   <span class="co"># legend x position</span>
-                           <span class="dt">y=</span><span class="kw">max</span>(<span class="kw">colSums</span>(mat)) <span class="co"># legend y pos</span>
-                        ), 
-        <span class="dt">col=</span>qd.colors)</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="configuration.html#cb32-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">configuration</span>(rksp<span class="fl">.0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="configuration.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="at">n =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="configuration.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">characterNames</span>(rksp<span class="fl">.0</span>)</span>
+<span id="cb32-4"><a href="configuration.html#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="configuration.html#cb32-5" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(c)</span>
+<span id="cb32-6"><a href="configuration.html#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="configuration.html#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">10</span>))</span>
+<span id="cb32-8"><a href="configuration.html#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="configuration.html#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(mat, </span>
+<span id="cb32-10"><a href="configuration.html#cb32-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">names.arg =</span> <span class="fu">as.roman</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(mat)),   <span class="co"># roman act numbers</span></span>
+<span id="cb32-11"><a href="configuration.html#cb32-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> c<span class="sc">$</span>character,  <span class="co"># legend text</span></span>
+<span id="cb32-12"><a href="configuration.html#cb32-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">args.legend =</span> <span class="fu">list</span>(<span class="at">x=</span><span class="fu">ncol</span>(mat)<span class="sc">+</span><span class="dv">3</span>,   <span class="co"># legend x position</span></span>
+<span id="cb32-13"><a href="configuration.html#cb32-13" aria-hidden="true" tabindex="-1"></a>                           <span class="at">y=</span><span class="fu">max</span>(<span class="fu">colSums</span>(mat)) <span class="co"># legend y pos</span></span>
+<span id="cb32-14"><a href="configuration.html#cb32-14" aria-hidden="true" tabindex="-1"></a>                        ), </span>
+<span id="cb32-15"><a href="configuration.html#cb32-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span>qd.colors)</span></code></pre></div>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <p>Of course, the speech of characters that do not speak often is now removed, leaving only a portion of each act covered in the plot.</p>
 </div>
-<div id="normalization" class="section level3">
-<h3><span class="header-section-number">8.1.2</span> Normalization</h3>
+<div id="normalization" class="section level3 hasAnchor" number="8.1.2">
+<h3><span class="header-section-number">8.1.2</span> Normalization<a href="configuration.html#normalization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Since each act has a different length, it is often useful to normalize each block, according to the total number of spoken tokens. This way, we can display the relative active presence of each character in each act. In combination with the filtering we did before, however, we need to be careful: If we scale with the filtered matrix, the resulting values do not reflect the portion of the speech in the scene, but only to the top 8 characters. This way, one would get the impression that the filtered characters’ speeches add up to 100% of a segment, which is not the case. The following snippet shows how to scale using the original matrix, but still only include the top eight characters into the matrix.</p>
-<pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>)   <span class="co"># getting the full configuration (with all characters)</span>
-mat_orig &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)     <span class="co"># extracting the matrix</span>
-
-c_filtered &lt;-<span class="st"> </span>c <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>,<span class="dt">n =</span> <span class="dv">8</span>) <span class="co"># filtering, so that only the top 8 characters remain</span>
-mat_filtered &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c_filtered)  <span class="co"># extracting the filtered matrix</span>
-
-<span class="co"># scaling, using values from the unfiltered matrix</span>
-mat &lt;-<span class="st"> </span><span class="kw">scale</span>(mat_filtered, 
-             <span class="dt">center=</span><span class="ot">FALSE</span>, 
-             <span class="dt">scale=</span><span class="kw">colSums</span>(mat_orig)) 
-
-<span class="co"># plot, as above</span>
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">10</span>))
-<span class="kw">barplot</span>(mat, 
-        <span class="dt">names.arg =</span> <span class="kw">as.roman</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),  <span class="co"># roman act numbers</span>
-        <span class="co"># legend</span>
-        <span class="dt">legend.text=</span>c_filtered<span class="op">$</span>character,            <span class="co"># set legend text</span>
-        <span class="dt">args.legend =</span> <span class="kw">list</span>(<span class="dt">x=</span><span class="kw">ncol</span>(mat)<span class="op">+</span><span class="dv">3</span>,      <span class="co"># legend x position</span>
-                           <span class="dt">y=</span><span class="kw">max</span>(<span class="kw">colSums</span>(mat)) <span class="co"># legend y pos</span>
-                        ),
-        <span class="co"># visual</span>
-        <span class="dt">las=</span><span class="dv">1</span>,        <span class="co"># rotate labels on y axis</span>
-        <span class="dt">col=</span>qd.colors <span class="co"># provide colors</span>
-)</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="configuration.html#cb33-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">configuration</span>(rksp<span class="fl">.0</span>)   <span class="co"># getting the full configuration (with all characters)</span></span>
+<span id="cb33-2"><a href="configuration.html#cb33-2" aria-hidden="true" tabindex="-1"></a>mat_orig <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(c)     <span class="co"># extracting the matrix</span></span>
+<span id="cb33-3"><a href="configuration.html#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="configuration.html#cb33-4" aria-hidden="true" tabindex="-1"></a>c_filtered <span class="ot">&lt;-</span> c <span class="sc">%&gt;%</span> <span class="fu">filterCharacters</span>(rksp<span class="fl">.0</span>,<span class="at">n =</span> <span class="dv">8</span>) <span class="co"># filtering, so that only the top 8 characters remain</span></span>
+<span id="cb33-5"><a href="configuration.html#cb33-5" aria-hidden="true" tabindex="-1"></a>mat_filtered <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(c_filtered)  <span class="co"># extracting the filtered matrix</span></span>
+<span id="cb33-6"><a href="configuration.html#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="configuration.html#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># scaling, using values from the unfiltered matrix</span></span>
+<span id="cb33-8"><a href="configuration.html#cb33-8" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">scale</span>(mat_filtered, </span>
+<span id="cb33-9"><a href="configuration.html#cb33-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">center=</span><span class="cn">FALSE</span>, </span>
+<span id="cb33-10"><a href="configuration.html#cb33-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">scale=</span><span class="fu">colSums</span>(mat_orig)) </span>
+<span id="cb33-11"><a href="configuration.html#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="configuration.html#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># plot, as above</span></span>
+<span id="cb33-13"><a href="configuration.html#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">10</span>))</span>
+<span id="cb33-14"><a href="configuration.html#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(mat, </span>
+<span id="cb33-15"><a href="configuration.html#cb33-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">names.arg =</span> <span class="fu">as.roman</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(mat)),  <span class="co"># roman act numbers</span></span>
+<span id="cb33-16"><a href="configuration.html#cb33-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># legend</span></span>
+<span id="cb33-17"><a href="configuration.html#cb33-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text=</span>c_filtered<span class="sc">$</span>character,            <span class="co"># set legend text</span></span>
+<span id="cb33-18"><a href="configuration.html#cb33-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">args.legend =</span> <span class="fu">list</span>(<span class="at">x=</span><span class="fu">ncol</span>(mat)<span class="sc">+</span><span class="dv">3</span>,      <span class="co"># legend x position</span></span>
+<span id="cb33-19"><a href="configuration.html#cb33-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">y=</span><span class="fu">max</span>(<span class="fu">colSums</span>(mat)) <span class="co"># legend y pos</span></span>
+<span id="cb33-20"><a href="configuration.html#cb33-20" aria-hidden="true" tabindex="-1"></a>                        ),</span>
+<span id="cb33-21"><a href="configuration.html#cb33-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># visual</span></span>
+<span id="cb33-22"><a href="configuration.html#cb33-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">las=</span><span class="dv">1</span>,        <span class="co"># rotate labels on y axis</span></span>
+<span id="cb33-23"><a href="configuration.html#cb33-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span>qd.colors <span class="co"># provide colors</span></span>
+<span id="cb33-24"><a href="configuration.html#cb33-24" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 </div>
 </div>
-<div id="copresence" class="section level2">
-<h2><span class="header-section-number">8.2</span> Copresence</h2>
+<div id="copresence" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Copresence<a href="configuration.html#copresence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Configuration matrices are also often used to get an overview of who is copresent on stage. This can also be achieved using the function <code>configuration()</code>. First, we create a configuration matrix that only represents presence or absence of a figure (and we switch to scenes). Obviously, the resulting matrix has many more columns, we include only the first 10 below.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">configuration</span>(rksp<span class="fl">.0</span>, <span class="dt">onlyPresence =</span> <span class="ot">TRUE</span>, <span class="dt">segment=</span><span class="st">&quot;Scene&quot;</span>)</code></pre>
-<pre><code>##    corpus  drama        character     1     2     3     4     5     6
-## 1    test rksp.0        der_prinz  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## 2    test rksp.0 der_kammerdiener  TRUE FALSE FALSE FALSE FALSE FALSE
-## 4    test rksp.0            conti FALSE  TRUE FALSE  TRUE FALSE FALSE
-## 9    test rksp.0        marinelli FALSE FALSE FALSE FALSE FALSE  TRUE
-## 14   test rksp.0     camillo_rota FALSE FALSE FALSE FALSE FALSE FALSE
-## 15   test rksp.0  claudia_galotti FALSE FALSE FALSE FALSE FALSE FALSE
-## 16   test rksp.0            pirro FALSE FALSE FALSE FALSE FALSE FALSE
-## 17   test rksp.0          odoardo FALSE FALSE FALSE FALSE FALSE FALSE
-## 20   test rksp.0           angelo FALSE FALSE FALSE FALSE FALSE FALSE
-## 25   test rksp.0           emilia FALSE FALSE FALSE FALSE FALSE FALSE
-## 27   test rksp.0          appiani FALSE FALSE FALSE FALSE FALSE FALSE
-## 47   test rksp.0         battista FALSE FALSE FALSE FALSE FALSE FALSE
-## 65   test rksp.0           orsina FALSE FALSE FALSE FALSE FALSE FALSE
-##        7
-## 1   TRUE
-## 2   TRUE
-## 4  FALSE
-## 9  FALSE
-## 14 FALSE
-## 15 FALSE
-## 16 FALSE
-## 17 FALSE
-## 20 FALSE
-## 25 FALSE
-## 27 FALSE
-## 47 FALSE
-## 65 FALSE</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="configuration.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">configuration</span>(rksp<span class="fl">.0</span>, <span class="at">onlyPresence =</span> <span class="cn">TRUE</span>, <span class="at">segment=</span><span class="st">&quot;Scene&quot;</span>)</span></code></pre></div>
+<pre><code>##    corpus  drama        character     1     2     3     4     5     6     7
+## 1    test rksp.0        der_prinz  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## 2    test rksp.0 der_kammerdiener  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE
+## 4    test rksp.0            conti FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE
+## 9    test rksp.0        marinelli FALSE FALSE FALSE FALSE FALSE  TRUE FALSE
+## 14   test rksp.0     camillo_rota FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 15   test rksp.0  claudia_galotti FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 16   test rksp.0            pirro FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 17   test rksp.0          odoardo FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 20   test rksp.0           angelo FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 25   test rksp.0           emilia FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 27   test rksp.0          appiani FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 47   test rksp.0         battista FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## 65   test rksp.0           orsina FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
 <p>Creating a co-occurrence matrix is a simple matter of matrix multiplication, and we already know how to create a matrix.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># extract the configuration</span>
-c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>, <span class="dt">onlyPresence =</span> <span class="ot">TRUE</span>, <span class="dt">segment=</span><span class="st">&quot;Scene&quot;</span>) 
-
-<span class="co"># extract a matrix</span>
-mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
-
-<span class="co"># multiply the matrix with its inverse</span>
-<span class="co"># this creates the copresence matrix</span>
-copresence &lt;-<span class="st"> </span>mat <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(mat) 
-
-<span class="co"># add character names</span>
-<span class="kw">rownames</span>(copresence) &lt;-<span class="st"> </span>c<span class="op">$</span>character
-<span class="kw">colnames</span>(copresence) &lt;-<span class="st"> </span>c<span class="op">$</span>character
-
-copresence</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="configuration.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the configuration</span></span>
+<span id="cb36-2"><a href="configuration.html#cb36-2" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">configuration</span>(rksp<span class="fl">.0</span>, <span class="at">onlyPresence =</span> <span class="cn">TRUE</span>, <span class="at">segment=</span><span class="st">&quot;Scene&quot;</span>) </span>
+<span id="cb36-3"><a href="configuration.html#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="configuration.html#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># extract a matrix</span></span>
+<span id="cb36-5"><a href="configuration.html#cb36-5" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(c)</span>
+<span id="cb36-6"><a href="configuration.html#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="configuration.html#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># multiply the matrix with its inverse</span></span>
+<span id="cb36-8"><a href="configuration.html#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># this creates the copresence matrix</span></span>
+<span id="cb36-9"><a href="configuration.html#cb36-9" aria-hidden="true" tabindex="-1"></a>copresence <span class="ot">&lt;-</span> mat <span class="sc">%*%</span> <span class="fu">t</span>(mat) </span>
+<span id="cb36-10"><a href="configuration.html#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="configuration.html#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># add character names</span></span>
+<span id="cb36-12"><a href="configuration.html#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(copresence) <span class="ot">&lt;-</span> c<span class="sc">$</span>character</span>
+<span id="cb36-13"><a href="configuration.html#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(copresence) <span class="ot">&lt;-</span> c<span class="sc">$</span>character</span>
+<span id="cb36-14"><a href="configuration.html#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="configuration.html#cb36-15" aria-hidden="true" tabindex="-1"></a>copresence</span></code></pre></div>
 <pre><code>##                  der_prinz der_kammerdiener conti marinelli camillo_rota
 ## der_prinz               17                2     2         9            1
 ## der_kammerdiener         2                2     0         0            0
@@ -368,170 +402,170 @@ copresence</code></pre>
 ## appiani                  0                0     0         2            0
 ## battista                 1                0     0         3            0
 ## orsina                   1                0     0         3            0
-##                  claudia_galotti pirro odoardo angelo emilia appiani
-## der_prinz                      0     0       2      0      2       0
-## der_kammerdiener               0     0       0      0      0       0
-## conti                          0     0       0      0      0       0
-## marinelli                      3     1       4      1      4       2
-## camillo_rota                   0     0       0      0      0       0
-## claudia_galotti               13     3       3      0      3       4
-## pirro                          3     4       1      1      0       1
-## odoardo                        3     1      12      0      2       0
-## angelo                         0     1       0      2      0       0
-## emilia                         3     0       2      0      7       1
-## appiani                        4     1       0      0      1       5
-## battista                       2     0       0      0      1       0
-## orsina                         1     0       3      0      0       0
-##                  battista orsina
-## der_prinz               1      1
-## der_kammerdiener        0      0
-## conti                   0      0
-## marinelli               3      3
-## camillo_rota            0      0
-## claudia_galotti         2      1
-## pirro                   0      0
-## odoardo                 0      3
-## angelo                  0      0
-## emilia                  1      0
-## appiani                 0      0
-## battista                4      0
-## orsina                  0      6</code></pre>
+##                  claudia_galotti pirro odoardo angelo emilia appiani battista
+## der_prinz                      0     0       2      0      2       0        1
+## der_kammerdiener               0     0       0      0      0       0        0
+## conti                          0     0       0      0      0       0        0
+## marinelli                      3     1       4      1      4       2        3
+## camillo_rota                   0     0       0      0      0       0        0
+## claudia_galotti               13     3       3      0      3       4        2
+## pirro                          3     4       1      1      0       1        0
+## odoardo                        3     1      12      0      2       0        0
+## angelo                         0     1       0      2      0       0        0
+## emilia                         3     0       2      0      7       1        1
+## appiani                        4     1       0      0      1       5        0
+## battista                       2     0       0      0      1       0        4
+## orsina                         1     0       3      0      0       0        0
+##                  orsina
+## der_prinz             1
+## der_kammerdiener      0
+## conti                 0
+## marinelli             3
+## camillo_rota          0
+## claudia_galotti       1
+## pirro                 0
+## odoardo               3
+## angelo                0
+## emilia                0
+## appiani               0
+## battista              0
+## orsina                6</code></pre>
 <p>The resulting copresence matrix shows the number of scenes in which two characters are both present. The diagonal shows the number of scenes in which a character is present in total (because each character is always copresent with itself, so to speak).</p>
 <p>There are multiple ways to visualise this copresence. One option is a heat map, as shown below.</p>
-<div id="as-heatmap" class="section level3">
-<h3><span class="header-section-number">8.2.1</span> As Heatmap</h3>
+<div id="as-heatmap" class="section level3 hasAnchor" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> As Heatmap<a href="configuration.html#as-heatmap" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The copresence can be visualised in a simple heat map. We first focus on the lower triangle and also remove the diagonal values. The actual plotting is a bit more complicated in this case, because we are just using the values in the copresence matrix as pixel intensities in the plot. Also, the axes need to be suppressed first, and can be added later with the proper names of the characters. If needed the code can also be used to include labels into the heat map.</p>
-<pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>, <span class="dt">onlyPresence =</span> <span class="ot">TRUE</span>, <span class="dt">segment=</span><span class="st">&quot;Scene&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">7</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
-
-<span class="co"># extract a matrix</span>
-mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
-
-<span class="co"># multiply the matrix with its inverse</span>
-<span class="co"># this creates the copresence matrix</span>
-copresence &lt;-<span class="st"> </span>mat <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(mat) 
-
-<span class="co"># add character names</span>
-<span class="kw">rownames</span>(copresence) &lt;-<span class="st"> </span>c<span class="op">$</span>character
-<span class="kw">colnames</span>(copresence) &lt;-<span class="st"> </span>c<span class="op">$</span>character
-
-<span class="co"># since it&#39;s a square matrix, we don&#39;t need the bottom right triangle</span>
-<span class="co"># and diagonales.</span>
-copresence[<span class="kw">lower.tri</span>(copresence,<span class="dt">diag=</span><span class="ot">TRUE</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span>
-
-<span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">1</span>)) <span class="co"># plot margins</span>
-<span class="kw">image</span>(copresence, 
-      <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">256</span>,<span class="dv">111</span>,<span class="dv">184</span>, <span class="dt">alpha=</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">255</span>)),
-                <span class="dt">maxColorValue =</span> <span class="dv">256</span>),
-      <span class="dt">xaxt=</span> <span class="st">&quot;n&quot;</span>,  <span class="co"># no x axis</span>
-      <span class="dt">yaxt=</span> <span class="st">&quot;n&quot;</span>,  <span class="co"># no y axis</span>
-      <span class="dt">frame=</span><span class="ot">TRUE</span>  <span class="co"># print a frame around the heatmap</span>
-      )
-
-<span class="co"># include values as labels</span>
-<span class="kw">text</span>(<span class="dt">y=</span>(<span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(copresence), <span class="dt">each=</span><span class="kw">nrow</span>(copresence))<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>(<span class="kw">nrow</span>(copresence)<span class="op">-</span><span class="dv">1</span>),
-     <span class="dt">x=</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(copresence)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>(<span class="kw">nrow</span>(copresence)<span class="op">-</span><span class="dv">1</span>),
-     <span class="dt">labels=</span><span class="kw">as.vector</span>(copresence))
-
-<span class="co"># add the x axis</span>
-<span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">at =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> <span class="kw">length</span>(c<span class="op">$</span>character)), <span class="dt">labels =</span> c<span class="op">$</span>character, <span class="dt">las=</span><span class="dv">3</span>)
-<span class="co"># add the y axis</span>
-<span class="kw">axis</span>(<span class="dv">2</span>, <span class="dt">at =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">length.out =</span> <span class="kw">length</span>(c<span class="op">$</span>character)), <span class="dt">labels =</span> c<span class="op">$</span>character, <span class="dt">las=</span><span class="dv">1</span>)</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="configuration.html#cb38-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">configuration</span>(rksp<span class="fl">.0</span>, <span class="at">onlyPresence =</span> <span class="cn">TRUE</span>, <span class="at">segment=</span><span class="st">&quot;Scene&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="configuration.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="at">n =</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="configuration.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">characterNames</span>(rksp<span class="fl">.0</span>)</span>
+<span id="cb38-4"><a href="configuration.html#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="configuration.html#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co"># extract a matrix</span></span>
+<span id="cb38-6"><a href="configuration.html#cb38-6" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(c)</span>
+<span id="cb38-7"><a href="configuration.html#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="configuration.html#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co"># multiply the matrix with its inverse</span></span>
+<span id="cb38-9"><a href="configuration.html#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="co"># this creates the copresence matrix</span></span>
+<span id="cb38-10"><a href="configuration.html#cb38-10" aria-hidden="true" tabindex="-1"></a>copresence <span class="ot">&lt;-</span> mat <span class="sc">%*%</span> <span class="fu">t</span>(mat) </span>
+<span id="cb38-11"><a href="configuration.html#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-12"><a href="configuration.html#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="co"># add character names</span></span>
+<span id="cb38-13"><a href="configuration.html#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(copresence) <span class="ot">&lt;-</span> c<span class="sc">$</span>character</span>
+<span id="cb38-14"><a href="configuration.html#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(copresence) <span class="ot">&lt;-</span> c<span class="sc">$</span>character</span>
+<span id="cb38-15"><a href="configuration.html#cb38-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-16"><a href="configuration.html#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="co"># since it&#39;s a square matrix, we don&#39;t need the bottom right triangle</span></span>
+<span id="cb38-17"><a href="configuration.html#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co"># and diagonales.</span></span>
+<span id="cb38-18"><a href="configuration.html#cb38-18" aria-hidden="true" tabindex="-1"></a>copresence[<span class="fu">lower.tri</span>(copresence,<span class="at">diag=</span><span class="cn">TRUE</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb38-19"><a href="configuration.html#cb38-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-20"><a href="configuration.html#cb38-20" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">1</span>)) <span class="co"># plot margins</span></span>
+<span id="cb38-21"><a href="configuration.html#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(copresence, </span>
+<span id="cb38-22"><a href="configuration.html#cb38-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">256</span>,<span class="dv">111</span>,<span class="dv">184</span>, <span class="at">alpha=</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">255</span>)),</span>
+<span id="cb38-23"><a href="configuration.html#cb38-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">maxColorValue =</span> <span class="dv">256</span>),</span>
+<span id="cb38-24"><a href="configuration.html#cb38-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">xaxt=</span> <span class="st">&quot;n&quot;</span>,  <span class="co"># no x axis</span></span>
+<span id="cb38-25"><a href="configuration.html#cb38-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">yaxt=</span> <span class="st">&quot;n&quot;</span>,  <span class="co"># no y axis</span></span>
+<span id="cb38-26"><a href="configuration.html#cb38-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">frame=</span><span class="cn">TRUE</span>  <span class="co"># print a frame around the heatmap</span></span>
+<span id="cb38-27"><a href="configuration.html#cb38-27" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb38-28"><a href="configuration.html#cb38-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-29"><a href="configuration.html#cb38-29" aria-hidden="true" tabindex="-1"></a><span class="co"># include values as labels</span></span>
+<span id="cb38-30"><a href="configuration.html#cb38-30" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">y=</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(copresence), <span class="at">each=</span><span class="fu">nrow</span>(copresence))<span class="sc">-</span><span class="dv">1</span>)<span class="sc">/</span>(<span class="fu">nrow</span>(copresence)<span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb38-31"><a href="configuration.html#cb38-31" aria-hidden="true" tabindex="-1"></a>     <span class="at">x=</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(copresence)<span class="sc">-</span><span class="dv">1</span>)<span class="sc">/</span>(<span class="fu">nrow</span>(copresence)<span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb38-32"><a href="configuration.html#cb38-32" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels=</span><span class="fu">as.vector</span>(copresence))</span>
+<span id="cb38-33"><a href="configuration.html#cb38-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-34"><a href="configuration.html#cb38-34" aria-hidden="true" tabindex="-1"></a><span class="co"># add the x axis</span></span>
+<span id="cb38-35"><a href="configuration.html#cb38-35" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">1</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out =</span> <span class="fu">length</span>(c<span class="sc">$</span>character)), <span class="at">labels =</span> c<span class="sc">$</span>character, <span class="at">las=</span><span class="dv">3</span>)</span>
+<span id="cb38-36"><a href="configuration.html#cb38-36" aria-hidden="true" tabindex="-1"></a><span class="co"># add the y axis</span></span>
+<span id="cb38-37"><a href="configuration.html#cb38-37" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(<span class="dv">2</span>, <span class="at">at =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out =</span> <span class="fu">length</span>(c<span class="sc">$</span>character)), <span class="at">labels =</span> c<span class="sc">$</span>character, <span class="at">las=</span><span class="dv">1</span>)</span></code></pre></div>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 <p>Apparently, Marinelli and the prince have the most shared scenes. Marinelli also shares a scene with most other figures (sum of the vertical bar: 16).</p>
 </div>
-<div id="network" class="section level3">
-<h3><span class="header-section-number">8.2.2</span> As Network</h3>
+<div id="network" class="section level3 hasAnchor" number="8.2.2">
+<h3><span class="header-section-number">8.2.2</span> As Network<a href="configuration.html#network" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The same information can also be visualized as a copresence network. For this, we employ the R-package <code>igraph</code>. A nice introduction to <code>igraph</code> can be found in <span class="citation">(Arnold and Tilton 2015)</span>, particularly for literary networks.</p>
 <p>Technically, the matrix we created before is an <a href="https://en.wikipedia.org/wiki/Adjacency_matrix">adjacency matrix</a>. It is therefore simple to convert it to a graph, and igraph offers the function <code>graph_from_adjacency_matrix()</code> for this.</p>
-<pre class="sourceCode r"><code class="sourceCode r">c &lt;-<span class="st"> </span><span class="kw">configuration</span>(rksp<span class="fl">.0</span>, <span class="dt">onlyPresence =</span> <span class="ot">TRUE</span>, <span class="dt">segment=</span><span class="st">&quot;Scene&quot;</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="dt">n =</span> <span class="dv">7</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">characterNames</span>(rksp<span class="fl">.0</span>)
-
-<span class="co"># extract a matrix</span>
-mat &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(c)
-
-<span class="co"># multiply the matrix with its inverse</span>
-<span class="co"># this creates the copresence matrix</span>
-copresence &lt;-<span class="st"> </span>mat <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(mat) 
-
-<span class="co"># add character names</span>
-<span class="kw">rownames</span>(copresence) &lt;-<span class="st"> </span>c<span class="op">$</span>character
-<span class="kw">colnames</span>(copresence) &lt;-<span class="st"> </span>c<span class="op">$</span>character
-
-<span class="co"># convert the adjacency matrix to a graph object</span>
-g &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw">graph_from_adjacency_matrix</span>(copresence, 
-                                 <span class="dt">weighted=</span><span class="ot">TRUE</span>,     <span class="co"># weighted graph</span>
-                                 <span class="dt">mode=</span><span class="st">&quot;undirected&quot;</span>, <span class="co"># no direction</span>
-                                 <span class="dt">diag=</span><span class="ot">FALSE</span>         <span class="co"># no looping edges</span>
-                                )</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="configuration.html#cb39-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">configuration</span>(rksp<span class="fl">.0</span>, <span class="at">onlyPresence =</span> <span class="cn">TRUE</span>, <span class="at">segment=</span><span class="st">&quot;Scene&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="configuration.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filterCharacters</span>(rksp<span class="fl">.0</span>, <span class="at">n =</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="configuration.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">characterNames</span>(rksp<span class="fl">.0</span>)</span>
+<span id="cb39-4"><a href="configuration.html#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="configuration.html#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># extract a matrix</span></span>
+<span id="cb39-6"><a href="configuration.html#cb39-6" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(c)</span>
+<span id="cb39-7"><a href="configuration.html#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="configuration.html#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="co"># multiply the matrix with its inverse</span></span>
+<span id="cb39-9"><a href="configuration.html#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co"># this creates the copresence matrix</span></span>
+<span id="cb39-10"><a href="configuration.html#cb39-10" aria-hidden="true" tabindex="-1"></a>copresence <span class="ot">&lt;-</span> mat <span class="sc">%*%</span> <span class="fu">t</span>(mat) </span>
+<span id="cb39-11"><a href="configuration.html#cb39-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-12"><a href="configuration.html#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="co"># add character names</span></span>
+<span id="cb39-13"><a href="configuration.html#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(copresence) <span class="ot">&lt;-</span> c<span class="sc">$</span>character</span>
+<span id="cb39-14"><a href="configuration.html#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(copresence) <span class="ot">&lt;-</span> c<span class="sc">$</span>character</span>
+<span id="cb39-15"><a href="configuration.html#cb39-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-16"><a href="configuration.html#cb39-16" aria-hidden="true" tabindex="-1"></a><span class="co"># convert the adjacency matrix to a graph object</span></span>
+<span id="cb39-17"><a href="configuration.html#cb39-17" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_adjacency_matrix</span>(copresence, </span>
+<span id="cb39-18"><a href="configuration.html#cb39-18" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">weighted=</span><span class="cn">TRUE</span>,     <span class="co"># weighted graph</span></span>
+<span id="cb39-19"><a href="configuration.html#cb39-19" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">mode=</span><span class="st">&quot;undirected&quot;</span>, <span class="co"># no direction</span></span>
+<span id="cb39-20"><a href="configuration.html#cb39-20" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">diag=</span><span class="cn">FALSE</span>         <span class="co"># no looping edges</span></span>
+<span id="cb39-21"><a href="configuration.html#cb39-21" aria-hidden="true" tabindex="-1"></a>                                )</span></code></pre></div>
 <p>Now the variable <code>g</code> holds the graph object. There are different things we can do with the graph. First, we can visualise it. <code>igraph</code> uses the same mechanism of R that we have used before for plotting, specifying a <code>plot()</code> function that can plot graph objects.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we plot</span>
-<span class="kw">plot</span>(g, 
-     <span class="dt">layout=</span>layout_with_gem,       <span class="co"># how to lay out the graph</span>
-     <span class="dt">main=</span><span class="st">&quot;Copresence Network: Emilia Galotti&quot;</span>,  <span class="co"># title</span>
-     <span class="dt">vertex.label.cex=</span><span class="fl">0.8</span>,         <span class="co"># label size</span>
-     <span class="dt">vertex.label.color=</span><span class="st">&quot;black&quot;</span>,   <span class="co"># font color</span>
-     <span class="dt">vertex.color=</span>qd.colors[<span class="dv">6</span>],    <span class="co"># vertex color</span>
-     <span class="dt">vertex.frame.color=</span><span class="ot">NA</span>,        <span class="co"># no vertex border</span>
-     <span class="dt">edge.width=</span><span class="kw">E</span>(g)<span class="op">$</span>weight        <span class="co"># scale edges according to their weight</span>
-)  </code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="configuration.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we plot</span></span>
+<span id="cb40-2"><a href="configuration.html#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g, </span>
+<span id="cb40-3"><a href="configuration.html#cb40-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">layout=</span>layout_with_gem,       <span class="co"># how to lay out the graph</span></span>
+<span id="cb40-4"><a href="configuration.html#cb40-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="st">&quot;Copresence Network: Emilia Galotti&quot;</span>,  <span class="co"># title</span></span>
+<span id="cb40-5"><a href="configuration.html#cb40-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label.cex=</span><span class="fl">0.8</span>,         <span class="co"># label size</span></span>
+<span id="cb40-6"><a href="configuration.html#cb40-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label.color=</span><span class="st">&quot;black&quot;</span>,   <span class="co"># font color</span></span>
+<span id="cb40-7"><a href="configuration.html#cb40-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.color=</span>qd.colors[<span class="dv">6</span>],    <span class="co"># vertex color</span></span>
+<span id="cb40-8"><a href="configuration.html#cb40-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.frame.color=</span><span class="cn">NA</span>,        <span class="co"># no vertex border</span></span>
+<span id="cb40-9"><a href="configuration.html#cb40-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.width=</span><span class="fu">E</span>(g)<span class="sc">$</span>weight        <span class="co"># scale edges according to their weight</span></span>
+<span id="cb40-10"><a href="configuration.html#cb40-10" aria-hidden="true" tabindex="-1"></a>)  </span></code></pre></div>
 <p><img src="DramaAnalysis_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 </div>
-<div id="network-properties" class="section level3">
-<h3><span class="header-section-number">8.2.3</span> Network properties</h3>
+<div id="network-properties" class="section level3 hasAnchor" number="8.2.3">
+<h3><span class="header-section-number">8.2.3</span> Network properties<a href="configuration.html#network-properties" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><code>igraph</code> offers a number of function to extract graph properties. We will show them below without explanation. The documentation of each function can be found <a href="https://igraph.org/r/doc/">here</a>.</p>
-<div id="density" class="section level4">
-<h4><span class="header-section-number">8.2.3.1</span> Density</h4>
+<div id="density" class="section level4 hasAnchor" number="8.2.3.1">
+<h4><span class="header-section-number">8.2.3.1</span> Density<a href="configuration.html#density" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Function: <a href="https://igraph.org/r/doc/edge_density.html"><code>graph.density()</code></a></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">graph.density</span>(g)</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="configuration.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">graph.density</span>(g)</span></code></pre></div>
 <pre><code>## [1] 0.7619048</code></pre>
 </div>
-<div id="average-nearest-neighbor-degree" class="section level4">
-<h4><span class="header-section-number">8.2.3.2</span> Average nearest neighbor degree</h4>
+<div id="average-nearest-neighbor-degree" class="section level4 hasAnchor" number="8.2.3.2">
+<h4><span class="header-section-number">8.2.3.2</span> Average nearest neighbor degree<a href="configuration.html#average-nearest-neighbor-degree" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Function: <a href="https://igraph.org/r/doc/knn.html"><code>knn()</code></a></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">knn</span>(g)</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="configuration.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">knn</span>(g)</span></code></pre></div>
 <pre><code>## $knn
-##       Der Prinz       Marinelli         Claudia Odoardo Galotti 
-##        4.214286        2.760000        4.714286        5.214286 
-##          Emilia         Appiani          Orsina 
-##        6.166667        7.285714        8.375000 
+##       Der Prinz       Marinelli         Claudia Odoardo Galotti          Emilia 
+##        5.571429        4.360000        4.571429        4.928571        5.000000 
+##         Appiani          Orsina 
+##        5.285714        5.250000 
 ## 
 ## $knnk
-## [1]      NaN      NaN 7.285714 6.294643 5.365079 2.760000</code></pre>
+## [1]      NaN      NaN 5.285714 5.410714 4.833333 4.360000</code></pre>
 </div>
-<div id="edge-connectivity" class="section level4">
-<h4><span class="header-section-number">8.2.3.3</span> Edge connectivity</h4>
+<div id="edge-connectivity" class="section level4 hasAnchor" number="8.2.3.3">
+<h4><span class="header-section-number">8.2.3.3</span> Edge connectivity<a href="configuration.html#edge-connectivity" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Function: <a href="https://igraph.org/r/doc/edge_connectivity.html"><code>edge_connectivity()</code></a></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">edge_connectivity</span>(g)</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="configuration.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_connectivity</span>(g)</span></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 </div>
 </div>
-<div id="graph-export" class="section level3">
-<h3><span class="header-section-number">8.2.4</span> Graph Export</h3>
+<div id="graph-export" class="section level3 hasAnchor" number="8.2.4">
+<h3><span class="header-section-number">8.2.4</span> Graph Export<a href="configuration.html#graph-export" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>As a final step, one might want to further work on the graph using <a href="https://gephi.org">Gephi</a>, or other tools. In order to do so, one can export the graph into an appropriate file:</p>
-<pre class="sourceCode r"><code class="sourceCode r">igraph<span class="op">::</span><span class="kw">write_graph</span>(g, 
-                    <span class="st">&quot;rksp.0.graphml&quot;</span>,    <span class="co"># specify the file name</span>
-                    <span class="dt">format=</span><span class="st">&quot;graphml&quot;</span>     <span class="co"># specify the file format</span>
-)</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="configuration.html#cb47-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">write_graph</span>(g, </span>
+<span id="cb47-2"><a href="configuration.html#cb47-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;rksp.0.graphml&quot;</span>,    <span class="co"># specify the file name</span></span>
+<span id="cb47-3"><a href="configuration.html#cb47-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">format=</span><span class="st">&quot;graphml&quot;</span>     <span class="co"># specify the file format</span></span>
+<span id="cb47-4"><a href="configuration.html#cb47-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>This results in a file called <a href="rksp.0.graphml"><code>rksp.0.graphml</code></a>, that starts similarly as this:</p>
-<pre class="sourceCode xml"><code class="sourceCode xml"><span class="kw">&lt;?xml</span> version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;<span class="kw">?&gt;</span>
-<span class="kw">&lt;graphml</span><span class="ot"> xmlns=</span><span class="st">&quot;http://graphml.graphdrawing.org/xmlns&quot;</span>
-<span class="ot">         xmlns:xsi=</span><span class="st">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-<span class="ot">         xsi:schemaLocation=</span><span class="st">&quot;http://graphml.graphdrawing.org/xmlns</span>
-<span class="st">         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd&quot;</span><span class="kw">&gt;</span>
-<span class="co">&lt;!-- Created by igraph --&gt;</span>
-  <span class="kw">&lt;key</span><span class="ot"> id=</span><span class="st">&quot;v_name&quot;</span><span class="ot"> for=</span><span class="st">&quot;node&quot;</span><span class="ot"> attr.name=</span><span class="st">&quot;name&quot;</span><span class="ot"> attr.type=</span><span class="st">&quot;string&quot;</span><span class="kw">/&gt;</span>
-  <span class="kw">&lt;key</span><span class="ot"> id=</span><span class="st">&quot;e_weight&quot;</span><span class="ot"> for=</span><span class="st">&quot;edge&quot;</span><span class="ot"> attr.name=</span><span class="st">&quot;weight&quot;</span><span class="ot"> attr.type=</span><span class="st">&quot;double&quot;</span><span class="kw">/&gt;</span>
-  <span class="kw">&lt;graph</span><span class="ot"> id=</span><span class="st">&quot;G&quot;</span><span class="ot"> edgedefault=</span><span class="st">&quot;undirected&quot;</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;node</span><span class="ot"> id=</span><span class="st">&quot;n0&quot;</span><span class="kw">&gt;</span>
-      <span class="kw">&lt;data</span><span class="ot"> key=</span><span class="st">&quot;v_name&quot;</span><span class="kw">&gt;</span>DER KAMMERDIENER<span class="kw">&lt;/data&gt;</span>
-    <span class="kw">&lt;/node&gt;</span>
-    <span class="kw">&lt;node</span><span class="ot"> id=</span><span class="st">&quot;n1&quot;</span><span class="kw">&gt;</span>
-      <span class="kw">&lt;data</span><span class="ot"> key=</span><span class="st">&quot;v_name&quot;</span><span class="kw">&gt;</span>DER PRINZ<span class="kw">&lt;/data&gt;</span>
-    <span class="kw">&lt;/node&gt;</span>
-    ...</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb48-1"><a href="configuration.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span><span class="ot"> version=</span><span class="st">&quot;1.0&quot;</span><span class="ot"> encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
+<span id="cb48-2"><a href="configuration.html#cb48-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">graphml</span><span class="ot"> xmlns=</span><span class="st">&quot;http://graphml.graphdrawing.org/xmlns&quot;</span></span>
+<span id="cb48-3"><a href="configuration.html#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="ot">         xmlns:xsi=</span><span class="st">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span>
+<span id="cb48-4"><a href="configuration.html#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="ot">         xsi:schemaLocation=</span><span class="st">&quot;http://graphml.graphdrawing.org/xmlns</span></span>
+<span id="cb48-5"><a href="configuration.html#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="st">         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd&quot;</span>&gt;</span>
+<span id="cb48-6"><a href="configuration.html#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Created by igraph --&gt;</span></span>
+<span id="cb48-7"><a href="configuration.html#cb48-7" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">key</span><span class="ot"> id=</span><span class="st">&quot;v_name&quot;</span><span class="ot"> for=</span><span class="st">&quot;node&quot;</span><span class="ot"> attr.name=</span><span class="st">&quot;name&quot;</span><span class="ot"> attr.type=</span><span class="st">&quot;string&quot;</span>/&gt;</span>
+<span id="cb48-8"><a href="configuration.html#cb48-8" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">key</span><span class="ot"> id=</span><span class="st">&quot;e_weight&quot;</span><span class="ot"> for=</span><span class="st">&quot;edge&quot;</span><span class="ot"> attr.name=</span><span class="st">&quot;weight&quot;</span><span class="ot"> attr.type=</span><span class="st">&quot;double&quot;</span>/&gt;</span>
+<span id="cb48-9"><a href="configuration.html#cb48-9" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">graph</span><span class="ot"> id=</span><span class="st">&quot;G&quot;</span><span class="ot"> edgedefault=</span><span class="st">&quot;undirected&quot;</span>&gt;</span>
+<span id="cb48-10"><a href="configuration.html#cb48-10" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">node</span><span class="ot"> id=</span><span class="st">&quot;n0&quot;</span>&gt;</span>
+<span id="cb48-11"><a href="configuration.html#cb48-11" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">data</span><span class="ot"> key=</span><span class="st">&quot;v_name&quot;</span>&gt;DER KAMMERDIENER&lt;/<span class="kw">data</span>&gt;</span>
+<span id="cb48-12"><a href="configuration.html#cb48-12" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">node</span>&gt;</span>
+<span id="cb48-13"><a href="configuration.html#cb48-13" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">node</span><span class="ot"> id=</span><span class="st">&quot;n1&quot;</span>&gt;</span>
+<span id="cb48-14"><a href="configuration.html#cb48-14" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">data</span><span class="ot"> key=</span><span class="st">&quot;v_name&quot;</span>&gt;DER PRINZ&lt;/<span class="kw">data</span>&gt;</span>
+<span id="cb48-15"><a href="configuration.html#cb48-15" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">node</span>&gt;</span>
+<span id="cb48-16"><a href="configuration.html#cb48-16" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
 <p>This file can be opened with Gephi.</p>
 
 </div>
@@ -547,12 +581,13 @@ g &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"
     </div>
   </div>
 <script src="assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -560,12 +595,12 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -580,15 +615,22 @@ gitbook.start({
 "link": null,
 "text": null
 },
+"view": {
+"link": null,
+"text": null
+},
 "download": ["DramaAnalysis.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "section",
 "scroll_highlight": true
 },
 "toolbar": {
 "position": "fixed"
-},
-"search": true
+}
 });
 });
 </script>
